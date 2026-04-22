@@ -64,7 +64,7 @@
 .snc-hero-meta .l { display: flex; gap: 28px; align-items: center; }
 .snc-hero-meta .l span { display: flex; gap: 8px; align-items: center; }
 .snc-hero-meta .seal { width: 32px; height: 32px; border: 1px solid #2a3a55; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Libre Caslon Text', serif; font-size: 14px; color: var(--snc-brass); }
-.snc-hero h1 { font-family: 'Libre Caslon Text', serif; font-weight: 400; font-size: clamp(40px,5vw,80px); line-height: .92; letter-spacing: -0.025em; color: #fff; }
+.snc-hero h1 { font-family: 'Libre Caslon Text', serif; font-weight: 400; font-size: clamp(54px,9vw,148px); line-height: .92; letter-spacing: -0.025em; color: #fff; }
 .snc-hero h1 .it { font-style: italic; color: #bcc4d1; font-weight: 400; }
 .snc-hero h1 .grn { color: var(--snc-green-2); }
 .snc-hero-bottom { display: grid; grid-template-columns: 1.2fr 1fr; gap: 60px; margin-top: 56px; padding-bottom: 70px; align-items: end; }
@@ -176,7 +176,7 @@
 .snc-manifesto-in { max-width: 1180px; margin: 0 auto; }
 .snc-manifesto .kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--snc-brass); letter-spacing: .2em; text-transform: uppercase; margin-bottom: 28px; display: flex; align-items: center; gap: 16px; }
 .snc-manifesto .kicker::before { content: ""; width: 40px; height: 1px; background: var(--snc-brass); }
-.snc-manifesto blockquote { font-family: 'Libre Caslon Text', serif; font-weight: 400; font-size: clamp(18px,2vw,28px); line-height: 1.55; letter-spacing: -0.01em; color: var(--snc-ink); }
+.snc-manifesto blockquote { font-family: 'Libre Caslon Text', serif; font-weight: 400; font-size: clamp(36px,5.2vw,76px); line-height: 1.05; letter-spacing: -0.02em; color: var(--snc-ink); }
 .snc-manifesto blockquote .it { font-style: italic; color: #5a6a7a; }
 .snc-manifesto blockquote .grn { color: var(--snc-green); }
 .snc-manifesto .sig { display: flex; justify-content: space-between; align-items: center; margin-top: 60px; padding-top: 28px; border-top: 1px solid rgba(15,26,36,.14); }
@@ -312,7 +312,7 @@
   .snc-manifesto { padding: 90px 18px; }
   .snc-data-sec { padding: 70px 18px; }
   .snc-hero-inner { padding: 40px 18px 0; }
-  .snc-hero h1 { font-size: clamp(30px,8vw,48px); }
+  .snc-hero h1 { font-size: clamp(38px,11vw,60px); }
   .snc-hero-cta { flex-direction: column; align-items: stretch; }
   .snc-hero-stats { grid-template-columns: repeat(2,1fr); }
   .snc-eixos-grid { grid-template-columns: 1fr; }
@@ -326,11 +326,11 @@
   .snc-cta-in { padding: 70px 18px; gap: 36px; }
   .snc-foot-top { grid-template-columns: 1fr; gap: 28px; }
   .snc-foot-bot { flex-direction: column; align-items: flex-start; gap: 14px; }
-  .snc-manifesto blockquote { font-size: clamp(15px,4.5vw,20px); }
+  .snc-manifesto blockquote { font-size: clamp(26px,6.5vw,40px); }
   .snc-manifesto .sig { flex-direction: column; align-items: flex-start; gap: 18px; }
 }
 @media (max-width: 380px) {
-  .snc-hero h1 { font-size: 30px; }
+  .snc-hero h1 { font-size: 36px; }
   .snc-hero-stats { grid-template-columns: 1fr 1fr; }
 }
 
