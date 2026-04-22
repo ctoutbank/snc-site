@@ -31,7 +31,7 @@ function SectorCard({ s, index }: { s: (typeof SECTORS)[0]; index: number }) {
       <div className="snc-sg-default" style={{ opacity: hovered ? 0 : 1 }}>
         <div className="sg-num">S.{String(index + 1).padStart(2, '0')}</div>
         <div className="sg-cat">{s.cat}</div>
-        <h3>{s.title.replace(/\.$/, '')}<span className="it">.</span></h3>
+        <p className="sg-desc">{s.description}</p>
         <div className="sg-metric">
           <span className="sg-val">{s.case.value}</span>
         </div>
