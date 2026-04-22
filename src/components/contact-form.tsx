@@ -56,7 +56,18 @@ export function ContactForm({ variant = 'embedded' }: Props) {
       <div className="fg"><label htmlFor="c-nat">Natureza da operação</label><select id="c-nat" value={form.nature} onChange={(e) => set('nature', e.target.value)}>{NATURES.map((n) => <option key={n} value={n}>{n}</option>)}</select></div>
       <div className="fg"><label htmlFor="c-ctx">Contexto</label><textarea id="c-ctx" placeholder="Descreva brevemente o caso de uso…" value={form.context} onChange={(e) => set('context', e.target.value)} /></div>
       {status === 'error' && <div style={{ padding: '10px 14px', background: 'rgba(220,38,38,.15)', border: '1px solid rgba(220,38,38,.3)', color: '#fca5a5', fontSize: 13, marginBottom: 12 }}>{errorMsg}</div>}
-      <button type="submit" className="snc-form-submit" disabled={status === 'loading'}>{status === 'loading' ? 'Enviando…' : 'Enviar solicitação →'}</button>
+      <button
+        type="submit"
+        className="snc-form-submit"
+        disabled={status === 'loading'}
+        style={{
+          background: status === 'loading' ? '#1d7a35' : '#2BA84A',
+          color: '#06240e',
+          border: 'none',
+        }}
+      >
+        {status === 'loading' ? 'Enviando…' : 'Enviar solicitação →'}
+      </button>
     </form>
   );
 }
