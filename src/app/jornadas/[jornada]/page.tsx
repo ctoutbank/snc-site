@@ -210,7 +210,7 @@ export default async function JornadaPage({ params }: Props) {
             >
               {j.steps.map((step, i) => (
                 <div key={step.title} style={{
-                  background: 'var(--snc-paper)',
+                  background: '#fff',
                   padding: '36px 24px',
                   display: 'flex',
                   flexDirection: 'column',
