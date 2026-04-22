@@ -1,3 +1,4 @@
+'use client';
 import Link from 'next/link';
 
 export function SiteFooter() {
@@ -6,7 +7,7 @@ export function SiteFooter() {
       <div className="snc-foot-in">
         <div className="snc-foot-top">
           <div className="brand">
-            <img src="/snc-logo.png" alt="SNC" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+            <img src="/snc-logo.png" alt="SNC" />
             <p>Sistema Nacional de Conformidade. Operado pela Consolle Data Intelligence S.A. CNPJ 33.284.110/0001-48. Empresa brasileira registrada na ANPD.</p>
           </div>
           <div className="snc-foot-col">
