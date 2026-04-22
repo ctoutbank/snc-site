@@ -81,6 +81,53 @@ export default async function JornadaPage({ params }: Props) {
           </div>
         </div>
 
+        {/* Narrativa editorial */}
+        {j.narrative && j.narrative.length > 0 && (
+          <section style={{
+            background: 'var(--snc-paper-2)',
+            borderTop: '1px solid rgba(15,26,36,.1)',
+            borderBottom: '1px solid rgba(15,26,36,.1)',
+            padding: '80px 28px',
+          }}>
+            <div className="snc-narrative-grid" style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: 80, alignItems: 'start' }}>
+              <div style={{ position: 'sticky', top: 100 }}>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 20 }}>
+                  § O problema desta jornada
+                </div>
+                <blockquote style={{
+                  fontFamily: "'Libre Caslon Text', serif",
+                  fontStyle: 'italic',
+                  fontSize: 'clamp(22px,2.8vw,34px)',
+                  fontWeight: 400,
+                  lineHeight: 1.2,
+                  color: 'var(--snc-navy)',
+                  borderLeft: '3px solid var(--snc-green-2)',
+                  paddingLeft: 24,
+                  margin: 0,
+                }}>
+                  &ldquo;{j.problem}&rdquo;
+                </blockquote>
+                <div style={{ marginTop: 28, fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: '#8a94a3', letterSpacing: '.12em', textTransform: 'uppercase' }}>
+                  {j.title}{j.titleItalic}
+                </div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                {j.narrative.map((para, i) => (
+                  <p key={i} style={{
+                    fontSize: i === 0 ? 17 : 16,
+                    color: i === 0 ? '#2e3d4a' : '#4a5662',
+                    lineHeight: 1.8,
+                    fontWeight: i === 0 ? 500 : 400,
+                    margin: 0,
+                  }}>
+                    {para}
+                  </p>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* Passo a passo */}
         {j.steps && (
           <section className="snc-sec">

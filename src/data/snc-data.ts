@@ -24,6 +24,7 @@ export interface SncJourney {
   image: string;
   metrics?: { value: string; label: string }[];
   steps?: { title: string; desc: string }[];
+  narrative?: string[];
 }
 
 export interface SncSector {
@@ -425,6 +426,11 @@ export const JOURNEYS: SncJourney[] = [
       { value: '100%', label: 'Conformidade BACEN' },
       { value: 'LGPD', label: 'Operador certificado' },
       { value: 'COAF', label: 'Cadastro ativo' },
+    ],
+    narrative: [
+      'O desafio do compliance regulatório no Brasil não é falta de conhecimento — é falta de infraestrutura para provar conformidade em tempo real. LGPD, Resolução BCB 4.893, PLD/FT e as obrigações de reporte ao COAF têm critérios distintos, prazos próprios e registros separados. Na prática, a maioria das equipes ainda reconcilia fontes heterogêneas manualmente, sob pressão de prazo, acumulando lacunas de auditoria que só aparecem quando o regulador chega.',
+      'Esta jornada conecta, em uma única chamada de API, os módulos que precisam operar juntos: varredura automática PLD/FT em COAF, OFAC, ONU, UE e Interpol; identificação e monitoramento contínuo de Pessoas Politicamente Expostas com graus de relacionamento familiar e societário; análise de exposição política com histórico de cargos, doações eleitorais e bens declarados; e trilha de auditoria imutável exportável como evidência para Relatórios de Inteligência Financeira. Cada etapa é logada por obrigação regulatória, não por consulta genérica.',
+      'Para fintechs, bancos, IAPs e quaisquer entidades obrigadas, o resultado é direto: conformidade verificável — não apenas declarada. Sua área de compliance para de operar no modo reativo, a evidência de cada decisão está estruturada desde o primeiro onboarding, e sua exposição em fiscalizações cai a zero.',
     ],
     steps: [
       { title: 'PLD/FT', desc: 'Varredura em listas COAF, OFAC, ONU, UE e Interpol.' },
