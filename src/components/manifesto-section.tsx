@@ -12,7 +12,7 @@ export function ManifestoSection() {
         <div className="sig">
           <div className="a">
             <strong>Denison Zimmer da Luz</strong>
-            Presidente do Conselho Consultivo · Consolle Data Intelligence
+            Conselho Consultivo · Consolle Data Intelligence
           </div>
           <div className="seal">
             SELO<br />SNC
