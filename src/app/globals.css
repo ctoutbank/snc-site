@@ -156,37 +156,37 @@
 .snc-sg-header h2 { font-family: 'Libre Caslon Text', serif; font-size: clamp(32px,4vw,52px); font-weight: 400; color: #fff; line-height: 1.05; margin: 0 0 16px; }
 .snc-sg-header h2 .it { font-style: italic; color: #bcc4d1; }
 .snc-sg-sub { font-size: 14px; color: #7a8a9a; line-height: 1.55; margin: 0; }
-.snc-sg-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+.snc-sg-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; }
 .snc-sg-footer { margin-top: 48px; }
 .snc-btn-outline { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #fff; border: 1px solid rgba(255,255,255,.25); padding: 14px 28px; text-decoration: none; transition: border-color .2s, background .2s; }
 .snc-btn-outline:hover { border-color: #fff; background: rgba(255,255,255,.06); }
 
 /* Card base */
-.snc-sg-card { position: relative; height: 340px; overflow: hidden; background: var(--snc-navy); display: block; }
+.snc-sg-card { position: relative; height: 300px; overflow: hidden; background: var(--snc-navy); display: block; }
 .snc-sg-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(.4); transition: opacity .4s, transform .5s; }
 .snc-sg-overlay { position: absolute; inset: 0; background: linear-gradient(170deg, rgba(10,22,40,.45) 0%, rgba(10,22,40,.88) 100%); transition: opacity .4s; pointer-events: none; z-index: 1; }
 
 /* Default dark state — título em destaque, sem descrição */
-.snc-sg-default { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: flex-end; padding: 22px 20px; transition: opacity .3s; }
-.sg-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--snc-brass); letter-spacing: .2em; position: absolute; top: 18px; left: 20px; z-index: 3; }
-.sg-cat { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--snc-green-2); margin-bottom: 8px; }
-.snc-sg-default h3 { font-family: 'Libre Caslon Text', serif; font-size: 20px; font-weight: 400; line-height: 1.2; color: #fff; margin: 0; letter-spacing: -0.01em; }
+.snc-sg-default { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: flex-end; padding: 16px; transition: opacity .3s; }
+.sg-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--snc-brass); letter-spacing: .2em; position: absolute; top: 14px; left: 16px; z-index: 3; }
+.sg-cat { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: .14em; text-transform: uppercase; color: var(--snc-green-2); margin-bottom: 6px; }
+.snc-sg-default h3 { font-family: 'Libre Caslon Text', serif; font-size: 16px; font-weight: 400; line-height: 1.2; color: #fff; margin: 0; letter-spacing: -0.01em; }
 .snc-sg-default h3 .it { font-style: italic; color: #bcc4d1; }
-.sg-metric { margin-top: 12px; }
-.sg-val { font-family: 'Libre Caslon Text', serif; font-size: 28px; color: var(--snc-green-2); line-height: 1; }
+.sg-metric { margin-top: 10px; }
+.sg-val { font-family: 'Libre Caslon Text', serif; font-size: 22px; color: var(--snc-green-2); line-height: 1; }
 
 /* Hover white state */
-.snc-sg-hover { position: absolute; inset: 0; z-index: 4; background: #fff; color: #0a1628; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; transition: opacity .3s ease, transform .3s ease; }
-.sg-hover-cat { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #1a6b35; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 10px; }
-.sg-hover-val { font-family: 'Libre Caslon Text', serif; font-size: 36px; font-weight: 400; color: #0a1628; line-height: 1; display: block; }
-.sg-hover-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #6a7a8a; letter-spacing: .1em; text-transform: uppercase; margin-top: 3px; display: block; margin-bottom: 14px; }
-.sg-hover-text { font-size: 12px; color: #2a3a4a; line-height: 1.6; flex: 1; }
-.sg-hover-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 12px; }
-.sg-hover-tags span { font-family: 'JetBrains Mono', monospace; font-size: 9px; padding: 3px 7px; border: 1px solid rgba(10,22,40,.2); color: #4a5a6a; letter-spacing: .06em; text-transform: uppercase; }
-.sg-hover-cta { display: flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #0a1628; font-weight: 700; margin-top: 10px; }
+.snc-sg-hover { position: absolute; inset: 0; z-index: 4; background: #fff; color: #0a1628; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; transition: opacity .3s ease, transform .3s ease; }
+.sg-hover-cat { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #1a6b35; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 8px; }
+.sg-hover-val { font-family: 'Libre Caslon Text', serif; font-size: 30px; font-weight: 400; color: #0a1628; line-height: 1; display: block; }
+.sg-hover-label { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #6a7a8a; letter-spacing: .1em; text-transform: uppercase; margin-top: 3px; display: block; margin-bottom: 10px; }
+.sg-hover-text { font-size: 11px; color: #2a3a4a; line-height: 1.55; flex: 1; }
+.sg-hover-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 10px; }
+.sg-hover-tags span { font-family: 'JetBrains Mono', monospace; font-size: 8px; padding: 2px 6px; border: 1px solid rgba(10,22,40,.2); color: #4a5a6a; letter-spacing: .06em; text-transform: uppercase; }
+.sg-hover-cta { display: flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #0a1628; font-weight: 700; margin-top: 8px; }
 
 /* Responsive */
-@media (max-width: 1100px) { .snc-sg-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 1200px) { .snc-sg-grid { grid-template-columns: repeat(4, 1fr); } }
 @media (max-width: 768px) { .snc-sg-grid { grid-template-columns: repeat(2, 1fr); } .snc-sg-root { padding: 60px 20px; } }
 @media (max-width: 480px) { .snc-sg-grid { grid-template-columns: 1fr; } }
 
