@@ -1,99 +1,116 @@
 'use client';
 
-import { useState } from 'react';
-import { DATASETS, DS_CATEGORIES } from '@/data/snc-data';
+import { useEffect, useRef } from 'react';
+import Link from 'next/link';
+
+function CountUp({ target, suffix = '' }: { target: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        obs.unobserve(el);
+        const dur = 1600;
+        const start = performance.now();
+        const step = (t: number) => {
+          const p = Math.min(1, (t - start) / dur);
+          const v = Math.round(target * (1 - Math.pow(1 - p, 3)));
+          el.textContent = String(v) + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      },
+      { threshold: 0.3 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [target, suffix]);
+  return <span ref={ref}>0{suffix}</span>;
+}
+
+const FEATURES = [
+  {
+    num: 'I',
+    title: 'Fontes soberanas',
+    desc: 'BCB, Receita Federal, TSE, IBAMA, SICAR, COAF, Serasa, Boa Vista, Quod e SPC — sob contratos institucionais diretos, sem intermediários.',
+  },
+  {
+    num: 'II',
+    title: 'Rastreabilidade total',
+    desc: 'Toda consulta gera registro auditável com carimbo de tempo, finalidade declarada e fonte primária — pronto para regulador, ANPD e ISO 27001.',
+  },
+  {
+    num: 'III',
+    title: 'Latência operacional',
+    desc: 'Decisões em menos de 900ms no percentil 95. Arquitetura desenhada para ser chamada a cada transação — não apenas no cadastro.',
+  },
+  {
+    num: 'IV',
+    title: 'Conformidade embarcada',
+    desc: 'LGPD, Resolução BACEN 4.893, Circular 3.978 e fluxo COAF já estruturados na camada — você contrata a plataforma, herda a conformidade.',
+  },
+];
 
 export function DatasetsSection() {
-  const [cat, setCat] = useState<string | null>(null);
-  const [q, setQ] = useState('');
-
-  const visible = DATASETS.filter((d) => {
-    if (cat && d.category !== cat) return false;
-    if (q) {
-      const ql = q.toLowerCase();
-      return (
-        d.id.toLowerCase().includes(ql) ||
-        d.name.toLowerCase().includes(ql) ||
-        d.bureau.toLowerCase().includes(ql) ||
-        d.category.toLowerCase().includes(ql)
-      );
-    }
-    return true;
-  });
-
   return (
-    <section className="snc-data-sec" id="datasets-sec">
-      <div className="snc-sec-head" style={{ maxWidth: 1440, margin: '0 auto 60px' }}>
-        <div className="num">§ 06 · DATASETS</div>
-        <h2>
-          Explore a <span className="it">biblioteca integral.</span>
-        </h2>
-        <div className="aside">
-          Todo dataset disponível via API, documentado, auditável e rastreável à fonte primária.
-          Filtre por módulo, bureau ou finalidade.
+    <section className="snc-ds-premium" id="datasets-sec">
+      {/* Cabeçalho editorial */}
+      <div className="snc-ds-header">
+        <div className="snc-ds-header-left">
+          <div className="snc-ds-header-num">§ 06 · DATASETS</div>
+          <h2>
+            A infraestrutura de dados{' '}
+            <span className="it">mais densa</span> do Brasil.
+          </h2>
+        </div>
+        <div className="snc-ds-header-right">
+          Uma camada operacional única, construída sobre fontes soberanas,
+          homologada para decisão em tempo real.
         </div>
       </div>
-      <div className="snc-data-in">
-        <div className="snc-data-left">
-          <div className="big">253</div>
-          <div className="lbl">
-            Datasets integrados, disponíveis sob contrato comercial, operados em regime LGPD-compliant.
+
+      {/* Corpo */}
+      <div className="snc-ds-body">
+        {/* Coluna esquerda */}
+        <div className="snc-ds-col-left">
+          <div className="snc-ds-counter">
+            <CountUp target={253} />
           </div>
-          <div className="bureaus">
-            {[
-              ['Banco Central do Brasil', 'SCR · 41 Mi'],
-              ['Serasa Experian', '18 datasets'],
-              ['Boa Vista SCPC', '12 datasets'],
-              ['Quod', '9 datasets'],
-              ['SPC Brasil', 'On-demand'],
-              ['Receita Federal', 'Oficial'],
-              ['TSE', 'PEP · Eleitoral'],
-              ['IBAMA / SICAR', 'ESG Rural'],
-              ['COAF · LAB', 'AML'],
-            ].map(([nm, md]) => (
-              <div key={nm} className="bureau">
-                <span className="nm">{nm}</span>
-                <span className="md">{md}</span>
-              </div>
-            ))}
+          <div className="snc-ds-counter-label">
+            DATASETS INTEGRADOS — DE 9 BUREAUS OFICIAIS À ÚNICA CAMADA
+            OPERACIONAL DE DECISÃO DO PAÍS.
+          </div>
+          <p className="snc-ds-copy">
+            O SNC não vende dados soltos. Vende a{' '}
+            <span className="it" style={{ color: 'var(--snc-green-2)' }}>
+              síntese
+            </span>
+            . Consolidamos o que está disperso em nove fontes públicas e privadas
+            em uma malha coesa de APIs documentadas, com SLA único, contrato
+            único e faturamento único. O seu time técnico integra em dias, não em
+            trimestres.
+          </p>
+          <div className="snc-ds-ctas">
+            <Link href="/contato" className="snc-btn snc-btn-primary">
+              Solicitar catálogo completo →
+            </Link>
+            <Link href="/plataforma" className="snc-btn snc-btn-ghost">
+              Ver módulos
+            </Link>
           </div>
         </div>
-        <div>
-          <div className="snc-ds-search">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-              <circle cx="11" cy="11" r="7" />
-              <path d="m20 20-3.5-3.5" />
-            </svg>
-            <input
-              type="text"
-              placeholder="Buscar dataset, bureau ou finalidade…"
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-            />
-            <span className="cnt">{visible.length} / 253</span>
-          </div>
-          <div className="snc-ds-cats">
-            {DS_CATEGORIES.map((c) => (
-              <button
-                key={c}
-                className={(c === 'TODOS' ? !cat : cat === c) ? 'on' : ''}
-                onClick={() => setCat(c === 'TODOS' ? null : c)}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
-          <div className="snc-ds-list">
-            {visible.map((d) => (
-              <div key={d.id} className="snc-ds-row">
-                <div className="id">{d.id}</div>
-                <div className="nm">{d.name}</div>
-                <div className="md">{d.category}</div>
-                <div className="br">{d.bureau}</div>
-                <div className="pr">{d.price}</div>
-              </div>
-            ))}
-          </div>
+
+        {/* Coluna direita — 4 features */}
+        <div className="snc-ds-features">
+          {FEATURES.map((f) => (
+            <div key={f.num} className="snc-ds-feat">
+              <div className="snc-ds-feat-num">{f.num}</div>
+              <h4>{f.title}</h4>
+              <p>{f.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

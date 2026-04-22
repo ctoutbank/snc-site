@@ -11,7 +11,7 @@ export function ManifestoSection() {
         </blockquote>
         <div className="sig">
           <div className="a">
-            <strong>Roberto Mendes de Albuquerque</strong>
+            <strong>Denison Zimmer da Luz</strong>
             Presidente do Conselho Consultivo · Consolle Data Intelligence
           </div>
           <div className="seal">

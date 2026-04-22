@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 const CONSELHO = [
-  { code: 'PRES', name: 'Roberto Mendes de Albuquerque', role: 'ex-Diretor de Fiscalização, BCB', since: '2019–' },
+  { code: 'PRES', name: 'Denison Zimmer da Luz', role: 'Presidente · Consolle Data Intelligence', since: '2019–' },
   { code: 'CONS', name: 'Dra. Helena Vargas Siqueira', role: 'Prof. Titular, FGV Direito SP', since: '2020–' },
   { code: 'CONS', name: 'Paulo Henrique Castro', role: 'ex-COO, Serasa Experian', since: '2021–' },
   { code: 'CONS', name: 'Marina Okabe', role: 'Parceira, Veirano Advogados', since: '2022–' },
