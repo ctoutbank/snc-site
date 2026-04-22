@@ -196,17 +196,115 @@ export default async function JornadaPage({ params }: Props) {
             <div className="snc-sec-head">
               <div className="num">§ ETAPAS</div>
               <h2>Como <span className="it">funciona.</span></h2>
-              <div className="aside">Sequência operacional pronta para integrar em menos de 1 sprint.</div>
+              <div className="aside">Do primeiro dado consultado até a entrega do dossiê, tudo rastreável.</div>
             </div>
-            <div className="snc-prod-grid" style={{ gridTemplateColumns: 'repeat(2,1fr)' }}>
+            <div
+              className="snc-steps-grid"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: `repeat(${(j.steps.length) + (j.delivery ? 1 : 0)}, 1fr)`,
+                gap: 1,
+                background: 'rgba(15,26,36,.1)',
+                border: '1px solid rgba(15,26,36,.1)',
+              }}
+            >
               {j.steps.map((step, i) => (
-                <div key={step.title} className="snc-mod-card">
-                  <div className="tag">Etapa {i + 1}</div>
-                  <div className="cnt" style={{ fontSize: 56, color: 'var(--snc-brass)' }}>{String(i + 1).padStart(2, '0')}</div>
-                  <h4 style={{ fontFamily: 'Georgia, serif' }}>{step.title}</h4>
-                  <p>{step.desc}</p>
+                <div key={step.title} style={{
+                  background: 'var(--snc-paper)',
+                  padding: '36px 24px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 12,
+                }}>
+                  <div style={{
+                    fontFamily: 'JetBrains Mono, monospace',
+                    fontSize: 9,
+                    color: 'var(--snc-brass)',
+                    letterSpacing: '.18em',
+                    textTransform: 'uppercase',
+                  }}>
+                    Etapa {String(i + 1).padStart(2, '0')}
+                  </div>
+                  <div style={{ fontSize: 44, fontFamily: "'Libre Caslon Text', serif", color: 'rgba(15,26,36,.12)', lineHeight: 1, fontWeight: 400 }}>
+                    {String(i + 1).padStart(2, '0')}
+                  </div>
+                  <h4 style={{
+                    fontFamily: "'Libre Caslon Text', serif",
+                    fontWeight: 400,
+                    fontSize: 18,
+                    color: 'var(--snc-ink)',
+                    lineHeight: 1.15,
+                    margin: 0,
+                  }}>
+                    {step.title}
+                  </h4>
+                  <p style={{ fontSize: 13, color: '#4a5662', lineHeight: 1.55, margin: 0, flex: 1 }}>
+                    {step.desc}
+                  </p>
                 </div>
               ))}
+
+              {/* Card de entrega — terminal do fluxo */}
+              {j.delivery && (
+                <div style={{
+                  background: 'var(--snc-navy)',
+                  padding: '36px 24px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 12,
+                  borderTop: '3px solid var(--snc-green-2)',
+                }}>
+                  <div style={{
+                    fontFamily: 'JetBrains Mono, monospace',
+                    fontSize: 9,
+                    color: 'var(--snc-green-2)',
+                    letterSpacing: '.18em',
+                    textTransform: 'uppercase',
+                  }}>
+                    Entrega
+                  </div>
+                  <div style={{
+                    fontSize: 44,
+                    fontFamily: "'Libre Caslon Text', serif",
+                    color: 'var(--snc-green-2)',
+                    lineHeight: 1,
+                    fontWeight: 400,
+                    opacity: 0.3,
+                  }}>
+                    ✓
+                  </div>
+                  <h4 style={{
+                    fontFamily: "'Libre Caslon Text', serif",
+                    fontWeight: 400,
+                    fontSize: 18,
+                    color: '#fff',
+                    lineHeight: 1.15,
+                    margin: 0,
+                  }}>
+                    {j.delivery.title}
+                  </h4>
+                  <p style={{ fontSize: 13, color: '#8a94a3', lineHeight: 1.55, margin: 0, flex: 1 }}>
+                    {j.delivery.desc}
+                  </p>
+                  {j.delivery.highlights && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 4 }}>
+                      {j.delivery.highlights.map((h) => (
+                        <span key={h} style={{
+                          fontFamily: 'JetBrains Mono, monospace',
+                          fontSize: 9,
+                          color: 'var(--snc-green-2)',
+                          border: '1px solid rgba(43,168,74,.3)',
+                          padding: '3px 8px',
+                          letterSpacing: '.06em',
+                          textTransform: 'uppercase',
+                        }}>
+                          {h}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </section>
         )}

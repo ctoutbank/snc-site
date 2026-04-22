@@ -26,6 +26,7 @@ export interface SncJourney {
   steps?: { title: string; desc: string }[];
   narrative?: string[];
   paraQueServe?: string[];
+  delivery?: { title: string; desc: string; highlights?: string[] };
 }
 
 export interface SncSector {
@@ -447,6 +448,11 @@ export const JOURNEYS: SncJourney[] = [
       { title: 'Exposição Política', desc: 'Análise de cargos, doações e grau de risco político.' },
       { title: 'Trilha de Auditoria', desc: 'Log imutável de todas as consultas para Relatórios COAF.' },
     ],
+    delivery: {
+      title: 'Dossiê de Conformidade',
+      desc: 'Documento estruturado e rastreável pronto para apresentação a qualquer órgão regulador. Cada consulta logada por obrigação, prova de conformidade desde o primeiro onboarding.',
+      highlights: ['Auditoria BACEN', 'COAF · RIF', 'BCB 4.893', 'CVM/SFN'],
+    },
   },
 ];
 

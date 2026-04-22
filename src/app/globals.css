@@ -400,6 +400,8 @@
   /* Narrative */
   .snc-narrative-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
   .snc-narrative-left { position: static !important; }
+  /* Steps flow */
+  .snc-steps-grid { grid-template-columns: 1fr !important; }
   /* Cert */
   .snc-cert-grid { grid-template-columns: 1fr; gap: 36px; }
   .snc-cert-img { aspect-ratio: 4/3; }
