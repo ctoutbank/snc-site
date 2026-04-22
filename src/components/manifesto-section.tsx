@@ -15,7 +15,8 @@ export function ManifestoSection() {
             Conselho Consultivo · Consolle Data Intelligence
           </div>
           <div className="seal">
-            SELO<br />SNC
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/snc-shield.png" alt="Selo SNC" />
           </div>
         </div>
       </div>

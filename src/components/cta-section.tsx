@@ -26,22 +26,12 @@ export function CtaSection() {
               Explorar datasets
             </Link>
           </div>
-          <div style={{ marginTop: 48, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 30, maxWidth: 500 }}>
-            <div>
-              <div style={{ fontFamily: 'monospace', color: 'var(--snc-brass)', fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 8 }}>
-                Porto Alegre · Sede
-              </div>
-              <div style={{ color: '#bcc4d1', fontSize: 13, lineHeight: 1.6 }}>
-                Av. Ipiranga, 40<br />Trend City Center Office · Salas 1201/1212<br />CEP 90160-090 · Porto Alegre / RS
-              </div>
+          <div style={{ marginTop: 48, maxWidth: 280 }}>
+            <div style={{ fontFamily: 'monospace', color: 'var(--snc-brass)', fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 8 }}>
+              Porto Alegre · Sede
             </div>
-            <div>
-              <div style={{ fontFamily: 'monospace', color: 'var(--snc-brass)', fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 8 }}>
-                Porto Alegre · Operação
-              </div>
-              <div style={{ color: '#bcc4d1', fontSize: 13, lineHeight: 1.6 }}>
-                Av. Ipiranga, 40<br />Trend City Center Office · Salas 1201/1212<br />CEP 90160-090 · Porto Alegre / RS
-              </div>
+            <div style={{ color: '#bcc4d1', fontSize: 13, lineHeight: 1.8 }}>
+              Av. Ipiranga, 40<br />Trend City Center Office<br />Salas 1201 / 1212<br />CEP 90160-090 · Porto Alegre / RS
             </div>
           </div>
         </div>
