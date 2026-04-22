@@ -168,23 +168,6 @@ export default async function JornadaPage({ params }: Props) {
                   </div>
                 )}
 
-                {/* Link de contato inline */}
-                <div style={{ marginTop: 4 }}>
-                  <Link href="/contato" style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 6,
-                    fontSize: 13,
-                    color: 'var(--snc-green-2)',
-                    textDecoration: 'none',
-                    fontFamily: 'JetBrains Mono, monospace',
-                    letterSpacing: '.06em',
-                    borderBottom: '1px solid rgba(43,168,74,.3)',
-                    paddingBottom: 2,
-                  }}>
-                    Falar com um especialista →
-                  </Link>
-                </div>
               </div>
             </div>
           </section>
