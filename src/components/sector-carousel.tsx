@@ -1,8 +1,87 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { SECTORS } from '@/data/snc-data';
+
+function SectorCard({ s, index }: { s: (typeof SECTORS)[0]; index: number }) {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <Link
+      href={`/setores/${s.slug}`}
+      className="snc-sc"
+      style={{ textDecoration: 'none' }}
+      draggable={false}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {/* Photo — hidden on hover */}
+      <img
+        src={s.image}
+        alt={s.cat}
+        draggable={false}
+        style={{ opacity: hovered ? 0 : 0.2, transform: hovered ? 'scale(1.04)' : 'scale(1)' }}
+      />
+
+      {/* Navy overlay — hidden on hover */}
+      <div
+        className="snc-sc-overlay"
+        style={{ opacity: hovered ? 0 : 1 }}
+      />
+
+      {/* Default dark content */}
+      <div
+        className="snc-sc-default"
+        style={{ opacity: hovered ? 0 : 1, pointerEvents: hovered ? 'none' : 'auto' }}
+      >
+        <div className="sc-num">S.{String(index + 1).padStart(2, '0')} / XIV</div>
+        <div className="sc-cat">{s.cat}</div>
+        <h3>{s.title.replace(/\.$/, '')}<span className="it">.</span></h3>
+        <div className="sc-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Hover white content */}
+      <div
+        className="snc-sc-hover"
+        style={{
+          opacity: hovered ? 1 : 0,
+          transform: hovered ? 'translateY(0)' : 'translateY(6px)',
+          pointerEvents: hovered ? 'auto' : 'none',
+        }}
+      >
+        <div>
+          <div className="sc-hover-num">S.{String(index + 1).padStart(2, '0')}</div>
+          <div className="sc-hover-cat">{s.cat}</div>
+          <div className="sc-hover-metric">
+            <span className="sc-hover-val">{s.case.value}</span>
+            <span className="sc-hover-label">{s.case.label}</span>
+          </div>
+        </div>
+        <p className="sc-hover-text">{s.hoverText}</p>
+        <div>
+          <div className="sc-hover-tags">
+            {s.stars.slice(0, 3).map((star) => (
+              <span key={star}>{star}</span>
+            ))}
+          </div>
+          <div className="sc-hover-cta">
+            Conhecer o setor
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" width={14} height={14}>
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
 
 export function SectorCarousel() {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -35,7 +114,6 @@ export function SectorCarousel() {
 
   return (
     <div className="snc-carousel-root">
-      {/* Header */}
       <div className="snc-carousel-header">
         <div>
           <div className="kicker">§ EIXO III · SETORES</div>
@@ -60,7 +138,6 @@ export function SectorCarousel() {
         </div>
       </div>
 
-      {/* Track */}
       <div
         ref={trackRef}
         className="snc-carousel-track"
@@ -70,54 +147,7 @@ export function SectorCarousel() {
         onMouseMove={onMouseMove}
       >
         {SECTORS.map((s, i) => (
-          <Link
-            key={s.slug}
-            href={`/setores/${s.slug}`}
-            className="snc-sc"
-            style={{ textDecoration: 'none' }}
-            draggable={false}
-          >
-            {/* Photo */}
-            <img src={s.image} alt={s.cat} draggable={false} />
-
-            {/* Default dark content */}
-            <div className="snc-sc-default">
-              <div className="sc-num">S.{String(i + 1).padStart(2, '0')} / XIV</div>
-              <div className="sc-cat">{s.cat}</div>
-              <h3>{s.title.replace(/\.$/, '')}<span className="it">.</span></h3>
-              <div className="sc-arrow">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round">
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                  <polyline points="12 5 19 12 12 19" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Hover white content */}
-            <div className="snc-sc-hover">
-              <div>
-                <div className="sc-hover-num">S.{String(i + 1).padStart(2, '0')}</div>
-                <div className="sc-hover-cat">{s.cat}</div>
-                <div className="sc-hover-metric">
-                  <span className="sc-hover-val">{s.case.value}</span>
-                  <span className="sc-hover-label">{s.case.label}</span>
-                </div>
-              </div>
-              <p className="sc-hover-text">{s.hoverText}</p>
-              <div className="sc-hover-tags">
-                {s.stars.slice(0, 3).map((star) => (
-                  <span key={star}>{star}</span>
-                ))}
-              </div>
-              <div className="sc-hover-cta">
-                Conhecer o setor
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" width={14} height={14}>
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                  <polyline points="12 5 19 12 12 19" />
-                </svg>
-              </div>
-            </div>
-          </Link>
+          <SectorCard key={s.slug} s={s} index={i} />
         ))}
       </div>
     </div>

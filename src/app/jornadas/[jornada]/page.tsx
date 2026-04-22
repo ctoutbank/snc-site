@@ -129,22 +129,38 @@ export default async function JornadaPage({ params }: Props) {
                   </p>
                 ))}
 
-                {/* Para que serve — destaque */}
+                {/* Para que serve — premium dark card */}
                 {j.paraQueServe && j.paraQueServe.length > 0 && (
                   <div style={{
-                    background: 'rgba(43,168,74,.08)',
-                    border: '1px solid rgba(43,168,74,.22)',
-                    borderRadius: 4,
-                    padding: '24px 28px',
-                    marginTop: 8,
+                    background: 'var(--snc-navy)',
+                    borderLeft: '4px solid var(--snc-brass)',
+                    padding: '28px 32px',
+                    marginTop: 12,
                   }}>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.18em', textTransform: 'uppercase', marginBottom: 16 }}>
-                      Para que serve
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 10,
+                      marginBottom: 20,
+                    }}>
+                      <div style={{ width: 28, height: 1, background: 'var(--snc-brass)' }} />
+                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase' }}>
+                        Para que serve
+                      </div>
                     </div>
-                    <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                    <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 14 }}>
                       {j.paraQueServe.map((item, i) => (
-                        <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 14, color: '#2e3d4a', lineHeight: 1.55 }}>
-                          <span style={{ color: 'var(--snc-green-2)', flexShrink: 0, fontSize: 15, lineHeight: 1.2 }}>→</span>
+                        <li key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start', fontSize: 14, color: '#C4CDD8', lineHeight: 1.6 }}>
+                          <span style={{
+                            color: 'var(--snc-brass)',
+                            flexShrink: 0,
+                            fontSize: 11,
+                            lineHeight: 1.8,
+                            fontFamily: 'JetBrains Mono, monospace',
+                            letterSpacing: '.04em',
+                          }}>
+                            {String(i + 1).padStart(2, '0')}
+                          </span>
                           {item}
                         </li>
                       ))}
