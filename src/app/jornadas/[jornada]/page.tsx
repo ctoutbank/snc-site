@@ -225,7 +225,7 @@ export default async function JornadaPage({ params }: Props) {
                   }}>
                     Etapa {String(i + 1).padStart(2, '0')}
                   </div>
-                  <div style={{ fontSize: 44, fontFamily: "'Libre Caslon Text', serif", color: 'rgba(15,26,36,.12)', lineHeight: 1, fontWeight: 400 }}>
+                  <div style={{ fontSize: 44, fontFamily: "'Libre Caslon Text', serif", color: 'var(--snc-brass)', lineHeight: 1, fontWeight: 400, opacity: 0.4 }}>
                     {String(i + 1).padStart(2, '0')}
                   </div>
                   <h4 style={{
