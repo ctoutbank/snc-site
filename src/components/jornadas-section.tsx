@@ -19,7 +19,7 @@ export function JornadasSection() {
         {JOURNEYS.map((j, i) => (
           <Link
             key={j.slug}
-            href={`/snc/jornadas/${j.slug}`}
+            href={`/jornadas/${j.slug}`}
             className="snc-journey-row"
             style={{ textDecoration: 'none', display: 'grid' }}
           >

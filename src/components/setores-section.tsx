@@ -18,7 +18,7 @@ export function SetoresSection() {
         {SECTORS.map((s, i) => (
           <Link
             key={s.slug}
-            href={`/snc/setores/${s.slug}`}
+            href={`/setores/${s.slug}`}
             className={`snc-sector snc-${s.size}`}
             style={{ textDecoration: 'none' }}
           >

@@ -3,7 +3,7 @@ import Link from 'next/link';
 const EIXOS = [
   {
     num: 'EIXO I · PLATAFORMA',
-    href: '/snc/plataforma',
+    href: '/plataforma',
     label: 'Ver módulos',
     title: 'Por ',
     titleItalic: 'produto.',
@@ -19,7 +19,7 @@ const EIXOS = [
   },
   {
     num: 'EIXO II · JORNADAS',
-    href: '/snc/jornadas',
+    href: '/jornadas',
     label: 'Ver jornadas',
     title: 'Por ',
     titleItalic: 'problema.',
@@ -32,7 +32,7 @@ const EIXOS = [
   },
   {
     num: 'EIXO III · SETORES',
-    href: '/snc/setores',
+    href: '/setores',
     label: 'Ver setores',
     title: 'Por ',
     titleItalic: 'setor.',

@@ -46,7 +46,7 @@ export function ModulesPreview() {
         {visible.map((m, i) => (
           <Link
             key={m.slug}
-            href={`/snc/plataforma/${m.slug}`}
+            href={`/plataforma/${m.slug}`}
             style={{ textDecoration: 'none' }}
             className="snc-mod-card"
           >
