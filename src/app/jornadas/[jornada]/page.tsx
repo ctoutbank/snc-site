@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const j = JOURNEYS.find((j) => j.slug === jornada);
   if (!j) return {};
   return {
-    title: `${j.title}${j.titleItalic}`,
+    title: `${j.title}${j.titleItalic} — SNC`,
     description: j.problem + ' ' + j.description,
   };
 }
@@ -32,7 +32,8 @@ export default async function JornadaPage({ params }: Props) {
     <div className="snc-root">
       <SiteNav />
       <main>
-        {/* Hero */}
+
+        {/* ── Hero ── */}
         <section className="snc-hero" style={{ minHeight: 560 }}>
           <div className="snc-hero-bg">
             <img src={j.image} alt={j.title} />
@@ -40,10 +41,10 @@ export default async function JornadaPage({ params }: Props) {
           <div className="snc-hero-inner" style={{ paddingBottom: 60 }}>
             <div className="snc-hero-meta">
               <div className="l">
-                <span><span className="seal">§</span> Jornada</span>
+                <span><span className="seal">§</span> SNC · Solução</span>
               </div>
               <Link href="/jornadas" style={{ color: 'inherit', opacity: 0.7, fontSize: 12 }}>
-                ← Todas as jornadas
+                ← Ver soluções
               </Link>
             </div>
             <h1 style={{ fontSize: 'clamp(42px,7vw,96px)' }}>
@@ -71,7 +72,7 @@ export default async function JornadaPage({ params }: Props) {
           </div>
         </section>
 
-        {/* Módulos incluídos */}
+        {/* ── Módulos incluídos ── */}
         <div className="snc-trust">
           <div className="snc-trust-in">
             <span className="lab">Módulos</span>
@@ -81,7 +82,7 @@ export default async function JornadaPage({ params }: Props) {
           </div>
         </div>
 
-        {/* Narrativa editorial */}
+        {/* ── Narrativa editorial + Para que serve ── */}
         {j.narrative && j.narrative.length > 0 && (
           <section style={{
             background: 'var(--snc-paper-2)',
@@ -90,9 +91,11 @@ export default async function JornadaPage({ params }: Props) {
             padding: '80px 28px',
           }}>
             <div className="snc-narrative-grid" style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: 80, alignItems: 'start' }}>
-              <div style={{ position: 'sticky', top: 100 }}>
+
+              {/* Esquerda — pull-quote fixo */}
+              <div className="snc-narrative-left">
                 <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 20 }}>
-                  § O problema desta jornada
+                  § O problema que resolvemos
                 </div>
                 <blockquote style={{
                   fontFamily: "'Libre Caslon Text', serif",
@@ -111,6 +114,8 @@ export default async function JornadaPage({ params }: Props) {
                   {j.title}{j.titleItalic}
                 </div>
               </div>
+
+              {/* Direita — texto + para que serve + contato */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
                 {j.narrative.map((para, i) => (
                   <p key={i} style={{
@@ -123,23 +128,64 @@ export default async function JornadaPage({ params }: Props) {
                     {para}
                   </p>
                 ))}
+
+                {/* Para que serve — destaque */}
+                {j.paraQueServe && j.paraQueServe.length > 0 && (
+                  <div style={{
+                    background: 'rgba(43,168,74,.08)',
+                    border: '1px solid rgba(43,168,74,.22)',
+                    borderRadius: 4,
+                    padding: '24px 28px',
+                    marginTop: 8,
+                  }}>
+                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.18em', textTransform: 'uppercase', marginBottom: 16 }}>
+                      Para que serve
+                    </div>
+                    <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                      {j.paraQueServe.map((item, i) => (
+                        <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 14, color: '#2e3d4a', lineHeight: 1.55 }}>
+                          <span style={{ color: 'var(--snc-green-2)', flexShrink: 0, fontSize: 15, lineHeight: 1.2 }}>→</span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Link de contato inline */}
+                <div style={{ marginTop: 4 }}>
+                  <Link href="/contato" style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    fontSize: 13,
+                    color: 'var(--snc-green-2)',
+                    textDecoration: 'none',
+                    fontFamily: 'JetBrains Mono, monospace',
+                    letterSpacing: '.06em',
+                    borderBottom: '1px solid rgba(43,168,74,.3)',
+                    paddingBottom: 2,
+                  }}>
+                    Falar com um especialista →
+                  </Link>
+                </div>
               </div>
             </div>
           </section>
         )}
 
-        {/* Passo a passo */}
+        {/* ── Como funciona ── */}
         {j.steps && (
           <section className="snc-sec">
             <div className="snc-sec-head">
-              <div className="num">§ FLUXO</div>
+              <div className="num">§ ETAPAS</div>
               <h2>Como <span className="it">funciona.</span></h2>
-              <div className="aside">Sequência operacional implementada em {'<'} 1 sprint.</div>
+              <div className="aside">Sequência operacional pronta para integrar em menos de 1 sprint.</div>
             </div>
             <div className="snc-prod-grid" style={{ gridTemplateColumns: 'repeat(2,1fr)' }}>
               {j.steps.map((step, i) => (
                 <div key={step.title} className="snc-mod-card">
-                  <div className="tag">Passo {i + 1}</div>
+                  <div className="tag">Etapa {i + 1}</div>
                   <div className="cnt" style={{ fontSize: 56, color: 'var(--snc-brass)' }}>{String(i + 1).padStart(2, '0')}</div>
                   <h4 style={{ fontFamily: 'Georgia, serif' }}>{step.title}</h4>
                   <p>{step.desc}</p>
@@ -149,28 +195,29 @@ export default async function JornadaPage({ params }: Props) {
           </section>
         )}
 
-        {/* CTA */}
+        {/* ── CTA ── */}
         <section className="snc-cta" style={{ padding: '80px 28px' }}>
           <div style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 2 }}>
             <div style={{ fontFamily: 'monospace', fontSize: 11, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 20 }}>
-              § IMPLEMENTAR ESTA JORNADA
+              § SOLICITAR ACESSO
             </div>
             <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 'clamp(36px,5vw,60px)', fontWeight: 400, lineHeight: 1, marginBottom: 24 }}>
-              Pronto para resolver <span style={{ fontStyle: 'italic', color: '#bcc4d1' }}>este problema?</span>
+              Quer ver como funciona<span style={{ fontStyle: 'italic', color: '#bcc4d1' }}> na prática?</span>
             </h2>
             <p style={{ color: '#bcc4d1', fontSize: 16, lineHeight: 1.6, maxWidth: 500, margin: '0 auto 32px' }}>
-              Demonstração personalizada de 45 minutos com case prático para o seu setor.
+              Demonstração de 45 minutos com case real do seu setor. Sem compromisso.
             </p>
             <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link href="/contato" className="snc-btn snc-btn-primary">
-                Agendar demonstração →
+                Falar com um especialista →
               </Link>
               <Link href="/plataforma" className="snc-btn snc-btn-ghost">
-                Ver todos os módulos
+                Conhecer a plataforma
               </Link>
             </div>
           </div>
         </section>
+
       </main>
       <SiteFooter />
     </div>
