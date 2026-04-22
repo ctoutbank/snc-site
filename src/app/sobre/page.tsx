@@ -175,13 +175,8 @@ export default function SobrePage() {
               {[
                 {
                   city: 'Porto Alegre · Sede',
-                  address: 'Av. Ipiranga, 40\nTrend City Center Office · Salas 1201/1212\nCEP 90160-090 · Porto Alegre / RS',
+                  address: 'Av. Ipiranga, 40\nTrend City Center Office\nSalas 1201 / 1212\nCEP 90160-090 · Porto Alegre / RS',
                   desc: 'Centro de Governança, Compliance e Relações Institucionais.',
-                },
-                {
-                  city: 'Porto Alegre · Operação',
-                  address: 'Av. Ipiranga, 40\nTrend City Center Office · Salas 1201/1212\nCEP 90160-090 · Porto Alegre / RS',
-                  desc: 'Centro de Engenharia, Produto e Atendimento ao Cliente.',
                 },
               ].map((loc) => (
                 <div key={loc.city}>
