@@ -23,7 +23,7 @@ const TIMELINE = [
   { year: '2021', event: 'Lançamento do SNC com 9 bureaus integrados. Certificação ISO 27001.' },
   { year: '2022', event: '500 clientes ativos. Compliance SOC 2 Tipo II. Abertura do escritório em São Paulo.' },
   { year: '2023', event: 'Módulo LOVAC e Inteligência por IA. Conformidade Lei 14.790 (apostas). 1.000 clientes.' },
-  { year: '2024', event: 'Lançamento dos módulos ESG e Grafo de Relacionamentos. Sede Brasília inaugurada.' },
+  { year: '2024', event: 'Lançamento dos módulos ESG e Grafo de Relacionamentos. Sede Porto Alegre inaugurada no Trend City Center.' },
   { year: '2025', event: 'Relatório IA com LLMs auditáveis. 41 Mi de consultas/mês. R$ 2,1Bi de crédito protegido.' },
   { year: '2026', event: 'Expansão internacional. 253 datasets. 1.240 instituições. Maior plataforma de conformidade do Brasil.' },
 ];
@@ -174,13 +174,13 @@ export default function SobrePage() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 60 }}>
               {[
                 {
-                  city: 'Brasília · Sede',
-                  address: 'SHN Quadra 2, Bloco F\nEdifício Executive Office · 12º andar\nCEP 70702-906',
+                  city: 'Porto Alegre · Sede',
+                  address: 'Av. Ipiranga, 40\nTrend City Center Office · Salas 1201/1212\nCEP 90160-090 · Porto Alegre / RS',
                   desc: 'Centro de Governança, Compliance e Relações Institucionais.',
                 },
                 {
-                  city: 'São Paulo · Operação',
-                  address: 'Av. Brigadeiro Faria Lima, 4440\nItaim Bibi · 14º andar\nCEP 04538-132',
+                  city: 'Porto Alegre · Operação',
+                  address: 'Av. Ipiranga, 40\nTrend City Center Office · Salas 1201/1212\nCEP 90160-090 · Porto Alegre / RS',
                   desc: 'Centro de Engenharia, Produto e Atendimento ao Cliente.',
                 },
               ].map((loc) => (

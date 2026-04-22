@@ -249,7 +249,7 @@
 .snc-form-wrap textarea { resize: none; min-height: 60px; }
 .snc-form-wrap select option { background: var(--snc-navy); }
 .snc-form-submit { width: 100%; padding: 16px; background: var(--snc-green-2); color: #06240e; font-weight: 600; margin-top: 16px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; transition: background .15s; border: none; cursor: pointer; font: inherit; }
-.snc-form-submit:hover { background: #fff; }
+.snc-form-submit:hover { background: #fff; color: #0a1628; }
 .snc-form-submit:disabled { opacity: .6; cursor: not-allowed; }
 .snc-form-success { text-align: center; padding: 40px 20px; }
 .snc-form-success .icon { font-size: 48px; margin-bottom: 16px; }

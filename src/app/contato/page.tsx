@@ -34,12 +34,12 @@ export default function ContatoPage() {
               <div style={{ marginTop: 48, display: 'flex', flexDirection: 'column', gap: 32 }}>
                 {[
                   {
-                    label: 'Brasília · Sede',
-                    value: 'SHN Quadra 2, Bloco F\nEdifício Executive Office · 12º andar\nCEP 70702-906',
+                    label: 'Porto Alegre · Sede',
+                    value: 'Av. Ipiranga, 40\nTrend City Center Office · Salas 1201/1212\nCEP 90160-090 · Porto Alegre / RS',
                   },
                   {
-                    label: 'São Paulo · Operação',
-                    value: 'Av. Brigadeiro Faria Lima, 4440\nItaim Bibi · 14º andar\nCEP 04538-132',
+                    label: 'Porto Alegre · Operação',
+                    value: 'Av. Ipiranga, 40\nTrend City Center Office · Salas 1201/1212\nCEP 90160-090 · Porto Alegre / RS',
                   },
                   {
                     label: 'E-mail institucional',

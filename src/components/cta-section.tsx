@@ -29,18 +29,18 @@ export function CtaSection() {
           <div style={{ marginTop: 48, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 30, maxWidth: 500 }}>
             <div>
               <div style={{ fontFamily: 'monospace', color: 'var(--snc-brass)', fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 8 }}>
-                Brasília · Sede
+                Porto Alegre · Sede
               </div>
               <div style={{ color: '#bcc4d1', fontSize: 13, lineHeight: 1.6 }}>
-                SHN Quadra 2, Bloco F<br />Edifício Executive Office · 12º andar<br />CEP 70702-906
+                Av. Ipiranga, 40<br />Trend City Center Office · Salas 1201/1212<br />CEP 90160-090 · Porto Alegre / RS
               </div>
             </div>
             <div>
               <div style={{ fontFamily: 'monospace', color: 'var(--snc-brass)', fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 8 }}>
-                São Paulo · Operação
+                Porto Alegre · Operação
               </div>
               <div style={{ color: '#bcc4d1', fontSize: 13, lineHeight: 1.6 }}>
-                Av. Brigadeiro Faria Lima, 4440<br />Itaim Bibi · 14º andar<br />CEP 04538-132
+                Av. Ipiranga, 40<br />Trend City Center Office · Salas 1201/1212<br />CEP 90160-090 · Porto Alegre / RS
               </div>
             </div>
           </div>
