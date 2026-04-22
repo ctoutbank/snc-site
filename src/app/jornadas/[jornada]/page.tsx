@@ -84,16 +84,16 @@ export default async function JornadaPage({ params }: Props) {
 
         {/* ── Narrativa editorial + Para que serve ── */}
         {j.narrative && j.narrative.length > 0 && (
-          <section style={{
+          <section className="snc-narrative-section" style={{
             background: 'var(--snc-paper-2)',
             borderTop: '1px solid rgba(15,26,36,.1)',
             borderBottom: '1px solid rgba(15,26,36,.1)',
-            padding: '80px 28px',
+            padding: '120px 28px',
           }}>
-            <div className="snc-narrative-grid" style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: 80, alignItems: 'start' }}>
+            <div className="snc-narrative-grid" style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: 100, alignItems: 'start' }}>
 
               {/* Esquerda — pull-quote fixo */}
-              <div className="snc-narrative-left">
+              <div className="snc-narrative-left" style={{ paddingTop: 6 }}>
                 <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 20 }}>
                   § O problema que resolvemos
                 </div>
@@ -135,7 +135,7 @@ export default async function JornadaPage({ params }: Props) {
                     background: 'var(--snc-navy)',
                     borderLeft: '4px solid var(--snc-brass)',
                     padding: '28px 32px',
-                    marginTop: 12,
+                    marginTop: 36,
                   }}>
                     <div style={{
                       display: 'flex',
@@ -189,6 +189,7 @@ export default async function JornadaPage({ params }: Props) {
                 gap: 1,
                 background: 'rgba(15,26,36,.1)',
                 border: '1px solid rgba(15,26,36,.1)',
+                marginTop: 56,
               }}
             >
               {j.steps.map((step, i) => (

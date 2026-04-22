@@ -397,10 +397,11 @@
   .snc-manifesto blockquote { font-size: clamp(26px,6.5vw,40px); }
   .snc-manifesto .sig { flex-direction: column; align-items: flex-start; gap: 18px; }
   /* Narrative */
+  .snc-narrative-section { padding: 60px 18px !important; }
   .snc-narrative-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-  .snc-narrative-left { position: static !important; }
+  .snc-narrative-left { position: static !important; padding-top: 0 !important; }
   /* Steps flow */
-  .snc-steps-grid { grid-template-columns: 1fr !important; }
+  .snc-steps-grid { grid-template-columns: 1fr !important; margin-top: 32px !important; }
   /* Cert */
   .snc-cert-grid { grid-template-columns: 1fr; gap: 36px; }
   .snc-cert-img { aspect-ratio: 4/3; }
