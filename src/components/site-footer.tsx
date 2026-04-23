@@ -25,18 +25,15 @@ export function SiteFooter() {
               <a
                 href="mailto:contato@snc.consolle.one"
                 style={{
-                  fontFamily: "'Inter', 'JetBrains Mono', sans-serif",
-                  fontSize: 'clamp(15px,1.4vw,19px)',
-                  color: '#e8edf2',
-                  letterSpacing: '0.01em',
+                  fontFamily: 'inherit',
+                  fontSize: 12,
+                  color: '#7c8699',
+                  letterSpacing: 'normal',
                   textDecoration: 'none',
                   display: 'block',
                   fontWeight: 400,
-                  lineHeight: 1.4,
-                  transition: 'color .2s',
+                  lineHeight: 1.6,
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--snc-brass)')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#e8edf2')}
               >
                 contato@snc.consolle.one
               </a>
