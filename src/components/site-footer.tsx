@@ -8,7 +8,7 @@ export function SiteFooter() {
         <div className="snc-foot-top">
           <div className="brand">
             <img src="/snc-logo.png" alt="SNC" />
-            <p>Sistema Nacional de Conformidade. Operado pela Consolle Data Intelligence S.A. CNPJ 33.284.110/0001-48. Empresa brasileira registrada na ANPD.</p>
+            <p>Sistema Nacional de Conformidade. Infraestrutura brasileira de inteligência de dados para decisão em tempo real. Conformidade LGPD e BCB 4.893.</p>
           </div>
           <div className="snc-foot-col">
             <h5>Plataforma</h5>
