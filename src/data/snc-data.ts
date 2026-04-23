@@ -133,7 +133,7 @@ export const MODULES: SncModule[] = [
     datasets: 9,
     description: 'Listas negras, sanções, PEP e exposição política consolidada.',
     chips: ['OFAC', 'ONU', 'TSE'],
-    fullDescription: 'Varredura completa em listas de sanções nacionais e internacionais: OFAC, ONU, UE, COAF, ANPD. Identificação de PEP (Pessoa Politicamente Exposta) com graus de exposição e parentes. Conformidade total com COAF Resolução 36.',
+    fullDescription: 'Varredura completa em listas internacionais (OFAC, ONU, UE) e nacionais (COAF, ANPD, entre outras). Identificação de PEP (Pessoa Politicamente Exposta) com graus de exposição e parentes. Conformidade total com COAF Resolução 36.',
     useCases: ['Onboarding PLD/FT', 'KYB (Know Your Business)', 'Monitoramento contínuo', 'Auditorias regulatórias'],
     sla: '99,99%',
     priceFrom: 'R$ 0,35/consulta',
@@ -359,7 +359,7 @@ export const JOURNEYS: SncJourney[] = [
       { title: 'Captura de Documento', desc: 'OCR automático de RG, CNH ou Passaporte com validação de autenticidade.' },
       { title: 'Prova de Vida', desc: 'Biometria facial com liveness detection anti-spoofing.' },
       { title: 'Validação Oficial', desc: 'Cruzamento com Receita Federal, SERPRO e bases de identidade.' },
-      { title: 'Compliance PEP/Sanções', desc: 'Varredura automática em OFAC, ONU, COAF, UE e listas nacionais e internacionais.' },
+      { title: 'Compliance PEP/Sanções', desc: 'Varredura em listas internacionais (OFAC, ONU, UE) e nacionais (COAF, entre outras).' },
     ],
     narrative: [
       'O KYC não é um processo de boas-vindas. É a primeira linha de defesa contra lavagem de dinheiro, uso de identidade falsa e fraude de onboarding. A maior parte das equipes ainda executa etapas em silos — biometria em um fornecedor, validação documental em outro, consulta PEP em um terceiro — com reconciliação manual e risco acumulado a cada handoff.',
@@ -583,7 +583,7 @@ export const JOURNEYS: SncJourney[] = [
       'Operadores de apostas e igaming sujeitos à Lei 14.790/2023',
     ],
     steps: [
-      { title: 'PLD/FT', desc: 'Varredura em listas COAF, OFAC, ONU, UE e Interpol.' },
+      { title: 'PLD/FT', desc: 'Varredura em listas internacionais (OFAC, ONU, UE, Interpol) e nacionais (COAF, entre outras).' },
       { title: 'PEP e Sanções', desc: 'Identificação e monitoramento de Pessoas Politicamente Expostas.' },
       { title: 'Exposição Política', desc: 'Análise de cargos, doações e grau de risco político.' },
       { title: 'Trilha de Auditoria', desc: 'Log imutável de todas as consultas para Relatórios COAF.' },

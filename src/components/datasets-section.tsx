@@ -83,11 +83,7 @@ export function DatasetsSection() {
             OPERACIONAL DE DECISÃO DO PAÍS.
           </div>
           <p className="snc-ds-copy">
-            Consolidamos as mais importantes fontes públicas e privadas em uma ampla malha coesa de APIs documentadas, e plataforma{' '}
-            <span className="it" style={{ color: 'var(--snc-green-2)' }}>
-              Co-Branded
-            </span>{' '}
-            com SLA único, contrato único e faturamento único.
+            Consolidamos as mais importantes fontes públicas e privadas em uma ampla malha coesa de APIs documentadas, e plataforma Co-Branded com SLA único, contrato único e faturamento único.
           </p>
           <div className="snc-ds-ctas">
             <Link href="/contato" className="snc-btn snc-btn-primary">
