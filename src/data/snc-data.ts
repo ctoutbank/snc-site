@@ -313,14 +313,14 @@ export const JOURNEYS: SncJourney[] = [
       { value: '< 2s', label: 'Tempo de decisão' },
     ],
     steps: [
-      { title: 'Score Multibureau', desc: 'Consulta simultânea em 9 bureaus — SCR, SPC, Serasa, Boa Vista, Quod.' },
+      { title: 'Score Multibureau', desc: 'Consulta simultânea em 9 bureaus, SCR, SPC, Serasa, Boa Vista, Quod.' },
       { title: 'Cadastro & Identidade', desc: 'Validação completa de dados pessoais e documentais em fontes oficiais.' },
       { title: 'Risco Financeiro', desc: 'Análise de endividamento SCR e projeção actuarial de inadimplência.' },
       { title: 'Decisão Automatizada', desc: 'Score consolidado com threshold configurável por política de risco.' },
     ],
     narrative: [
-      'O problema do crédito responsável não é análise de dados — é acesso simultâneo às fontes certas no momento da decisão. A maioria dos modelos ainda consulta bureaus em série, exposta a inconsistências entre bases e à latência que compromete a experiência do cliente. O resultado é aprovação excessiva em carteiras de risco ou rejeição conservadora que afasta bons pagadores.',
-      'O SNC consulta os 9 principais bureaus em paralelo — SCR Banco Central, SPC Brasil, Serasa, Boa Vista, Quod e bases complementares — entregando um score consolidado em menos de 2 segundos. Cada fonte é ponderada pelo modelo e os dados brutos ficam disponíveis para auditoria da política de crédito.',
+      'O problema do crédito responsável não é análise de dados, é acesso simultâneo às fontes certas no momento da decisão. A maioria dos modelos ainda consulta bureaus em série, exposta a inconsistências entre bases e à latência que compromete a experiência do cliente. O resultado é aprovação excessiva em carteiras de risco ou rejeição conservadora que afasta bons pagadores.',
+      'O SNC consulta os 9 principais bureaus em paralelo (SCR Banco Central, SPC Brasil, Serasa, Boa Vista, Quod e bases complementares) entregando um score consolidado em menos de 2 segundos. Cada fonte é ponderada pelo modelo e os dados brutos ficam disponíveis para auditoria da política de crédito.',
       'Na prática, instituições que adotam score multibureau com o SNC registram queda consistente na inadimplência sem redução no volume aprovado. A explicação é simples: mais dados, melhor segregação de risco.',
     ],
     paraQueServe: [
@@ -331,10 +331,10 @@ export const JOURNEYS: SncJourney[] = [
       'Consignado e crédito pessoal com necessidade de validação de vínculo empregatício',
     ],
     legalBasis: [
-      'Lei 12.414/2011 — Cadastro Positivo de Crédito',
-      'Resolução BCB 4.557 — Gestão de Riscos',
-      'Resolução BCB 4.676 — Crédito ao Consumidor',
-      'SCR — Sistema de Informações de Crédito BCB',
+      'Lei 12.414/2011: Cadastro Positivo de Crédito',
+      'Resolução BCB 4.557: Gestão de Riscos',
+      'Resolução BCB 4.676: Crédito ao Consumidor',
+      'SCR: Sistema de Informações de Crédito BCB',
     ],
     delivery: {
       title: 'Score Consolidado Multibureau',
@@ -362,9 +362,9 @@ export const JOURNEYS: SncJourney[] = [
       { title: 'Compliance PEP/Sanções', desc: 'Varredura em listas internacionais (OFAC, ONU, UE) e nacionais (COAF, entre outras).' },
     ],
     narrative: [
-      'O KYC não é um processo de boas-vindas. É a primeira linha de defesa contra lavagem de dinheiro, uso de identidade falsa e fraude de onboarding. A maior parte das equipes ainda executa etapas em silos — biometria em um fornecedor, validação documental em outro, consulta PEP em um terceiro — com reconciliação manual e risco acumulado a cada handoff.',
-      'O SNC unifica biometria facial com liveness detection, OCR de documentos, validação em Receita Federal e SERPRO, e varredura automática em listas PEP e sanções internacionais em uma única chamada de API. O fluxo inteiro leva menos de 15 segundos e gera um registro unificado por onboarding — imuável, exportável e pronto para apresentação ao regulador.',
-      'O artefato final não é apenas uma aprovação. É um dosiê KYC com hash de evidência, timestamp e trilha de validação — exatamente o que o Banco Central exige para fiscalização do Programa de Compliance.',
+      'O KYC não é um processo de boas-vindas. É a primeira linha de defesa contra lavagem de dinheiro, uso de identidade falsa e fraude de onboarding. A maior parte das equipes ainda executa etapas em silos (biometria em um fornecedor, validação documental em outro, consulta PEP em um terceiro) com reconciliação manual e risco acumulado a cada handoff.',
+      'O SNC unifica biometria facial com liveness detection, OCR de documentos, validação em Receita Federal e SERPRO, e varredura automática em listas PEP e sanções internacionais em uma única chamada de API. O fluxo inteiro leva menos de 15 segundos e gera um registro unificado por onboarding, imuável, exportável e pronto para apresentação ao regulador.',
+      'O artefato final não é apenas uma aprovação. É um dosiê KYC com hash de evidência, timestamp e trilha de validação, exatamente o que o Banco Central exige para fiscalização do Programa de Compliance.',
     ],
     paraQueServe: [
       'Fintechs e bancos obrigados à Política de KYC conforme Resolução BCB 4.893',
@@ -374,10 +374,10 @@ export const JOURNEYS: SncJourney[] = [
       'Seguradoras e previdências com onboarding digital regulado pela SUSEP',
     ],
     legalBasis: [
-      'Resolução BCB 4.893 — Política de KYC e Compliance',
-      'LGPD — Lei 13.709/2018 — Tratamento de dados biométricos',
-      'Circular BCB 3.978 — PLD/FT em instituições financeiras',
-      'SUSEP Circular 612 — KYC em seguros e previdência',
+      'Resolução BCB 4.893: Política de KYC e Compliance',
+      'LGPD: Lei 13.709/2018: Tratamento de dados biométricos',
+      'Circular BCB 3.978: PLD/FT em instituições financeiras',
+      'SUSEP Circular 612: KYC em seguros e previdência',
     ],
     delivery: {
       title: 'Dosiê KYC Certificado',
@@ -405,9 +405,9 @@ export const JOURNEYS: SncJourney[] = [
       { title: 'Relatório Forense', desc: 'Síntese analítica em PDF com recomendações e trilha de auditoria.' },
     ],
     narrative: [
-      'Antes de assinar um contrato, aceitar um cotista ou fechar uma parceria, a pergunta real é: quem é essa pessoa ou empresa, de fato? A due diligence mal conduzida não é apenas um risco jurídico — é exposição a responsabilidade solidária em processo de lavagem, fraude contratual ou envolvimento em esquemas de corrupção. A maioria das equipes ainda depende de buscas manuais, ausentes de padronização e sem trilha de auditoria defensável.',
+      'Antes de assinar um contrato, aceitar um cotista ou fechar uma parceria, a pergunta real é: quem é essa pessoa ou empresa, de fato? A due diligence mal conduzida não é apenas um risco jurídico, é exposição a responsabilidade solidária em processo de lavagem, fraude contratual ou envolvimento em esquemas de corrupção. A maioria das equipes ainda depende de buscas manuais, ausentes de padronização e sem trilha de auditoria defensável.',
       'O SNC executa investigação com cruzamento de até 35 fontes em paralelo: antecedentes criminais, processos em todas as esferas, histórico de protestos, análise de grafo de relacionamentos, exposição política e reputação em mídias abertas. O resultado chega como relatório estruturado em PDF, com metodologia documentada e hash de integridade.',
-      'Para compliance officers, o dosiê SNC não é um relatório de busca — é um artefato de defesa. Cada dado consultado tem fonte, timestamp e resultado rastreável. Quando a fiscalização chega, a evidência de diligência já está pronta.',
+      'Para compliance officers, o dosiê SNC não é um relatório de busca, é um artefato de defesa. Cada dado consultado tem fonte, timestamp e resultado rastreável. Quando a fiscalização chega, a evidência de diligência já está pronta.',
     ],
     paraQueServe: [
       'Fundos de private equity e venture capital em processo de due diligence pré-investimento',
@@ -417,10 +417,10 @@ export const JOURNEYS: SncJourney[] = [
       'Empresas em processo de licenciamento ou renovação contratual com órgãos públicos',
     ],
     legalBasis: [
-      'Lei 12.846/2013 — Lei Anticorrupção',
-      'Lei 9.613/1998 — Prevenção à Lavagem de Dinheiro',
-      'Decreto 8.420/2015 — Programa de Integridade',
-      'Circular BCB 3.978 — Due Diligence de Contrapartes',
+      'Lei 12.846/2013: Lei Anticorrupção',
+      'Lei 9.613/1998: Prevenção à Lavagem de Dinheiro',
+      'Decreto 8.420/2015: Programa de Integridade',
+      'Circular BCB 3.978: Due Diligence de Contrapartes',
     ],
     delivery: {
       title: 'Relatório Forense Completo',
@@ -448,9 +448,9 @@ export const JOURNEYS: SncJourney[] = [
       { title: 'Alerta Webhook', desc: 'Notificação instantânea para seu sistema de prevenção.' },
     ],
     narrative: [
-      'A fraude não avisa. Ela explora a janela entre a intenção do usuário e a resposta do sistema — e essa janela, na maioria das operações, dura mais de 3 segundos. Nesse intervalo, os padrões que distinguem um usuário legítimo de uma identidade sintética, um dispositivo comprometido ou uma conta de mula já estavam disponíveis. O problema não é dados — é latência na decisão.',
+      'A fraude não avisa. Ela explora a janela entre a intenção do usuário e a resposta do sistema, e essa janela, na maioria das operações, dura mais de 3 segundos. Nesse intervalo, os padrões que distinguem um usuário legítimo de uma identidade sintética, um dispositivo comprometido ou uma conta de mula já estavam disponíveis. O problema não é dados, é latência na decisão.',
       'O motor antifraude do SNC combina score transacional em tempo real, fingerprint de dispositivo, phone score verificado, análise de velocidade e histórico de chargeback em uma única camada de decisão com resposta em menos de 200ms. Cada indicador é ponderado pelo modelo e o resultado é uma probabilidade de fraude calibrada por tipo de operação.',
-      'O diferencial operacional está no monitoramento contínuo: o SNC não apenas decide no momento da transação, mas acompanha o comportamento da carteira via webhook — alertando anomalias antes que se tornem chargebacks ou bloqueios regulatórios.',
+      'O diferencial operacional está no monitoramento contínuo: o SNC não apenas decide no momento da transação, mas acompanha o comportamento da carteira via webhook, alertando anomalias antes que se tornem chargebacks ou bloqueios regulatórios.',
     ],
     paraQueServe: [
       'E-commerces e marketplaces com alta incidência de fraude em cartão e contas de mula',
@@ -460,10 +460,10 @@ export const JOURNEYS: SncJourney[] = [
       'Plataformas de cashback e loyalty com risco de abuso de programa',
     ],
     legalBasis: [
-      'Resolução BCB 4.893 — Segurança em meios eletrônicos de pagamento',
-      'Lei 14.286/2021 — Marco Legal das Garantias e Prevenção a Fraudes',
-      'Circular BCB 3.978 — Controles internos e PLD/FT',
-      'LGPD — Análise de risco e decisões automatizadas',
+      'Resolução BCB 4.893: Segurança em meios eletrônicos de pagamento',
+      'Lei 14.286/2021: Marco Legal das Garantias e Prevenção a Fraudes',
+      'Circular BCB 3.978: Controles internos e PLD/FT',
+      'LGPD: Análise de risco e decisões automatizadas',
     ],
     delivery: {
       title: 'Score Antifraude em Tempo Real',
@@ -491,9 +491,9 @@ export const JOURNEYS: SncJourney[] = [
       { title: 'Score Consolidado', desc: 'Rating de saúde empresarial com recomendação de risco.' },
     ],
     narrative: [
-      'Operar com pessoas jurídicas sem radiografia real é decidir no escuro. Balanços auditados chegam com atraso, dados de SPED são opacos para quem não tem acesso direto e a composição societária real — com holdings e offshores — quase nunca está no contrato. O resultado é exposição a risco de crédito subestimado, fraude contratual e responsabilidade solidária com empresas envolvidas em irregularidades.',
+      'Operar com pessoas jurídicas sem radiografia real é decidir no escuro. Balanços auditados chegam com atraso, dados de SPED são opacos para quem não tem acesso direto e a composição societária real (com holdings e offshores) quase nunca está no contrato. O resultado é exposição a risco de crédito subestimado, fraude contratual e responsabilidade solidária com empresas envolvidas em irregularidades.',
       'O SNC mapeia a PJ em quatro dimensões simultâneas: indicadores financeiros estimados a partir de SPED, RAIS e bases fiscais; quadro societário completo com grafo de holdings e grupo econômico; conformidade ESG com histórico de embargos IBAMA; e scorecard de saúde operacional consolidado. Tudo em menos de 3 segundos, via API.',
-      'Para analistas de crédito B2B, o SNC elimina o intervalo de semanas entre a solicitação e a disponibilização de informação qualificada. A decisão baseia-se em dados estruturados e auditáveis — não em balanço auto-declarado ou visita presencial.',
+      'Para analistas de crédito B2B, o SNC elimina o intervalo de semanas entre a solicitação e a disponibilização de informação qualificada. A decisão baseia-se em dados estruturados e auditáveis, não em balanço auto-declarado ou visita presencial.',
     ],
     paraQueServe: [
       'Bancos e fundos com carteira de crédito B2B que precisam de análise rápida e auditável de PJs',
@@ -503,10 +503,10 @@ export const JOURNEYS: SncJourney[] = [
       'Plataformas de supply chain que gerenciam risco de fornecedores em tempo real',
     ],
     legalBasis: [
-      'Lei 6.404/1976 — Lei das Sociedades Anônimas',
-      'Decreto-Lei 9.430/1996 — SPED e Obrigações Fiscais',
-      'Lei 12.651/2012 — Código Florestal e SICAR',
-      'CVM — Instrução 480 — Informações Periódicas',
+      'Lei 6.404/1976: Lei das Sociedades Anônimas',
+      'Decreto-Lei 9.430/1996: SPED e Obrigações Fiscais',
+      'Lei 12.651/2012: Código Florestal e SICAR',
+      'CVM: Instrução 480: Informações Periódicas',
     ],
     delivery: {
       title: 'Dosiê Empresarial Completo',
@@ -534,7 +534,7 @@ export const JOURNEYS: SncJourney[] = [
       { title: 'Enriquecimento em Lote', desc: 'API em lote para atualização de toda a base em < 24h.' },
     ],
     narrative: [
-      'Uma base desatualizada é um passivo disfarçado de ativo. Telefones inválidos, e-mails inativos e endereços desatualizados comprometem campanhas, travam onboardings e produzem dados de cobrança inúteis. O enriquecimento manual é lento, caro e não escala — especialmente quando a base tem centenas de milhares de registros com frequência de atualização variável.',
+      'Uma base desatualizada é um passivo disfarçado de ativo. Telefones inválidos, e-mails inativos e endereços desatualizados comprometem campanhas, travam onboardings e produzem dados de cobrança inúteis. O enriquecimento manual é lento, caro e não escala, especialmente quando a base tem centenas de milhares de registros com frequência de atualização variável.',
       'O SNC resolve o enriquecimento em lote via API: perfil digital completo com presença em apps, redes sociais e assinatura de dispositivo; e-mails e telefones verificados em tempo real contra bases de operadoras; e comportamento online estruturado. A atualização de toda a base acontece em menos de 24 horas, com cobertura acima de 98% para CPFs ativos.',
       'Para equipes de CRM, o resultado é imediato: aumento consistente na taxa de entrega de email, melhor segmentação por perfil digital e redução de custo operacional com dados inválidos. A base deixa de ser um problema de qualidade e passa a ser um ativo de decisão.',
     ],
@@ -546,10 +546,10 @@ export const JOURNEYS: SncJourney[] = [
       'Startups de dados que revendem perfis enriquecidos para clientes corporativos',
     ],
     legalBasis: [
-      'LGPD — Art. 7.º e 11 — Finalidade e legitimidade no tratamento de dados',
-      'Lei 12.965/2014 — Marco Civil da Internet',
-      'ANATEL — Portabilidade e validação de operadora',
-      'LGPD — Art. 18 — Direitos do titular e atualização de dados',
+      'LGPD: Art. 7.º e 11: Finalidade e legitimidade no tratamento de dados',
+      'Lei 12.965/2014: Marco Civil da Internet',
+      'ANATEL: Portabilidade e validação de operadora',
+      'LGPD: Art. 18: Direitos do titular e atualização de dados',
     ],
     delivery: {
       title: 'Base Enriquecida via API em Lote',
@@ -594,10 +594,10 @@ export const JOURNEYS: SncJourney[] = [
       highlights: ['Auditoria BACEN', 'COAF · RIF', 'BCB 4.893', 'CVM/SFN'],
     },
     legalBasis: [
-      'Resolução BCB 4.893 — PLD/FT',
-      'Circular BCB 3.978 — COAF/RIF',
-      'LGPD — Lei 13.709/2018',
-      'CVM — Instrução 50 · SFN',
+      'Resolução BCB 4.893: PLD/FT',
+      'Circular BCB 3.978: COAF/RIF',
+      'LGPD: Lei 13.709/2018',
+      'CVM: Instrução 50 · SFN',
     ],
   },
 ];
