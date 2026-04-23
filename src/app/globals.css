@@ -44,7 +44,8 @@
 /* ===== BUTTONS ===== */
 .snc-btn { padding: 11px 18px; font-size: 13px; border-radius: 2px; transition: all .15s; letter-spacing: .02em; display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent; cursor: pointer; }
 .snc-btn-ghost { color: #fff; border-color: rgba(255,255,255,.55); }
-.snc-btn-ghost:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,.08); }
+.snc-btn.snc-btn-ghost { color: #fff; border-color: rgba(255,255,255,.55); }
+.snc-btn.snc-btn-ghost:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,.08); }
 .snc-btn-primary { background: var(--snc-green-2); color: #06240e; font-weight: 600; border-color: var(--snc-green-2); }
 .snc-btn-primary:hover { background: #fff; border-color: #fff; color: var(--snc-ink); }
 .snc-btn-dark { background: var(--snc-navy); color: #fff; }
