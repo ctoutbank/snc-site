@@ -93,7 +93,7 @@ export default async function JornadaPage({ params }: Props) {
             <div className="snc-narrative-grid" style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: 100, alignItems: 'stretch' }}>
 
               {/* Esquerda — pull-quote fixo */}
-              <div className="snc-narrative-left" style={{ paddingTop: 6 }}>
+              <div className="snc-narrative-left" style={{ paddingTop: 6, display: 'flex', flexDirection: 'column' }}>
                 <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 20 }}>
                   § O problema que resolvemos
                 </div>
@@ -120,7 +120,7 @@ export default async function JornadaPage({ params }: Props) {
                     background: 'var(--snc-navy)',
                     borderLeft: '4px solid var(--snc-brass)',
                     padding: '28px 32px',
-                    marginTop: 32,
+                    marginTop: 'auto',
                   }}>
                     <div style={{
                       display: 'flex',
