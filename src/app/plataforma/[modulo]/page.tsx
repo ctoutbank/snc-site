@@ -139,47 +139,6 @@ export default async function ModuloPage({ params }: Props) {
           </section>
         )}
 
-        {/* ── Datasets detalhados ── */}
-        {m.datasetItems && m.datasetItems.length > 0 && (
-          <section className="snc-sec" style={{ paddingTop: 72, paddingBottom: 72, borderTop: '1px solid rgba(15,26,36,.1)' }}>
-            <div style={{ maxWidth: 1180, margin: '0 auto' }}>
-              <div style={{ marginBottom: 48 }}>
-                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 16 }}>
-                  § Datasets incluídos
-                </div>
-                <h2 style={{ fontFamily: "'Libre Caslon Text', serif", fontWeight: 400, fontSize: 'clamp(26px,3vw,40px)', lineHeight: 1.05, letterSpacing: '-0.02em', color: 'var(--snc-ink)', maxWidth: 520 }}>
-                  O que cada um dos <span style={{ fontStyle: 'italic', color: '#5a6a7a' }}>{m.datasets} datasets entrega.</span>
-                </h2>
-              </div>
-
-              {/* Grid de datasets */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 1, background: 'rgba(15,26,36,.1)', border: '1px solid rgba(15,26,36,.1)' }}>
-                {m.datasetItems.map((ds, i) => (
-                  <div key={ds.id} style={{ background: 'var(--snc-paper)', padding: '28px 28px 32px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    {/* Cabeçalho */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-                      <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.14em' }}>
-                        {String(i + 1).padStart(2, '0')} · {ds.id}
-                      </span>
-                      <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: '#8a94a3', letterSpacing: '.12em', textTransform: 'uppercase', background: 'rgba(15,26,36,.06)', padding: '3px 8px', border: '1px solid rgba(15,26,36,.1)' }}>
-                        {ds.source}
-                      </span>
-                    </div>
-                    {/* Nome */}
-                    <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 18, fontWeight: 400, color: 'var(--snc-ink)', lineHeight: 1.2 }}>
-                      {ds.name}
-                    </div>
-                    {/* O que retorna */}
-                    <p style={{ fontSize: 13, color: '#5a6a7a', lineHeight: 1.65, margin: 0 }}>
-                      {ds.returns}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
         {/* ── Use Cases ── */}
         {m.useCases && m.useCases.length > 0 && (
           <section style={{ background: 'var(--snc-paper-2)', borderTop: '1px solid rgba(15,26,36,.1)', padding: '80px 28px' }}>
@@ -200,6 +159,43 @@ export default async function ModuloPage({ params }: Props) {
                     <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 20, fontWeight: 400, color: 'var(--snc-ink)', lineHeight: 1.15 }}>
                       {uc}
                     </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ── Datasets detalhados ── */}
+        {m.datasetItems && m.datasetItems.length > 0 && (
+          <section className="snc-sec" style={{ paddingTop: 72, paddingBottom: 72, borderTop: '1px solid rgba(15,26,36,.1)' }}>
+            <div style={{ maxWidth: 1180, margin: '0 auto' }}>
+              <div style={{ marginBottom: 48 }}>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 16 }}>
+                  § Datasets incluídos
+                </div>
+                <h2 style={{ fontFamily: "'Libre Caslon Text', serif", fontWeight: 400, fontSize: 'clamp(26px,3vw,40px)', lineHeight: 1.05, letterSpacing: '-0.02em', color: 'var(--snc-ink)', maxWidth: 520 }}>
+                  O que cada um dos <span style={{ fontStyle: 'italic', color: '#5a6a7a' }}>{m.datasets} datasets entrega.</span>
+                </h2>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 1, background: 'rgba(15,26,36,.1)', border: '1px solid rgba(15,26,36,.1)' }}>
+                {m.datasetItems.map((ds, i) => (
+                  <div key={ds.id} style={{ background: 'var(--snc-paper)', padding: '28px 28px 32px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                      <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.14em' }}>
+                        {String(i + 1).padStart(2, '0')} · {ds.id}
+                      </span>
+                      <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: '#8a94a3', letterSpacing: '.12em', textTransform: 'uppercase', background: 'rgba(15,26,36,.06)', padding: '3px 8px', border: '1px solid rgba(15,26,36,.1)' }}>
+                        {ds.source}
+                      </span>
+                    </div>
+                    <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 18, fontWeight: 400, color: 'var(--snc-ink)', lineHeight: 1.2 }}>
+                      {ds.name}
+                    </div>
+                    <p style={{ fontSize: 13, color: '#5a6a7a', lineHeight: 1.65, margin: 0 }}>
+                      {ds.returns}
+                    </p>
                   </div>
                 ))}
               </div>
