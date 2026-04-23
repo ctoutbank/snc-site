@@ -329,7 +329,8 @@ export const JOURNEYS: SncJourney[] = [
       { value: 'PDF', label: 'Relatório auditável' },
     ],
     steps: [
-
+      { title: 'Background Check', desc: 'Antecedentes criminais, processos e certidões em todas as esferas.' },
+      { title: 'Exposição Política', desc: 'PEP estendido, doações, cargos e bens declarados.' },
       { title: 'Relatório Forense', desc: 'Síntese analítica em PDF com recomendações e trilha de auditoria.' },
     ],
   },
