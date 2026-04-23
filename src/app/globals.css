@@ -158,8 +158,8 @@
 .snc-sg-sub { font-size: 14px; color: #7a8a9a; line-height: 1.55; margin: 0; }
 .snc-sg-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
 .snc-sg-footer { margin-top: 48px; }
-.snc-btn-outline { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #fff; border: 1px solid rgba(255,255,255,.25); padding: 14px 28px; text-decoration: none; transition: border-color .2s, background .2s; }
-.snc-btn-outline:hover { border-color: #fff; background: rgba(255,255,255,.06); }
+.snc-btn-outline { display: inline-flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: #fff; border: 1px solid var(--snc-brass); padding: 14px 36px; text-decoration: none; transition: background .22s, color .22s, border-color .22s; font-weight: 500; }
+.snc-btn-outline:hover { background: var(--snc-brass); color: var(--snc-navy); border-color: var(--snc-brass); }
 
 /* Card base */
 .snc-sg-card { position: relative; height: 320px; overflow: hidden; background: var(--snc-navy); display: block; }

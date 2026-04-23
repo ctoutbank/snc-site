@@ -90,7 +90,7 @@ export default async function JornadaPage({ params }: Props) {
             borderBottom: '1px solid rgba(15,26,36,.1)',
             padding: '120px 28px',
           }}>
-            <div className="snc-narrative-grid" style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: 100, alignItems: 'start' }}>
+            <div className="snc-narrative-grid" style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: 100, alignItems: 'stretch' }}>
 
               {/* Esquerda — pull-quote fixo */}
               <div className="snc-narrative-left" style={{ paddingTop: 6 }}>
@@ -154,44 +154,41 @@ export default async function JornadaPage({ params }: Props) {
                 )}
               </div>
 
-              {/* Direita — texto + para que serve + contato */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                {j.narrative.map((para, i) => (
-                  <p key={i} style={{
-                    fontSize: i === 0 ? 17 : 16,
-                    color: i === 0 ? '#2e3d4a' : '#4a5662',
-                    lineHeight: 1.8,
-                    fontWeight: i === 0 ? 500 : 400,
-                    margin: 0,
-                  }}>
-                    {para}
-                  </p>
-                ))}
+              {/* Direita — texto + § BASE LEGAL (mesmo nível do card esquerdo) */}
+              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                  {j.narrative.map((para, i) => (
+                    <p key={i} style={{
+                      fontSize: i === 0 ? 17 : 16,
+                      color: i === 0 ? '#2e3d4a' : '#4a5662',
+                      lineHeight: 1.8,
+                      fontWeight: i === 0 ? 500 : 400,
+                      margin: 0,
+                    }}>
+                      {para}
+                    </p>
+                  ))}
+                </div>
 
-                {/* § BASE LEGAL — Sugestão 2: ancora coluna direita com referências regulatórias */}
+                {/* § BASE LEGAL — navy + brass, mesmo estético do card esquerdo */}
                 {j.legalBasis && j.legalBasis.length > 0 && (
                   <div style={{
-                    borderLeft: '3px solid var(--snc-green-2)',
-                    background: 'rgba(15,26,36,.04)',
-                    padding: '16px 20px',
-                    marginTop: 16,
+                    background: 'var(--snc-navy)',
+                    borderLeft: '4px solid var(--snc-brass)',
+                    padding: '24px 28px',
+                    marginTop: 32,
                   }}>
-                    <div style={{
-                      fontFamily: 'JetBrains Mono, monospace',
-                      fontSize: 9,
-                      color: 'var(--snc-green-2)',
-                      letterSpacing: '.18em',
-                      textTransform: 'uppercase',
-                      marginBottom: 10,
-                    }}>§ BASE LEGAL</div>
-                    <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 5 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                      <div style={{ width: 28, height: 1, background: 'var(--snc-brass)' }} />
+                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase' }}>
+                        § Base Legal
+                      </div>
+                    </div>
+                    <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
                       {j.legalBasis.map((item, k) => (
-                        <li key={k} style={{
-                          fontFamily: 'JetBrains Mono, monospace',
-                          fontSize: 10,
-                          color: '#6a7a8a',
-                          lineHeight: 1.55,
-                        }}>— {item}</li>
+                        <li key={k} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: '#C4CDD8', lineHeight: 1.6 }}>
+                          — {item}
+                        </li>
                       ))}
                     </ul>
                   </div>
@@ -200,38 +197,6 @@ export default async function JornadaPage({ params }: Props) {
               </div>
             </div>
           </section>
-        )}
-
-        {/* ── Sugestão 1: Faixa técnica (stats do SNC entre narrativa e etapas) ── */}
-        {j.steps && (
-          <div style={{ background: 'var(--snc-navy)' }}>
-            <div style={{
-              maxWidth: 1180,
-              margin: '0 auto',
-              padding: '0 28px',
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
-            }}>
-              {[
-                { val: '253', label: 'datasets integrados' },
-                { val: '9', label: 'fontes soberanas' },
-                { val: '99,9%', label: 'SLA contratual' },
-                { val: '<900ms', label: 'latência P95' },
-              ].map((s, i) => (
-                <div key={s.label} style={{
-                  padding: '20px 0',
-                  borderLeft: i > 0 ? '1px solid rgba(255,255,255,.08)' : 'none',
-                  paddingLeft: i > 0 ? 28 : 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 4,
-                }}>
-                  <span style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 26, color: '#fff', lineHeight: 1 }}>{s.val}</span>
-                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: 'var(--snc-brass)', letterSpacing: '.16em', textTransform: 'uppercase' }}>{s.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
         )}
 
         {/* ── Como funciona ── */}
@@ -243,12 +208,12 @@ export default async function JornadaPage({ params }: Props) {
               <div className="aside">Do primeiro dado consultado até a entrega do dossiê, tudo rastreável.</div>
             </div>
 
-            {/* Sugestão 3 — conector de fluxo */}
+            {/* Conector de fluxo — compacto */}
             <div style={{
               display: 'flex',
               alignItems: 'center',
               gap: 16,
-              margin: '32px 0 0',
+              margin: '16px 0 0',
             }}>
               <div style={{ flex: 1, height: 1, background: 'rgba(15,26,36,.12)' }} />
               <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: 'var(--snc-brass)', letterSpacing: '.18em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
