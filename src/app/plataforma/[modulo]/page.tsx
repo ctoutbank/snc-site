@@ -87,12 +87,7 @@ export default async function ModuloPage({ params }: Props) {
         {/* ── Stats bar ── */}
         <div style={{ background: 'var(--snc-navy-2)', borderTop: '1px solid #17243b', borderBottom: '1px solid #17243b' }}>
           <div style={{ maxWidth: 1440, margin: '0 auto', padding: '24px 28px', display: 'flex', gap: 48, flexWrap: 'wrap', alignItems: 'center' }}>
-            <div>
-              <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 36, color: '#fff', lineHeight: 1 }}>
-                {m.datasets}<sup style={{ fontSize: '.45em', color: 'var(--snc-green-2)', marginLeft: 2 }}>ds</sup>
-              </div>
-              <div style={{ fontSize: 10, color: '#8a94a3', letterSpacing: '.14em', textTransform: 'uppercase', marginTop: 6 }}>Datasets integrados</div>
-            </div>
+
             {m.sla && (
               <div>
                 <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 36, color: '#fff', lineHeight: 1 }}>
@@ -101,14 +96,7 @@ export default async function ModuloPage({ params }: Props) {
                 <div style={{ fontSize: 10, color: '#8a94a3', letterSpacing: '.14em', textTransform: 'uppercase', marginTop: 6 }}>SLA garantido</div>
               </div>
             )}
-            {m.priceFrom && (
-              <div>
-                <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 36, color: 'var(--snc-green-2)', lineHeight: 1 }}>
-                  {m.priceFrom.split('/')[0]}
-                </div>
-                <div style={{ fontSize: 10, color: '#8a94a3', letterSpacing: '.14em', textTransform: 'uppercase', marginTop: 6 }}>A partir de · {m.priceFrom.split('/')[1] ?? 'consulta'}</div>
-              </div>
-            )}
+
             <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               {m.chips.map((chip) => (
                 <span key={chip} className="snc-chip" style={{ background: 'rgba(255,255,255,.06)', color: '#cfd6df', borderColor: 'rgba(255,255,255,.14)', padding: '5px 10px', fontSize: 10 }}>
@@ -185,7 +173,6 @@ export default async function ModuloPage({ params }: Props) {
             </h2>
             <p style={{ color: '#8a94a3', fontSize: 16, lineHeight: 1.6, marginBottom: 36 }}>
               Acesso via API REST, documentação técnica pública, sandbox disponível e onboarding assistido.
-              {m.priceFrom && ` A partir de ${m.priceFrom}.`}
             </p>
             <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link href="/contato" className="snc-btn snc-btn-primary" style={{ fontSize: 14, padding: '14px 28px' }}>
