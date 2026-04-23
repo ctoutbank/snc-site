@@ -169,7 +169,14 @@
 .snc-sg-arrow-btn:hover { border-color: var(--snc-brass); background: rgba(255,255,255,.12); color: var(--snc-brass); }
 
 /* Scroll track — 2 linhas via CSS Grid auto-flow column */
-.snc-sg-scroll-outer { overflow: hidden; margin: 0 -60px; padding: 0 60px; }
+.snc-sg-scroll-outer {
+  overflow: hidden;
+  margin: 0 -60px;
+  padding: 0 60px;
+  /* Gradiente direito sinaliza conteúdo além da janela */
+  -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
+  mask-image: linear-gradient(to right, black 80%, transparent 100%);
+}
 .snc-sg-scroll-track {
   display: grid;
   grid-template-rows: repeat(2, 320px);
@@ -182,6 +189,12 @@
   scrollbar-width: none;
 }
 .snc-sg-scroll-track::-webkit-scrollbar { display: none; }
+
+/* Feedback: barra de progresso + hint arraste */
+.snc-sg-feedback { margin-top: 16px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.snc-sg-progress-wrap { width: 100%; height: 2px; background: rgba(255,255,255,.1); position: relative; }
+.snc-sg-progress-bar { height: 100%; background: var(--snc-brass); transition: width .15s ease; position: absolute; left: 0; top: 0; }
+.snc-sg-drag-hint { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(255,255,255,.35); letter-spacing: .18em; text-transform: uppercase; transition: opacity .6s ease; }
 
 .snc-sg-footer { margin-top: 40px; }
 .snc-btn-outline { display: inline-flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #ffffff !important; border: 1px solid var(--snc-brass); padding: 14px 32px; text-decoration: none; transition: background .22s, color .22s; font-weight: 500; }

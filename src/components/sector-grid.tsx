@@ -70,6 +70,11 @@ function SectorCard({ s, index }: { s: (typeof SECTORS)[0]; index: number }) {
 
 export function SectorGrid() {
   const trackRef = useRef<HTMLDivElement>(null);
+  const [progress, setProgress] = useState(0);
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
 
   function scrollBy(dir: 'left' | 'right') {
     if (!trackRef.current) return;
@@ -78,6 +83,30 @@ export function SectorGrid() {
       left: dir === 'right' ? colWidth * 2 : -colWidth * 2,
       behavior: 'smooth',
     });
+  }
+
+  function onScroll() {
+    if (!trackRef.current) return;
+    const { scrollLeft: sl, scrollWidth, clientWidth } = trackRef.current;
+    setProgress(sl / (scrollWidth - clientWidth));
+    if (sl > 10) setHasScrolled(true);
+  }
+
+  function onMouseDown(e: React.MouseEvent) {
+    isDragging.current = true;
+    startX.current = e.pageX - (trackRef.current?.offsetLeft ?? 0);
+    scrollLeft.current = trackRef.current?.scrollLeft ?? 0;
+    if (trackRef.current) trackRef.current.style.cursor = 'grabbing';
+  }
+  function onMouseUp() {
+    isDragging.current = false;
+    if (trackRef.current) trackRef.current.style.cursor = 'grab';
+  }
+  function onMouseMove(e: React.MouseEvent) {
+    if (!isDragging.current || !trackRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - trackRef.current.offsetLeft;
+    trackRef.current.scrollLeft = scrollLeft.current - (x - startX.current) * 1.2;
   }
 
   return (
@@ -93,9 +122,9 @@ export function SectorGrid() {
         </p>
       </div>
 
-      {/* Barra de setas — sempre visível acima do track */}
+      {/* Barra de navegação */}
       <div className="snc-sg-nav-bar">
-        <span className="snc-sg-nav-label">{SECTORS.length} setores · deslize para explorar</span>
+        <span className="snc-sg-nav-label">{SECTORS.length} setores disponíveis</span>
         <div className="snc-sg-arrows">
           <button className="snc-sg-arrow-btn" onClick={() => scrollBy('left')} aria-label="Anterior">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" width={18} height={18}>
@@ -112,11 +141,33 @@ export function SectorGrid() {
 
       {/* Grid 2 linhas com scroll horizontal */}
       <div className="snc-sg-scroll-outer">
-        <div ref={trackRef} className="snc-sg-scroll-track">
+        <div
+          ref={trackRef}
+          className="snc-sg-scroll-track"
+          onScroll={onScroll}
+          onMouseDown={onMouseDown}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMouseUp}
+          onMouseMove={onMouseMove}
+          style={{ cursor: 'grab' }}
+        >
           {SECTORS.map((s, i) => (
             <SectorCard key={s.slug} s={s} index={i} />
           ))}
         </div>
+      </div>
+
+      {/* Barra de progresso + hint de arraste */}
+      <div className="snc-sg-feedback">
+        <div className="snc-sg-progress-wrap">
+          <div className="snc-sg-progress-bar" style={{ width: `${progress * 100}%` }} />
+        </div>
+        <span
+          className="snc-sg-drag-hint"
+          style={{ opacity: hasScrolled ? 0 : 1, pointerEvents: 'none' }}
+        >
+          ← arraste para explorar →
+        </span>
       </div>
 
       <div className="snc-sg-footer">
