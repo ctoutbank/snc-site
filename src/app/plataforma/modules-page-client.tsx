@@ -39,7 +39,7 @@ export function ModulesPageClient() {
             style={{ textDecoration: 'none' }}
           >
             <div className="tag">M.{String(i + 1).padStart(2, '0')}</div>
-
+            <div className="cnt">{m.datasets}<sup>datasets</sup></div>
             <div className="ds">{areaLabel(m.area)}</div>
             <h4>{m.name}</h4>
             <p>{m.description}</p>

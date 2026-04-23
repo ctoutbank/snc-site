@@ -59,7 +59,7 @@ export function HomeHero() {
 
         <div className="snc-hero-bottom">
           <div className="snc-hero-lede">
-            O SNC consolida dados de 9 bureaus oficiais em uma única camada operacional
+            O SNC consolida 253 datasets de 9 bureaus oficiais em uma única camada operacional
             de decisão — score de crédito, KYC, antifraude, due diligence e compliance regulatório
             — disponível para instituições financeiras, governo e operadores regulados.
             <div className="snc-hero-cta">
@@ -73,6 +73,10 @@ export function HomeHero() {
           </div>
 
           <div className="snc-hero-stats">
+            <div className="s">
+              <div className="n"><CountUp target={253} /></div>
+              <div className="l">Datasets</div>
+            </div>
             <div className="s">
               <div className="n"><CountUp target={20} /></div>
               <div className="l">Módulos</div>

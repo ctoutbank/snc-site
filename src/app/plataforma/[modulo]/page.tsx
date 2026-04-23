@@ -87,7 +87,12 @@ export default async function ModuloPage({ params }: Props) {
         {/* ── Stats bar ── */}
         <div style={{ background: 'var(--snc-navy-2)', borderTop: '1px solid #17243b', borderBottom: '1px solid #17243b' }}>
           <div style={{ maxWidth: 1440, margin: '0 auto', padding: '24px 28px', display: 'flex', gap: 48, flexWrap: 'wrap', alignItems: 'center' }}>
-
+            <div>
+              <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 36, color: '#fff', lineHeight: 1 }}>
+                {m.datasets}<sup style={{ fontSize: '.45em', color: 'var(--snc-green-2)', marginLeft: 2 }}>ds</sup>
+              </div>
+              <div style={{ fontSize: 10, color: '#8a94a3', letterSpacing: '.14em', textTransform: 'uppercase', marginTop: 6 }}>Datasets integrados</div>
+            </div>
             {m.sla && (
               <div>
                 <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 36, color: '#fff', lineHeight: 1 }}>

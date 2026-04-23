@@ -22,7 +22,7 @@ export function ModulesPreview() {
       <div className="snc-sec-head">
         <div className="num">§ 02 · PLATAFORMA</div>
         <h2>
-          Vinte módulos. <span className="it">Cinco áreas temáticas.</span>
+          Vinte módulos. <span className="it">Duzentos e cinquenta e três</span> datasets.
         </h2>
         <div className="aside">
           A maior concentração de fontes oficiais de decisão do país, organizada em
@@ -51,7 +51,10 @@ export function ModulesPreview() {
             className="snc-mod-card"
           >
             <div className="tag">M.{String(i + 1).padStart(2, '0')}</div>
-
+            <div className="cnt">
+              {m.datasets}
+              <sup>datasets</sup>
+            </div>
             <div className="ds">{areaLabel(m.area)}</div>
             <h4>{m.name}</h4>
             <p>{m.description}</p>

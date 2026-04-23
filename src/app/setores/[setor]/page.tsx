@@ -101,7 +101,7 @@ export default async function SetorPage({ params }: Props) {
                 className="snc-mod-card"
                 style={{ textDecoration: 'none' }}
               >
-
+                <div className="cnt">{m.datasets}<sup>datasets</sup></div>
                 <h4>{m.name}</h4>
                 <p>{m.description}</p>
                 <div className="bot">

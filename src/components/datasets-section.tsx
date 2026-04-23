@@ -75,7 +75,13 @@ export function DatasetsSection() {
       <div className="snc-ds-body">
         {/* Coluna esquerda */}
         <div className="snc-ds-col-left">
-
+          <div className="snc-ds-counter">
+            <CountUp target={253} />
+          </div>
+          <div className="snc-ds-counter-label">
+            DATASETS INTEGRADOS — DE 9 BUREAUS OFICIAIS À Única CAMADA
+            OPERACIONAL DE DECISÃO DO PAÍS.
+          </div>
           <p className="snc-ds-copy">
             O SNC não vende dados soltos. Vende a{' '}
             <span className="it" style={{ color: 'var(--snc-green-2)' }}>
