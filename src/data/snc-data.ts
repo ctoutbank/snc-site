@@ -359,7 +359,7 @@ export const JOURNEYS: SncJourney[] = [
       { title: 'Captura de Documento', desc: 'OCR automático de RG, CNH ou Passaporte com validação de autenticidade.' },
       { title: 'Prova de Vida', desc: 'Biometria facial com liveness detection anti-spoofing.' },
       { title: 'Validação Oficial', desc: 'Cruzamento com Receita Federal, SERPRO e bases de identidade.' },
-      { title: 'Compliance PEP/Sanções', desc: 'Varredura automática em OFAC, ONU, COAF e listas nacionais.' },
+      { title: 'Compliance PEP/Sanções', desc: 'Varredura automática em OFAC, ONU, COAF, UE e listas nacionais e internacionais.' },
     ],
     narrative: [
       'O KYC não é um processo de boas-vindas. É a primeira linha de defesa contra lavagem de dinheiro, uso de identidade falsa e fraude de onboarding. A maior parte das equipes ainda executa etapas em silos — biometria em um fornecedor, validação documental em outro, consulta PEP em um terceiro — com reconciliação manual e risco acumulado a cada handoff.',

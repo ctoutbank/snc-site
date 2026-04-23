@@ -83,14 +83,11 @@ export function DatasetsSection() {
             OPERACIONAL DE DECISÃO DO PAÍS.
           </div>
           <p className="snc-ds-copy">
-            O SNC não vende dados soltos. Vende a{' '}
+            Consolidamos as mais importantes fontes públicas e privadas em uma ampla malha coesa de APIs documentadas, e plataforma{' '}
             <span className="it" style={{ color: 'var(--snc-green-2)' }}>
-              síntese
-            </span>
-            . Consolidamos o que está disperso em nove fontes públicas e privadas
-            em uma malha coesa de APIs documentadas, com SLA único, contrato
-            único e faturamento único. O seu time técnico integra em dias, não em
-            trimestres.
+              Co-Branded
+            </span>{' '}
+            com SLA único, contrato único e faturamento único.
           </p>
           <div className="snc-ds-ctas">
             <Link href="/contato" className="snc-btn snc-btn-primary">
