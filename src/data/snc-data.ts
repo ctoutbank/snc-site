@@ -1,6 +1,13 @@
 // SNC — Dados centralizados do site institucional
 // Fonte: SNC Institucional - bundle source.html
 
+export interface SncDatasetItem {
+  id: string;      // ex: FOR01
+  source: string;  // ex: MEC, MTE, OAB
+  name: string;    // Nome legível do dataset
+  returns: string; // O que o dataset retorna
+}
+
 export interface SncModule {
   slug: string;
   area: 'id' | 'credito' | 'fraude' | 'pj' | 'int';
@@ -12,6 +19,7 @@ export interface SncModule {
   useCases?: string[];
   sla?: string;
   priceFrom?: string;
+  datasetItems?: SncDatasetItem[];
 }
 
 export interface SncJourney {
@@ -88,11 +96,73 @@ export const MODULES: SncModule[] = [
     name: 'Formação & Qualificações',
     datasets: 10,
     description: 'Histórico profissional, RAIS, conselhos de classe e formação.',
-    chips: ['MTE', 'RAIS', 'CFC'],
-    fullDescription: 'Validação completa de histórico profissional e educacional: MEC, RAIS, CBO, conselhos de classe (CFC, CREMERS, OAB, etc.), certificações técnicas e experiências declaradas.',
+    chips: ['MEC', 'MTE', 'OAB', 'CREA', 'RAIS', 'CBO'],
+    fullDescription: 'Validação completa de histórico profissional e educacional: diplomas via e-MEC, vínculos empregatícios via RAIS, classificação de ocupações (CBO), conselhos de classe federais, certificações técnicas reconhecidas e carteira de trabalho digital. Cada dado retorna estruturado e auditável para processos de admissão, due diligence e compliance de prestadores.',
     useCases: ['Background check profissional', 'RH e recrutamento', 'Validação de prestadores', 'Due diligence pessoal'],
     sla: '99,85%',
     priceFrom: 'R$ 1,80/consulta',
+    datasetItems: [
+      {
+        id: 'FOR01',
+        source: 'MEC / e-MEC',
+        name: 'Formação Acadêmica',
+        returns: 'Diploma, instituição, curso, data de conclusão e situação do processo de reconhecimento junto ao MEC. Cobre graduação, pós-graduação, mestrado e doutorado.',
+      },
+      {
+        id: 'FOR02',
+        source: 'MTE / RAIS',
+        name: 'Vínculos Empregatícios RAIS',
+        returns: 'Histórico de empregos CLT dos últimos 10 anos: CNPJ do empregador, cargo (CBO), salário contratual, admissão e demissão. Direto da base do Ministério do Trabalho.',
+      },
+      {
+        id: 'FOR03',
+        source: 'MTE / eSocial',
+        name: 'Carteira de Trabalho Digital',
+        returns: 'Registro oficial de contratos de trabalho, afastamentos, FGTS e contribuições previdenciárias consolidados via eSocial.',
+      },
+      {
+        id: 'FOR04',
+        source: 'MTE / CBO',
+        name: 'Classificação Brasileira de Ocupações',
+        returns: 'Código CBO correspondente à função exercida, família ocupacional e grupo de base, permitindo verificar aderência entre cargo declarado e histórico registrado.',
+      },
+      {
+        id: 'FOR05',
+        source: 'OAB Federal',
+        name: 'Registro OAB',
+        returns: 'Número de inscrição, seccional, data de inscrição, situação (ativo, suspenso, cancelado) e eventuais sanções disciplinares publicadas.',
+      },
+      {
+        id: 'FOR06',
+        source: 'CREA / CAU',
+        name: 'Conselho de Engenharia e Arquitetura',
+        returns: 'Registro no CREA ou CAU, especialidade, situação de anuidade, certidão de acervo técnico e ART/RRT emitidas pelo profissional.',
+      },
+      {
+        id: 'FOR07',
+        source: 'CFM / CRO / COREN',
+        name: 'Conselhos de Saúde',
+        returns: 'Situação do registro profissional em CFM (médicos), CRO (odontólogos) e COREN (enfermagem): número, especialidade, regime de exercício e pendências.',
+      },
+      {
+        id: 'FOR08',
+        source: 'CFC / CRC',
+        name: 'Conselho de Contabilidade',
+        returns: 'Registro CFC/CRC do contador ou técnico contábil, situação de anuidade, habilitação para auditoria e eventuais penalidades administrativas.',
+      },
+      {
+        id: 'FOR09',
+        source: 'Instituições Certificadoras',
+        name: 'Certificações Técnicas',
+        returns: 'Certificações reconhecidas por parceiros credenciados: TI (AWS, Azure, Cisco), Gestão (PMI, PRINCE2) e segurança (ISACA, ISC²). Validade e status de renovação.',
+      },
+      {
+        id: 'FOR10',
+        source: 'MEC / CAPES',
+        name: 'Cadastro de Pós-Graduação',
+        returns: 'Situação de cursos stricto sensu (mestrado e doutorado) via plataforma Sucupira/CAPES: conceito do programa, área de conhecimento e status da defesa.',
+      },
+    ],
   },
   {
     slug: 'certidoes-pf',
