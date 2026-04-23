@@ -24,7 +24,7 @@ function SectorCard({ s, index }: { s: (typeof SECTORS)[0]; index: number }) {
       />
       <div className="snc-sg-overlay" style={{ opacity: hovered ? 0 : 1 }} />
 
-      {/* Default dark: nome uppercase + descrição */}
+      {/* Default dark */}
       <div className="snc-sg-default" style={{ opacity: hovered ? 0 : 1 }}>
         <div className="sg-num">S.{String(index + 1).padStart(2, '0')}</div>
         <div className="sg-cat">{s.cat}</div>
@@ -73,8 +73,7 @@ export function SectorGrid() {
 
   function scrollBy(dir: 'left' | 'right') {
     if (!trackRef.current) return;
-    // Desloca 2 colunas por vez
-    const colWidth = trackRef.current.scrollWidth / Math.ceil(SECTORS.length / 2);
+    const colWidth = trackRef.current.offsetWidth / 4;
     trackRef.current.scrollBy({
       left: dir === 'right' ? colWidth * 2 : -colWidth * 2,
       behavior: 'smooth',
@@ -83,37 +82,29 @@ export function SectorGrid() {
 
   return (
     <div className="snc-sg-root">
-      {/* Header + setas */}
-      <div className="snc-sg-top-row">
-        <div className="snc-sg-header">
-          <div className="kicker">§ EIXO III · SETORES</div>
-          <h2>
-            Quatorze verticais da <span className="it">economia regulada.</span>
-          </h2>
-          <p className="snc-sg-sub">
-            Pacotes de dados construídos com especialistas de cada setor — prontos para integrar ao seu fluxo de decisão.
-          </p>
-        </div>
+      {/* Header */}
+      <div className="snc-sg-header">
+        <div className="kicker">§ EIXO III · SETORES</div>
+        <h2>
+          {SECTORS.length} verticais da <span className="it">economia regulada.</span>
+        </h2>
+        <p className="snc-sg-sub">
+          Pacotes de dados construídos com especialistas de cada setor — prontos para integrar ao seu fluxo de decisão.
+        </p>
+      </div>
 
+      {/* Barra de setas — sempre visível acima do track */}
+      <div className="snc-sg-nav-bar">
+        <span className="snc-sg-nav-label">{SECTORS.length} setores · deslize para explorar</span>
         <div className="snc-sg-arrows">
-          <button
-            className="snc-sg-arrow-btn"
-            onClick={() => scrollBy('left')}
-            aria-label="Setor anterior"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" width={20} height={20}>
-              <line x1="19" y1="12" x2="5" y2="12" />
-              <polyline points="12 5 5 12 12 19" />
+          <button className="snc-sg-arrow-btn" onClick={() => scrollBy('left')} aria-label="Anterior">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" width={18} height={18}>
+              <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 5 5 12 12 19" />
             </svg>
           </button>
-          <button
-            className="snc-sg-arrow-btn"
-            onClick={() => scrollBy('right')}
-            aria-label="Próximo setor"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" width={20} height={20}>
-              <line x1="5" y1="12" x2="19" y2="12" />
-              <polyline points="12 5 19 12 12 19" />
+          <button className="snc-sg-arrow-btn" onClick={() => scrollBy('right')} aria-label="Próximo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" width={18} height={18}>
+              <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
             </svg>
           </button>
         </div>
@@ -130,7 +121,7 @@ export function SectorGrid() {
 
       <div className="snc-sg-footer">
         <Link href="/setores" className="snc-btn-outline">
-          Ver todos os setores →
+          Ver todos os {SECTORS.length} setores →
         </Link>
       </div>
     </div>

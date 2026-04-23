@@ -153,17 +153,19 @@
 .snc-sg-root { padding: 100px 60px; background: var(--snc-navy); }
 
 /* Header row com setas */
-.snc-sg-top-row { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 48px; }
-.snc-sg-header { max-width: 640px; }
+.snc-sg-header { max-width: 680px; margin-bottom: 40px; }
 .snc-sg-header .kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--snc-brass); letter-spacing: .2em; text-transform: uppercase; margin-bottom: 16px; }
 .snc-sg-header h2 { font-family: 'Libre Caslon Text', serif; font-size: clamp(32px,4vw,52px); font-weight: 400; color: #fff; line-height: 1.05; margin: 0 0 16px; }
 .snc-sg-header h2 .it { font-style: italic; color: #bcc4d1; }
 .snc-sg-sub { font-size: 14px; color: #7a8a9a; line-height: 1.55; margin: 0; }
 
+/* Barra de navegação acima do track */
+.snc-sg-nav-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.snc-sg-nav-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(255,255,255,.4); letter-spacing: .14em; text-transform: uppercase; }
 /* Botões de navegação */
-.snc-sg-arrows { display: flex; gap: 10px; flex-shrink: 0; }
-.snc-sg-arrow-btn { width: 48px; height: 48px; border: 1px solid rgba(255,255,255,.22); background: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color .2s, background .2s; }
-.snc-sg-arrow-btn:hover { border-color: #fff; background: rgba(255,255,255,.08); }
+.snc-sg-arrows { display: flex; gap: 8px; }
+.snc-sg-arrow-btn { width: 44px; height: 44px; border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.06); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color .2s, background .2s; }
+.snc-sg-arrow-btn:hover { border-color: var(--snc-brass); background: rgba(255,255,255,.12); color: var(--snc-brass); }
 
 /* Scroll track — 2 linhas via CSS Grid auto-flow column */
 .snc-sg-scroll-outer { overflow: hidden; margin: 0 -60px; padding: 0 60px; }
@@ -180,9 +182,9 @@
 }
 .snc-sg-scroll-track::-webkit-scrollbar { display: none; }
 
-.snc-sg-footer { margin-top: 48px; }
-.snc-btn-outline { display: inline-flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: #fff; border: 1px solid var(--snc-brass); padding: 14px 36px; text-decoration: none; transition: background .22s, color .22s, border-color .22s; font-weight: 500; }
-.snc-btn-outline:hover { background: var(--snc-brass); color: var(--snc-navy); border-color: var(--snc-brass); }
+.snc-sg-footer { margin-top: 40px; }
+.snc-btn-outline { display: inline-flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #ffffff !important; border: 1px solid var(--snc-brass); padding: 14px 32px; text-decoration: none; transition: background .22s, color .22s; font-weight: 500; }
+.snc-btn-outline:hover { background: var(--snc-brass); color: var(--snc-navy) !important; }
 
 /* Card base */
 .snc-sg-card { position: relative; height: 100%; overflow: hidden; background: var(--snc-navy); display: block; }
@@ -193,7 +195,7 @@
 .snc-sg-default { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; transition: opacity .3s; }
 .sg-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--snc-brass); letter-spacing: .2em; position: absolute; top: 16px; left: 20px; z-index: 3; }
 .sg-cat { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #fff; margin-bottom: 10px; line-height: 1.25; }
-.sg-desc { font-size: 12px; color: rgba(255,255,255,.6); line-height: 1.55; margin: 0; }
+.sg-desc { font-size: 12px; color: rgba(255,255,255,.6); line-height: 1.55; margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .sg-metric { margin-top: 14px; }
 .sg-val { font-family: 'Libre Caslon Text', serif; font-size: 26px; color: var(--snc-green-2); line-height: 1; }
 
