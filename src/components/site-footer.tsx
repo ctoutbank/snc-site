@@ -9,6 +9,38 @@ export function SiteFooter() {
           <div className="brand">
             <img src="/snc-logo.png" alt="SNC" />
             <p>Sistema Nacional de Conformidade. Infraestrutura brasileira de inteligência de dados para decisão em tempo real. Conformidade LGPD e BCB 4.893.</p>
+
+            {/* E-mail institucional — estilo monospace brass + email branco */}
+            <div style={{ marginTop: 24 }}>
+              <div style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 10,
+                color: 'var(--snc-brass)',
+                letterSpacing: '.22em',
+                textTransform: 'uppercase',
+                marginBottom: 6,
+              }}>
+                E-mail institucional
+              </div>
+              <a
+                href="mailto:contato@snc.consolle.one"
+                style={{
+                  fontFamily: "'Inter', 'JetBrains Mono', sans-serif",
+                  fontSize: 'clamp(15px,1.4vw,19px)',
+                  color: '#e8edf2',
+                  letterSpacing: '0.01em',
+                  textDecoration: 'none',
+                  display: 'block',
+                  fontWeight: 400,
+                  lineHeight: 1.4,
+                  transition: 'color .2s',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--snc-brass)')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#e8edf2')}
+              >
+                contato@snc.consolle.one
+              </a>
+            </div>
           </div>
           <div className="snc-foot-col">
             <h5>Plataforma</h5>

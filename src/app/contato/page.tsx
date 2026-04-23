@@ -39,7 +39,7 @@ export default function ContatoPage() {
                   },
                   {
                     label: 'E-mail institucional',
-                    value: 'institucional@snc.consolle.one',
+                    value: 'contato@snc.consolle.one',
                   },
                 ].map((item) => (
                   <div key={item.label}>

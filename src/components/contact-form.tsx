@@ -15,6 +15,7 @@ const NATURES = [
   'Saúde / Planos',
   'Apostas reguladas',
   'Governo / Órgão público',
+  'Parcerias',
   'Outro',
 ];
 
