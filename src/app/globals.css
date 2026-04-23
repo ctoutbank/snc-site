@@ -595,3 +595,29 @@
   .snc-ds-features { grid-template-columns: 1fr; }
   .snc-ds-feat { border-right: none !important; }
 }
+
+/* ── Setor: linha numerada de jornadas (Opção B) ──────────── */
+.snc-sector-journey-row {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 40px;
+  padding: 36px 0;
+  border-bottom: 1px solid rgba(15,26,36,.1);
+  align-items: center;
+  color: inherit;
+  transition: background .18s;
+}
+.snc-sector-journey-row:hover {
+  background: rgba(15,26,36,.03);
+}
+.snc-sector-journey-row:hover span[style*="brass"] {
+  transform: translateX(6px);
+}
+@media (max-width: 900px) {
+  .snc-sector-journey-row { grid-template-columns: 60px 1fr; gap: 20px; }
+  .snc-sector-journey-row > div:last-child { display: none; }
+}
+@media (max-width: 600px) {
+  .snc-sector-journey-row { grid-template-columns: 1fr; padding: 28px 0; }
+  .snc-sector-journey-row > div:first-child { font-size: 28px !important; }
+}

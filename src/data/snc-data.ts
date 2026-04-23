@@ -42,6 +42,10 @@ export interface SncSector {
   case: { value: string; label: string };
   fullDescription?: string;
   modules?: string[];
+  narrative?: string[];
+  paraQueServe?: string[];
+  sectorJourneys?: string[];
+  legalBasis?: string[];
 }
 
 export interface SncDataset {
@@ -615,6 +619,29 @@ export const SECTORS: SncSector[] = [
     stars: ['SCR BCB', 'KYC', 'PEP'],
     case: { value: '+40%', label: 'Aprovação mantendo inadimplência <3%' },
     modules: ['Score de Crédito', 'Verificação de Identidade', 'Compliance & PEP', 'Risco Financeiro'],
+    narrative: [
+      'O setor financeiro opera com um paradoxo: quanto mais rigorosa a análise de crédito, menor a conversão. Quanto mais permissiva, maior a inadimplência. A saída está em qualidade de dados, não em política mais conservadora. Fintechs e bancos que integram múltiplos bureaus em tempo real aprovam mais sem comprometer a carteira.',
+      'O SNC conecta o setor financeiro às fontes que importam: SCR Banco Central, bureaus privados, KYC regulatório em conformidade com BCB 4.893 e PLD/FT em um único ponto de integração. Cada consulta gera log auditável pronto para fiscalização do Banco Central.',
+      'Para compliance officers e analistas de crédito, o resultado é operacional: menos reconciliação entre sistemas, menos inconsistência entre fontes e evidência documentada para cada decisão.',
+    ],
+    paraQueServe: [
+      'Fintechs de crédito que precisam escalar aprovações sem deteriorar a carteira',
+      'Bancos digitais e corretoras em processo de licenciamento junto ao Banco Central',
+      'Cooperativas de crédito com necessidade de conformidade COAF e PLD/FT',
+      'Financeiras e emissores de cartão que operam crédito pessoal e consignado',
+      'Plataformas de open finance que processam portabilidade de crédito e dados',
+    ],
+    sectorJourneys: [
+      'credito-responsavel',
+      'kyc-digital',
+      'compliance-regulatorio',
+    ],
+    legalBasis: [
+      'Resolução BCB 4.893: Política de Compliance e KYC',
+      'Lei 12.414/2011: Cadastro Positivo de Crédito',
+      'Circular BCB 3.978: PLD/FT e COAF',
+      'LGPD: Tratamento de dados financeiros e biométricos',
+    ],
   },
   {
     slug: 'rh-recrutamento',
@@ -627,6 +654,28 @@ export const SECTORS: SncSector[] = [
     stars: ['Background', 'RAIS', 'Formação'],
     case: { value: '-30%', label: 'Turnover em logística' },
     modules: ['Background Check', 'Formação & Qualificações', 'Certidões PF'],
+    narrative: [
+      'Uma contratação errada custa entre 1,5x e 3x o salário anual do cargo, sem contar o impacto em equipe, clientes e processos trabalhistas. O background check manual ainda é a norma em muitas empresas: lento, inconsistente e sem trilha auditável. O resultado é decisão de contratação baseada em declaração auto-referida, não em dado objetivo.',
+      'O SNC automatiza a validação de candidatos em 60 segundos: antecedentes em todas as esferas, formação acadêmica via MEC, vínculo empregatício via RAIS, certidões e perfil profissional digital. O resultado chega estruturado e pronto para o ATS, sem formulários manuais.',
+      'Para RH estratégico, o impacto vai além da contratação: o mesmo fluxo se aplica a promoções internas, compliance de terceirizados e vetting periódico de colaboradores em posições sensíveis.',
+    ],
+    paraQueServe: [
+      'Departamentos de RH que realizam alto volume de contratações e precisam de escala',
+      'Empresas de logística, transporte e serviços com risco operacional em campo',
+      'Prestadores de serviços de saúde e segurança que exigem certificação profissional',
+      'Empresas com acesso a dados sensíveis de clientes (LGPD) que exigem vetting rigoroso',
+      'Escritórios de contabilidade, direito e auditoria em processo de admissão',
+    ],
+    sectorJourneys: [
+      'due-diligence',
+      'enriquecimento-de-base',
+    ],
+    legalBasis: [
+      'CLT: Art. 442 e seguintes — Contrato de trabalho',
+      'Lei 9.029/1995: Práticas discriminatórias na contratação',
+      'LGPD: Art. 11 — Tratamento de dados sensíveis de candidatos',
+      'ANPD: Nota Técnica sobre dados de colaboradores',
+    ],
   },
   {
     slug: 'seguros',
@@ -639,6 +688,29 @@ export const SECTORS: SncSector[] = [
     stars: ['Antifraude', 'Identidade', 'Monitoramento'],
     case: { value: '-42%', label: 'Redução de sinistros fraudulentos' },
     modules: ['Verificação de Identidade', 'Antifraude', 'Risco Financeiro', 'Monitoramento 24h'],
+    narrative: [
+      'O sinistro fraudulento começa antes da apólice. Identidade adulterada no onboarding, histórico financeiro falseado e risco subestimado na subscrição são as origens de 70% das fraudes em seguros. O underwriting tradicional ainda depende de declaração do segurado, sem cruzamento automatizado com fontes independentes.',
+      'O SNC integra o ciclo completo do seguro: biometria no onboarding, score de risco multibureau na subscrição, antifraude na regulação de sinistros e monitoramento contínuo do segurado. Cada etapa gera evidência rastreável por apólice.',
+      'Para seguradoras, o impacto é direto na sinistralidade: segurados com identidade verificada, risco auditado e monitoramento ativo reduzem perdas operacionais sem aumentar o prêmio.',
+    ],
+    paraQueServe: [
+      'Seguradoras de vida, auto e residencial com alta incidência de sinistros fraudulentos',
+      'Corretoras que distribuem seguros e precisam de KYC no onboarding de clientes',
+      'Resseguradoras que exigem compliance documentado de suas cedentes',
+      'Insuretechs que integram análise de risco em tempo real no fluxo de cotação',
+      'Plataformas de seguro embarcado com alto volume de apólices de baixo valor',
+    ],
+    sectorJourneys: [
+      'prevencao-de-fraude',
+      'kyc-digital',
+      'due-diligence',
+    ],
+    legalBasis: [
+      'SUSEP Circular 612: KYC e compliance em seguros',
+      'CNSP Resolução 382: Prevenção à lavagem de dinheiro em seguradoras',
+      'LGPD: Tratamento de dados de saúde e biométricos em apólices',
+      'Lei 9.656/1998: Planos de saúde e regulação de sinistros',
+    ],
   },
   {
     slug: 'governo-licitacoes',
@@ -651,6 +723,29 @@ export const SECTORS: SncSector[] = [
     stars: ['Certidões', 'PEP', 'Compliance'],
     case: { value: '100%', label: 'Conformidade em processos licitatórios' },
     modules: ['Certidões PJ', 'Compliance & PEP', 'Background Check'],
+    narrative: [
+      'Contratos públicos com fornecedores irregulares geram passivo jurídico imediato, inquéritos administrativos e risco de responsabilização pessoal para gestores. A habilitação via documentação não é suficiente: certidões vencidas, PEP ocultos em quadros societários e histórico de irregularidades passam despercebidos sem cruzamento automatizado.',
+      'O SNC entrega habilitação técnica e compliance em uma única consulta: certidões em todas as esferas, situação Receita Federal, processos judiciais, PEP e sanções consolidadas, IBAMA e ESG para contratos ambientalmente sensíveis. Tudo rastreável por CNPJ e por processo licitatório.',
+      'Para gestores públicos, o artefato SNC é defesa administrativa: cada fornecedor habilitado tem dossiê com timestamp, fonte e resultado. Quando o TCU chega, a evidência de diligência já está estruturada.',
+    ],
+    paraQueServe: [
+      'Órgãos públicos federais, estaduais e municipais em processos licitatórios',
+      'Comissões de habilitação e pregoeiros que precisam de agilidade com segurança jurídica',
+      'Empresas fornecedoras do setor público que precisam demonstrar compliance',
+      'Escritórios jurídicos que assessoram clientes em concessões e PPPs',
+      'Controladorias e corregedorias em processos de auditoria de contratos vigentes',
+    ],
+    sectorJourneys: [
+      'due-diligence',
+      'compliance-regulatorio',
+      'analise-empresarial',
+    ],
+    legalBasis: [
+      'Lei 14.133/2021: Nova Lei de Licitações e Contratos',
+      'Lei 12.846/2013: Lei Anticorrupção e Programa de Integridade',
+      'Decreto 8.420/2015: Regulamenta o Programa de Integridade',
+      'TCU Acórdão 1.793/2011: Due diligence em licitações',
+    ],
   },
   {
     slug: 'imobiliario-locacao',
@@ -663,6 +758,28 @@ export const SECTORS: SncSector[] = [
     stars: ['Decode', 'SCPC', 'Justiça'],
     case: { value: '30s', label: 'Análise completa de locatário' },
     modules: ['Score de Crédito', 'Certidões PF', 'Risco Financeiro'],
+    narrative: [
+      'Inadimplência em locação residencial termina em despejo, meses de aluguel perdido e honorários advocatícios. A análise de locatário feita por imobiliárias ainda mistura impressão pessoal com score pontual de um único bureau, sem validação de renda real, sem cruzamento de processos e sem certidões. O risco fica no proprietário.',
+      'O SNC analisa locatários em 30 segundos com o rigor de uma instituição financeira: score multibureau, certidões de protesto e processos em todas as esferas, validação de renda via fontes públicas e histórico de endereço. Para PJ, adiciona indicadores empresariais e situação Receita Federal.',
+      'Para imobiliárias, o resultado é competitivo: menos inadimplência, mais confiança do proprietário e capacidade de analisar alto volume sem time de crédito dedicado.',
+    ],
+    paraQueServe: [
+      'Imobiliárias que gerenciam carteiras de locação residencial e comercial',
+      'Proprietários que alugam diretamente e precisam de análise sem intermediário',
+      'Administradoras de condomínios que gerenciam prestadores e locatários',
+      'Plataformas digitais de aluguel que precisam de KYC no onboarding',
+      'Garantidoras de aluguel que subscrevem risco de inadimplência',
+    ],
+    sectorJourneys: [
+      'credito-responsavel',
+      'due-diligence',
+    ],
+    legalBasis: [
+      'Lei 8.245/1991: Lei do Inquilinato — Locação urbana',
+      'LGPD: Tratamento de dados de locatários e fiadores',
+      'Código Civil: Art. 818 — Fiança e garantias locatícias',
+      'Lei 12.414/2011: Cadastro Positivo no contexto de locação',
+    ],
   },
   {
     slug: 'saude-planos',
@@ -675,6 +792,29 @@ export const SECTORS: SncSector[] = [
     stars: ['KYC', 'Biometria', 'Monitoramento'],
     case: { value: 'R$ 12M', label: 'Sinistros evitados/ano' },
     modules: ['Verificação de Identidade', 'Antifraude', 'Monitoramento 24h'],
+    narrative: [
+      'Fraude em planos de saúde começa no cadastro: beneficiários com identidade adulterada, vínculos falsos em contratos coletivos e prestadores com CRM irregular são as principais fontes de perda. O sinistro indevido aparece depois, mas a vulnerabilidade estava no onboarding.',
+      'O SNC valida beneficiários, prestadores e contratantes com biometria, registro profissional, processos judiciais e monitoramento contínuo integrado. Para operadoras, isso significa menos fraude em sinistros, conformidade ANS documentada e evidência de due diligence por beneficiário.',
+      'Para gestores de planos, o resultado prático é operacional: onboarding com identidade verificada, monitoramento de beneficiários com alertas de comportamento anômalo e trilha de auditoria por evento de saúde.',
+    ],
+    paraQueServe: [
+      'Operadoras de planos de saúde que precisam conformar KYC de beneficiários à ANS',
+      'Hospitais e clínicas que prestam serviços a múltiplas operadoras e precisam de credenciamento',
+      'Cooperativas médicas que gerenciam corpo clínico com registro profissional ativo',
+      'Plataformas de health tech que integram seguro de saúde no fluxo de atendimento',
+      'Corretoras de benefícios que distribuem planos coletivos empresariais',
+    ],
+    sectorJourneys: [
+      'kyc-digital',
+      'prevencao-de-fraude',
+      'compliance-regulatorio',
+    ],
+    legalBasis: [
+      'RN ANS 305: Identificação de beneficiários e prestadores',
+      'Lei 9.656/1998: Planos e seguros privados de saúde',
+      'LGPD: Tratamento de dados de saúde — Art. 11 e 12',
+      'CFM Resolução 1.821/2007: Prontuário e dados médicos',
+    ],
   },
   {
     slug: 'transportes-logistica',
@@ -687,6 +827,28 @@ export const SECTORS: SncSector[] = [
     stars: ['Background', 'CNH', 'RAIS'],
     case: { value: '-38%', label: 'Incidentes por motorista não verificado' },
     modules: ['Background Check', 'Formação & Qualificações', 'Certidões PF'],
+    narrative: [
+      'Motorista com CNH irregular, histórico de acidente ou antecedentes graves é risco operacional diário. Seguradora contesta a apólice, cliente perde carga, empresa responde solidariamente. O vetting informal não sustenta nem jurídica nem operacionalmente.',
+      'O SNC automatiza o vetting de motoristas e operadores: antecedentes criminais, validação de CNH via DETRAN, vínculos trabalhistas via RAIS, certidões e checagem de pendências veiculares. Para frotas grandes, o processamento em lote atualiza toda a base em menos de 24h.',
+      'Para gestores de frota e RH de transportadoras, o resultado é duplo: conformidade com seguradoras que exigem vetting documentado e redução real de incidentes por motoristas não verificados.',
+    ],
+    paraQueServe: [
+      'Transportadoras de carga e logística que operam frotas próprias ou contratadas',
+      'Empresas de transporte de passageiros e aplicativos de mobilidade urbana',
+      'Distribuidoras que terceirizam entregas e precisam validar parceiros logísticos',
+      'Seguradoras que subscrevem apólices de frota com exigência de vetting documentado',
+      'Indústrias com operação própria de distribuição e motoristas CLT ou MEI',
+    ],
+    sectorJourneys: [
+      'due-diligence',
+      'enriquecimento-de-base',
+    ],
+    legalBasis: [
+      'Lei 11.442/2007: Transporte rodoviário de carga — RNTRC',
+      'ANTT Resolução 5.867/2021: Habilitação de transportadores',
+      'LGPD: Dados de trabalhadores e prestadores de serviço',
+      'CLT: Art. 927 — Responsabilidade solidária em acidentes',
+    ],
   },
   {
     slug: 'varejo-e-commerce',
@@ -699,6 +861,28 @@ export const SECTORS: SncSector[] = [
     stars: ['Antifraude', 'Phone Score', 'Perfil Digital'],
     case: { value: '-68%', label: 'Chargeback · cliente enterprise' },
     modules: ['Antifraude', 'Perfil Digital', 'Verificação de Identidade'],
+    narrative: [
+      'Chargeback é o custo invisível do e-commerce: aparece 30 a 60 dias depois da venda, consome tempo operacional e penaliza a taxa de aprovação futura. O modelo de antifraude baseado em score único falha especialmente em sazonalidade alta, quando o volume de operações anômalas disfarça padrões genuinamente fraudulentos.',
+      'O SNC combina score transacional em tempo real, fingerprint de dispositivo, phone score e perfil digital para decisão em menos de 200ms. Para varejo físico, adiciona validação de identidade no checkout e monitoramento de contas com comportamento de mula.',
+      'Para gestores de e-commerce e meios de pagamento, o impacto é mensurável: redução de chargeback sem aumento de fricção, maior taxa de aprovação e menor custo operacional com contestações.',
+    ],
+    paraQueServe: [
+      'E-commerces de alto ticket que sofrem com chargeback em cartão de crédito',
+      'Marketplaces que precisam validar compradores e vendedores simultaneamente',
+      'Varejistas físicos que integraram checkout digital e encontraram nova superfície de fraude',
+      'Empresas de BNPL (compre agora, pague depois) com decisão em tempo real',
+      'Plataformas de cashback e programas de fidelidade com risco de abuso',
+    ],
+    sectorJourneys: [
+      'prevencao-de-fraude',
+      'enriquecimento-de-base',
+    ],
+    legalBasis: [
+      'CDC: Art. 18 — Responsabilidade por vício de produto e chargebacks',
+      'LGPD: Tratamento de dados de comportamento de compra',
+      'Marco Civil da Internet: Lei 12.965/2014',
+      'Resolução BCB 4.893: Segurança em meios eletrônicos de pagamento',
+    ],
   },
   {
     slug: 'agronegocio',
@@ -711,6 +895,29 @@ export const SECTORS: SncSector[] = [
     stars: ['IBAMA', 'SICAR', 'ESG', 'CAR'],
     case: { value: '100%', label: 'Conformidade ambiental no crédito' },
     modules: ['ESG & Dados Rurais', 'Certidões PJ', 'Indicadores Empresariais'],
+    narrative: [
+      'Crédito rural exige compliance que vai muito além do CPF. Financiamento de imóvel com embargo IBAMA ativo, produtor com CAR irregular ou SICAR desatualizado expõe a operação a bloqueio imediato e responsabilidade solidária do credor. O processo de verificação manual de conformidade ambiental leva dias e depende de cartórios locais.',
+      'O SNC verifica conformidade ambiental e financeira em uma única chamada de API: IBAMA, SICAR, CAR, embargos ambientais, certidões e situação Receita Federal. Para PJs rurais, adiciona quadro societário e indicadores empresariais do produtor ou da cooperativa.',
+      'Para bancos e fundos que operam crédito rural, o SNC transforma conformidade em vantagem competitiva: libera recursos mais rápido, com segurança jurídica intacta e evidência auditável para o BACEN e o Ministério da Agricultura.',
+    ],
+    paraQueServe: [
+      'Bancos e cooperativas que operam crédito rural e precisam de conformidade ambiental',
+      'Tradings e exportadoras que precisam validar fornecedores e produtores rurais',
+      'Seguradoras rurais que subscrevem risco de crédito agrícola e pecuário',
+      'Fundos de investimento em cadeias produtivas do agro com exigência ESG',
+      'Certificadoras de rastreabilidade que auditam conformidade ambiental de produtores',
+    ],
+    sectorJourneys: [
+      'analise-empresarial',
+      'compliance-regulatorio',
+      'due-diligence',
+    ],
+    legalBasis: [
+      'Lei 12.651/2012: Código Florestal — CAR e APPs',
+      'SICAR: Sistema de Cadastro Ambiental Rural',
+      'IBAMA: Monitoramento e embargos ambientais',
+      'Lei 4.829/1965: Crédito rural — Conformidade BACEN',
+    ],
   },
   {
     slug: 'telecomunicacoes',
@@ -723,6 +930,29 @@ export const SECTORS: SncSector[] = [
     stars: ['Score', 'Antifraude', 'KYC'],
     case: { value: '-55%', label: 'Fraude em ativação de planos' },
     modules: ['Score de Crédito', 'Antifraude', 'Verificação de Identidade'],
+    narrative: [
+      'SIM swap, fraude de portabilidade e ativação de planos com identidade sintética são os principais vetores de ataque em telecomunicações. Operadoras que aprovam planos pós-pagos sem validação de identidade digital carregam o ônus do inadimplente e do fraudador, muitas vezes até descobrir semanas depois.',
+      'O SNC valida a identidade do solicitante com biometria, cruza com base de operadoras e detecta padrões de SIM swap via phone score. Para planos empresariais, valida o CNPJ, situação Receita e representante legal antes da ativação. Tudo em menos de 15 segundos.',
+      'Para operadoras e provedores de internet, o resultado é claro: menos fraude na ativação, menor inadimplência estrutural e base de clientes com identidade verificada, essencial para a oferta de serviços financeiros embarcados.',
+    ],
+    paraQueServe: [
+      'Operadoras de telefonia móvel que oferecem planos pós-pagos e financiamento de dispositivos',
+      'Provedores de internet (ISPs) que operam crédito embutido em contratos',
+      'Distribuidores de chips e planos virtuais (eSIM) com risco de ativação fraudulenta',
+      'Empresas que oferecem banking embarcado em plataformas telecom',
+      'Gestores de frotas corporativas com planos empresariais em múltiplos dispositivos',
+    ],
+    sectorJourneys: [
+      'kyc-digital',
+      'enriquecimento-de-base',
+      'prevencao-de-fraude',
+    ],
+    legalBasis: [
+      'ANATEL Resolução 477/2007: Regulamento de Serviço Móvel Pessoal',
+      'LGPD: Tratamento de dados de usuários de telecomunicações',
+      'Lei 9.472/1997: Lei Geral de Telecomunicações',
+      'Circular BCB 3.978: PLD/FT para serviços financeiros embarcados',
+    ],
   },
   {
     slug: 'industria-b2b',
@@ -735,6 +965,29 @@ export const SECTORS: SncSector[] = [
     stars: ['Indicadores', 'Círculos', 'ESG', 'IBAMA', 'SICAR'],
     case: { value: '8k', label: 'Fornecedores validados/mês' },
     modules: ['Indicadores Empresariais', 'Círculos & Relacionamentos', 'ESG & Dados Rurais', 'Certidões PJ'],
+    narrative: [
+      'Na indústria B2B, o risco de cadeia de suprimentos é o risco do negócio. Fornecedor com dívidas trabalhistas, irregularidades fiscais ou vínculo com empresas sancionadas contamina o contrato principal, e a responsabilidade solidária pode chegar ao cliente final. A due diligence de fornecedores ainda é feita manualmente em muitas indústrias.',
+      'O SNC valida toda a cadeia em escala: indicadores financeiros empresariais, quadro societário e grupo econômico, conformidade ESG e IBAMA, certidões em todas as esferas e situação de crédito via SCR. Para gestores de compras, o processamento em lote atualiza o cadastro de todos os fornecedores simultaneamente.',
+      'Para empresas com cadeia de fornecimento extensa, o SNC transforma compliance de fornecedores em processo automático: onboarding seguro, renovação periódica e alerta proativo quando um parceiro muda de situação fiscal ou ambiental.',
+    ],
+    paraQueServe: [
+      'Indústrias com cadeia extensa de fornecedores que exigem conformidade ESG e fiscal',
+      'Gestores de compras que processam alto volume de novos fornecedores mensalmente',
+      'Empresas exportadoras que precisam demonstrar compliance de fornecedores a clientes internacionais',
+      'Fundos de private equity que realizam due diligence de empresas do portfólio',
+      'Distribuidoras e representantes comerciais que creditam revendedores B2B',
+    ],
+    sectorJourneys: [
+      'analise-empresarial',
+      'due-diligence',
+      'credito-responsavel',
+    ],
+    legalBasis: [
+      'Lei 6.404/1976: Sociedades Anônimas — Responsabilidade solidária',
+      'Lei 12.846/2013: Lei Anticorrupção e due diligence de cadeia',
+      'Decreto-Lei 9.430/1996: SPED e obrigações fiscais',
+      'Lei 12.651/2012: Conformidade ambiental em contratos industriais',
+    ],
   },
   {
     slug: 'marketplace-gig',
@@ -747,6 +1000,29 @@ export const SECTORS: SncSector[] = [
     stars: ['Background', 'Identidade', 'Antifraude'],
     case: { value: '-61%', label: 'Fraude de prestadores em plataformas' },
     modules: ['Background Check', 'Verificação de Identidade', 'Antifraude'],
+    narrative: [
+      'Plataformas de marketplace e gig economy escalam com a confiança como produto central. Uma fraude de identidade de prestador, um golpe aplicado por um entregador ou uma transação com conta de mula compromete a reputação da plataforma. Verificar cada usuário manualmente não escala.',
+      'O SNC habilita prestadores, vendedores e usuários em segundos: background check automatizado, biometria com prova de vida, validação de documentos e antifraude transacional em tempo real. Para plataformas de gig, adiciona validação de CNH e RAIS para trabalhadores mobile.',
+      'Para product managers e operações de plataforma, o SNC é a camada de trust que habilita crescimento seguro: menos chargebacks, menos fraude de identidade e menos risco regulatório com a LGPD e o Marco Civil.',
+    ],
+    paraQueServe: [
+      'Marketplaces de produtos e serviços que precisam verificar vendedores e compradores',
+      'Plataformas de entrega e mobilidade que gerenciam prestadores autônomos',
+      'Apps de serviços domésticos, saúde e educação com risco de identidade no onboarding',
+      'Plataformas de freelancers que processam pagamentos internacionais',
+      'Empresas de economia compartilhada que operam bens de terceiros (imóveis, veículos)',
+    ],
+    sectorJourneys: [
+      'prevencao-de-fraude',
+      'kyc-digital',
+      'enriquecimento-de-base',
+    ],
+    legalBasis: [
+      'LGPD: Tratamento de dados de trabalhadores por plataforma',
+      'Marco Civil da Internet: Responsabilidade de provedores de plataforma',
+      'CLT: Art. 4-A — Trabalho intermitente e gig economy',
+      'Resolução BCB 4.893: Meios de pagamento em plataformas digitais',
+    ],
   },
   {
     slug: 'energia-utilities',
@@ -759,6 +1035,29 @@ export const SECTORS: SncSector[] = [
     stars: ['Score', 'Monitoramento', 'Risco'],
     case: { value: '-44%', label: 'Inadimplência em novas conexões' },
     modules: ['Score de Crédito', 'Risco Financeiro', 'Monitoramento 24h'],
+    narrative: [
+      'Tarifas de energia não são recuperáveis. Quando um cliente conectado não paga, o prejuízo é imediato, o processo de desligamento é regulado e a renegociação exige conformidade com a ANEEL. O risco de inadimplência estrutural começa na aprovação da nova ligação, e a maioria das concessionárias ainda aprova conexões sem score de crédito estruturado.',
+      'O SNC analisa solicitantes de novas conexões com score multibureau, histórico financeiro e monitoramento contínuo pós-ativação. Para B2B empresarial, adiciona indicadores empresariais, situação Receita e conformidade ESG, especialmente relevante para empresas com consumo energético sujeito a licenciamento ambiental.',
+      'Para utilities reguladas, o SNC entrega o ciclo completo: aprovação com risco avaliado, monitoramento de adimplência em tempo real e evidência auditável para a ANEEL quando necessário.',
+    ],
+    paraQueServe: [
+      'Concessionárias de energia que aprovam novas conexões residenciais e comerciais',
+      'Distribuidoras de gás e saneamento com modelo de contrato pré-pago e pós-pago',
+      'Fornecedores de energia livre no mercado B2B que precisam avaliar risco de contraparte',
+      'Utilities que oferecem parcelamento de dívida e precisam de análise de capacidade de pagamento',
+      'Empresas de geração solar e eficiência energética com financiamento de equipamentos',
+    ],
+    sectorJourneys: [
+      'compliance-regulatorio',
+      'analise-empresarial',
+      'credito-responsavel',
+    ],
+    legalBasis: [
+      'ANEEL Resolução Normativa 1.000/2021: Fornecimento de energia',
+      'ANP Portaria 116/2000: Distribuição de gás natural',
+      'LGPD: Dados de consumo como dados pessoais sensíveis',
+      'Lei 8.987/1995: Concessões e permissões de serviços públicos',
+    ],
   },
   {
     slug: 'betting-igaming',
@@ -771,6 +1070,29 @@ export const SECTORS: SncSector[] = [
     stars: ['KYC regulatório', 'PEP', 'Idade', 'Risco', 'Monitoramento contínuo'],
     case: { value: 'D+0', label: 'Conformidade desde o go-live' },
     modules: ['Mercado de Apostas', 'Verificação de Identidade', 'Compliance & PEP', 'Monitoramento 24h', 'Risco Financeiro'],
+    narrative: [
+      'A Lei 14.790/2023 não é uma opção, é uma condição de licenciamento. Operadores de apostas que não cumprem KYC regulatório, verificação de idade, PEP e monitoramento de comportamento suspeito desde o D+0 operam em risco de cassação da licença pelo Ministério da Fazenda.',
+      'O SNC entrega o módulo de conformidade completo para apostas: biometria com prova de vida, verificação de idade via Receita Federal, KYC regulatório com PEP e sanções, risco financeiro do apostador e monitoramento contínuo de comportamento. Homologado para os requisitos do SPA/MF.',
+      'Para operadores licenciados, o SNC não é um fornecedor de KYC, é a infraestrutura de compliance que sustenta o licenciamento. Cada consulta gera registro auditável por CPF, por sessão e por evento de apostas, pronto para apresentação ao regulador.',
+    ],
+    paraQueServe: [
+      'Operadores de apostas esportivas licenciados ou em processo de licenciamento pela MF',
+      'Plataformas de igaming que operam sob a Lei 14.790/2023 e precisam de KYC desde D+0',
+      'Afiliadas e distribuidores de apostas que precisam demonstrar compliance próprio',
+      'Processadores de pagamento que operam no ecossistema de betting e precisam de AML',
+      'Escritórios jurídicos que assessoram operadores no processo de licenciamento',
+    ],
+    sectorJourneys: [
+      'kyc-digital',
+      'compliance-regulatorio',
+      'prevencao-de-fraude',
+    ],
+    legalBasis: [
+      'Lei 14.790/2023: Marco legal de apostas esportivas no Brasil',
+      'Portaria MF 1.112/2023: Requisitos de licenciamento e KYC',
+      'LGPD: Tratamento de dados de apostadores',
+      'Circular BCB 3.978: PLD/FT em operações de apostas',
+    ],
   },
 ];
 
