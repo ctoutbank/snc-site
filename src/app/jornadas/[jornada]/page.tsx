@@ -173,21 +173,21 @@ export default async function JornadaPage({ params }: Props) {
                 {/* § BASE LEGAL — navy + brass, mesmo estético do card esquerdo */}
                 {j.legalBasis && j.legalBasis.length > 0 && (
                   <div style={{
-                    background: 'var(--snc-navy)',
+                    background: 'transparent',
                     borderLeft: '4px solid var(--snc-brass)',
-                    padding: '24px 28px',
+                    padding: '20px 24px',
                     marginTop: 32,
                   }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
                       <div style={{ width: 28, height: 1, background: 'var(--snc-brass)' }} />
-                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase' }}>
+                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-navy)', letterSpacing: '.2em', textTransform: 'uppercase' }}>
                         § Base Legal
                       </div>
                     </div>
-                    <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 7 }}>
                       {j.legalBasis.map((item, k) => (
-                        <li key={k} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: '#C4CDD8', lineHeight: 1.6 }}>
-                          — {item}
+                        <li key={k} style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: '#2e3d4a', lineHeight: 1.6 }}>
+                          — {item}
                         </li>
                       ))}
                     </ul>
