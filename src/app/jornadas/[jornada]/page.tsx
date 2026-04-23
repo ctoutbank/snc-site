@@ -113,29 +113,14 @@ export default async function JornadaPage({ params }: Props) {
                 <div style={{ marginTop: 28, fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: '#8a94a3', letterSpacing: '.12em', textTransform: 'uppercase' }}>
                   {j.title}{j.titleItalic}
                 </div>
-              </div>
 
-              {/* Direita — texto + para que serve + contato */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                {j.narrative.map((para, i) => (
-                  <p key={i} style={{
-                    fontSize: i === 0 ? 17 : 16,
-                    color: i === 0 ? '#2e3d4a' : '#4a5662',
-                    lineHeight: 1.8,
-                    fontWeight: i === 0 ? 500 : 400,
-                    margin: 0,
-                  }}>
-                    {para}
-                  </p>
-                ))}
-
-                {/* Para que serve — premium dark card */}
+                {/* Para que serve — premium dark card (coluna esquerda, abaixo do problema) */}
                 {j.paraQueServe && j.paraQueServe.length > 0 && (
                   <div style={{
                     background: 'var(--snc-navy)',
                     borderLeft: '4px solid var(--snc-brass)',
                     padding: '28px 32px',
-                    marginTop: 36,
+                    marginTop: 32,
                   }}>
                     <div style={{
                       display: 'flex',
@@ -167,6 +152,22 @@ export default async function JornadaPage({ params }: Props) {
                     </ul>
                   </div>
                 )}
+              </div>
+
+              {/* Direita — texto + para que serve + contato */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                {j.narrative.map((para, i) => (
+                  <p key={i} style={{
+                    fontSize: i === 0 ? 17 : 16,
+                    color: i === 0 ? '#2e3d4a' : '#4a5662',
+                    lineHeight: 1.8,
+                    fontWeight: i === 0 ? 500 : 400,
+                    margin: 0,
+                  }}>
+                    {para}
+                  </p>
+                ))}
+
 
               </div>
             </div>
