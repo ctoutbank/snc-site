@@ -68,7 +68,7 @@ function SectorCard({ s, index }: { s: (typeof SECTORS)[0]; index: number }) {
   );
 }
 
-export function SectorGrid() {
+export function SectorGrid({ mode = 'scroll' }: { mode?: 'scroll' | 'grid' }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [hasScrolled, setHasScrolled] = useState(false);
@@ -122,53 +122,65 @@ export function SectorGrid() {
         </p>
       </div>
 
-      {/* Barra de navegação */}
-      <div className="snc-sg-nav-bar">
-        <span className="snc-sg-nav-label">{SECTORS.length} setores disponíveis</span>
-        <div className="snc-sg-arrows">
-          <button className="snc-sg-arrow-btn" onClick={() => scrollBy('left')} aria-label="Anterior">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" width={18} height={18}>
-              <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 5 5 12 12 19" />
-            </svg>
-          </button>
-          <button className="snc-sg-arrow-btn" onClick={() => scrollBy('right')} aria-label="Próximo">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" width={18} height={18}>
-              <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      {/* Grid 2 linhas com scroll horizontal */}
-      <div className="snc-sg-scroll-outer">
-        <div
-          ref={trackRef}
-          className="snc-sg-scroll-track"
-          onScroll={onScroll}
-          onMouseDown={onMouseDown}
-          onMouseUp={onMouseUp}
-          onMouseLeave={onMouseUp}
-          onMouseMove={onMouseMove}
-          style={{ cursor: 'grab' }}
-        >
+      {mode === 'grid' ? (
+        /* ─── PÁGINA /setores: grid estático 4 colunas ─── */
+        <div className="snc-sg-static-grid">
           {SECTORS.map((s, i) => (
             <SectorCard key={s.slug} s={s} index={i} />
           ))}
         </div>
-      </div>
+      ) : (
+        /* ─── HOMEPAGE: carrossel horizontal com setas ─── */
+        <>
+          {/* Barra de navegação */}
+          <div className="snc-sg-nav-bar">
+            <span className="snc-sg-nav-label">{SECTORS.length} setores disponíveis</span>
+            <div className="snc-sg-arrows">
+              <button className="snc-sg-arrow-btn" onClick={() => scrollBy('left')} aria-label="Anterior">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" width={18} height={18}>
+                  <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 5 5 12 12 19" />
+                </svg>
+              </button>
+              <button className="snc-sg-arrow-btn" onClick={() => scrollBy('right')} aria-label="Próximo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" width={18} height={18}>
+                  <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+                </svg>
+              </button>
+            </div>
+          </div>
 
-      {/* Barra de progresso + hint de arraste */}
-      <div className="snc-sg-feedback">
-        <div className="snc-sg-progress-wrap">
-          <div className="snc-sg-progress-bar" style={{ width: `${progress * 100}%` }} />
-        </div>
-        <span
-          className="snc-sg-drag-hint"
-          style={{ opacity: hasScrolled ? 0 : 1, pointerEvents: 'none' }}
-        >
-          ← arraste para explorar →
-        </span>
-      </div>
+          {/* Grid 2 linhas scroll horizontal */}
+          <div className="snc-sg-scroll-outer">
+            <div
+              ref={trackRef}
+              className="snc-sg-scroll-track"
+              onScroll={onScroll}
+              onMouseDown={onMouseDown}
+              onMouseUp={onMouseUp}
+              onMouseLeave={onMouseUp}
+              onMouseMove={onMouseMove}
+              style={{ cursor: 'grab' }}
+            >
+              {SECTORS.map((s, i) => (
+                <SectorCard key={s.slug} s={s} index={i} />
+              ))}
+            </div>
+          </div>
+
+          {/* Barra de progresso + hint */}
+          <div className="snc-sg-feedback">
+            <div className="snc-sg-progress-wrap">
+              <div className="snc-sg-progress-bar" style={{ width: `${progress * 100}%` }} />
+            </div>
+            <span
+              className="snc-sg-drag-hint"
+              style={{ opacity: hasScrolled ? 0 : 1, pointerEvents: 'none' }}
+            >
+              ← arraste para explorar →
+            </span>
+          </div>
+        </>
+      )}
 
       <div className="snc-sg-footer">
         <Link href="/setores" className="snc-btn-outline">
