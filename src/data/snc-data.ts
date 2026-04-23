@@ -27,6 +27,7 @@ export interface SncJourney {
   narrative?: string[];
   paraQueServe?: string[];
   delivery?: { title: string; desc: string; highlights?: string[] };
+  legalBasis?: string[];
 }
 
 export interface SncSector {

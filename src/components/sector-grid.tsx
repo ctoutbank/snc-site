@@ -49,7 +49,6 @@ function SectorCard({ s, index }: { s: (typeof SECTORS)[0]; index: number }) {
           <div className="sg-hover-label">{s.case.label}</div>
         </div>
         <p className="sg-hover-text">{s.hoverText}</p>
-        <div className="sg-hover-spacer" />
         <div className="snc-sg-hover-bottom">
           <div className="sg-hover-tags">
             {s.stars.slice(0, 3).map((star) => (
@@ -64,7 +63,6 @@ function SectorCard({ s, index }: { s: (typeof SECTORS)[0]; index: number }) {
             </svg>
           </div>
         </div>
-        <div className="sg-hover-spacer" />
       </div>
     </Link>
   );
