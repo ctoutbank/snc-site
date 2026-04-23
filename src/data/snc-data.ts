@@ -404,6 +404,29 @@ export const JOURNEYS: SncJourney[] = [
       { title: 'Exposição Política', desc: 'PEP estendido, doações, cargos e bens declarados.' },
       { title: 'Relatório Forense', desc: 'Síntese analítica em PDF com recomendações e trilha de auditoria.' },
     ],
+    narrative: [
+      'Antes de assinar um contrato, aceitar um cotista ou fechar uma parceria, a pergunta real é: quem é essa pessoa ou empresa, de fato? A due diligence mal conduzida não é apenas um risco jurídico — é exposição a responsabilidade solidária em processo de lavagem, fraude contratual ou envolvimento em esquemas de corrupção. A maioria das equipes ainda depende de buscas manuais, ausentes de padronização e sem trilha de auditoria defensável.',
+      'O SNC executa investigação com cruzamento de até 35 fontes em paralelo: antecedentes criminais, processos em todas as esferas, histórico de protestos, análise de grafo de relacionamentos, exposição política e reputação em mídias abertas. O resultado chega como relatório estruturado em PDF, com metodologia documentada e hash de integridade.',
+      'Para compliance officers, o dosiê SNC não é um relatório de busca — é um artefato de defesa. Cada dado consultado tem fonte, timestamp e resultado rastreável. Quando a fiscalização chega, a evidência de diligência já está pronta.',
+    ],
+    paraQueServe: [
+      'Fundos de private equity e venture capital em processo de due diligence pré-investimento',
+      'Departamentos jurídicos que assessoram clientes em M&A e contratos de alto valor',
+      'Compliance officers responsáveis por onboarding de parceiros e fornecedores críticos',
+      'Gestoras de fundos com obrigação de KYC estendido de cotistas PEP',
+      'Empresas em processo de licenciamento ou renovação contratual com órgãos públicos',
+    ],
+    legalBasis: [
+      'Lei 12.846/2013 — Lei Anticorrupção',
+      'Lei 9.613/1998 — Prevenção à Lavagem de Dinheiro',
+      'Decreto 8.420/2015 — Programa de Integridade',
+      'Circular BCB 3.978 — Due Diligence de Contrapartes',
+    ],
+    delivery: {
+      title: 'Relatório Forense Completo',
+      desc: 'Dosiê investigativo com metodologia documentada, hash de integridade e trilha de auditoria. Entregue em PDF estruturado com recomendações de risco e evidências rastreáveis por fonte.',
+      highlights: ['35 Fontes', 'PDF Auditável', 'Hash SHA256', 'Lei 12.846'],
+    },
   },
   {
     slug: 'prevencao-de-fraude',
@@ -424,6 +447,29 @@ export const JOURNEYS: SncJourney[] = [
       { title: 'Análise de Velocidade', desc: 'Detecção de padrões anômalos de uso e múltiplas tentativas.' },
       { title: 'Alerta Webhook', desc: 'Notificação instantânea para seu sistema de prevenção.' },
     ],
+    narrative: [
+      'A fraude não avisa. Ela explora a janela entre a intenção do usuário e a resposta do sistema — e essa janela, na maioria das operações, dura mais de 3 segundos. Nesse intervalo, os padrões que distinguem um usuário legítimo de uma identidade sintética, um dispositivo comprometido ou uma conta de mula já estavam disponíveis. O problema não é dados — é latência na decisão.',
+      'O motor antifraude do SNC combina score transacional em tempo real, fingerprint de dispositivo, phone score verificado, análise de velocidade e histórico de chargeback em uma única camada de decisão com resposta em menos de 200ms. Cada indicador é ponderado pelo modelo e o resultado é uma probabilidade de fraude calibrada por tipo de operação.',
+      'O diferencial operacional está no monitoramento contínuo: o SNC não apenas decide no momento da transação, mas acompanha o comportamento da carteira via webhook — alertando anomalias antes que se tornem chargebacks ou bloqueios regulatórios.',
+    ],
+    paraQueServe: [
+      'E-commerces e marketplaces com alta incidência de fraude em cartão e contas de mula',
+      'Emissores de cartão que precisam reduzir chargeback sem aumentar falso-positivo',
+      'Operadoras de PIX com necessidade de decisão de risco em menos de 200ms',
+      'Fintechs de crédito que sofrem com fraude de identidade no onboarding',
+      'Plataformas de cashback e loyalty com risco de abuso de programa',
+    ],
+    legalBasis: [
+      'Resolução BCB 4.893 — Segurança em meios eletrônicos de pagamento',
+      'Lei 14.286/2021 — Marco Legal das Garantias e Prevenção a Fraudes',
+      'Circular BCB 3.978 — Controles internos e PLD/FT',
+      'LGPD — Análise de risco e decisões automatizadas',
+    ],
+    delivery: {
+      title: 'Score Antifraude em Tempo Real',
+      desc: 'Probabilidade de fraude calibrada por tipo de operação, com decisão em < 200ms, log de indicadores e integração via webhook para alertas contínuos de portfólio.',
+      highlights: ['< 200ms', 'Webhook', 'PIX', 'Chargeback'],
+    },
   },
   {
     slug: 'analise-empresarial',
@@ -444,6 +490,29 @@ export const JOURNEYS: SncJourney[] = [
       { title: 'Conformidade ESG', desc: 'IBAMA, SICAR, embargos ambientais e certificações.' },
       { title: 'Score Consolidado', desc: 'Rating de saúde empresarial com recomendação de risco.' },
     ],
+    narrative: [
+      'Operar com pessoas jurídicas sem radiografia real é decidir no escuro. Balanços auditados chegam com atraso, dados de SPED são opacos para quem não tem acesso direto e a composição societária real — com holdings e offshores — quase nunca está no contrato. O resultado é exposição a risco de crédito subestimado, fraude contratual e responsabilidade solidária com empresas envolvidas em irregularidades.',
+      'O SNC mapeia a PJ em quatro dimensões simultâneas: indicadores financeiros estimados a partir de SPED, RAIS e bases fiscais; quadro societário completo com grafo de holdings e grupo econômico; conformidade ESG com histórico de embargos IBAMA; e scorecard de saúde operacional consolidado. Tudo em menos de 3 segundos, via API.',
+      'Para analistas de crédito B2B, o SNC elimina o intervalo de semanas entre a solicitação e a disponibilização de informação qualificada. A decisão baseia-se em dados estruturados e auditáveis — não em balanço auto-declarado ou visita presencial.',
+    ],
+    paraQueServe: [
+      'Bancos e fundos com carteira de crédito B2B que precisam de análise rápida e auditável de PJs',
+      'Departamentos comerciais que precisam qualificar leads empresariais antes de negociar',
+      'Operadores que exigem conformidade ESG e ambiental de fornecedores e parceiros',
+      'Seguradoras que subscrevem riscos corporativos com base em saúde financeira da PJ',
+      'Plataformas de supply chain que gerenciam risco de fornecedores em tempo real',
+    ],
+    legalBasis: [
+      'Lei 6.404/1976 — Lei das Sociedades Anônimas',
+      'Decreto-Lei 9.430/1996 — SPED e Obrigações Fiscais',
+      'Lei 12.651/2012 — Código Florestal e SICAR',
+      'CVM — Instrução 480 — Informações Periódicas',
+    ],
+    delivery: {
+      title: 'Dosiê Empresarial Completo',
+      desc: 'Relatório consolidado com indicadores financeiros estimados, mapa societário em grafo, histórico ESG e scorecard de risco. Entregue em JSON estruturado ou PDF com hash de integridade.',
+      highlights: ['19 Indicadores', 'Grafo Societário', 'ESG', 'SPED'],
+    },
   },
   {
     slug: 'enriquecimento-de-base',
@@ -464,6 +533,29 @@ export const JOURNEYS: SncJourney[] = [
       { title: 'Comportamento Online', desc: 'Padrão de uso e engajamento digital.' },
       { title: 'Enriquecimento em Lote', desc: 'API em lote para atualização de toda a base em < 24h.' },
     ],
+    narrative: [
+      'Uma base desatualizada é um passivo disfarçado de ativo. Telefones inválidos, e-mails inativos e endereços desatualizados comprometem campanhas, travam onboardings e produzem dados de cobrança inúteis. O enriquecimento manual é lento, caro e não escala — especialmente quando a base tem centenas de milhares de registros com frequência de atualização variável.',
+      'O SNC resolve o enriquecimento em lote via API: perfil digital completo com presença em apps, redes sociais e assinatura de dispositivo; e-mails e telefones verificados em tempo real contra bases de operadoras; e comportamento online estruturado. A atualização de toda a base acontece em menos de 24 horas, com cobertura acima de 98% para CPFs ativos.',
+      'Para equipes de CRM, o resultado é imediato: aumento consistente na taxa de entrega de email, melhor segmentação por perfil digital e redução de custo operacional com dados inválidos. A base deixa de ser um problema de qualidade e passa a ser um ativo de decisão.',
+    ],
+    paraQueServe: [
+      'Equipes de marketing que dependem de base qualificada para campanhas de alta performance',
+      'Departamentos de cobrança que precisam de contact data atualizado para acionamento',
+      'CRMs e plataformas de customer data que oferecem enriquecimento como feature',
+      'Empresas de e-commerce com alta taxa de bounce em email e SMS',
+      'Startups de dados que revendem perfis enriquecidos para clientes corporativos',
+    ],
+    legalBasis: [
+      'LGPD — Art. 7.º e 11 — Finalidade e legitimidade no tratamento de dados',
+      'Lei 12.965/2014 — Marco Civil da Internet',
+      'ANATEL — Portabilidade e validação de operadora',
+      'LGPD — Art. 18 — Direitos do titular e atualização de dados',
+    ],
+    delivery: {
+      title: 'Base Enriquecida via API em Lote',
+      desc: 'Perfil digital completo, contatos verificados e atributos comportamentais entregues em JSON enriquecido por CPF. Processamento em lote com retorno em < 24h e cobertura > 98% da base ativa.',
+      highlights: ['22 Atributos', '98% Cobertura', 'API em Lote', 'LGPD'],
+    },
   },
   {
     slug: 'compliance-regulatorio',
