@@ -164,6 +164,30 @@ export const MODULES: SncModule[] = [
   },
 
   {
+    slug: 'midia-negativa',
+    area: 'fraude',
+    name: 'Mídia Negativa',
+    datasets: 6,
+    description: 'Varredura em notícias, Justiça e registros de má reputação.',
+    chips: ['Global'],
+    fullDescription: 'Monitoramento de mídia negativa em fontes abertas globais: notícias, portais jurídicos, registros de reclamação (Procon, ReclameAqui) e redes sociais. Análise de sentimento e score de reputação.',
+    useCases: ['KYC avançado', 'Due diligence reputacional', 'Monitoramento de parceiros', 'Prevenção de fraude'],
+    sla: '99,85%',
+    priceFrom: 'R$ 2,40/varredura',
+  },
+  {
+    slug: 'lovac-investigacao',
+    area: 'fraude',
+    name: 'LOVAC · Investigação',
+    datasets: 17,
+    description: 'Inteligência investigativa completa com relatório forense.',
+    chips: ['LOVAC'],
+    fullDescription: 'O módulo de maior profundidade do SNC: investigação OSINT completa com cruzamento de 17 datasets, análise de grafo de relacionamentos, timeline de eventos e relatório forense PDF. Para casos de alta complexidade.',
+    useCases: ['Fraude corporativa', 'Due diligence executiva', 'Investigação patrimonial', 'Compliance de alto risco'],
+    sla: '99,80%',
+    priceFrom: 'R$ 28,00/relatório',
+  },
+  {
     slug: 'monitoramento-24h',
     area: 'fraude',
     name: 'Monitoramento 24h',
@@ -320,8 +344,8 @@ export const JOURNEYS: SncJourney[] = [
     title: 'Due Diligence',
     titleItalic: ' investigativa.',
     problem: 'Como investigar um parceiro, fornecedor ou contraparte antes do contrato?',
-    description: 'Investigação com múltiplas fontes integradas: antecedentes, processos, reputação e rede de relacionamentos em relatório consolidado.',
-    modules: ['Background 9', 'Político 12'],
+    description: 'Investigação com 35 fontes integradas: antecedentes, processos, reputação e rede de relacionamentos em relatório consolidado.',
+    modules: ['Background 9', 'LOVAC 17', 'Político 12'],
     image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=900&q=80',
     metrics: [
       { value: '35', label: 'Fontes cruzadas' },
@@ -330,6 +354,7 @@ export const JOURNEYS: SncJourney[] = [
     ],
     steps: [
       { title: 'Background Check', desc: 'Antecedentes criminais, processos e certidões em todas as esferas.' },
+      { title: 'Investigação LOVAC', desc: 'OSINT completo com grafo de relacionamentos e timeline de eventos.' },
       { title: 'Exposição Política', desc: 'PEP estendido, doações, cargos e bens declarados.' },
       { title: 'Relatório Forense', desc: 'Síntese analítica em PDF com recomendações e trilha de auditoria.' },
     ],
@@ -625,7 +650,7 @@ export const DATASETS: SncDataset[] = [
   { id: 'ANTI01', name: 'Score Antifraude Scoras', category: 'FRAUDE', bureau: 'SCORAS', price: 'R$ 1,15' },
   { id: 'ANTI02', name: 'Phone Score Blu365', category: 'FRAUDE', bureau: 'BLU365', price: 'R$ 0,70' },
   { id: 'DEV01', name: 'Device Fingerprint', category: 'FRAUDE', bureau: 'SNC', price: 'R$ 0,25' },
-
+  { id: 'LOV01', name: 'Relatório LOVAC Completo', category: 'INVESTIGAÇÃO', bureau: 'LOVAC', price: 'R$ 28,00' },
   { id: 'BG01', name: 'Background Check PF', category: 'BG', bureau: 'SNC', price: 'R$ 4,80' },
   { id: 'BG02', name: 'Antecedentes Criminais', category: 'BG', bureau: 'TJ', price: 'R$ 2,20' },
   { id: 'FOR01', name: 'Formação Acadêmica', category: 'BG', bureau: 'MEC', price: 'R$ 1,80' },
