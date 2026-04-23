@@ -71,7 +71,7 @@ export function SiteFooter() {
           </div>
         </div>
         <div className="snc-foot-bot">
-          <span>© 2026 Consolle Data Intelligence · Todos os direitos reservados</span>
+          <span>© 2026 SNC-Sistema Nacional de Conformidade · Consolle Data Intelligence · Todos os direitos reservados</span>
           <div className="certs">
             <span>ISO 27001</span>
             <span>SOC 2 · II</span>
