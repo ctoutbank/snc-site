@@ -305,7 +305,7 @@ export const JOURNEYS: SncJourney[] = [
     titleItalic: ' no atacado.',
     problem: 'Como aprovar crédito com segurança, sem aumentar inadimplência?',
     description: 'Score multibureau, cadastro validado e análise de risco financeiro por operação. Aprovação com menor inadimplência e mesmo SLA.',
-    modules: ['Score 37', 'Cadastral 11', 'Risco 14'],
+    modules: ['Score de Crédito', 'Dados Cadastrais', 'Risco Financeiro'],
     image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=900&q=80',
     metrics: [
       { value: '-28%', label: 'Inadimplência média' },
@@ -348,7 +348,7 @@ export const JOURNEYS: SncJourney[] = [
     titleItalic: ' sem fricção.',
     problem: 'Como verificar a identidade de um cliente em 15 segundos?',
     description: 'Biometria facial, OCR de documento e validação em fontes oficiais combinados em um fluxo único. Conformidade BCB e LGPD.',
-    modules: ['Identidade 8', 'KYC 9', 'Compliance 9'],
+    modules: ['Verificação de Identidade', 'KYC', 'Compliance & PEP'],
     image: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=900&q=80',
     metrics: [
       { value: '15s', label: 'Tempo médio de KYC' },
@@ -391,7 +391,7 @@ export const JOURNEYS: SncJourney[] = [
     titleItalic: ' investigativa.',
     problem: 'Como investigar um parceiro, fornecedor ou contraparte antes do contrato?',
     description: 'Investigação com 35 fontes integradas: antecedentes, processos, reputação e rede de relacionamentos em relatório consolidado.',
-    modules: ['Background 9', 'LOVAC 17', 'Político 12'],
+    modules: ['Background Check', 'LOVAC · Investigação', 'Envolvimento Político'],
     image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=900&q=80',
     metrics: [
       { value: '35', label: 'Fontes cruzadas' },
@@ -434,7 +434,7 @@ export const JOURNEYS: SncJourney[] = [
     titleItalic: ' em tempo real.',
     problem: 'Como bloquear operações fraudulentas antes de serem efetivadas?',
     description: 'Antifraude multicamada com decisão em menos de 200ms. Score transacional, device fingerprint, phone score e monitoramento contínuo.',
-    modules: ['Antifraude 17', 'Monitoramento 7'],
+    modules: ['Antifraude', 'Monitoramento 24h'],
     image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=900&q=80',
     metrics: [
       { value: '-68%', label: 'Redução de chargeback' },
@@ -477,7 +477,7 @@ export const JOURNEYS: SncJourney[] = [
     titleItalic: ' profunda.',
     problem: 'Como entender a saúde real de uma PJ antes de operar?',
     description: 'Radiografia de pessoas jurídicas: indicadores financeiros, quadro societário, grupo econômico, ESG e saúde operacional.',
-    modules: ['Indicadores 19', 'Círculos 8', 'ESG 7'],
+    modules: ['Indicadores Empresariais', 'Círculos & Relacionamentos', 'ESG & Dados Rurais'],
     image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&q=80',
     metrics: [
       { value: '19', label: 'Indicadores analisados' },
@@ -520,7 +520,7 @@ export const JOURNEYS: SncJourney[] = [
     titleItalic: ' de base.',
     problem: 'Como enriquecer minha base com perfil digital e contatos validados?',
     description: 'Perfil digital, contatos validados e comportamento online para enriquecer a base de clientes com dados estruturados e auditáveis.',
-    modules: ['Perfil Digital 22', 'BigMarket'],
+    modules: ['Perfil Digital', 'BigMarket'],
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80',
     metrics: [
       { value: '22', label: 'Atributos digitais' },
