@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { SECTORS } from '@/data/snc-data';
 
@@ -16,18 +16,15 @@ function SectorCard({ s, index }: { s: (typeof SECTORS)[0]; index: number }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Photo */}
       <img
         src={s.image}
         alt={s.cat}
         draggable={false}
-        style={{ opacity: hovered ? 0 : 0.2, transform: hovered ? 'scale(1.04)' : 'scale(1)' }}
+        style={{ opacity: hovered ? 0 : 0.22, transform: hovered ? 'scale(1.04)' : 'scale(1)' }}
       />
-
-      {/* Overlay */}
       <div className="snc-sg-overlay" style={{ opacity: hovered ? 0 : 1 }} />
 
-      {/* Default dark */}
+      {/* Default dark: nome uppercase + descrição */}
       <div className="snc-sg-default" style={{ opacity: hovered ? 0 : 1 }}>
         <div className="sg-num">S.{String(index + 1).padStart(2, '0')}</div>
         <div className="sg-cat">{s.cat}</div>
@@ -52,17 +49,19 @@ function SectorCard({ s, index }: { s: (typeof SECTORS)[0]; index: number }) {
           <div className="sg-hover-label">{s.case.label}</div>
         </div>
         <p className="sg-hover-text">{s.hoverText}</p>
-        <div className="sg-hover-tags">
-          {s.stars.slice(0, 3).map((star) => (
-            <span key={star}>{star}</span>
-          ))}
-        </div>
-        <div className="sg-hover-cta">
-          Conhecer o setor
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" width={13} height={13}>
-            <line x1="5" y1="12" x2="19" y2="12" />
-            <polyline points="12 5 19 12 12 19" />
-          </svg>
+        <div>
+          <div className="sg-hover-tags">
+            {s.stars.slice(0, 3).map((star) => (
+              <span key={star}>{star}</span>
+            ))}
+          </div>
+          <div className="sg-hover-cta">
+            Conhecer o setor
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" width={12} height={12}>
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </div>
         </div>
       </div>
     </Link>
@@ -70,6 +69,31 @@ function SectorCard({ s, index }: { s: (typeof SECTORS)[0]; index: number }) {
 }
 
 export function SectorGrid() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+
+  const gridSectors = SECTORS.slice(0, 8);   // primeiros 8 → 2 linhas de 4
+  const carouselSectors = SECTORS.slice(8);  // restantes 6 → carrossel
+
+  function onMouseDown(e: React.MouseEvent) {
+    isDragging.current = true;
+    startX.current = e.pageX - (trackRef.current?.offsetLeft ?? 0);
+    scrollLeft.current = trackRef.current?.scrollLeft ?? 0;
+    if (trackRef.current) trackRef.current.style.cursor = 'grabbing';
+  }
+  function onMouseUp() {
+    isDragging.current = false;
+    if (trackRef.current) trackRef.current.style.cursor = 'grab';
+  }
+  function onMouseMove(e: React.MouseEvent) {
+    if (!isDragging.current || !trackRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - trackRef.current.offsetLeft;
+    trackRef.current.scrollLeft = scrollLeft.current - (x - startX.current) * 1.3;
+  }
+
   return (
     <div className="snc-sg-root">
       {/* Header */}
@@ -83,12 +107,32 @@ export function SectorGrid() {
         </p>
       </div>
 
-      {/* Grid 3 colunas */}
+      {/* Grid fixo 4 × 2 */}
       <div className="snc-sg-grid">
-        {SECTORS.map((s, i) => (
+        {gridSectors.map((s, i) => (
           <SectorCard key={s.slug} s={s} index={i} />
         ))}
       </div>
+
+      {/* Carrossel com os restantes */}
+      {carouselSectors.length > 0 && (
+        <div className="snc-sg-carousel-wrap">
+          <div
+            ref={trackRef}
+            className="snc-sg-carousel-track"
+            onMouseDown={onMouseDown}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseUp}
+            onMouseMove={onMouseMove}
+          >
+            {carouselSectors.map((s, i) => (
+              <div key={s.slug} className="snc-sg-carousel-item">
+                <SectorCard s={s} index={i + 8} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="snc-sg-footer">
         <Link href="/setores" className="snc-btn-outline">
