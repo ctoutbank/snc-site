@@ -17,7 +17,7 @@ export function CertSection() {
             alt="Arquitetura institucional"
           />
           <div className="badge">§ CERTIFICAÇÕES</div>
-          <div className="seal-b">SNC<br />CERT<br />VI · MMXXVI</div>
+          <div className="seal-b">SNC<br />CERT<br />VI · 2026</div>
         </div>
         <div className="snc-cert-text">
           <div className="kicker">§ 07 · CONFORMIDADE</div>

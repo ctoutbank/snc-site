@@ -46,7 +46,7 @@ export function HomeHero() {
               <span className="seal">§</span>
               Autoridade em Conformidade
             </span>
-            <span>MMXIX — MMXXVI</span>
+            <span>2019 — 2026</span>
           </div>
           <div>ED. 04 · Abril 2026</div>
         </div>

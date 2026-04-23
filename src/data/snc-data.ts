@@ -318,6 +318,29 @@ export const JOURNEYS: SncJourney[] = [
       { title: 'Risco Financeiro', desc: 'Análise de endividamento SCR e projeção actuarial de inadimplência.' },
       { title: 'Decisão Automatizada', desc: 'Score consolidado com threshold configurável por política de risco.' },
     ],
+    narrative: [
+      'O problema do crédito responsável não é análise de dados — é acesso simultâneo às fontes certas no momento da decisão. A maioria dos modelos ainda consulta bureaus em série, exposta a inconsistências entre bases e à latência que compromete a experiência do cliente. O resultado é aprovação excessiva em carteiras de risco ou rejeição conservadora que afasta bons pagadores.',
+      'O SNC consulta os 9 principais bureaus em paralelo — SCR Banco Central, SPC Brasil, Serasa, Boa Vista, Quod e bases complementares — entregando um score consolidado em menos de 2 segundos. Cada fonte é ponderada pelo modelo e os dados brutos ficam disponíveis para auditoria da política de crédito.',
+      'Na prática, instituições que adotam score multibureau com o SNC registram queda consistente na inadimplência sem redução no volume aprovado. A explicação é simples: mais dados, melhor segregação de risco.',
+    ],
+    paraQueServe: [
+      'Bancos digitais e fintechs de crédito que precisam escalar aprovações sem deteriorar a carteira',
+      'Financeiras e cooperativas que operam com alta concentração em segmentos de maior risco',
+      'Emissores de cartão que precisam precificar limite com base em risco real de inadimplência',
+      'Plataformas de BNPL com decisão em tempo real e alta exposição a fraude de identidade',
+      'Consignado e crédito pessoal com necessidade de validação de vínculo empregatício',
+    ],
+    legalBasis: [
+      'Lei 12.414/2011 — Cadastro Positivo de Crédito',
+      'Resolução BCB 4.557 — Gestão de Riscos',
+      'Resolução BCB 4.676 — Crédito ao Consumidor',
+      'SCR — Sistema de Informações de Crédito BCB',
+    ],
+    delivery: {
+      title: 'Score Consolidado Multibureau',
+      desc: 'Score único ponderado com dados de até 9 bureaus, variáveis de risco financeiro e validação de identidade. Threshold configurável por política interna e log de decisão auditável.',
+      highlights: ['9 Bureaus', 'SCR BCB', '< 2s', 'Log auditável'],
+    },
   },
   {
     slug: 'kyc-digital',
@@ -338,6 +361,29 @@ export const JOURNEYS: SncJourney[] = [
       { title: 'Validação Oficial', desc: 'Cruzamento com Receita Federal, SERPRO e bases de identidade.' },
       { title: 'Compliance PEP/Sanções', desc: 'Varredura automática em OFAC, ONU, COAF e listas nacionais.' },
     ],
+    narrative: [
+      'O KYC não é um processo de boas-vindas. É a primeira linha de defesa contra lavagem de dinheiro, uso de identidade falsa e fraude de onboarding. A maior parte das equipes ainda executa etapas em silos — biometria em um fornecedor, validação documental em outro, consulta PEP em um terceiro — com reconciliação manual e risco acumulado a cada handoff.',
+      'O SNC unifica biometria facial com liveness detection, OCR de documentos, validação em Receita Federal e SERPRO, e varredura automática em listas PEP e sanções internacionais em uma única chamada de API. O fluxo inteiro leva menos de 15 segundos e gera um registro unificado por onboarding — imuável, exportável e pronto para apresentação ao regulador.',
+      'O artefato final não é apenas uma aprovação. É um dosiê KYC com hash de evidência, timestamp e trilha de validação — exatamente o que o Banco Central exige para fiscalização do Programa de Compliance.',
+    ],
+    paraQueServe: [
+      'Fintechs e bancos obrigados à Política de KYC conforme Resolução BCB 4.893',
+      'Corretoras e gestoras com necessidade de KYC de cotistas e contrapartes',
+      'Operadores de apostas e igaming sujeitos à identificação obrigatória de usuários',
+      'Plataformas de open finance que processam vinculação de conta de terceiros',
+      'Seguradoras e previdências com onboarding digital regulado pela SUSEP',
+    ],
+    legalBasis: [
+      'Resolução BCB 4.893 — Política de KYC e Compliance',
+      'LGPD — Lei 13.709/2018 — Tratamento de dados biométricos',
+      'Circular BCB 3.978 — PLD/FT em instituições financeiras',
+      'SUSEP Circular 612 — KYC em seguros e previdência',
+    ],
+    delivery: {
+      title: 'Dosiê KYC Certificado',
+      desc: 'Relatório unificado de verificação de identidade com hash de evidência, biometria validada e resultado de varredura PEP/Sanções. Pronto para auditoria BCB e Programa de Compliance.',
+      highlights: ['BCB 4.893', 'PEP/Sanções', 'Biometria', 'LGPD'],
+    },
   },
   {
     slug: 'due-diligence',

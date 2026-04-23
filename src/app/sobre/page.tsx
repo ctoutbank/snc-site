@@ -107,7 +107,7 @@ export default function SobrePage() {
                 src="https://images.unsplash.com/photo-1573497491208-6b1acb260507?w=1200&q=80"
                 alt="Conselho Consultivo"
               />
-              <div className="badge">§ CONSELHO · MMXXVI</div>
+              <div className="badge">§ CONSELHO · 2026</div>
             </div>
           </div>
         </section>
