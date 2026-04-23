@@ -168,10 +168,70 @@ export default async function JornadaPage({ params }: Props) {
                   </p>
                 ))}
 
+                {/* § BASE LEGAL — Sugestão 2: ancora coluna direita com referências regulatórias */}
+                {j.legalBasis && j.legalBasis.length > 0 && (
+                  <div style={{
+                    borderLeft: '3px solid var(--snc-green-2)',
+                    background: 'rgba(15,26,36,.04)',
+                    padding: '16px 20px',
+                    marginTop: 16,
+                  }}>
+                    <div style={{
+                      fontFamily: 'JetBrains Mono, monospace',
+                      fontSize: 9,
+                      color: 'var(--snc-green-2)',
+                      letterSpacing: '.18em',
+                      textTransform: 'uppercase',
+                      marginBottom: 10,
+                    }}>§ BASE LEGAL</div>
+                    <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 5 }}>
+                      {j.legalBasis.map((item, k) => (
+                        <li key={k} style={{
+                          fontFamily: 'JetBrains Mono, monospace',
+                          fontSize: 10,
+                          color: '#6a7a8a',
+                          lineHeight: 1.55,
+                        }}>— {item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
               </div>
             </div>
           </section>
+        )}
+
+        {/* ── Sugestão 1: Faixa técnica (stats do SNC entre narrativa e etapas) ── */}
+        {j.steps && (
+          <div style={{ background: 'var(--snc-navy)' }}>
+            <div style={{
+              maxWidth: 1180,
+              margin: '0 auto',
+              padding: '0 28px',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(4, 1fr)',
+            }}>
+              {[
+                { val: '253', label: 'datasets integrados' },
+                { val: '9', label: 'fontes soberanas' },
+                { val: '99,9%', label: 'SLA contratual' },
+                { val: '<900ms', label: 'latência P95' },
+              ].map((s, i) => (
+                <div key={s.label} style={{
+                  padding: '20px 0',
+                  borderLeft: i > 0 ? '1px solid rgba(255,255,255,.08)' : 'none',
+                  paddingLeft: i > 0 ? 28 : 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 4,
+                }}>
+                  <span style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 26, color: '#fff', lineHeight: 1 }}>{s.val}</span>
+                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: 'var(--snc-brass)', letterSpacing: '.16em', textTransform: 'uppercase' }}>{s.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
 
         {/* ── Como funciona ── */}
@@ -182,6 +242,21 @@ export default async function JornadaPage({ params }: Props) {
               <h2>Como <span className="it">funciona.</span></h2>
               <div className="aside">Do primeiro dado consultado até a entrega do dossiê, tudo rastreável.</div>
             </div>
+
+            {/* Sugestão 3 — conector de fluxo */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 16,
+              margin: '32px 0 0',
+            }}>
+              <div style={{ flex: 1, height: 1, background: 'rgba(15,26,36,.12)' }} />
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: 'var(--snc-brass)', letterSpacing: '.18em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                {j.steps.length} ETAPAS{j.delivery ? ' + 1 ENTREGA' : ''}
+              </div>
+              <div style={{ flex: 1, height: 1, background: 'rgba(15,26,36,.12)' }} />
+            </div>
+
             <div
               className="snc-steps-grid"
               style={{
@@ -190,7 +265,7 @@ export default async function JornadaPage({ params }: Props) {
                 gap: 1,
                 background: 'rgba(15,26,36,.1)',
                 border: '1px solid rgba(15,26,36,.1)',
-                marginTop: 56,
+                marginTop: 24,
               }}
             >
               {j.steps.map((step, i) => (

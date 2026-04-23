@@ -454,6 +454,12 @@ export const JOURNEYS: SncJourney[] = [
       desc: 'Documento estruturado e rastreável pronto para apresentação a qualquer órgão regulador. Cada consulta logada por obrigação, prova de conformidade desde o primeiro onboarding.',
       highlights: ['Auditoria BACEN', 'COAF · RIF', 'BCB 4.893', 'CVM/SFN'],
     },
+    legalBasis: [
+      'Resolução BCB 4.893 — PLD/FT',
+      'Circular BCB 3.978 — COAF/RIF',
+      'LGPD — Lei 13.709/2018',
+      'CVM — Instrução 50 · SFN',
+    ],
   },
 ];
 
