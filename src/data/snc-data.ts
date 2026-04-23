@@ -380,7 +380,7 @@ export const JOURNEYS: SncJourney[] = [
     problem: 'Como aprovar crédito com segurança, sem aumentar inadimplência?',
     description: 'Score multibureau, cadastro validado e análise de risco financeiro por operação. Aprovação com menor inadimplência e mesmo SLA.',
     modules: ['Score de Crédito', 'Dados Cadastrais', 'Risco Financeiro'],
-    image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=900&q=80',
+    image: '/jornadas/credito-responsavel.jpg',
     metrics: [
       { value: '-28%', label: 'Inadimplência média' },
       { value: '+40%', label: 'Aprovação segura' },
@@ -423,7 +423,7 @@ export const JOURNEYS: SncJourney[] = [
     problem: 'Como verificar a identidade de um cliente em 15 segundos?',
     description: 'Biometria facial, OCR de documento e validação em fontes oficiais combinados em um fluxo único. Conformidade BCB e LGPD.',
     modules: ['Verificação de Identidade', 'KYC', 'Compliance & PEP'],
-    image: 'https://images.unsplash.com/photo-1573497491208-6b1acb260507?w=900&q=80',
+    image: '/jornadas/kyc-digital.jpg',
     metrics: [
       { value: '15s', label: 'Tempo médio de KYC' },
       { value: '99,7%', label: 'Precisão biométrica' },
@@ -466,7 +466,7 @@ export const JOURNEYS: SncJourney[] = [
     problem: 'Como investigar um parceiro, fornecedor ou contraparte antes do contrato?',
     description: 'Investigação com 35 fontes integradas: antecedentes, processos, reputação e rede de relacionamentos em relatório consolidado.',
     modules: ['Background Check', 'LOVAC · Investigação', 'Envolvimento Político'],
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&q=80',
+    image: '/jornadas/due-diligence.jpg',
     metrics: [
       { value: '35', label: 'Fontes cruzadas' },
       { value: '< 4h', label: 'Entrega do relatório' },
@@ -509,7 +509,7 @@ export const JOURNEYS: SncJourney[] = [
     problem: 'Como bloquear operações fraudulentas antes de serem efetivadas?',
     description: 'Antifraude multicamada com decisão em menos de 200ms. Score transacional, device fingerprint, phone score e monitoramento contínuo.',
     modules: ['Antifraude', 'Monitoramento 24h'],
-    image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=900&q=80',
+    image: '/jornadas/prevencao-de-fraude.jpg',
     metrics: [
       { value: '-68%', label: 'Redução de chargeback' },
       { value: '< 200ms', label: 'Latência de decisão' },
@@ -552,7 +552,7 @@ export const JOURNEYS: SncJourney[] = [
     problem: 'Como entender a saúde real de uma PJ antes de operar?',
     description: 'Radiografia de pessoas jurídicas: indicadores financeiros, quadro societário, grupo econômico, ESG e saúde operacional.',
     modules: ['Indicadores Empresariais', 'Círculos & Relacionamentos', 'ESG & Dados Rurais'],
-    image: 'https://images.unsplash.com/photo-1664575602554-2087b04935a5?w=900&q=80',
+    image: '/jornadas/analise-empresarial.jpg',
     metrics: [
       { value: '19', label: 'Indicadores analisados' },
       { value: '8k', label: 'PJs validadas/mês' },
@@ -595,7 +595,7 @@ export const JOURNEYS: SncJourney[] = [
     problem: 'Como enriquecer minha base com perfil digital e contatos validados?',
     description: 'Perfil digital, contatos validados e comportamento online para enriquecer a base de clientes com dados estruturados e auditáveis.',
     modules: ['Perfil Digital', 'BigMarket'],
-    image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=900&q=80',
+    image: '/jornadas/enriquecimento-de-base.jpg',
     metrics: [
       { value: '22', label: 'Atributos digitais' },
       { value: '+35%', label: 'Taxa de entrega de email' },
@@ -638,7 +638,7 @@ export const JOURNEYS: SncJourney[] = [
     problem: 'Como cumprir LGPD, Resolução BACEN 4.893 e obrigações COAF?',
     description: 'Infraestrutura de compliance completa: PLD/FT, LGPD, Resolução BCB 4.893, CVM e COAF em um único fluxo auditável.',
     modules: ['Compliance & PEP', 'Envolvimento Político', 'Trilha de Auditoria'],
-    image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=900&q=80',
+    image: '/jornadas/compliance-regulatorio.jpg',
     metrics: [
       { value: '100%', label: 'Conformidade BACEN' },
       { value: 'LGPD', label: 'Operador certificado' },

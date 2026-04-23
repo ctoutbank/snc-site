@@ -37,7 +37,7 @@ export default function SobrePage() {
         <section className="snc-hero" style={{ minHeight: 520 }}>
           <div className="snc-hero-bg">
             <img
-              src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1920&q=80"
+              src="/sobre/hero.jpg"
               alt="Consolle Data Intelligence"
             />
           </div>
@@ -54,10 +54,12 @@ export default function SobrePage() {
             </h1>
             <div className="snc-hero-bottom" style={{ paddingBottom: 40 }}>
               <div className="snc-hero-lede">
-                O Sistema Nacional de Conformidade é operado pela Consolle Data Intelligence S.A.,
-                empresa brasileira de tecnologia fundada em 2019 por um grupo de ex-executivos do
-                Banco Central, Serasa e Itaú. Atendemos hoje 1.240 instituições entre bancos,
-                fintechs, varejistas, operadoras de saúde e órgãos públicos.
+                O Sistema Nacional de Conformidade é uma plataforma brasileira de tecnologia criada
+                para garantir segurança, inteligência e rigor na análise de dados. Desde 2019,
+                evolui continuamente para atender instituições que operam com alto nível de exigência
+                regulatória. Atende o mercado financeiro, fintechs, varejo, operadoras de saúde e o
+                setor público, apoiando decisões mais precisas, redução de riscos e plena aderência
+                às normas vigentes.
               </div>
               <div className="snc-hero-stats">
                 <div className="s">
@@ -81,36 +83,7 @@ export default function SobrePage() {
           </div>
         </section>
 
-        {/* Conselho Consultivo */}
-        <section className="snc-cert">
-          <div className="snc-cert-grid">
-            <div className="snc-cert-text">
-              <div className="kicker">§ GOVERNANÇA</div>
-              <h2>Conselho<br /><span className="it">consultivo.</span></h2>
-              <p>
-                Nossa governança inclui especialistas independentes com trajetória no regulador,
-                no mercado financeiro e na academia. Reuniões trimestrais, atas públicas,
-                conflitos de interesse declarados.
-              </p>
-              <div className="snc-cert-list">
-                {CONSELHO.map((m) => (
-                  <div key={m.name} className="r">
-                    <span className="c">{m.code}</span>
-                    <span className="n">{m.name} — {m.role}</span>
-                    <span className="s">{m.since}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="snc-cert-img">
-              <img
-                src="https://images.unsplash.com/photo-1573497491208-6b1acb260507?w=1200&q=80"
-                alt="Conselho Consultivo"
-              />
-              <div className="badge">§ CONSELHO · 2026</div>
-            </div>
-          </div>
-        </section>
+
 
         {/* Missão e Valores */}
         <section className="snc-manifesto">
@@ -138,60 +111,9 @@ export default function SobrePage() {
           </div>
         </section>
 
-        {/* Timeline */}
-        <section className="snc-sec">
-          <div className="snc-sec-head">
-            <div className="num">§ HISTÓRIA</div>
-            <h2>Uma <span className="it">trajetória</span> de construção.</h2>
-            <div className="aside">2019 — 2026</div>
-          </div>
-          <div style={{ borderLeft: '1px solid rgba(15,26,36,.14)', paddingLeft: 40, marginLeft: 60 }}>
-            {TIMELINE.map((t) => (
-              <div key={t.year} style={{ marginBottom: 40, position: 'relative' }}>
-                <div style={{
-                  position: 'absolute',
-                  left: -49,
-                  top: 4,
-                  fontFamily: 'monospace',
-                  fontSize: 11,
-                  color: 'var(--snc-brass)',
-                  letterSpacing: '.12em',
-                }}>
-                  {t.year}
-                </div>
-                <p style={{ fontSize: 15, color: '#4a5662', lineHeight: 1.6 }}>{t.event}</p>
-              </div>
-            ))}
-          </div>
-        </section>
 
-        {/* Presença */}
-        <section style={{ background: 'var(--snc-navy)', color: '#fff', padding: '80px 28px' }}>
-          <div style={{ maxWidth: 1440, margin: '0 auto' }}>
-            <div style={{ fontFamily: 'monospace', fontSize: 11, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 40 }}>
-              § PRESENÇA NACIONAL
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 60 }}>
-              {[
-                {
-                  city: 'Porto Alegre · Sede',
-                  address: 'Av. Ipiranga, 40\nTrend City Center Office\nSalas 1201 / 1212\nCEP 90160-090 · Porto Alegre / RS',
-                  desc: 'Centro de Governança, Compliance e Relações Institucionais.',
-                },
-              ].map((loc) => (
-                <div key={loc.city}>
-                  <div style={{ fontFamily: 'monospace', fontSize: 11, color: 'var(--snc-brass)', letterSpacing: '.16em', textTransform: 'uppercase', marginBottom: 16 }}>
-                    {loc.city}
-                  </div>
-                  <div style={{ color: '#cfd6df', fontSize: 15, lineHeight: 1.8, whiteSpace: 'pre-line', marginBottom: 16 }}>
-                    {loc.address}
-                  </div>
-                  <div style={{ fontSize: 13, color: '#8a94a3' }}>{loc.desc}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+
+
 
         {/* CTA */}
         <section className="snc-cta" style={{ padding: '80px 28px' }}>
