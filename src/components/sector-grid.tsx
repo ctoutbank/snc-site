@@ -49,7 +49,7 @@ function SectorCard({ s, index }: { s: (typeof SECTORS)[0]; index: number }) {
           <div className="sg-hover-label">{s.case.label}</div>
         </div>
         <p className="sg-hover-text">{s.hoverText}</p>
-        <div>
+        <div className="snc-sg-hover-bottom">
           <div className="sg-hover-tags">
             {s.stars.slice(0, 3).map((star) => (
               <span key={star}>{star}</span>
