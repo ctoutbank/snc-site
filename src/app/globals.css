@@ -85,6 +85,45 @@
 .snc-trust-in .items { display: flex; gap: 36px; flex: 1; flex-wrap: wrap; }
 .snc-trust-in .items span { opacity: .8; }
 
+/* ===== FONTES SOBERANAS ===== */
+.snc-fontes-section { background: var(--snc-paper); border-top: 1px solid rgba(15,26,36,.1); border-bottom: 1px solid rgba(15,26,36,.1); padding: 56px 28px 48px; }
+.snc-fontes-header { max-width: 1180px; margin: 0 auto 40px; display: grid; grid-template-columns: auto 1fr auto; align-items: end; gap: 32px; padding-bottom: 28px; border-bottom: 1px solid rgba(15,26,36,.12); }
+.snc-fontes-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--snc-brass); letter-spacing: .22em; text-transform: uppercase; white-space: nowrap; padding-bottom: 4px; }
+.snc-fontes-headline { font-family: 'Libre Caslon Text', serif; font-size: clamp(26px,3.2vw,42px); font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; color: var(--snc-ink); }
+.snc-fontes-sub { font-size: 12px; color: #6b7785; line-height: 1.6; max-width: 280px; text-align: right; padding-bottom: 4px; }
+
+.snc-fontes-rows { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 0; }
+.snc-fontes-row { display: grid; grid-template-columns: 160px 1fr; align-items: baseline; gap: 20px; padding: 14px 0; border-bottom: 1px solid rgba(15,26,36,.07); }
+.snc-fontes-row:last-child { border-bottom: none; }
+.snc-fontes-row-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--snc-brass); letter-spacing: .18em; text-transform: uppercase; white-space: nowrap; padding-top: 3px; }
+.snc-fontes-row-items { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0; }
+.snc-fontes-item { display: inline-flex; align-items: baseline; gap: 4px; }
+.snc-fontes-dot { color: var(--snc-brass); font-weight: 400; margin: 0 10px; opacity: .7; }
+.snc-fontes-name { color: var(--snc-ink); font-weight: 500; letter-spacing: -0.01em; line-height: 1.2; }
+.snc-fontes-desc { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #8a94a3; letter-spacing: .08em; text-transform: uppercase; margin-left: 5px; }
+
+/* tier sizes */
+.snc-fontes-row--primary .snc-fontes-name { font-family: 'Libre Caslon Text', serif; font-size: clamp(20px,2.2vw,28px); font-weight: 400; }
+.snc-fontes-row--primary .snc-fontes-desc { font-size: 10px; }
+.snc-fontes-row--primary .snc-fontes-dot { font-size: 22px; }
+.snc-fontes-row--secondary .snc-fontes-name { font-family: 'Libre Caslon Text', serif; font-size: clamp(15px,1.6vw,20px); font-weight: 400; }
+.snc-fontes-row--secondary .snc-fontes-dot { font-size: 16px; }
+.snc-fontes-row--tertiary .snc-fontes-name { font-size: 13px; font-weight: 500; }
+.snc-fontes-row--tertiary .snc-fontes-dot { font-size: 13px; }
+.snc-fontes-row--tertiary .snc-fontes-desc { font-size: 8px; }
+
+.snc-fontes-footer { max-width: 1180px; margin: 32px auto 0; padding-top: 20px; border-top: 1px solid rgba(15,26,36,.12); display: flex; align-items: center; gap: 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--snc-brass); letter-spacing: .14em; text-transform: uppercase; }
+.snc-fontes-footer-dot { color: rgba(15,26,36,.3); }
+
+/* responsive */
+@media (max-width: 768px) {
+  .snc-fontes-header { grid-template-columns: 1fr; gap: 12px; }
+  .snc-fontes-sub { text-align: left; max-width: 100%; }
+  .snc-fontes-row { grid-template-columns: 1fr; gap: 6px; }
+  .snc-fontes-row-label { display: none; }
+}
+
+
 /* ===== SECTION HEADERS ===== */
 .snc-sec { padding: 72px 28px; max-width: 1440px; margin: 0 auto; }
 .snc-sec-head { display: grid; grid-template-columns: 120px 1fr auto; gap: 40px; align-items: end; margin-bottom: 60px; padding-bottom: 24px; border-bottom: 1px solid rgba(15,26,36,.14); }
