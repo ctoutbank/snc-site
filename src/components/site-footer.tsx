@@ -65,7 +65,7 @@ export function SiteFooter() {
           <div className="snc-foot-col">
             <h5>Instituição</h5>
             <Link href="/artigos">Artigos SNC</Link>
-            <Link href="/sobre">Compliance LGPD</Link>
+            <Link href="/lgpd">Compliance LGPD</Link>
             <Link href="/contato">Contato</Link>
           </div>
         </div>
