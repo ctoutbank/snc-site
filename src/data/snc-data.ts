@@ -17,6 +17,7 @@ export interface SncModule {
   chips: string[];
   fullDescription?: string;
   useCases?: string[];
+  useCasesRich?: { title: string; desc: string }[];
   sla?: string;
   priceFrom?: string;
   datasetItems?: SncDatasetItem[];
@@ -291,6 +292,24 @@ export const MODULES: SncModule[] = [
     chips: ['TJ', 'TST', 'TSE'],
     fullDescription: 'Due diligence completa: antecedentes criminais, processos trabalhistas, certidões cíveis, histórico eleitoral, restrições comerciais e mídias negativas. Entregue em relatório estruturado e PDF auditável.',
     useCases: ['Parceiros e fornecedores', 'Cargos de liderança', 'Franqueados', 'M&A e investimentos'],
+    useCasesRich: [
+      {
+        title: 'Parceiros e fornecedores',
+        desc: 'Antes de assinar qualquer contrato, saiba se o parceiro responde a processos trabalhistas, acumula protestos em cartório ou tem histórico de reclamações sistêmicas no Procon. Empresas que transferem risco invisível pela cadeia de suprimentos são a principal causa de passivos contingentes não provisionados — e o Background Check mapeia isso antes do contrato, não depois.',
+      },
+      {
+        title: 'Cargos de liderança',
+        desc: 'C-levels, diretores e gerentes de áreas sensíveis têm acesso privilegiado a ativos, dados estratégicos e decisões de alto impacto. Antecedentes criminais não declarados, ações cíveis por desvio de função ou processos trabalhistas como reclamado revelam padrões de comportamento que o currículo não mostra. Contratações sem due diligence geram responsabilidade fiduciária para o board.',
+      },
+      {
+        title: 'Franqueados',
+        desc: 'Franqueadores são corresponsáveis pela reputação de toda a rede. Um franqueado com histórico de descumprimento trabalhista, protestos em cartório ou reclamações massivas de consumidores compromete não só a unidade — compromete a marca inteira. Validar o histórico antes do contrato de franquia protege os demais franqueados e a integridade do sistema.',
+      },
+      {
+        title: 'M&A e investimentos',
+        desc: 'Em processos de fusão, aquisição ou captação de investimento, a due diligence de pessoas-chave é tão crítica quanto a due diligence financeira. Antecedentes não revelados por sócios ou executivos podem anular acordos, gerar responsabilidade solidária para o adquirente, ou comprometer aprovações regulatórias junto ao CADE e BACEN. O relatório auditável do SNC é aceito como evidência documental nesses processos.',
+      },
+    ],
     sla: '99,90%',
     priceFrom: 'R$ 4,80/relatório',
     datasetItems: [

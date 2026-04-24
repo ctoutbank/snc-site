@@ -140,7 +140,7 @@ export default async function ModuloPage({ params }: Props) {
         )}
 
         {/* ── Use Cases ── */}
-        {m.useCases && m.useCases.length > 0 && (
+        {(m.useCasesRich?.length || m.useCases?.length) ? (
           <section style={{ background: 'var(--snc-paper-2)', borderTop: '1px solid rgba(15,26,36,.1)', padding: '80px 28px' }}>
             <div style={{ maxWidth: 1180, margin: '0 auto' }}>
               <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 18 }}>
@@ -150,21 +150,45 @@ export default async function ModuloPage({ params }: Props) {
                 Onde este módulo<br />
                 <span style={{ fontStyle: 'italic', color: '#5a6a7a' }}>é decisivo.</span>
               </h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 0, background: 'var(--snc-dot-bg)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
-                {m.useCases.map((uc, i) => (
-                  <div key={uc} style={{ background: 'var(--snc-paper)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: 12, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
-                    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.16em' }}>
-                      UC.{String(i + 1).padStart(2, '0')}
+
+              {/* Formato rico: título + descrição contextual */}
+              {m.useCasesRich && m.useCasesRich.length > 0 ? (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 0, background: 'var(--snc-dot-bg)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
+                  {m.useCasesRich.map((uc, i) => (
+                    <div key={uc.title} style={{ background: 'var(--snc-paper)', padding: '36px 32px 40px', display: 'flex', flexDirection: 'column', gap: 0, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
+                        <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.16em', flexShrink: 0 }}>
+                          UC.{String(i + 1).padStart(2, '0')}
+                        </span>
+                        <span style={{ width: 24, height: 1, background: 'rgba(15,26,36,.15)', display: 'block' }} />
+                      </div>
+                      <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 22, fontWeight: 400, color: 'var(--snc-ink)', lineHeight: 1.15, marginBottom: 16 }}>
+                        {uc.title}
+                      </div>
+                      <p style={{ fontSize: 13, color: '#5a6a7a', lineHeight: 1.75, margin: 0, flex: 1 }}>
+                        {uc.desc}
+                      </p>
                     </div>
-                    <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 20, fontWeight: 400, color: 'var(--snc-ink)', lineHeight: 1.15 }}>
-                      {uc}
+                  ))}
+                </div>
+              ) : (
+                /* Fallback: apenas labels (formato simples) */
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 0, background: 'var(--snc-dot-bg)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
+                  {m.useCases!.map((uc, i) => (
+                    <div key={uc} style={{ background: 'var(--snc-paper)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: 12, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
+                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.16em' }}>
+                        UC.{String(i + 1).padStart(2, '0')}
+                      </div>
+                      <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 20, fontWeight: 400, color: 'var(--snc-ink)', lineHeight: 1.15 }}>
+                        {uc}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           </section>
-        )}
+        ) : null}
 
         {/* ── Datasets detalhados ── */}
         {m.datasetItems && m.datasetItems.length > 0 && (
