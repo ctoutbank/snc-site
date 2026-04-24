@@ -10,15 +10,12 @@ export function OutrasFontes() {
   return (
     <div className="snc-outras-bar">
       <div className="snc-outras-inner">
-        <span className="snc-outras-label">Outras Fontes</span>
-        <div className="snc-outras-list">
-          {fontes.map((f, i) => (
-            <span key={f} className="snc-outras-item">
-              {i > 0 && <span className="snc-outras-dot">●</span>}
-              {f}
-            </span>
-          ))}
-        </div>
+        {fontes.map((f, i) => (
+          <span key={f} className="snc-outras-item">
+            {i > 0 && <span className="snc-outras-dot">●</span>}
+            {f.toUpperCase()}
+          </span>
+        ))}
       </div>
     </div>
   );
