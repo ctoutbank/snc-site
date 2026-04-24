@@ -955,8 +955,8 @@ export const JOURNEYS: SncJourney[] = [
       { title: 'Decisão Automatizada', desc: 'Score consolidado com threshold configurável por política de risco.' },
     ],
     narrative: [
-      'O problema do crédito responsável não é análise de dados, é acesso simultâneo às fontes certas no momento da decisão. A maioria dos modelos ainda consulta bureaus em série, exposta a inconsistências entre bases e à latência que compromete a experiência do cliente. O resultado é aprovação excessiva em carteiras de risco ou rejeição conservadora que afasta bons pagadores.',
-      'O SNC consulta os 9 principais bureaus em paralelo (SCR Banco Central, SPC Brasil, Serasa, Boa Vista, Quod e bases complementares) entregando um score consolidado em menos de 2 segundos. Cada fonte é ponderada pelo modelo e os dados brutos ficam disponíveis para auditoria da política de crédito.',
+      'O crédito responsável começa com acesso às fontes certas no momento da decisão. O SNC poderá consultar os principais bureaus de crédito existentes no mercado — SCR Banco Central, SPC Brasil, Serasa, Boa Vista, Quod e bases complementares — consolidando as informações em um único score ponderado, entregue em menos de 2 segundos.',
+      'Cada fonte consultada é ponderada pelo modelo de risco e os dados brutos ficam disponíveis para auditoria da política de crédito. O score resultante reflete a visão mais completa disponível sobre o tomador, combinando histórico de crédito, endividamento SCR e variáveis cadastrais validadas em fontes oficiais.',
       'Na prática, instituições que adotam score multibureau com o SNC registram queda consistente na inadimplência sem redução no volume aprovado. A explicação é simples: mais dados, melhor segregação de risco.',
     ],
     paraQueServe: [

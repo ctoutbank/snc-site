@@ -50,7 +50,7 @@ export function SiteFooter() {
             <Link href="/jornadas/credito-responsavel">Crédito Responsável</Link>
             <Link href="/jornadas/kyc-digital">KYC Digital</Link>
             <Link href="/jornadas/due-diligence">Due Diligence</Link>
-            <Link href="/jornadas/prevencao-de-fraude">Prevenção de Fraude</Link>
+            <Link href="/jornadas/prevencao-de-fraude">Prevenção à Fraude</Link>
             <Link href="/jornadas/compliance-regulatorio">Compliance</Link>
           </div>
           <div className="snc-foot-col">
@@ -64,10 +64,14 @@ export function SiteFooter() {
           </div>
           <div className="snc-foot-col">
             <h5>Instituição</h5>
-            <Link href="/sobre">Conselho</Link>
-            <Link href="/sobre">Carreiras</Link>
             <Link href="/sobre">Compliance LGPD</Link>
             <Link href="/contato">Contato</Link>
+          </div>
+          <div className="snc-foot-col">
+            <h5>Conteúdo</h5>
+            <Link href="/blog">Blog SNC</Link>
+            <Link href="/jornadas">Jornadas</Link>
+            <Link href="/datasets">Datasets</Link>
           </div>
         </div>
         <div className="snc-foot-bot">
