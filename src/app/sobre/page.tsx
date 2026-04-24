@@ -133,12 +133,7 @@ export default function SobrePage() {
                   title: 'Inventário único',
                   desc: 'SCR, Serasa, Boa Vista, SPC, Quod, Receita Federal, TSE, IBAMA e COAF — num único contrato e uma única API REST.',
                 },
-                {
-                  metric: '< 2',
-                  unit: 'segundos',
-                  title: 'Latência real',
-                  desc: 'Consultas multi-bureau respondidas com normalização e pré-processamento inclusos. Nenhum processamento assíncrono escondido.',
-                },
+
                 {
                   metric: 'ISO + SOC 2',
                   unit: 'tipo II',
