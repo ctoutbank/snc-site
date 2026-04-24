@@ -1066,7 +1066,7 @@ export const JOURNEYS: SncJourney[] = [
   },
   {
     slug: 'prevencao-de-fraude',
-    title: 'Prevenção de Fraude',
+    title: 'Prevenção à Fraude',
     titleItalic: ' em tempo real.',
     problem: 'Como bloquear operações fraudulentas antes de serem efetivadas?',
     description: 'Antifraude multicamada com decisão em menos de 200ms. Score transacional, device fingerprint, phone score e monitoramento contínuo.',
