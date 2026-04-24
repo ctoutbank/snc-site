@@ -86,7 +86,7 @@ export default async function ModuloPage({ params }: Props) {
 
         {/* ── Stats bar ── */}
         <div style={{ background: 'var(--snc-navy-2)', borderTop: '1px solid #17243b', borderBottom: '1px solid #17243b' }}>
-          <div style={{ maxWidth: 1440, margin: '0 auto', padding: '24px 28px', display: 'flex', gap: 48, flexWrap: 'wrap', alignItems: 'center' }}>
+          <div className="snc-mod-statsbar-inner">
             <div>
               <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 36, color: '#fff', lineHeight: 1 }}>
                 {m.datasets}<sup style={{ fontSize: '.45em', color: 'var(--snc-green-2)', marginLeft: 2 }}>ds</sup>
@@ -102,7 +102,7 @@ export default async function ModuloPage({ params }: Props) {
               </div>
             )}
 
-            <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <div className="snc-mod-chips-row">
               {m.chips.map((chip) => (
                 <span key={chip} className="snc-chip" style={{ background: 'rgba(255,255,255,.06)', color: '#cfd6df', borderColor: 'rgba(255,255,255,.14)', padding: '5px 10px', fontSize: 10 }}>
                   {chip}
@@ -153,7 +153,7 @@ export default async function ModuloPage({ params }: Props) {
 
               {/* Formato rico: título + descrição contextual */}
               {m.useCasesRich && m.useCasesRich.length > 0 ? (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, background: 'rgba(15,26,36,.12)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
+                <div className="snc-mod-cards-grid" style={{ background: 'rgba(15,26,36,.12)', border: '1px solid rgba(15,26,36,.12)' }}>
                   {m.useCasesRich.map((uc, i) => (
                     <div key={uc.title} style={{ background: '#ffffff', padding: '36px 32px 40px', display: 'flex', flexDirection: 'column', gap: 0, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
                       <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.16em', textTransform: 'uppercase', marginBottom: 8 }}>

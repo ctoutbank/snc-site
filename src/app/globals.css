@@ -526,6 +526,55 @@
   .snc-nav-cta .snc-btn-primary { font-size: 10px; padding: 8px 10px; }
 }
 
+/* ===== MODULE PAGE — RESPONSIVE GRIDS ===== */
+/* 4-column card grid used in all module sub-pages */
+.snc-mod-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  overflow: hidden;
+}
+
+/* Stats bar inner layout */
+.snc-mod-statsbar-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 24px 28px;
+  display: flex;
+  gap: 48px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Section content wrapper */
+.snc-mod-section-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+/* Chips row pushed right in stats bar */
+.snc-mod-chips-row {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Tablet <= 1024px */
+@media (max-width: 1024px) {
+  .snc-mod-cards-grid { grid-template-columns: repeat(2, 1fr); }
+  .snc-mod-statsbar-inner { gap: 28px; padding: 20px 24px; }
+  .snc-mod-chips-row { margin-left: 0; margin-top: 4px; width: 100%; }
+}
+
+/* Mobile <= 720px */
+@media (max-width: 720px) {
+  .snc-mod-cards-grid { grid-template-columns: 1fr; }
+  .snc-mod-statsbar-inner { gap: 20px; padding: 18px 18px; flex-direction: column; align-items: flex-start; }
+  .snc-mod-chips-row { margin-left: 0; width: 100%; }
+  .snc-mod-section-wrap { padding: 0 18px; }
+}
+
 /* ─── DATASETS PREMIUM SECTION ─────────────────────────── */
 .snc-ds-premium {
   background: var(--snc-navy);
