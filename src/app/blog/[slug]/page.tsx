@@ -87,7 +87,7 @@ export default async function BlogPostPage({ params }: Props) {
 
           <h1
             className="snc-hero-title"
-            style={{ marginTop: 18, maxWidth: 720, fontSize: 'clamp(24px, 2.8vw, 36px)', lineHeight: 1.15 }}
+            style={{ marginTop: 18, maxWidth: 680, fontSize: 'clamp(18px, 1.8vw, 24px)', lineHeight: 1.2 }}
           >
             {post.title}
           </h1>
