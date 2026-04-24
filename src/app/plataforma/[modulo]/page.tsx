@@ -162,7 +162,7 @@ export default async function ModuloPage({ params }: Props) {
                         </span>
                         <span style={{ width: 24, height: 1, background: 'rgba(15,26,36,.15)', display: 'block' }} />
                       </div>
-                      <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 22, fontWeight: 400, color: 'var(--snc-ink)', lineHeight: 1.15, marginBottom: 16 }}>
+                      <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 22, fontWeight: 400, color: 'var(--snc-ink)', lineHeight: 1.15, marginBottom: 16, minHeight: '2.4em' }}>
                         {uc.title}
                       </div>
                       <p style={{ fontSize: 13, color: '#5a6a7a', lineHeight: 1.75, margin: 0, flex: 1 }}>
