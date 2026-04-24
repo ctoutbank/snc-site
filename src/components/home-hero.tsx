@@ -35,7 +35,7 @@ export function HomeHero() {
     <section className="snc-hero">
       <div className="snc-hero-bg">
         <img
-          src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=1920&q=80"
+          src="/hero-bg.png"
           alt="Congresso Nacional"
         />
       </div>
