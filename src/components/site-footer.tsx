@@ -43,7 +43,6 @@ export function SiteFooter() {
             <h5>Plataforma</h5>
             <Link href="/plataforma">Módulos</Link>
             <Link href="/datasets">Datasets</Link>
-            <Link href="/sobre">Status · SLA</Link>
           </div>
           <div className="snc-foot-col">
             <h5>Jornadas</h5>
