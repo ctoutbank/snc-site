@@ -210,11 +210,13 @@ export default async function ModuloPage({ params }: Props) {
                 {m.datasetItems.map((ds, i) => (
                   <div key={ds.id} style={{ background: '#ffffff', padding: '36px 32px 40px', display: 'flex', flexDirection: 'column', gap: 0, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-                      <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.14em' }}>
+                      <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.14em', flexShrink: 0 }}>
                         {ds.id}
                       </span>
-                      <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: '#8a94a3', letterSpacing: '.12em', textTransform: 'uppercase', background: 'rgba(15,26,36,.06)', padding: '3px 8px', border: '1px solid rgba(15,26,36,.1)' }}>
-                        {ds.source}
+                      <span
+                        title={ds.source}
+                        style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: '#8a94a3', letterSpacing: '.1em', textTransform: 'uppercase', background: 'rgba(15,26,36,.06)', padding: '3px 8px', border: '1px solid rgba(15,26,36,.1)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 130 }}>
+                        {ds.source.split('/')[0].trim()}
                       </span>
                     </div>
                     <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 72, fontWeight: 400, color: 'var(--snc-brass)', lineHeight: 1, marginBottom: 20, opacity: 0.55 }}>
