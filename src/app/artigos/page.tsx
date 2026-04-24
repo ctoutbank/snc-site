@@ -185,11 +185,12 @@ export default function ArtigosPage() {
           <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 40 }}>
             § Todos os artigos
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, background: 'rgba(15,26,36,.1)', border: '1px solid rgba(15,26,36,.1)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'transparent' }}>
             {rest.map((post) => (
               <Link key={post.slug} href={`/artigos/${post.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                 <article style={{
                   background: '#fff',
+                  border: '1px solid rgba(15,26,36,.1)',
                   padding: '36px 32px 40px',
                   display: 'flex',
                   flexDirection: 'column',
