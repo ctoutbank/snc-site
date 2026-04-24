@@ -77,7 +77,7 @@ export default function LgpdPage() {
         {/* ── HERO ── */}
         <section className="snc-hero">
           <div className="snc-hero-bg" style={{ background: 'var(--snc-navy)' }} />
-          <div className="snc-hero-inner" style={{ paddingBottom: 64 }}>
+          <div className="snc-hero-inner" style={{ paddingBottom: 40 }}>
             <div className="snc-hero-meta">
               <span className="snc-hero-tag">§ COMPLIANCE · LGPD · Lei 13.709/2018</span>
             </div>
@@ -132,9 +132,9 @@ export default function LgpdPage() {
         </section>
 
         {/* ── BASES LEGAIS ── */}
-        <section style={{ background: 'var(--snc-paper)', padding: '80px 28px' }}>
+        <section style={{ background: 'var(--snc-paper)', padding: '52px 28px' }}>
           <div style={{ maxWidth: 1180, margin: '0 auto' }}>
-            <div style={{ marginBottom: 52 }}>
+            <div style={{ marginBottom: 32 }}>
               <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 16 }}>
                 § Bases Legais de Tratamento
               </div>
@@ -160,9 +160,9 @@ export default function LgpdPage() {
         </section>
 
         {/* ── PRINCÍPIOS TÉCNICOS ── */}
-        <section style={{ background: 'var(--snc-paper-2)', borderTop: '1px solid rgba(15,26,36,.1)', padding: '80px 28px' }}>
+        <section style={{ background: 'var(--snc-paper-2)', borderTop: '1px solid rgba(15,26,36,.1)', padding: '52px 28px' }}>
           <div style={{ maxWidth: 1180, margin: '0 auto' }}>
-            <div style={{ marginBottom: 52 }}>
+            <div style={{ marginBottom: 32 }}>
               <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 16 }}>
                 § Princípios Técnicos
               </div>
@@ -199,9 +199,9 @@ export default function LgpdPage() {
         </section>
 
         {/* ── DIREITOS DO TITULAR ── */}
-        <section style={{ background: 'var(--snc-navy)', padding: '80px 28px' }}>
+        <section style={{ background: 'var(--snc-navy)', padding: '52px 28px' }}>
           <div style={{ maxWidth: 1180, margin: '0 auto' }}>
-            <div style={{ marginBottom: 52 }}>
+            <div style={{ marginBottom: 32 }}>
               <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 16 }}>
                 § Direitos do Titular — Art. 18 LGPD
               </div>
@@ -238,7 +238,7 @@ export default function LgpdPage() {
         </section>
 
         {/* ── CITAÇÃO CENTRAL ── */}
-        <section style={{ background: 'var(--snc-paper)', borderTop: '1px solid rgba(15,26,36,.08)', padding: '80px 28px' }}>
+        <section style={{ background: 'var(--snc-paper)', borderTop: '1px solid rgba(15,26,36,.08)', padding: '52px 28px' }}>
           <div style={{ maxWidth: 860, margin: '0 auto' }}>
             <div style={{ borderLeft: '4px solid var(--snc-brass)', paddingLeft: 36 }}>
               <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 20 }}>
@@ -273,7 +273,7 @@ export default function LgpdPage() {
         </section>
 
         {/* ── CONTATO DPO ── */}
-        <section style={{ background: 'var(--snc-paper-2)', borderTop: '1px solid rgba(15,26,36,.1)', padding: '80px 28px' }}>
+        <section style={{ background: 'var(--snc-paper-2)', borderTop: '1px solid rgba(15,26,36,.1)', padding: '52px 28px' }}>
           <div style={{ maxWidth: 860, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'start' }}>
             <div>
               <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 20 }}>
@@ -329,7 +329,7 @@ export default function LgpdPage() {
         </section>
 
         {/* ── CTA ── */}
-        <section className="snc-cta" style={{ padding: '80px 28px' }}>
+        <section className="snc-cta" style={{ padding: '52px 28px' }}>
           <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 2 }}>
             <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 20 }}>
               § Próximo passo
