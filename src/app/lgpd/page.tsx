@@ -81,7 +81,7 @@ export default function LgpdPage() {
             <div className="snc-hero-meta">
               <span className="snc-hero-tag">§ COMPLIANCE · LGPD · Lei 13.709/2018</span>
             </div>
-            <h1 className="snc-hero-title" style={{ marginTop: 28, maxWidth: 680, fontSize: 'clamp(28px, 3.5vw, 44px)', lineHeight: 1.15 }}>
+            <h1 className="snc-hero-title" style={{ marginTop: 28, maxWidth: 680, fontSize: 'clamp(36px, 5vw, 60px)', lineHeight: 1.15 }}>
               Privacidade não é política.<br />
               <em>É arquitetura.</em>
             </h1>
