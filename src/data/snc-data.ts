@@ -76,6 +76,24 @@ export const MODULES: SncModule[] = [
     chips: ['Receita', 'SERPRO', 'CCE'],
     fullDescription: 'Acesso unificado a dados cadastrais completos de pessoas físicas e jurídicas, com validação cruzada em Receita Federal, SERPRO e Cadastro Centralizado de Empresas. Inclui CPF, CNPJ, endereços, contatos, situação fiscal e histórico de alterações.',
     useCases: ['Onboarding digital', 'Enriquecimento de base', 'Validação de cadastro', 'KYC simplificado'],
+    useCasesRich: [
+      {
+        title: 'Onboarding digital',
+        desc: 'Em fluxos de onboarding, cada segundo de fricção custa conversões. A Consulta Cadastral valida CPF, endereço e telefone em menos de 2 segundos via Receita Federal e SERPRO, eliminando formulários de auto-declaração que geram inconsistências e só viram problema depois.',
+      },
+      {
+        title: 'Enriquecimento de base',
+        desc: 'Bases com email inválido, telefone desativado ou endereço desatualizado custam dinheiro em campanhas que não chegam e decisões baseadas em dados obsoletos. O módulo complementa registros existentes com dados validados oficialmente, aumentando a precisão de segmentação, scoring e comunicação.',
+      },
+      {
+        title: 'Validação de cadastro',
+        desc: 'Dados incorretos ou fraudados na entrada contaminam toda a cadeia: score errado, documentos enviados ao endereço errado, impossibilidade de recuperação judicial de créditos. A Consulta Cadastral valida cada campo na fonte primária antes de persistir o registro.',
+      },
+      {
+        title: 'KYC simplificado',
+        desc: 'Para produtos de baixo risco ou limites reduzidos, uma jornada de KYC completa perde clientes legítimos. O módulo entrega os elementos mínimos de identidade suficientes para abertura de conta, emissão de cartão pré-pago ou crédito de ticket baixo — com conformidade regulatória documentada.',
+      },
+    ],
     sla: '99,95%',
     priceFrom: 'R$ 0,25/consulta',
     datasetItems: [
@@ -101,6 +119,24 @@ export const MODULES: SncModule[] = [
     chips: ['Unico', 'Idwall', 'Serpro'],
     fullDescription: 'Verificação de identidade em camadas: biometria facial liveness detection, OCR de documentos, consulta Serpro e cruzamento com bases do governo federal. Conformidade com LGPD e Resolução BCB.',
     useCases: ['Abertura de conta digital', 'Onboarding regulatório', 'Autenticação reforçada', 'Prevenção de fraude'],
+    useCasesRich: [
+      {
+        title: 'Abertura de conta digital',
+        desc: 'Conta digital aberta sem liveness detection é porta aberta para identidades sintéticas. A Verificação de Identidade combina biometria facial com anti-spoofing e cruzamento com SERPRO, bloqueando documentos adulterados e selfies injetadas antes do onboarding ser concluído.',
+      },
+      {
+        title: 'Onboarding regulatório',
+        desc: 'BCB 4.893 e LGPD exigem verificação de identidade com trilha auditável. O módulo registra cada passo — OCR, biometria, score de confiança — com timestamp e hash. A conformidade é automática, não uma camada adicionada depois da implementação.',
+      },
+      {
+        title: 'Autenticação reforçada',
+        desc: 'Senhas e OTP por SMS são insuficientes para transações de alto valor. A biometria facial com liveness detection adiciona uma camada que não pode ser replicada por phishing ou engenharia social, reduzindo o risco de account takeover em operações críticas.',
+      },
+      {
+        title: 'Prevenção de fraude',
+        desc: 'Identidades sintéticas combinam CPFs válidos com documentos falsificados. O OCR detecta alterações em elementos de segurança — hologramas, MRZ, fontes — que passam por revisão manual. Integrado ao Antifraude, identifica padrões de dispositivo e velocidade que indicam tentativa coordenada.',
+      },
+    ],
     sla: '99,90%',
     priceFrom: 'R$ 0,90/verificação',
     datasetItems: [
@@ -123,6 +159,24 @@ export const MODULES: SncModule[] = [
     chips: ['MEC', 'MTE', 'OAB', 'CREA', 'RAIS', 'CBO'],
     fullDescription: 'Validação completa de histórico profissional e educacional: diplomas via e-MEC, vínculos empregatícios via RAIS, classificação de ocupações (CBO), conselhos de classe federais, certificações técnicas reconhecidas e carteira de trabalho digital. Cada dado retorna estruturado e auditável para processos de admissão, due diligence e compliance de prestadores.',
     useCases: ['Background check profissional', 'RH e recrutamento', 'Validação de prestadores', 'Due diligence pessoal'],
+    useCasesRich: [
+      {
+        title: 'Background check profissional',
+        desc: 'Um médico sem registro CRM ativo, um advogado suspenso pela OAB ou um engenheiro com acervo técnico zerado representam risco legal para quem os contrata. O módulo valida diretamente nos conselhos de classe federais — não no currículo apresentado pelo candidato.',
+      },
+      {
+        title: 'RH e recrutamento',
+        desc: 'Diploma falso, histórico de emprego inflado e cargo declarado diferente do CBO real são inconsistências que só aparecem com validação oficial. O módulo cruza os dados declarados com e-MEC, RAIS e eSocial, trazendo o histórico real de vínculos e salários CLT dos últimos 10 anos.',
+      },
+      {
+        title: 'Validação de prestadores',
+        desc: 'Prestador de serviços especializados que atua sem registro de conselho ou diploma reconhecido pelo MEC gera responsabilidade solidária para o contratante em processos trabalhistas e cíveis. A validação antes do contrato encerra essa exposição.',
+      },
+      {
+        title: 'Due diligence pessoal',
+        desc: 'Em admissões para cargos estratégicos, a verificação de formação vai além do diploma — inclui especialidades, certificações técnicas ativas, anuidades de conselho e histórico de penalidades disciplinares. Informações que o candidato não voluntaria e que a entrevista não revela.',
+      },
+    ],
     sla: '99,85%',
     priceFrom: 'R$ 1,80/consulta',
     datasetItems: [
@@ -197,6 +251,24 @@ export const MODULES: SncModule[] = [
     chips: ['TST', 'TSE', 'Justiça'],
     fullDescription: 'Emissão e verificação de certidões negativas para pessoas físicas em todas as esferas: Justiça Federal, Estadual, Trabalhista (TST), TSE e PGFN. Rastreabilidade e validade documentada.',
     useCases: ['Processos licitatórios', 'Habilitação de fornecedores', 'Compliance corporativo', 'Due diligence'],
+    useCasesRich: [
+      {
+        title: 'Processos licitatórios',
+        desc: 'Licitações exigem conjunto específico de certidões com prazos de validade distintos. O módulo centraliza emissão e monitora validade, garantindo que o pacote esteja completo e válido no momento da habilitação — não que expire no meio do processo.',
+      },
+      {
+        title: 'Habilitação de fornecedores',
+        desc: 'Fornecedores com débitos trabalhistas ou tributários sem aparecer em cadastros comerciais são passivo invisível. Certidões PF valida a situação de sócios-pessoa-física antes do credenciamento, antecipando problemas que só aparecem em execução de contrato.',
+      },
+      {
+        title: 'Compliance corporativo',
+        desc: 'Políticas de compliance exigem que prestadores comprovem regularidade fiscal e trabalhista periodicamente. O monitoramento de validade elimina a gestão manual de planilhas e garante alertas automáticos de vencimento.',
+      },
+      {
+        title: 'Due diligence',
+        desc: 'Em due diligence para aquisições, a situação das pessoas físicas ligadas à empresa-alvo importa tanto quanto a situação da PJ. Sócios com execuções trabalhistas ou débitos com a Fazenda podem bloquear transferência de ativos e aprovações regulatórias no pós-fechamento.',
+      },
+    ],
     sla: '99,80%',
     priceFrom: 'R$ 1,40/certidão',
     datasetItems: [
@@ -215,6 +287,24 @@ export const MODULES: SncModule[] = [
     chips: ['9 bureaus'],
     fullDescription: 'O maior aggregator de score de crédito do Brasil. Consolida SCR Banco Central, SPC Brasil, Serasa Experian, Boa Vista SCPC, Quod e mais 4 fontes em uma única resposta normalizada. Inclui histórico de pagamentos, endividamento e projeção de risco.',
     useCases: ['Concessão de crédito', 'Limites e políticas de risco', 'Scoring para fintechs', 'Financiamento imobiliário'],
+    useCasesRich: [
+      {
+        title: 'Concessão de crédito',
+        desc: 'Decisões baseadas em um único bureau podem aprovar quem é inadimplente em outro ou recusar quem tem histórico positivo não capturado. O módulo consolida SCR, SPC, Serasa, Boa Vista e Quod em uma única resposta normalizada, eliminando assimetria de informação entre fontes.',
+      },
+      {
+        title: 'Limites e políticas de risco',
+        desc: 'Limite de crédito definido sem considerar o comprometimento real de renda gera inadimplência previsível. O módulo entrega não só o score mas o endividamento total no SCR, coobrigações e histórico de renegociações — os dados que revelam a capacidade real de pagamento, não a declarada.',
+      },
+      {
+        title: 'Scoring para fintechs',
+        desc: 'Fintechs sem acesso ao SCR do Banco Central tomam decisões com informação incompleta. O módulo inclui o SCR BCB — antes restrito a IF reguladas — habilitando modelos de scoring com a mesma profundidade de dados que os grandes bancos utilizam.',
+      },
+      {
+        title: 'Financiamento imobiliário',
+        desc: 'Financiamentos de longo prazo exigem análise de capacidade de pagamento sustentada. O módulo entrega histórico de 60 meses de adimplência por modalidade, posições imobiliárias já registradas e renda estimada por vínculos CLT e INSS.',
+      },
+    ],
     sla: '99,98%',
     priceFrom: 'R$ 1,60/consulta',
     datasetItems: [
@@ -241,6 +331,24 @@ export const MODULES: SncModule[] = [
     chips: ['SCR BCB'],
     fullDescription: 'Análise profunda de capacidade financeira com dados do SCR Banco Central: carteira de dívidas, responsabilidade por garantias, co-obrigações, histórico de renegociações e projeção actuarial de inadimplência.',
     useCases: ['Crédito consignado', 'Capital de giro PJ', 'Risco de contraparte', 'Monitoramento de portfólio'],
+    useCasesRich: [
+      {
+        title: 'Crédito consignado',
+        desc: 'Concessão de consignado sem verificar a margem real disponível gera contratos inválidos por excesso de comprometimento. O módulo consulta o banco pagador, calcula a margem legal utilizada e o saldo disponível — o dado que o cliente não tem incentivo em revelar voluntariamente.',
+      },
+      {
+        title: 'Capital de giro PJ',
+        desc: 'Empresas que pedem capital de giro geralmente têm comprometimento de crédito invisível nos bureaus de varejo. O módulo acessa o SCR Banco Central, revelando coobrigações, garantias prestadas a terceiros e histórico de renegociações — passivos que comprometem a capacidade de pagamento sem aparecer no CNPJ.',
+      },
+      {
+        title: 'Risco de contraparte',
+        desc: 'Em operações B2B com pagamento diferido, o risco de inadimplência do comprador define o custo de capital do vendedor. O módulo entrega a probabilidade de default em 12 meses calculada sobre 14 datasets do SCR, bureaus e patrimônio.',
+      },
+      {
+        title: 'Monitoramento de portfólio',
+        desc: 'Portfólios de crédito deterioram lentamente — um cliente adimplente pode acumular coobrigações que aumentam seu risco. O monitoramento integrado detecta mudanças de perfil antes que se tornem inadimplência realizada.',
+      },
+    ],
     sla: '99,95%',
     priceFrom: 'R$ 2,80/consulta',
     datasetItems: [
@@ -269,6 +377,24 @@ export const MODULES: SncModule[] = [
     chips: ['OFAC', 'ONU', 'TSE'],
     fullDescription: 'Varredura completa em listas internacionais (OFAC, ONU, UE) e nacionais (COAF, ANPD, entre outras). Identificação de PEP (Pessoa Politicamente Exposta) com graus de exposição e parentes. Conformidade total com COAF Resolução 36.',
     useCases: ['Onboarding PLD/FT', 'KYB (Know Your Business)', 'Monitoramento contínuo', 'Auditorias regulatórias'],
+    useCasesRich: [
+      {
+        title: 'Onboarding PLD/FT',
+        desc: 'A COAF Resolução 36 e a Lei 9.613 exigem verificação de PEP e sanções no onboarding — com documentação da verificação. O módulo retorna a consulta estruturada com timestamp, lista consultada e resultado, gerando automaticamente a trilha de auditoria exigida pelos reguladores.',
+      },
+      {
+        title: 'KYB (Know Your Business)',
+        desc: 'Verificar apenas o CNPJ é insuficiente. Em PLD/FT, o risco está nos sócios-pessoas-físicas e nos parentes de sócios PEP. O módulo verifica cada sócio do QSA contra 9 listas internacionais e nacionais, incluindo parentes em 2 graus de parentesco.',
+      },
+      {
+        title: 'Monitoramento contínuo',
+        desc: 'PEP e sanções não são verificações únicas — um cliente pode ser nomeado para cargo público após o onboarding. O Monitoramento 24h integrado dispara alertas em tempo real quando o status PEP ou a presença em lista de sanção muda para qualquer cliente da carteira.',
+      },
+      {
+        title: 'Auditorias regulatórias',
+        desc: 'BACEN, SUSEP e CVM verificam a documentação de cada verificação de PEP realizada. O módulo entrega registros imutáveis de cada consulta — lista verificada, resultado, data, operador — em formato aceito como evidência em processos administrativos.',
+      },
+    ],
     sla: '99,99%',
     priceFrom: 'R$ 0,35/consulta',
     datasetItems: [
@@ -333,6 +459,24 @@ export const MODULES: SncModule[] = [
     chips: ['Scoras', 'Phone'],
     fullDescription: 'Motor de antifraude multicamada: score de risco transacional, phone score, email score, device fingerprint, análise de velocidade, histórico de chargeback e violações anteriores. Decisão em < 200ms.',
     useCases: ['E-commerce e marketplace', 'Abertura de contas', 'Transações PIX', 'Emissão de cartão'],
+    useCasesRich: [
+      {
+        title: 'E-commerce e marketplace',
+        desc: 'Chargebacks custam mais do que o produto — custam o produto, a taxa e o risco de perda de conta junto à adquirente. O Antifraude analisa device fingerprint, IP, email e histórico de chargeback em menos de 200ms, bloqueando transações de alto risco antes da aprovação sem impactar o checkout de clientes legítimos.',
+      },
+      {
+        title: 'Abertura de contas',
+        desc: 'Contas abertas com identidades sintéticas são a base das fraudes de account takeover. O módulo verifica, na abertura, se o CPF, email, telefone e dispositivo já estão associados a padrões de fraude na rede SNC, bloqueando contas-laranja antes que gerem passivo.',
+      },
+      {
+        title: 'Transações PIX',
+        desc: 'PIX irreversível mais engenharia social equivale a prejuízo sem recuperação. O Antifraude avalia o padrão da transação — valor atípico, novo beneficiário, horário incomum, dispositivo diferente — podendo bloquear ou exigir confirmação antes do débito, sem impactar 99% das transações legítimas.',
+      },
+      {
+        title: 'Emissão de cartão',
+        desc: 'Cartões emitidos para identidades sintéticas são usados para fraudes de crédito que só aparecem na inadimplência. O módulo valida email, telefone e device no momento da emissão, detectando inconsistências de perfil que indicam intenção fraudulenta antes do limite ser concedido.',
+      },
+    ],
     sla: '99,98%',
     priceFrom: 'R$ 1,15/avaliação',
     datasetItems: [
@@ -358,6 +502,24 @@ export const MODULES: SncModule[] = [
     chips: ['Global'],
     fullDescription: 'Monitoramento de mídia negativa em fontes abertas globais: notícias, portais jurídicos, registros de reclamação (Procon, ReclameAqui) e redes sociais. Análise de sentimento e score de reputação.',
     useCases: ['KYC avançado', 'Due diligence reputacional', 'Monitoramento de parceiros', 'Prevenção de fraude'],
+    useCasesRich: [
+      {
+        title: 'KYC avançado',
+        desc: 'Bureaus tradicionais não capturam escândalos de imprensa ou associações a personagens investigados. A varredura de Mídia Negativa complementa o KYC com o risco reputacional que não aparece em nenhum banco de dados estruturado — mas que define a percepção de risco do regulador.',
+      },
+      {
+        title: 'Due diligence reputacional',
+        desc: 'Um parceiro sem processos judiciais pode ter sido protagonista de reportagem investigativa sobre desvios em empresa anterior, ou acumular centenas de reclamações sistêmicas no Procon. O módulo varre imprensa nacional, portais jurídicos, Procon e redes sociais com análise de sentimento automatizada.',
+      },
+      {
+        title: 'Monitoramento de parceiros',
+        desc: 'Reputação muda. Um parceiro limpo hoje pode ser alvo de reportagem investigativa amanhã. O monitoramento contínuo integrado gera alertas em tempo real quando nova publicação negativa é identificada, antes que a informação chegue pelo mercado.',
+      },
+      {
+        title: 'Prevenção de fraude',
+        desc: 'Fraudadores recorrentes acumulam rastros na imprensa e em reclamações online antes de aparecerem em listas negras formais. A varredura identifica esses padrões precocemente, adicionando uma camada de inteligência que os bureaus estruturados não fornecem.',
+      },
+    ],
     sla: '99,85%',
     priceFrom: 'R$ 2,40/varredura',
     datasetItems: [
@@ -378,6 +540,24 @@ export const MODULES: SncModule[] = [
     chips: ['LOVAC'],
     fullDescription: 'O módulo de maior profundidade do SNC: investigação OSINT completa com cruzamento de 17 datasets, análise de grafo de relacionamentos, timeline de eventos e relatório forense PDF. Para casos de alta complexidade.',
     useCases: ['Fraude corporativa', 'Due diligence executiva', 'Investigação patrimonial', 'Compliance de alto risco'],
+    useCasesRich: [
+      {
+        title: 'Fraude corporativa',
+        desc: 'Quando a suspeita já existe, a investigação precisa ser documentada para suportar decisões jurídicas. O LOVAC consolida 17 datasets em relatório forense com hash SHA-256: patrimônio real, grafo de relacionamentos, timeline de eventos e registros que o investigado preferiria esconder.',
+      },
+      {
+        title: 'Due diligence executiva',
+        desc: 'Para nomeações de C-level ou M&A com alvo de alta complexidade, a due diligence padrão é insuficiente. O LOVAC mapeia o grafo de relacionamentos completo, cruza patrimônio declarado com registros públicos e gera relatório narrativo com recomendação de risco.',
+      },
+      {
+        title: 'Investigação patrimonial',
+        desc: 'Processos de execução e recuperação de crédito exigem identificar ativos de difícil localização — imóveis em cartório, veículos, participações societárias e benefícios previdenciários. O LOVAC consolida essas informações em relatório único com fontes rastreáveis e timestamp.',
+      },
+      {
+        title: 'Compliance de alto risco',
+        desc: 'Clientes com estruturas societárias opacas ou histórico de exposição política elevada exigem due diligence Enhanced, exigida pela COAF Resolução 36. O LOVAC fornece o nível de profundidade — e a documentação auditável — que satisfaz inspeções regulatórias.',
+      },
+    ],
     sla: '99,80%',
     priceFrom: 'R$ 28,00/relatório',
     datasetItems: [
@@ -402,6 +582,24 @@ export const MODULES: SncModule[] = [
     chips: ['Webhook'],
     fullDescription: 'Monitoramento contínuo de portfólio via webhook: alertas de restrições novas, mudanças de PEP, protestos, processos judiciais e eventos de risco. Integração push em tempo real.',
     useCases: ['Gestão de carteira de crédito', 'Compliance proativo', 'Alertas de fraude', 'Monitoramento PLD'],
+    useCasesRich: [
+      {
+        title: 'Gestão de carteira de crédito',
+        desc: 'A situação de risco de um cliente muda após a concessão. O Monitoramento 24h entrega alertas via webhook no momento em que o evento ocorre — nova inadimplência no SCR, protesto, demissão — permitindo ação preventiva antes que o contrato entre em atraso. É a diferença entre provisão proativa e perda realizada.',
+      },
+      {
+        title: 'Compliance proativo',
+        desc: 'Clientes PEP precisam de monitoramento contínuo — um correntista pode ser nomeado para cargo público após o onboarding. O alerta automático de mudança de status PEP ou inclusão em lista de sanção garante que a equipe seja notificada em tempo real, sem depender de re-consulta periódica manual.',
+      },
+      {
+        title: 'Alertas de fraude',
+        desc: 'Accounts comprometidas passam por eventos detectáveis antes da fraude ser consumada — novo dispositivo, endereço atualizado, nova linha telefônica. O módulo detecta essas mudanças e gera alertas que permitem autenticação adicional antes do prejuízo.',
+      },
+      {
+        title: 'Monitoramento PLD',
+        desc: 'Políticas de PLD exigem re-verificação periódica de clientes de alto risco. O monitoramento contínuo substitui ciclos manuais de revisão por alertas automáticos de eventos relevantes, reduzindo custo operacional de compliance sem comprometer a cobertura regulatória.',
+      },
+    ],
     sla: '99,97%',
     priceFrom: 'R$ 0,15/evento',
     datasetItems: [
@@ -423,6 +621,24 @@ export const MODULES: SncModule[] = [
     chips: ['Receita', 'Juntas'],
     fullDescription: 'Radiografia completa de pessoas jurídicas: situação Receita Federal, SINTEGRA, SPED, quadro societário, faturamento estimado, reclamações Procon, histórico de penalidades e saúde financeira consolidada.',
     useCases: ['KYB (Know Your Business)', 'Onboarding de fornecedores', 'Crédito PJ', 'Auditoria pré-contratual'],
+    useCasesRich: [
+      {
+        title: 'KYB (Know Your Business)',
+        desc: 'CNPJ ativo não significa empresa solvente ou operacional. O módulo entrega a radiografia real: faturamento estimado por dados fiscais do SPED, número de funcionários via eSocial, reclamações no Procon e processos ativos — a diferença entre uma empresa que funciona e um CNPJ de prateleira.',
+      },
+      {
+        title: 'Onboarding de fornecedores',
+        desc: 'Um fornecedor com certificados impecáveis mas CNPJ inapto na Receita, inscrição estadual cancelada por irregularidade fiscal ou execuções trabalhistas ativas é um passivo a caminho. O módulo identifica esses sinais antes do contrato ser assinado.',
+      },
+      {
+        title: 'Crédito PJ',
+        desc: 'Crédito para pessoa jurídica baseado apenas na declaração do sócio é empiricamente arriscado. O módulo cruza faturamento estimado por SPED com capacidade de pagamento declarada, identificando sobre-declaração de receita antes da aprovação da linha de crédito.',
+      },
+      {
+        title: 'Auditoria pré-contratual',
+        desc: 'Antes de assinar contratos de longa duração com fornecedores críticos, a auditoria de saúde empresarial inclui mais que certidões: situação real de operação, porte estimado, histórico de litígios e scorecard de saúde de A a E calculado sobre os 9 datasets do módulo.',
+      },
+    ],
     sla: '99,95%',
     priceFrom: 'R$ 3,50/consulta',
     datasetItems: [
@@ -447,6 +663,24 @@ export const MODULES: SncModule[] = [
     chips: ['Grafo'],
     fullDescription: 'Mapeamento completo de rede de relacionamentos via grafo: sócios, diretores, procuradores, empresas vinculadas, grupos econômicos e beneficiários finais. Visualização interativa e exportação em JSON.',
     useCases: ['Estruturas societárias complexas', 'Identificação de UBO', 'Risco de grupo econômico', 'M&A'],
+    useCasesRich: [
+      {
+        title: 'Estruturas societárias complexas',
+        desc: 'Holdings em cascata, empresas com sócios comuns e CNPJs no mesmo endereço são sinais de estruturas criadas para dificultar a identificação do risco real. O módulo mapeia automaticamente a rede completa, identificando sócios em comum, endereços compartilhados e vínculos não declarados entre empresas aparentemente independentes.',
+      },
+      {
+        title: 'Identificação de UBO',
+        desc: 'Regulações de PLD/FT exigem identificação do Beneficiário Final até o nível de 25% de participação. O módulo expande o QSA recursivamente, identificando a pessoa física que controla a cadeia societária — mesmo através de múltiplas camadas de holdings.',
+      },
+      {
+        title: 'Risco de grupo econômico',
+        desc: 'Risco em grupos econômicos é solidário — a inadimplência de uma subsidiária afeta as demais e pode comprometer garantias cruzadas. O módulo identifica empresas do mesmo grupo por sócios comuns, endereço e representante, calculando o risco consolidado de toda a rede antes da decisão de crédito.',
+      },
+      {
+        title: 'M&A',
+        desc: 'Estruturas societárias ocultas reveladas após o fechamento geram responsabilidade para o adquirente. O módulo mapeia o grafo completo antes do signing — identificando conexões com PEP, participações em entidades reguladas e empresas do mesmo grupo com passivos ocultos.',
+      },
+    ],
     sla: '99,90%',
     priceFrom: 'R$ 5,20/mapa',
     datasetItems: [
@@ -469,6 +703,24 @@ export const MODULES: SncModule[] = [
     chips: ['IBAMA', 'SICAR'],
     fullDescription: 'Conformidade ambiental e ESG: embargos IBAMA, cadastro SICAR (imóveis rurais), CAR, infrações ambientais, certificações e histórico de autuações. Para empresas do agro, indústria e financiamento.',
     useCases: ['Crédito rural', 'Financiamento verde', 'Fornecedores do agro', 'ESG reporting'],
+    useCasesRich: [
+      {
+        title: 'Crédito rural',
+        desc: 'Financiamento rural para propriedades com embargo IBAMA ativo ou CAR pendente cria risco regulatório para o banco concedente. O módulo verifica a situação ambiental do imóvel antes da liberação do crédito, protegendo o financiador de associação com irregularidade ambiental.',
+      },
+      {
+        title: 'Financiamento verde',
+        desc: 'Fundos ESG e linhas de crédito verde exigem comprovação de conformidade ambiental dos tomadores. O módulo entrega o Score ESG consolidado com evidências em três dimensões — ambiental, social e governança — pronto para uso em relatórios de impacto e due diligence ESG.',
+      },
+      {
+        title: 'Fornecedores do agro',
+        desc: 'Cadeias de suprimento do agronegócio enfrentam pressão crescente de compradores internacionais e legislações como o EUDR. O módulo verifica se o fornecedor rural consta da Lista Suja de trabalho escravo, tem embargos do IBAMA ou irregularidade no CAR antes do contrato de fornecimento.',
+      },
+      {
+        title: 'ESG reporting',
+        desc: 'Relatórios de sustentabilidade GRI, SASB e TCFD exigem dados verificáveis sobre a cadeia de valor, não autodeclarações. O módulo fornece dados de conformidade ambiental e trabalhista dos fornecedores em formato estruturado, com fonte e data de referência auditável por terceiros.',
+      },
+    ],
     sla: '99,85%',
     priceFrom: 'R$ 1,90/consulta',
     datasetItems: [
@@ -490,6 +742,24 @@ export const MODULES: SncModule[] = [
     chips: ['Federal', 'Estadual'],
     fullDescription: 'Certidões negativas para pessoas jurídicas: Receita Federal, PGFN, INSS, FGTS, Justiça Federal, CNDT e Câmaras Estaduais. Rastreamento de prazo de validade e renovação automática.',
     useCases: ['Licitações públicas', 'Habilitação de fornecedores', 'Compliance fiscal', 'Financiamentos'],
+    useCasesRich: [
+      {
+        title: 'Licitações públicas',
+        desc: 'Habilitação em licitação exige conjunto específico de certidões com validades simultâneas. O módulo centraliza emissão e monitora vencimentos, alertando com antecedência suficiente para renovação — a empresa que perde licitação por certidão vencida cometeu um erro evitável.',
+      },
+      {
+        title: 'Habilitação de fornecedores',
+        desc: 'Políticas de gestão de fornecedores de grandes empresas exigem certidões válidas de todos os CNPJs no cadastro. O módulo faz a gestão automatizada do ciclo de vida das certidões, garantindo conformidade permanente sem custo operacional crescente.',
+      },
+      {
+        title: 'Compliance fiscal',
+        desc: 'Empresas que operam com fornecedores irregulares do ponto de vista fiscal podem ser responsabilizadas solidariamente em execuções fiscais. O monitoramento identifica quando um fornecedor perde a regularidade, permitindo ação antes que o risco seja transferido para o contratante.',
+      },
+      {
+        title: 'Financiamentos',
+        desc: 'Contratos de financiamento com bancos e BNDES exigem manutenção de regularidade fiscal e trabalhista durante toda a vigência. O módulo garante monitoramento automático, alertando em caso de perda de certidão antes que o covenant seja violado e o financiamento antecipado.',
+      },
+    ],
     sla: '99,80%',
     priceFrom: 'R$ 1,40/certidão',
     datasetItems: [
@@ -510,6 +780,24 @@ export const MODULES: SncModule[] = [
     chips: ['Device', 'Apps'],
     fullDescription: 'Inteligência digital completa: presença em redes sociais, apps instalados, dispositivos utilizados, comportamento de navegação, e-mails e telefones validados em bases digitais. Para enriquecimento e antifraude.',
     useCases: ['Enriquecimento de base', 'Personalização de ofertas', 'Antifraude digital', 'Onboarding sem fricção'],
+    useCasesRich: [
+      {
+        title: 'Enriquecimento de base',
+        desc: 'Cadastros com email inválido, telefone desativado ou endereço desatualizado custam dinheiro em comunicação que não chega. O Perfil Digital valida email, telefone, IP e dispositivo em tempo real, enriquecendo a base com atributos digitais verificados e atualizados.',
+      },
+      {
+        title: 'Personalização de ofertas',
+        desc: 'Oferta de produto financeiro com ticket e canal errado tem taxa de conversão zero. O perfil de maturidade digital — apps instalados, comportamento de compra online, presença em redes sociais — permite segmentação muito mais precisa que dados demográficos tradicionais.',
+      },
+      {
+        title: 'Antifraude digital',
+        desc: 'Identidade sintética tem perfil digital inconsistente: email criado recentemente, número portado nos últimos dias, dispositivo nunca visto antes. O módulo detecta essas inconsistências na abertura de conta, sinalizando para revisão antes que a fraude seja completada.',
+      },
+      {
+        title: 'Onboarding sem fricção',
+        desc: 'Solicitar documentos que o sistema já consegue verificar digitalmente é fricção desnecessária que aumenta o abandono. O Perfil Digital valida endereço por IP, telefone pela operadora e email por entregabilidade — eliminando pedidos de comprovante que degradam a experiência do cliente legítimo.',
+      },
+    ],
     sla: '99,90%',
     priceFrom: 'R$ 1,60/perfil',
     datasetItems: [
@@ -534,6 +822,24 @@ export const MODULES: SncModule[] = [
     chips: ['IA', 'LLM'],
     fullDescription: 'Relatório analítico narrativo gerado por LLMs auditáveis: síntese de todos os dados disponíveis em linguagem natural, riscos identificados, recomendações de ação e trilha de auditoria completa. Suporte a GPT-4o, Mistral e Amazon Nova.',
     useCases: ['Relatórios para comitês de crédito', 'Due diligence executiva', 'Compliance documentado', 'Análise de risco narrativa'],
+    useCasesRich: [
+      {
+        title: 'Relatórios para comitês de crédito',
+        desc: 'Analistas transformam dados brutos em texto para apresentar ao comitê — trabalho repetitivo, caro e propenso a inconsistências. O Relatório IA gera a síntese em linguagem natural diretamente dos datasets consultados, com riscos identificados e recomendação de ação, em formato pronto para uso em reunião.',
+      },
+      {
+        title: 'Due diligence executiva',
+        desc: 'Due diligence de pessoas físicas complexas gera volumes de informação difíceis de sintetizar manualmente. O LLM auditável consolida processos, patrimônio, histórico político, mídias negativas e sanções em relatório narrativo coerente, com linha do tempo e identificação de padrões que a análise manual tende a perder.',
+      },
+      {
+        title: 'Compliance documentado',
+        desc: 'Reguladores exigem evidência de que a análise foi realizada — não apenas o resultado. O Relatório IA gera trilha auditável com cada dataset consultado, resultado, timestamp e modelo LLM utilizado, com hash SHA-256 imutável. É a documentação de compliance gerada no mesmo momento que a análise.',
+      },
+      {
+        title: 'Análise de risco narrativa',
+        desc: 'Dados estruturados revelam o quê, mas não o porquê. O LLM identifica conexões causais entre eventos — o processo trabalhista que coincidiu com a saída do sócio majoritário e a queda de faturamento — que analistas humanos levam horas para identificar manualmente.',
+      },
+    ],
     sla: '99,85%',
     priceFrom: 'R$ 3,80/relatório',
     datasetItems: [
@@ -555,6 +861,24 @@ export const MODULES: SncModule[] = [
     chips: ['TSE', 'TCU'],
     fullDescription: 'Inteligência política completa: candidaturas históricas, cargos ocupados, doações eleitorais recebidas e realizadas, bens declarados, processos no TCU/TCE e grau de exposição política calculado.',
     useCases: ['PEP de nível 3 e 4', 'Onboarding de políticos', 'Compliance eleitoral', 'Jornalismo investigativo'],
+    useCasesRich: [
+      {
+        title: 'PEP de nível 3 e 4',
+        desc: 'A definição de PEP do BCB inclui parentes e associados próximos de políticos — os chamados níveis 3 e 4, raramente identificados em buscas simples. O módulo calcula o grau de exposição política para cada sócio, incluindo cônjuges, filhos e sócios de PEP direto, com justificativa e nível de risco calculado.',
+      },
+      {
+        title: 'Onboarding de políticos',
+        desc: 'Onboarding de pessoa com histórico político extenso — candidaturas em múltiplos estados, cargos de confiança, bens declarados inconsistentes — levaria horas de pesquisa manual. O módulo entrega o perfil político completo em segundos, com fontes públicas rastreáveis.',
+      },
+      {
+        title: 'Compliance eleitoral',
+        desc: 'Períodos eleitorais aumentam o volume de onboarding de pessoas com mandato ativo ou candidatura em andamento. A política de PEP exige tratamento diferenciado e aprovação em níveis superiores. O módulo identifica automaticamente a situação eleitoral atual e ativa o fluxo de aprovação adequado.',
+      },
+      {
+        title: 'Jornalismo investigativo',
+        desc: 'Jornalistas e pesquisadores que investigam redes políticas precisam cruzar candidaturas, doadores, patrimônio declarado e cargos ocupados para encontrar padrões. O módulo consolida 12 datasets do TSE, DOU e TCU em API estruturada, acelerando investigações que levariam semanas de pesquisa manual.',
+      },
+    ],
     sla: '99,90%',
     priceFrom: 'R$ 1,30/consulta',
     datasetItems: [
@@ -579,6 +903,24 @@ export const MODULES: SncModule[] = [
     chips: ['Lei 14790'],
     fullDescription: 'Módulo vertical completo para operadores licenciados de apostas esportivas (Lei 14.790/2023): KYC regulatório, verificação de maioridade, PEP, sanções administrativas, risco financeiro e monitoramento contínuo. Homologado para SPA/MF.',
     useCases: ['KYC de apostadores', 'Conformidade Lei 14.790', 'Verificação de idade', 'Monitoramento de clientes'],
+    useCasesRich: [
+      {
+        title: 'KYC de apostadores',
+        desc: 'A Lei 14.790/2023 e a Portaria SPA/MF exigem verificação de identidade com evidência documentada — sem isso, a licença está em risco. O módulo entrega o KYC regulatório completo: validação de CPF, nome, data de nascimento e nome da mãe contra a Receita Federal, com score de confiança e trilha auditável por consulta.',
+      },
+      {
+        title: 'Conformidade Lei 14.790',
+        desc: 'A lei proíbe acesso de menores de idade, PEP e funcionários públicos federais às plataformas de aposta. O módulo verifica todos esses critérios em uma única chamada, gerando automaticamente o registro de conformidade exigido pelas normas da Secretaria de Prêmios e Apostas.',
+      },
+      {
+        title: 'Verificação de idade',
+        desc: 'Confirmação de maioridade não pode depender da data de nascimento autodeclarada — facilmente fraudável e insuficiente como evidência regulatória. O módulo verifica a maioridade diretamente na Receita Federal e retorna o resultado binário sem expor a data de nascimento do apostador.',
+      },
+      {
+        title: 'Monitoramento de clientes',
+        desc: 'Conformidade não é verificação única — apostadores podem ser nomeados para cargo público ou entrar em lista de sanção após o onboarding. O monitoramento contínuo via webhook alerta o operador de qualquer mudança de perfil que exija revisão regulatória conforme a Lei 14.790/2023.',
+      },
+    ],
     sla: '99,99%',
     priceFrom: 'R$ 1,90/verificação',
     datasetItems: [
