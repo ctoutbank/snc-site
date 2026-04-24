@@ -176,7 +176,7 @@ export default async function ModuloPage({ params }: Props) {
                 </div>
               ) : (
                 /* Fallback: apenas labels (formato simples) */
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, background: 'rgba(15,26,36,.12)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
+                <div className="snc-mod-cards-grid" style={{ background: 'rgba(15,26,36,.12)', border: '1px solid rgba(15,26,36,.12)' }}>
                   {m.useCases!.map((uc, i) => (
                     <div key={uc} style={{ background: '#ffffff', padding: '36px 32px 40px', display: 'flex', flexDirection: 'column', gap: 0, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
                       <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.16em', textTransform: 'uppercase', marginBottom: 8 }}>
@@ -212,7 +212,7 @@ export default async function ModuloPage({ params }: Props) {
                 </h2>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, background: 'rgba(15,26,36,.12)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
+              <div className="snc-mod-cards-grid" style={{ background: 'rgba(15,26,36,.12)', border: '1px solid rgba(15,26,36,.12)' }}>
                 {m.datasetItems.map((ds, i) => (
                   <div key={ds.id} style={{ background: '#ffffff', padding: '36px 32px 40px', display: 'flex', flexDirection: 'column', gap: 0, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
                     <div style={{ marginBottom: 8 }}>
