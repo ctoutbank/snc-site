@@ -115,38 +115,67 @@ export default function SobrePage() {
 
 
 
-        {/* Benefícios */}
         <section style={{ background: 'var(--snc-paper-2)', borderTop: '1px solid rgba(15,26,36,.1)', padding: '80px 28px' }}>
           <div style={{ maxWidth: 1180, margin: '0 auto' }}>
             <div style={{ marginBottom: 48 }}>
               <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 16 }}>
-                § Benefícios
+                § Infraestrutura
               </div>
               <h2 style={{ fontFamily: "'Libre Caslon Text', serif", fontWeight: 400, fontSize: 'clamp(28px,4vw,52px)', lineHeight: 1.05, letterSpacing: '-0.025em', color: 'var(--snc-ink)' }}>
-                Por que o SNC <span style={{ fontStyle: 'italic', color: '#5a6a7a' }}>funciona.</span>
+                O que você <span style={{ fontStyle: 'italic', color: '#5a6a7a' }}>obtém de fato.</span>
               </h2>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 0, border: '1px solid rgba(15,26,36,.12)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 0, border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden', background: 'var(--snc-dot-bg)' }}>
               {[
-                { title: 'Decisões mais seguras',    desc: 'Redução de incerteza operacional' },
-                { title: 'Menor exposição a risco',  desc: 'Análise estruturada e preventiva' },
-                { title: 'Eficiência operacional',   desc: 'Automação de processos críticos' },
-                { title: 'Conformidade contínua',    desc: 'Atualização constante às normas vigentes' },
-                { title: 'Aderência regulatória',    desc: 'Compatível com BACEN, LGPD e COAF' },
+                {
+                  metric: '253',
+                  unit: 'datasets',
+                  title: 'Inventário único',
+                  desc: 'SCR, Serasa, Boa Vista, SPC, Quod, Receita Federal, TSE, IBAMA e COAF — num único contrato e uma única API REST.',
+                },
+                {
+                  metric: '< 2',
+                  unit: 'segundos',
+                  title: 'Latência real',
+                  desc: 'Consultas multi-bureau respondidas com normalização e pré-processamento inclusos. Nenhum processamento assíncrono escondido.',
+                },
+                {
+                  metric: 'ISO + SOC 2',
+                  unit: 'tipo II',
+                  title: 'Segurança auditada',
+                  desc: 'ISO 27001 e SOC 2 Tipo II operacionais. Auditoria independente trimestral. Criptografia em trânsito e em repouso.',
+                },
+                {
+                  metric: 'LGPD',
+                  unit: 'by design',
+                  title: 'Rastreabilidade total',
+                  desc: 'Cada consulta registra operador, empresa, finalidade e timestamp. Não é uma camada adicionada — é a arquitetura base.',
+                },
+                {
+                  metric: '1',
+                  unit: 'integração',
+                  title: '9 fontes simultâneas',
+                  desc: 'Integre uma vez. Acesse todos os bureaus em paralelo. Eliminamos meses de negociação e integração bilateral.',
+                },
               ].map((item, i) => (
                 <div key={item.title} style={{
                   background: 'var(--snc-paper)',
                   borderTop: '3px solid var(--snc-brass)',
-                  borderLeft: i > 0 ? '1px solid rgba(15,26,36,.12)' : 'none',
+                  borderRight: '1px solid rgba(15,26,36,.12)',
+                  borderBottom: '1px solid rgba(15,26,36,.12)',
                   padding: '28px 24px 32px',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: 10,
                 }}>
-                  <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 17, fontWeight: 400, color: 'var(--snc-ink)', lineHeight: 1.2 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 2 }}>
+                    <span style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 28, fontWeight: 400, color: 'var(--snc-green-2)', lineHeight: 1 }}>{item.metric}</span>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: '#8a94a3', letterSpacing: '.1em', textTransform: 'uppercase' }}>{item.unit}</span>
+                  </div>
+                  <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 16, fontWeight: 400, color: 'var(--snc-ink)', lineHeight: 1.2 }}>
                     {item.title}
                   </div>
-                  <p style={{ fontSize: 12, color: '#7c8699', lineHeight: 1.6, margin: 0 }}>
+                  <p style={{ fontSize: 12, color: '#7c8699', lineHeight: 1.65, margin: 0 }}>
                     {item.desc}
                   </p>
                 </div>
@@ -158,15 +187,23 @@ export default function SobrePage() {
         {/* CTA */}
         <section className="snc-cta" style={{ padding: '80px 28px' }}>
           <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 2 }}>
-            <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 'clamp(36px,5vw,60px)', fontWeight: 400, lineHeight: 1, marginBottom: 24 }}>
-              Faça parte da <span style={{ fontStyle: 'italic', color: '#bcc4d1' }}>infraestrutura.</span>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 20 }}>
+              § Próximo passo
+            </div>
+            <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 'clamp(32px,4.5vw,54px)', fontWeight: 400, lineHeight: 1.05, marginBottom: 16 }}>
+              Veja o que a plataforma<br />
+              <span style={{ fontStyle: 'italic', color: '#bcc4d1' }}>entrega na prática.</span>
             </h2>
+            <p style={{ color: '#8a94a3', fontSize: 15, lineHeight: 1.6, maxWidth: 480, margin: '0 auto 36px' }}>
+              20 módulos, 253 datasets, documentação técnica e sandbox disponível.
+              Sem comprometimento.
+            </p>
             <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link href="/contato" className="snc-btn snc-btn-primary">
-                Falar com a equipe →
+              <Link href="/plataforma" className="snc-btn snc-btn-primary">
+                Explorar os 20 módulos →
               </Link>
-              <Link href="/plataforma" className="snc-btn snc-btn-ghost">
-                Ver a plataforma
+              <Link href="/contato" className="snc-btn snc-btn-ghost">
+                Falar com a equipe
               </Link>
             </div>
           </div>
