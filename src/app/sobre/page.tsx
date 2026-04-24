@@ -66,10 +66,7 @@ export default function SobrePage() {
                   <div className="n">100<sup>%</sup></div>
                   <div className="l">Conformidade</div>
                 </div>
-                <div className="s">
-                  <div className="n">&lt; 2<sup>s</sup></div>
-                  <div className="l">Latência média</div>
-                </div>
+
                 <div className="s">
                   <div className="n">35<sup>+</sup></div>
                   <div className="l">Fontes de dados</div>
