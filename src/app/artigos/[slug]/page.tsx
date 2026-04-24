@@ -160,6 +160,61 @@ export default async function BlogPostPage({ params }: Props) {
             </p>
           ))}
 
+          {/* ── Como o SNC atua ── */}
+          <div style={{
+            background: 'var(--snc-paper-2)',
+            border: '1px solid rgba(15,26,36,.1)',
+            padding: '36px 40px',
+            margin: '48px 0 0',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
+              <div style={{ width: 4, height: 28, background: 'var(--snc-brass)', flexShrink: 0 }} />
+              <div>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 4 }}>
+                  § Plataforma SNC
+                </div>
+                <h3 style={{ fontFamily: "'Libre Caslon Text', serif", fontWeight: 400, fontSize: 20, color: 'var(--snc-ink)', margin: 0, lineHeight: 1.2 }}>
+                  {post.sncRole.title}
+                </h3>
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+              {post.sncRole.points.map((point, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
+                  <div style={{
+                    width: 22,
+                    height: 22,
+                    background: 'var(--snc-navy)',
+                    flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginTop: 2,
+                  }}>
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: 'var(--snc-brass)' }}>
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                  </div>
+                  <p style={{ fontSize: 14, color: '#3a4a5a', lineHeight: 1.65, margin: 0 }}>
+                    {point}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: 28, paddingTop: 24, borderTop: '1px solid rgba(15,26,36,.08)' }}>
+              <Link href="/contato" style={{
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: 10,
+                color: 'var(--snc-brass)',
+                letterSpacing: '.12em',
+                textTransform: 'uppercase',
+                textDecoration: 'none',
+              }}>
+                Ver demonstração ao vivo →
+              </Link>
+            </div>
+          </div>
+
           {/* Divisor */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, margin: '56px 0', opacity: 0.4 }}>
             <div style={{ flex: 1, height: 1, background: 'rgba(15,26,36,.2)' }} />

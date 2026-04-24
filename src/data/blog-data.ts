@@ -9,6 +9,10 @@ export interface BlogPost {
   readTime: string;
   excerpt: string;
   content: string[];
+  sncRole: {
+    title: string;
+    points: string[];
+  };
   tags: string[];
 }
 
@@ -30,6 +34,15 @@ export const BLOG_POSTS: BlogPost[] = [
       'A autoridade responsável por fiscalizar o cumprimento da lei já deixou claro que score de crédito e verificação de identidade são usos legítimos dos dados, desde que a empresa seja transparente sobre o processo. O risco está em quem usa dados sem registro, não em quem consulta com responsabilidade.',
       'Para empresas que já usam sistemas de análise automática de crédito, a adaptação costuma ser simples. Na maioria dos casos, basta garantir que cada consulta gera um registro com data, motivo e resultado. O SNC já faz isso automaticamente em cada chamada, sem que a equipe técnica precise configurar nada adicional.',
     ],
+    sncRole: {
+      title: 'Como o SNC atua neste tema',
+      points: [
+        'Registra automaticamente cada consulta com data, hora, finalidade e fonte de dados',
+        'Gera trilha de auditoria imutável pronta para apresentar a órgãos reguladores',
+        'Documenta o processo decisório de forma estruturada, sem trabalho manual da equipe',
+        'Garante que cada consulta tenha base legal identificada conforme as hipóteses da LGPD',
+      ],
+    },
     tags: ['LGPD', 'Compliance', 'Bureau de Dados', 'Crédito'],
   },
   {
@@ -49,6 +62,15 @@ export const BLOG_POSTS: BlogPost[] = [
       'Empresas do setor financeiro têm obrigação legal de registrar como verificaram a identidade de cada cliente. Esse registro precisa incluir quais informações foram consultadas, quando e qual foi o resultado. Sem isso, a empresa fica exposta tanto a fraudes quanto a questionamentos regulatórios.',
       'O princípio por trás de tudo isso é simples: identidade não é um dado único, é um conjunto de informações que precisam fazer sentido juntas. Quanto mais fontes diferentes confirmam os mesmos dados de uma pessoa, mais seguro é o processo de aprovação.',
     ],
+    sncRole: {
+      title: 'Como o SNC atua neste tema',
+      points: [
+        'Verifica o CPF nas bases da Receita Federal, DETRAN e Cartório de Registro Civil',
+        'Cruza os dados do cadastro com histórico de dispositivos associados a fraudes anteriores',
+        'Entrega o resultado completo em menos de um segundo, sem impactar a experiência do usuário',
+        'Gera registro auditável de cada verificação com todas as fontes consultadas e o resultado obtido',
+      ],
+    },
     tags: ['KYC', 'Identidade Digital', 'Fraud Prevention', 'BACEN'],
   },
   {
@@ -68,6 +90,15 @@ export const BLOG_POSTS: BlogPost[] = [
       'A forma certa de usar essas informações é olhar para cada bureau separadamente e entender o que ele está dizendo sobre aquele cliente dentro do seu próprio modelo. Empresas que fazem isso com mais rigor conseguem aprovar mais crédito sem aumentar o risco, porque entendem melhor o que cada número realmente significa.',
       'Outro ponto importante: o score reflete o passado. Uma pessoa que pagava tudo em dia pode estar passando por um momento difícil agora, e o score ainda não capturou isso. Por isso, combinar o score com outras informações, como estimativa de renda atual e comportamento recente, dá uma visão mais completa e mais justa do cliente.',
     ],
+    sncRole: {
+      title: 'Como o SNC atua neste tema',
+      points: [
+        'Consolida dados dos principais bureaus de crédito em uma única chamada de API',
+        'Entrega os resultados de cada bureau com campos normalizados para facilitar a comparação',
+        'Complementa o score com estimativa de renda e dados comportamentais do cliente',
+        'Permite configurar thresholds de aprovação independentes para cada bureau consultado',
+      ],
+    },
     tags: ['Score', 'Crédito', 'Serasa', 'SPC', 'Boa Vista'],
   },
   {
@@ -87,6 +118,15 @@ export const BLOG_POSTS: BlogPost[] = [
       'Antes da tecnologia atual, fazer essa verificação manualmente levava de três a cinco dias por empresa e exigia uma equipe dedicada. Com sistemas como o SNC, o mesmo processo acontece em segundos, com o resultado organizado e pronto para uso. Isso não elimina a análise humana nos casos mais complexos, mas libera a equipe para focar onde realmente importa.',
       'Para empresas que atuam em setores regulados como bancos, seguradoras e corretoras, esse tipo de verificação é obrigatório por lei. As autoridades exigem que haja um processo documentado de análise de parceiros e clientes, com registro de quando foi feito e o que foi encontrado.',
     ],
+    sncRole: {
+      title: 'Como o SNC atua neste tema',
+      points: [
+        'Analisa o quadro societário completo, incluindo sócios indiretos e empresas controladoras',
+        'Verifica cada sócio individualmente nas listas de PEP e sanções nacionais e internacionais',
+        'Entrega score de risco calculado para cada dimensão da análise em menos de dois segundos',
+        'Gera log auditável do processo completo para comprovação junto a órgãos reguladores',
+      ],
+    },
     tags: ['Due Diligence', 'PJ', 'Compliance', 'PEP', 'Sanções'],
   },
   {
@@ -106,6 +146,15 @@ export const BLOG_POSTS: BlogPost[] = [
       'Existe também um outro tipo de fraude chamado de invasão de conta. Aqui, a conta foi aberta de forma legítima por uma pessoa real. Mas depois, alguém consegue acesso e começa a usar como se fosse ela. Esse tipo é mais difícil de detectar no momento do cadastro justamente porque a conta é genuína. A proteção mais eficaz é monitorar o comportamento depois do cadastro e identificar quando algo muda de forma suspeita.',
       'O custo médio de uma fraude desse tipo para as empresas é alto, e o problema vai além do dinheiro perdido. Há o trabalho de investigação, a provisão contábil e, em alguns casos, consequências legais por não ter detectado a tempo. Investir em prevenção custa consistentemente menos do que lidar com as consequências.',
     ],
+    sncRole: {
+      title: 'Como o SNC atua neste tema',
+      points: [
+        'Verifica a consistência entre o CPF, a idade declarada e o histórico biográfico da pessoa',
+        'Cruza o dispositivo usado no cadastro com uma base de aparelhos associados a fraudes',
+        'Analisa o padrão de comportamento das solicitações para identificar ações automatizadas',
+        'Monitora contas ativas e gera alertas quando o comportamento do usuário muda de forma suspeita',
+      ],
+    },
     tags: ['Antifraude', 'Identidade Sintética', 'Account Takeover', 'Segurança'],
   },
   {
@@ -125,6 +174,15 @@ export const BLOG_POSTS: BlogPost[] = [
       'Para empresas que estão começando a estruturar esse processo, o primeiro passo é entender quais listas precisam ser verificadas e com que frequência. Em alguns setores, a regra exige verificação mensal para todos os clientes. Em outros, a frequência pode variar dependendo do perfil de risco de cada um.',
       'O SNC verifica automaticamente as principais listas nacionais e internacionais em cada consulta e pode ser configurado para monitorar a carteira ativa de forma contínua. Para empresas que estão buscando regularização junto ao Banco Central ou outros órgãos, o sistema já entrega o registro técnico no formato exigido para comprovação.',
     ],
+    sncRole: {
+      title: 'Como o SNC atua neste tema',
+      points: [
+        'Verifica automaticamente as listas OFAC, ONU e COAF em cada consulta realizada',
+        'Mantém uma base proprietária de PEPs brasileiros atualizada diariamente',
+        'Monitora a carteira ativa e gera alertas quando um cliente passa a constar em alguma lista',
+        'Entrega documentação técnica para comprovação do processo junto a órgãos reguladores',
+      ],
+    },
     tags: ['PEP', 'Sanções', 'OFAC', 'COAF', 'AML', 'Compliance'],
   },
   {
@@ -144,6 +202,15 @@ export const BLOG_POSTS: BlogPost[] = [
       'No mundo B2B, o enriquecimento serve para qualificar leads. Uma empresa que recebe formulários com apenas nome e CNPJ pode usar o enriquecimento para descobrir o tamanho da empresa, o setor de atuação, o número de funcionários e o faturamento estimado. Isso permite que o time comercial priorize os contatos com mais potencial em vez de tratar todos da mesma forma.',
       'O uso menos óbvio, mas muito relevante, é a verificação retroativa de compliance. Uma empresa que começou a verificar PEPs e sanções recentemente precisa checar também os clientes mais antigos que nunca passaram por esse processo. Com o enriquecimento em lote, é possível processar toda a carteira e identificar riscos que estavam invisíveis desde o cadastro.',
     ],
+    sncRole: {
+      title: 'Como o SNC atua neste tema',
+      points: [
+        'Adiciona estimativa de renda, score de crédito e perfil de risco a qualquer base de CPFs',
+        'Enriquece bases de CNPJs com dados societários, faturamento estimado e situação fiscal',
+        'Processa grandes volumes de registros em lote para verificações retroativas de compliance',
+        'Atualiza dados de contato como telefone e e-mail para melhorar o alcance das campanhas',
+      ],
+    },
     tags: ['Enriquecimento', 'CRM', 'Dados', 'Marketing', 'Segmentação'],
   },
   {
@@ -163,6 +230,15 @@ export const BLOG_POSTS: BlogPost[] = [
       'Setor financeiro, seguradoras e outros setores regulados têm obrigação legal de atualizar periodicamente os dados dos clientes. Não basta fazer a verificação uma vez no início. A frequência de atualização depende do perfil do cliente e do que as regras do setor exigem, mas o processo precisa existir e ser documentado.',
       'Empresas que implementaram monitoramento contínuo costumam relatar resultados concretos: menos inadimplência, porque as situações de risco são identificadas antes de virar problema, e mais segurança jurídica, porque há registro de que a empresa fez o acompanhamento que a lei exige. O custo do monitoramento é consistentemente menor do que o custo de lidar com as consequências de não ter feito.',
     ],
+    sncRole: {
+      title: 'Como o SNC atua neste tema',
+      points: [
+        'Monitora variações de score de crédito e situação cadastral na carteira ativa de clientes',
+        'Gera alertas automáticos quando um cliente passa a constar em listas de sanção ou PEP',
+        'Acompanha mudanças no quadro societário de empresas parceiras e clientes PJ',
+        'Entrega alertas em tempo real via integração direta ou em relatórios consolidados por período',
+      ],
+    },
     tags: ['Monitoramento', 'Risco', 'Carteira', 'Inadimplência', 'Alertas'],
   },
 ];
