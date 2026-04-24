@@ -156,13 +156,13 @@ export default async function ModuloPage({ params }: Props) {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, background: 'rgba(15,26,36,.12)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
                   {m.useCasesRich.map((uc, i) => (
                     <div key={uc.title} style={{ background: '#ffffff', padding: '36px 32px 40px', display: 'flex', flexDirection: 'column', gap: 0, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
-                        <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.16em', flexShrink: 0 }}>
-                          UC.{String(i + 1).padStart(2, '0')}
-                        </span>
-                        <span style={{ width: 24, height: 1, background: 'rgba(15,26,36,.15)', display: 'block' }} />
+                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.16em', textTransform: 'uppercase', marginBottom: 8 }}>
+                        UC.{String(i + 1).padStart(2, '0')}
                       </div>
-                      <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 22, fontWeight: 400, color: 'var(--snc-ink)', lineHeight: 1.15, marginBottom: 16, minHeight: '2.4em' }}>
+                      <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 72, fontWeight: 400, color: 'var(--snc-brass)', lineHeight: 1, marginBottom: 20, opacity: 0.55 }}>
+                        {String(i + 1).padStart(2, '0')}
+                      </div>
+                      <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 20, fontWeight: 400, color: 'var(--snc-ink)', lineHeight: 1.15, marginBottom: 14 }}>
                         {uc.title}
                       </div>
                       <p style={{ fontSize: 13, color: '#5a6a7a', lineHeight: 1.75, margin: 0, flex: 1 }}>
@@ -175,9 +175,12 @@ export default async function ModuloPage({ params }: Props) {
                 /* Fallback: apenas labels (formato simples) */
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, background: 'rgba(15,26,36,.12)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
                   {m.useCases!.map((uc, i) => (
-                    <div key={uc} style={{ background: '#ffffff', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: 12, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
-                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.16em' }}>
+                    <div key={uc} style={{ background: '#ffffff', padding: '36px 32px 40px', display: 'flex', flexDirection: 'column', gap: 0, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
+                      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.16em', textTransform: 'uppercase', marginBottom: 8 }}>
                         UC.{String(i + 1).padStart(2, '0')}
+                      </div>
+                      <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 72, fontWeight: 400, color: 'var(--snc-brass)', lineHeight: 1, marginBottom: 20, opacity: 0.55 }}>
+                        {String(i + 1).padStart(2, '0')}
                       </div>
                       <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 20, fontWeight: 400, color: 'var(--snc-ink)', lineHeight: 1.15 }}>
                         {uc}
@@ -205,16 +208,19 @@ export default async function ModuloPage({ params }: Props) {
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, background: 'rgba(15,26,36,.12)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
                 {m.datasetItems.map((ds, i) => (
-                  <div key={ds.id} style={{ background: '#ffffff', padding: '28px 28px 32px', display: 'flex', flexDirection: 'column', gap: 10, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                  <div key={ds.id} style={{ background: '#ffffff', padding: '36px 32px 40px', display: 'flex', flexDirection: 'column', gap: 0, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
                       <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.14em' }}>
-                        {String(i + 1).padStart(2, '0')} · {ds.id}
+                        {ds.id}
                       </span>
                       <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: '#8a94a3', letterSpacing: '.12em', textTransform: 'uppercase', background: 'rgba(15,26,36,.06)', padding: '3px 8px', border: '1px solid rgba(15,26,36,.1)' }}>
                         {ds.source}
                       </span>
                     </div>
-                    <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 18, fontWeight: 400, color: 'var(--snc-ink)', lineHeight: 1.2 }}>
+                    <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 72, fontWeight: 400, color: 'var(--snc-brass)', lineHeight: 1, marginBottom: 20, opacity: 0.55 }}>
+                      {String(i + 1).padStart(2, '0')}
+                    </div>
+                    <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 18, fontWeight: 400, color: 'var(--snc-ink)', lineHeight: 1.2, marginBottom: 12 }}>
                       {ds.name}
                     </div>
                     <p style={{ fontSize: 13, color: '#5a6a7a', lineHeight: 1.65, margin: 0 }}>
