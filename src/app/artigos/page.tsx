@@ -36,11 +36,10 @@ export default function BlogPage() {
         <div className="snc-hero-bg" style={{ background: 'var(--snc-navy)' }} />
         <div className="snc-hero-inner" style={{ paddingBottom: 60 }}>
           <div className="snc-hero-meta">
-            <span className="snc-hero-tag">§ BLOG · SNC</span>
+            <span className="snc-hero-tag">§ ARTIGOS · SNC</span>
           </div>
           <h1 className="snc-hero-title" style={{ marginTop: 28, maxWidth: 700 }}>
-            Inteligência de dados{' '}
-            <em>para decisões que importam.</em>
+            Artigos SNC
           </h1>
           <div className="snc-hero-lede">
             <p style={{ color: '#8a94a3', fontSize: 16, lineHeight: 1.7, maxWidth: 560, margin: 0 }}>
