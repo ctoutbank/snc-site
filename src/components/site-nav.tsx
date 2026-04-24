@@ -25,7 +25,7 @@ export function SiteNav() {
             <span className="dot" />
             Plataforma operacional · SLA 99,98%
           </span>
-          <span>Porto Alegre / RS &nbsp;·&nbsp; Trend City Center Office &nbsp;·&nbsp; Av. Ipiranga, 40 · salas 1201 / 1212</span>
+          <span>Porto Alegre / RS &nbsp;·&nbsp; Trend Office &nbsp;·&nbsp; Av. Ipiranga, 40 · salas 1201 / 1212</span>
         </div>
         <nav className="snc-nav">
           <Link href="/" className="snc-brand">
@@ -82,7 +82,7 @@ export function SiteNav() {
             <a href="https://snc.consolle.one/auth/sign-in" className="snc-btn snc-btn-ghost" style={{ justifyContent: 'center' }}>Área Restrita</a>
           </div>
           <div style={{ marginTop: 'auto', paddingTop: 30, fontSize: 11, color: '#8a94a3', letterSpacing: '.1em', textTransform: 'uppercase' }}>
-            Trend City Center Office<br />Av. Ipiranga, 40 · Porto Alegre / RS
+            Trend Office<br />Av. Ipiranga, 40 · Porto Alegre / RS
           </div>
         </div>
       )}

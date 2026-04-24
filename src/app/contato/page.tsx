@@ -35,7 +35,7 @@ export default function ContatoPage() {
                 {[
                   {
                     label: 'Porto Alegre · Sede',
-                    value: 'Av. Ipiranga, 40\nTrend City Center Office\nSalas 1201 / 1212\nCEP 90160-090 · Porto Alegre / RS',
+                    value: 'Av. Ipiranga, 40\nTrend Office\nSalas 1201 / 1212\nCEP 90160-090 · Porto Alegre / RS',
                   },
                   {
                     label: 'E-mail institucional',
