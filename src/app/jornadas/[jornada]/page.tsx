@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { JOURNEYS } from '@/data/snc-data';
+import { JOURNEYS, MODULES } from '@/data/snc-data';
 import { SiteNav } from '@/components/site-nav';
 import { SiteFooter } from '@/components/site-footer';
 
@@ -77,7 +77,20 @@ export default async function JornadaPage({ params }: Props) {
           <div className="snc-trust-in">
             <span className="lab">Módulos</span>
             <div className="items">
-              {j.modules.map((m) => <span key={m}>{m}</span>)}
+              {j.modules.map((m) => {
+                const mod = MODULES.find((x) => x.name === m);
+                return mod ? (
+                  <Link
+                    key={m}
+                    href={`/plataforma/${mod.slug}`}
+                    style={{ color: 'inherit', textDecoration: 'none', opacity: 1 }}
+                  >
+                    {m}
+                  </Link>
+                ) : (
+                  <span key={m}>{m}</span>
+                );
+              })}
             </div>
           </div>
         </div>
