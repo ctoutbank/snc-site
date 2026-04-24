@@ -13,7 +13,7 @@ export default function SetoresPage() {
   return (
     <div className="snc-root">
       <SiteNav />
-      <main style={{ paddingTop: 80 }}>
+      <main>
         <SectorGrid mode="grid" />
       </main>
       <SiteFooter />

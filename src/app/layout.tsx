@@ -51,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={`${libreCaslon.variable} ${inter.variable} ${jetbrainsMono.variable}`}
         style={{
           fontFamily: 'var(--font-inter), system-ui, sans-serif',
-          background: '#0A1628',
+          background: '#F4EFE4',
           color: '#0F1A24',
           WebkitFontSmoothing: 'antialiased',
           overflowX: 'hidden',

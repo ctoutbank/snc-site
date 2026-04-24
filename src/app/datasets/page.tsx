@@ -14,9 +14,7 @@ export default function DatasetsPage() {
     <div className="snc-root">
       <SiteNav />
       <main>
-        <div style={{ paddingTop: 60 }}>
-          <DatasetsSection />
-        </div>
+        <DatasetsSection />
       </main>
       <SiteFooter />
     </div>

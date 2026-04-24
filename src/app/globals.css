@@ -86,7 +86,7 @@
 .snc-trust-in .items span { opacity: .8; }
 
 /* ===== SECTION HEADERS ===== */
-.snc-sec { padding: 72px 28px; max-width: 1440px; margin: 0 auto; background: var(--snc-paper); }
+.snc-sec { padding: 72px 28px; max-width: 1440px; margin: 0 auto; }
 .snc-sec-head { display: grid; grid-template-columns: 120px 1fr auto; gap: 40px; align-items: end; margin-bottom: 60px; padding-bottom: 24px; border-bottom: 1px solid rgba(15,26,36,.14); }
 .snc-sec-head .num { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--snc-brass); letter-spacing: .16em; }
 .snc-sec-head .num::before { content: ""; display: block; width: 32px; height: 1px; background: var(--snc-brass); margin-bottom: 12px; }
