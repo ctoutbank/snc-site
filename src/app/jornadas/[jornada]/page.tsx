@@ -228,7 +228,7 @@ export default async function JornadaPage({ params }: Props) {
                 display: 'grid',
                 gridTemplateColumns: `repeat(${(j.steps.length) + (j.delivery ? 1 : 0)}, 1fr)`,
                 gap: 1,
-                background: 'rgba(15,26,36,.1)',
+                background: 'radial-gradient(circle, rgba(15,26,36,.18) 1px, #F4EFE4 1px) center/14px 14px',
                 border: '1px solid rgba(15,26,36,.1)',
                 marginTop: 24,
               }}

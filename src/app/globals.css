@@ -12,6 +12,7 @@
   --snc-green-2: #2BA84A;
   --snc-brass: #B8914A;
   --snc-muted: #8a94a3;
+  --snc-dot-bg: radial-gradient(circle, rgba(15,26,36,.18) 1px, var(--snc-paper) 1px) center/14px 14px;
 }
 
 /* ===== RESET ===== */
@@ -101,7 +102,7 @@
 .snc-eixos-head h2 { font-family: 'Libre Caslon Text', serif; font-weight: 400; font-size: clamp(40px,5.5vw,72px); line-height: 1; letter-spacing: -0.02em; }
 .snc-eixos-head h2 .it { font-style: italic; color: #5a6a7a; }
 .snc-eixos-head p { max-width: 600px; margin: 22px auto 0; color: #4a5662; font-size: 16px; line-height: 1.55; }
-.snc-eixos-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(15,26,36,.12); border: 1px solid rgba(15,26,36,.12); }
+.snc-eixos-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--snc-dot-bg); border: 1px solid rgba(15,26,36,.12); }
 .snc-eixo-card { background: var(--snc-paper); padding: 44px 36px; position: relative; cursor: pointer; transition: background .2s; min-height: 420px; display: flex; flex-direction: column; }
 .snc-eixo-card:hover { background: #fff; }
 .snc-eixo-card .num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--snc-brass); letter-spacing: .2em; margin-bottom: 40px; }
@@ -118,7 +119,7 @@
 .snc-prod-tabs button { padding: 18px 22px; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: #5a6a7a; border-bottom: 2px solid transparent; white-space: nowrap; transition: all .15s; font: inherit; cursor: pointer; background: none; border-top: none; border-left: none; border-right: none; }
 .snc-prod-tabs button:hover { color: var(--snc-ink); }
 .snc-prod-tabs button.on { color: var(--snc-navy); border-color: var(--snc-green-2); font-weight: 600; }
-.snc-prod-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: radial-gradient(circle, rgba(15,26,36,.18) 1px, var(--snc-paper) 1px) center/14px 14px; border: 1px solid rgba(15,26,36,.12); }
+.snc-prod-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--snc-dot-bg); border: 1px solid rgba(15,26,36,.12); }
 .snc-mod-card { background: var(--snc-paper); padding: 28px 24px; min-height: 240px; display: flex; flex-direction: column; cursor: pointer; transition: background .15s; position: relative; }
 .snc-mod-card:hover { background: #fff; }
 .snc-mod-card .tag { position: absolute; top: 14px; right: 14px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--snc-brass); letter-spacing: .1em; }
