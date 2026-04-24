@@ -215,14 +215,9 @@ export default async function ModuloPage({ params }: Props) {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, background: 'rgba(15,26,36,.12)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
                 {m.datasetItems.map((ds, i) => (
                   <div key={ds.id} style={{ background: '#ffffff', padding: '36px 32px 40px', display: 'flex', flexDirection: 'column', gap: 0, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-                      <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.14em', flexShrink: 0 }}>
+                    <div style={{ marginBottom: 8 }}>
+                      <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.14em' }}>
                         {ds.id}
-                      </span>
-                      <span
-                        title={ds.source}
-                        style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: '#8a94a3', letterSpacing: '.1em', textTransform: 'uppercase', background: 'rgba(15,26,36,.06)', padding: '3px 8px', border: '1px solid rgba(15,26,36,.1)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 130 }}>
-                        {ds.source.split('/')[0].trim()}
                       </span>
                     </div>
                     <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 72, fontWeight: 400, color: 'var(--snc-brass)', lineHeight: 1, marginBottom: 20, opacity: 0.55 }}>
@@ -231,9 +226,16 @@ export default async function ModuloPage({ params }: Props) {
                     <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 18, fontWeight: 400, color: 'var(--snc-ink)', lineHeight: 1.2, marginBottom: 12 }}>
                       {ds.name}
                     </div>
-                    <p style={{ fontSize: 13, color: '#5a6a7a', lineHeight: 1.65, margin: 0 }}>
+                    <p style={{ fontSize: 13, color: '#5a6a7a', lineHeight: 1.65, margin: 0, flex: 1 }}>
                       {ds.returns}
                     </p>
+                    <div style={{ marginTop: 'auto', paddingTop: 20 }}>
+                      <span
+                        title={ds.source}
+                        style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: '#8a94a3', letterSpacing: '.1em', textTransform: 'uppercase', background: 'rgba(15,26,36,.06)', padding: '3px 8px', border: '1px solid rgba(15,26,36,.1)', whiteSpace: 'nowrap' }}>
+                        {ds.source.split('/')[0].trim()}
+                      </span>
+                    </div>
                   </div>
                 ))}
                 {Array((4 - (m.datasetItems.length % 4)) % 4).fill(null).map((_, i) => (
