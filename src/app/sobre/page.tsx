@@ -115,6 +115,46 @@ export default function SobrePage() {
 
 
 
+        {/* Benefícios */}
+        <section style={{ background: 'var(--snc-paper-2)', borderTop: '1px solid rgba(15,26,36,.1)', padding: '80px 28px' }}>
+          <div style={{ maxWidth: 1180, margin: '0 auto' }}>
+            <div style={{ marginBottom: 48 }}>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 16 }}>
+                § Benefícios
+              </div>
+              <h2 style={{ fontFamily: "'Libre Caslon Text', serif", fontWeight: 400, fontSize: 'clamp(28px,4vw,52px)', lineHeight: 1.05, letterSpacing: '-0.025em', color: 'var(--snc-ink)' }}>
+                Por que o SNC <span style={{ fontStyle: 'italic', color: '#5a6a7a' }}>funciona.</span>
+              </h2>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 0, border: '1px solid rgba(15,26,36,.12)' }}>
+              {[
+                { title: 'Decisões mais seguras',    desc: 'Redução de incerteza operacional' },
+                { title: 'Menor exposição a risco',  desc: 'Análise estruturada e preventiva' },
+                { title: 'Eficiência operacional',   desc: 'Automação de processos críticos' },
+                { title: 'Conformidade contínua',    desc: 'Atualização constante às normas vigentes' },
+                { title: 'Aderência regulatória',    desc: 'Compatível com BACEN, LGPD e COAF' },
+              ].map((item, i) => (
+                <div key={item.title} style={{
+                  background: 'var(--snc-paper)',
+                  borderTop: '3px solid var(--snc-brass)',
+                  borderLeft: i > 0 ? '1px solid rgba(15,26,36,.12)' : 'none',
+                  padding: '28px 24px 32px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 10,
+                }}>
+                  <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 17, fontWeight: 400, color: 'var(--snc-ink)', lineHeight: 1.2 }}>
+                    {item.title}
+                  </div>
+                  <p style={{ fontSize: 12, color: '#7c8699', lineHeight: 1.6, margin: 0 }}>
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* CTA */}
         <section className="snc-cta" style={{ padding: '80px 28px' }}>
           <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 2 }}>
