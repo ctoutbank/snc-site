@@ -96,10 +96,10 @@
 .snc-fontes-count { font-size: 12px; color: #6b7785; line-height: 1.65; text-align: right; margin: 0; }
 
 /* spotlight band — Opção C: brass italic sobre navy */
-.snc-fontes-bureaus { background: var(--snc-navy); padding: 24px 28px 28px; border-top: 3px solid var(--snc-brass); }
+.snc-fontes-bureaus { padding: 20px 28px 24px; border-top: 1px solid rgba(15,26,36,.1); }
 .snc-fontes-bureaus-label { max-width: 1180px; margin: 0 auto 14px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(184,145,74,.55); letter-spacing: .26em; text-transform: uppercase; }
 .snc-fontes-bureaus-list { max-width: 1180px; margin: 0 auto; display: flex; align-items: baseline; flex-wrap: wrap; row-gap: 4px; }
-.snc-fontes-bureau-item { font-family: 'Libre Caslon Text', serif; font-size: clamp(15px,1.8vw,22px); color: var(--snc-brass); font-style: italic; font-weight: 400; white-space: nowrap; text-shadow: 0 1px 14px rgba(184,145,74,.28); }
+.snc-fontes-bureau-item { font-family: 'Libre Caslon Text', serif; font-size: clamp(11px,1.2vw,15px); color: var(--snc-brass); font-style: italic; font-weight: 400; white-space: nowrap; text-shadow: 0 1px 10px rgba(184,145,74,.2); }
 .snc-fontes-bureau-sep { color: var(--snc-brass); margin: 0 14px; font-size: 0.75em; opacity: .35; font-style: normal; }
 
 /* demais categorias */
