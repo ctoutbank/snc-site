@@ -170,6 +170,9 @@ export default async function ModuloPage({ params }: Props) {
                       </p>
                     </div>
                   ))}
+                  {Array((4 - (m.useCasesRich.length % 4)) % 4).fill(null).map((_, i) => (
+                    <div key={`phantom-uc-rich-${i}`} style={{ background: 'var(--snc-dot-bg)', borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }} />
+                  ))}
                 </div>
               ) : (
                 /* Fallback: apenas labels (formato simples) */
@@ -186,6 +189,9 @@ export default async function ModuloPage({ params }: Props) {
                         {uc}
                       </div>
                     </div>
+                  ))}
+                  {Array((4 - (m.useCases!.length % 4)) % 4).fill(null).map((_, i) => (
+                    <div key={`phantom-uc-${i}`} style={{ background: 'var(--snc-dot-bg)', borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }} />
                   ))}
                 </div>
               )}
@@ -229,6 +235,9 @@ export default async function ModuloPage({ params }: Props) {
                       {ds.returns}
                     </p>
                   </div>
+                ))}
+                {Array((4 - (m.datasetItems.length % 4)) % 4).fill(null).map((_, i) => (
+                  <div key={`phantom-ds-${i}`} style={{ background: 'var(--snc-dot-bg)', borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }} />
                 ))}
               </div>
             </div>
