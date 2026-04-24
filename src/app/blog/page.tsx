@@ -5,7 +5,7 @@ import { SiteNav } from '@/components/site-nav';
 import { SiteFooter } from '@/components/site-footer';
 
 export const metadata: Metadata = {
-  title: 'Blog SNC — Inteligência de Dados, Compliance e Risco',
+  title: 'Artigos SNC — Inteligência de Dados, Compliance e Risco',
   description: 'Artigos e análises sobre compliance LGPD, prevenção de fraude, KYC digital, score de crédito e inteligência de dados para o mercado financeiro brasileiro.',
 };
 

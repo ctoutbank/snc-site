@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = getBlogPost(slug);
   if (!post) return {};
   return {
-    title: `${post.title} — Blog SNC`,
+    title: `${post.title} — Artigos SNC`,
     description: post.excerpt,
   };
 }
