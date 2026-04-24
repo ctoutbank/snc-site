@@ -150,7 +150,7 @@ export default async function ModuloPage({ params }: Props) {
                 Onde este módulo<br />
                 <span style={{ fontStyle: 'italic', color: '#5a6a7a' }}>é decisivo.</span>
               </h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 1, background: 'rgba(15,26,36,.1)', border: '1px solid rgba(15,26,36,.1)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 1, background: 'var(--snc-dot-bg)', border: '1px solid rgba(15,26,36,.12)' }}>
                 {m.useCases.map((uc, i) => (
                   <div key={uc} style={{ background: 'var(--snc-paper)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: 12 }}>
                     <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.16em' }}>
@@ -179,7 +179,7 @@ export default async function ModuloPage({ params }: Props) {
                 </h2>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 1, background: 'rgba(15,26,36,.1)', border: '1px solid rgba(15,26,36,.1)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 1, background: 'var(--snc-dot-bg)', border: '1px solid rgba(15,26,36,.12)' }}>
                 {m.datasetItems.map((ds, i) => (
                   <div key={ds.id} style={{ background: 'var(--snc-paper)', padding: '28px 28px 32px', display: 'flex', flexDirection: 'column', gap: 10 }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
