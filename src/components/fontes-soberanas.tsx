@@ -5,7 +5,7 @@ export function FontesSoberanas() {
       sources: [
         'Banco Central do Brasil', 'COAF / UNIDAD', 'Receita Federal',
         'Polícia Federal', 'STF', 'STJ', 'TSE', 'Polícia Civil',
-        'OFAC — EUA', 'ONU / UNODC', 'INTERPOL', 'TCU', 'CGU',
+        'OFAC', 'ONU', 'INTERPOL', 'TCU', 'CGU',
       ],
     },
     {

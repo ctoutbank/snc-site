@@ -153,9 +153,9 @@ export default async function ModuloPage({ params }: Props) {
 
               {/* Formato rico: título + descrição contextual */}
               {m.useCasesRich && m.useCasesRich.length > 0 ? (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, background: 'var(--snc-dot-bg)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, background: 'rgba(15,26,36,.12)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
                   {m.useCasesRich.map((uc, i) => (
-                    <div key={uc.title} style={{ background: 'var(--snc-paper)', padding: '36px 32px 40px', display: 'flex', flexDirection: 'column', gap: 0, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
+                    <div key={uc.title} style={{ background: '#ffffff', padding: '36px 32px 40px', display: 'flex', flexDirection: 'column', gap: 0, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
                         <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.16em', flexShrink: 0 }}>
                           UC.{String(i + 1).padStart(2, '0')}
@@ -173,9 +173,9 @@ export default async function ModuloPage({ params }: Props) {
                 </div>
               ) : (
                 /* Fallback: apenas labels (formato simples) */
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, background: 'var(--snc-dot-bg)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, background: 'rgba(15,26,36,.12)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
                   {m.useCases!.map((uc, i) => (
-                    <div key={uc} style={{ background: 'var(--snc-paper)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: 12, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
+                    <div key={uc} style={{ background: '#ffffff', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: 12, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
                       <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.16em' }}>
                         UC.{String(i + 1).padStart(2, '0')}
                       </div>
@@ -205,7 +205,7 @@ export default async function ModuloPage({ params }: Props) {
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, background: 'var(--snc-dot-bg)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
                 {m.datasetItems.map((ds, i) => (
-                  <div key={ds.id} style={{ background: 'var(--snc-paper)', padding: '28px 28px 32px', display: 'flex', flexDirection: 'column', gap: 10, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
+                  <div key={ds.id} style={{ background: '#ffffff', padding: '28px 28px 32px', display: 'flex', flexDirection: 'column', gap: 10, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
                       <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.14em' }}>
                         {String(i + 1).padStart(2, '0')} · {ds.id}
