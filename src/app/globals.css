@@ -118,7 +118,7 @@
 .snc-prod-tabs button { padding: 18px 22px; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: #5a6a7a; border-bottom: 2px solid transparent; white-space: nowrap; transition: all .15s; font: inherit; cursor: pointer; background: none; border-top: none; border-left: none; border-right: none; }
 .snc-prod-tabs button:hover { color: var(--snc-ink); }
 .snc-prod-tabs button.on { color: var(--snc-navy); border-color: var(--snc-green-2); font-weight: 600; }
-.snc-prod-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: rgba(15,26,36,.1); border: 1px solid rgba(15,26,36,.1); }
+.snc-prod-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: radial-gradient(circle, rgba(15,26,36,.18) 1px, var(--snc-paper) 1px) center/14px 14px; border: 1px solid rgba(15,26,36,.12); }
 .snc-mod-card { background: var(--snc-paper); padding: 28px 24px; min-height: 240px; display: flex; flex-direction: column; cursor: pointer; transition: background .15s; position: relative; }
 .snc-mod-card:hover { background: #fff; }
 .snc-mod-card .tag { position: absolute; top: 14px; right: 14px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--snc-brass); letter-spacing: .1em; }
