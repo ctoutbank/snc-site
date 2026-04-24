@@ -1,61 +1,47 @@
 export function FontesSoberanas() {
+  // Autoridades institucionais — destaque brass itálico
   const spotlight = [
-    'Banco Central do Brasil',
-    'COAF / UNIDAD',
-    'Receita Federal',
-    'Polícia Federal',
-    'STF',
-    'STJ',
-    'TSE',
-    'Polícia Civil',
-    'OFAC — EUA',
-    'ONU / UNODC',
-    'INTERPOL',
-    'TCU',
-    'CGU',
+    'Banco Central do Brasil', 'COAF / UNIDAD', 'Receita Federal',
+    'Polícia Federal', 'STF', 'STJ', 'TSE', 'Polícia Civil',
+    'OFAC — EUA', 'ONU / UNODC', 'INTERPOL', 'TCU', 'CGU',
   ];
 
+  // Demais fontes — sem duplicatas do spotlight
   const rows = [
     {
-      label: 'Governo Federal',
-      sources: ['Receita Federal', 'PGFN', 'CVM', 'SUSEP', 'ANS', 'COAF / UNIDAD'],
+      label: 'Crédito & Bureaus',
+      sources: ['SPC Brasil', 'Serasa Experian', 'Boa Vista SCPC', 'Quod', 'PGFN', 'CVM'],
     },
     {
-      label: 'Segurança Pública',
-      sources: ['Polícia Federal', 'Polícia Civil', 'SINESP', 'SENAD', 'ANAC', 'INTERPOL'],
+      label: 'Reguladores',
+      sources: ['SUSEP', 'ANS', 'ANATEL', 'ANAC', 'ANVISA', 'ANP'],
     },
     {
-      label: 'Justiça & Eleitoral',
-      sources: ['TSE', 'CNJ', 'TJ Estaduais', 'STJ', 'TJSP / TJRJ', 'TRT'],
+      label: 'Justiça & Registros',
+      sources: ['CNJ', 'TJ Estaduais', 'TJSP / TJRJ', 'TRT', 'Cartório de Protestos', 'Juntas Comerciais'],
     },
     {
       label: 'Ambiental & Terra',
       sources: ['IBAMA', 'SICAR / CAR', 'INCRA', 'ANA', 'FUNAI', 'ICMBio'],
     },
     {
-      label: 'Registros & Outros',
-      sources: ['Cartório de Protestos', 'Juntas Comerciais', 'INSS / CNIS', 'SENATRAN', 'CadÚnico', 'ANP'],
+      label: 'Social & Trânsito',
+      sources: ['INSS / CNIS', 'CadÚnico', 'SENATRAN', 'SINESP', 'SENAD', 'DRCI'],
     },
   ];
 
   return (
     <section className="snc-fontes-section">
 
-      {/* Topo — headline */}
       <div className="snc-fontes-top">
         <div className="snc-fontes-tag">§ Fontes Soberanas</div>
         <h2 className="snc-fontes-hl">
           Dados de quem <em>o Brasil confia.</em>
         </h2>
-        <p className="snc-fontes-count">
-          30 instituições oficiais — bureaus, órgãos federais,<br />
-          segurança pública e registros públicos.
-        </p>
+        <p className="snc-fontes-count">30 fontes oficiais · 9 categorias · cobertura total.</p>
       </div>
 
-      {/* Spotlight — banda institucional em brass */}
       <div className="snc-fontes-bureaus">
-        <div className="snc-fontes-bureaus-label">Fontes de Autoridade</div>
         <div className="snc-fontes-bureaus-list">
           {spotlight.map((b, i) => (
             <span key={b} className="snc-fontes-bureau-item">
@@ -66,7 +52,6 @@ export function FontesSoberanas() {
         </div>
       </div>
 
-      {/* Demais fontes — linhas por categoria */}
       <div className="snc-fontes-grid">
         {rows.map((row) => (
           <div key={row.label} className="snc-fontes-row">
@@ -83,7 +68,6 @@ export function FontesSoberanas() {
         ))}
       </div>
 
-      {/* Rodapé */}
       <div className="snc-fontes-bar">
         <span>30 fontes</span>
         <span className="snc-fontes-bar-dot">·</span>
