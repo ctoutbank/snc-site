@@ -46,7 +46,7 @@ export default async function ModuloPage({ params }: Props) {
       <main>
 
         {/* ── Hero ── */}
-        <section className="snc-hero" style={{ minHeight: 460, background: 'var(--snc-navy)' }}>
+        <section className="snc-hero snc-hero-geo" style={{ minHeight: 460, background: 'var(--snc-navy)' }}>
           <div className="snc-hero-inner" style={{ paddingBottom: 60 }}>
             <div className="snc-hero-meta">
               <div className="l">
