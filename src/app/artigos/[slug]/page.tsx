@@ -54,7 +54,7 @@ export default async function BlogPostPage({ params }: Props) {
       <SiteNav />
 
       {/* ── Hero ── */}
-      <section className="snc-hero" style={{ minHeight: 360 }}>
+      <section className="snc-hero snc-hero-geo" style={{ minHeight: 360 }}>
         <div className="snc-hero-bg" style={{ background: 'var(--snc-navy)' }} />
         <div className="snc-hero-inner" style={{ paddingBottom: 48 }}>
           <div className="snc-hero-meta">
@@ -149,11 +149,11 @@ export default async function BlogPostPage({ params }: Props) {
             <p
               key={i}
               style={{
-                fontSize: i === 0 ? 18 : 16,
+                fontSize: i === 0 ? 15 : 14,
                 color: i === 0 ? '#1e2d3a' : '#3a4a5a',
                 lineHeight: 1.85,
                 fontWeight: i === 0 ? 500 : 400,
-                margin: '0 0 28px',
+                margin: '0 0 24px',
               }}
             >
               {para}
