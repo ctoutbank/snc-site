@@ -621,3 +621,34 @@
   .snc-sector-journey-row { grid-template-columns: 1fr; padding: 28px 0; }
   .snc-sector-journey-row > div:first-child { font-size: 28px !important; }
 }
+
+/* ─── Page-level responsive grids ───────────────────────── */
+/* 1. Module page: title/chips | description */
+.snc-mod-split {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 80px;
+  align-items: start;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+/* 2. Sobre: Transparência / Responsabilidade / Rigor — 3 cols */
+.snc-values-3col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(15,26,36,.14);
+}
+
+@media (max-width: 900px) {
+  .snc-mod-split { gap: 50px; }
+  .snc-values-3col { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+}
+
+@media (max-width: 720px) {
+  .snc-mod-split { grid-template-columns: 1fr !important; gap: 36px !important; }
+  .snc-values-3col { grid-template-columns: 1fr !important; gap: 22px !important; margin-top: 36px !important; }
+}

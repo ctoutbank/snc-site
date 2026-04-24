@@ -63,20 +63,20 @@ export default function SobrePage() {
               </div>
               <div className="snc-hero-stats">
                 <div className="s">
-                  <div className="n">1.240</div>
-                  <div className="l">Instituições atendidas</div>
+                  <div className="n">100<sup>%</sup></div>
+                  <div className="l">Conformidade regulatória</div>
                 </div>
                 <div className="s">
-                  <div className="n">41<sup>Mi</sup></div>
-                  <div className="l">Consultas/mês</div>
+                  <div className="n" style={{ fontSize: 'clamp(22px,3vw,38px)', letterSpacing: '-0.02em' }}>Tempo real</div>
+                  <div className="l">Processamento e análise</div>
                 </div>
                 <div className="s">
-                  <div className="n">180</div>
-                  <div className="l">Colaboradores</div>
+                  <div className="n">1 <sup style={{ fontSize: '.45em' }}>API</sup></div>
+                  <div className="l">Integração com múltiplas fontes</div>
                 </div>
                 <div className="s">
-                  <div className="n">R$ 2,1<sup>Bi</sup></div>
-                  <div className="l">Crédito protegido/mês</div>
+                  <div className="n" style={{ fontSize: 'clamp(18px,2.4vw,30px)', letterSpacing: '-0.01em' }}>Trilha<br/>completa</div>
+                  <div className="l">Auditoria e rastreabilidade</div>
                 </div>
               </div>
             </div>
@@ -94,7 +94,7 @@ export default function SobrePage() {
               que afeta <span className="it">vidas, crédito e liberdade</span> no Brasil.
               Conformidade não é burocracia — é <span className="it">proteção</span>.
             </blockquote>
-            <div style={{ marginTop: 60, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 40, paddingTop: 40, borderTop: '1px solid rgba(15,26,36,.14)' }}>
+            <div className="snc-values-3col">
               {[
                 { title: 'Transparência', desc: 'Toda operação auditada. Todo dataset rastreável à fonte primária. Sem caixas pretas.' },
                 { title: 'Responsabilidade', desc: 'Cada consulta tem nome, data e finalidade declarados. LGPD by design desde 2019.' },

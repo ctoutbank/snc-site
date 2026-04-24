@@ -115,7 +115,7 @@ export default async function ModuloPage({ params }: Props) {
         {/* ── Descrição completa ── */}
         {m.fullDescription && (
           <section className="snc-sec" style={{ paddingTop: 80, paddingBottom: 60 }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 80, alignItems: 'start', maxWidth: 1180, margin: '0 auto' }}>
+            <div className="snc-mod-split">
               <div>
                 <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 18 }}>
                   § Sobre o módulo
