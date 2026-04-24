@@ -1,13 +1,13 @@
 export function FontesSoberanas() {
-  // Autoridades institucionais — destaque brass itálico
-  const spotlight = [
-    'Banco Central do Brasil', 'COAF / UNIDAD', 'Receita Federal',
-    'Polícia Federal', 'STF', 'STJ', 'TSE', 'Polícia Civil',
-    'OFAC — EUA', 'ONU / UNODC', 'INTERPOL', 'TCU', 'CGU',
-  ];
-
-  // Demais fontes — sem duplicatas do spotlight
   const rows = [
+    {
+      label: 'Autoridades',
+      sources: [
+        'Banco Central do Brasil', 'COAF / UNIDAD', 'Receita Federal',
+        'Polícia Federal', 'STF', 'STJ', 'TSE', 'Polícia Civil',
+        'OFAC — EUA', 'ONU / UNODC', 'INTERPOL', 'TCU', 'CGU',
+      ],
+    },
     {
       label: 'Crédito & Bureaus',
       sources: ['SPC Brasil', 'Serasa Experian', 'Boa Vista SCPC', 'Quod', 'PGFN', 'CVM'],
@@ -38,18 +38,7 @@ export function FontesSoberanas() {
         <h2 className="snc-fontes-hl">
           Dados de quem <em>o Brasil confia.</em>
         </h2>
-        <p className="snc-fontes-count">30 fontes oficiais · 9 categorias · cobertura total.</p>
-      </div>
-
-      <div className="snc-fontes-bureaus">
-        <div className="snc-fontes-bureaus-list">
-          {spotlight.map((b, i) => (
-            <span key={b} className="snc-fontes-bureau-item">
-              {i > 0 && <span className="snc-fontes-bureau-sep">·</span>}
-              {b}
-            </span>
-          ))}
-        </div>
+        <p className="snc-fontes-count">30 fontes oficiais · 6 categorias · cobertura total.</p>
       </div>
 
       <div className="snc-fontes-grid">
