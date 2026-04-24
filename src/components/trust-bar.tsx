@@ -8,6 +8,8 @@ export function TrustBar() {
     'TSE',
     'IBAMA / SICAR',
     'COAF',
+    'OFAC — EUA',
+    'ONU / UNODC',
   ];
   return (
     <div className="snc-trust">
