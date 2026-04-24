@@ -20,7 +20,7 @@ export default function JornadasPage() {
             <div className="snc-sec-head">
               <div className="num">§ EIXO II · JORNADAS</div>
               <h2>
-                Sete jornadas. <span className="it">Sete problemas de negócio.</span>
+                Problemas complexos. <span className="it">Soluções estruturadas.</span>
               </h2>
               <div className="aside">
                 Escolha pelo problema que você resolve, não pelo dataset que você usa.
