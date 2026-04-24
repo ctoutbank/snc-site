@@ -4,6 +4,13 @@ import type { NextConfig } from "next";
 const PORTAL_URL = process.env.PORTAL_PROXY_URL || "https://outbank-one.vercel.app";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      // /blog → /artigos (301 permanente para SEO)
+      { source: "/blog", destination: "/artigos", permanent: true },
+      { source: "/blog/:slug", destination: "/artigos/:slug", permanent: true },
+    ];
+  },
   async rewrites() {
     return [
       // Portal de autenticação — mantém snc.consolle.one/auth/sign-in funcionando

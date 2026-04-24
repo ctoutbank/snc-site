@@ -82,7 +82,7 @@ export default function BlogPage() {
           <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.2em', textTransform: 'uppercase', marginBottom: 32 }}>
             § Artigo em destaque
           </div>
-          <Link href={`/blog/${featured.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link href={`/artigos/${featured.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
             <div
               style={{
                 display: 'grid',
@@ -189,7 +189,7 @@ export default function BlogPage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, background: 'rgba(15,26,36,.1)', border: '1px solid rgba(15,26,36,.1)' }}>
             {rest.map((post) => (
-              <Link key={post.slug} href={`/blog/${post.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <Link key={post.slug} href={`/artigos/${post.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                 <article style={{
                   background: '#fff',
                   padding: '36px 32px 40px',

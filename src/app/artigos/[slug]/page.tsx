@@ -58,7 +58,7 @@ export default async function BlogPostPage({ params }: Props) {
         <div className="snc-hero-bg" style={{ background: 'var(--snc-navy)' }} />
         <div className="snc-hero-inner" style={{ paddingBottom: 48 }}>
           <div className="snc-hero-meta">
-            <Link href="/blog" style={{ color: 'inherit', opacity: 0.7, fontSize: 12 }}>
+            <Link href="/artigos" style={{ color: 'inherit', opacity: 0.7, fontSize: 12 }}>
               Blog
             </Link>
             <span style={{ opacity: 0.4, margin: '0 8px' }}>›</span>
@@ -183,7 +183,7 @@ export default async function BlogPostPage({ params }: Props) {
               <Link href="/contato" className="snc-btn snc-btn-primary" style={{ fontSize: 12 }}>
                 Falar com um especialista →
               </Link>
-              <Link href="/blog" className="snc-btn snc-btn-ghost" style={{ fontSize: 12 }}>
+              <Link href="/artigos" className="snc-btn snc-btn-ghost" style={{ fontSize: 12 }}>
                 ← Voltar ao Blog
               </Link>
             </div>
@@ -200,7 +200,7 @@ export default async function BlogPostPage({ params }: Props) {
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: `repeat(${related.length}, 1fr)`, gap: 1, background: 'rgba(15,26,36,.1)', border: '1px solid rgba(15,26,36,.1)' }}>
               {related.map((r) => (
-                <Link key={r.slug} href={`/blog/${r.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <Link key={r.slug} href={`/artigos/${r.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                   <div style={{ background: '#fff', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: 12, height: '100%' }}>
                     <span style={{
                       fontFamily: 'JetBrains Mono, monospace',
