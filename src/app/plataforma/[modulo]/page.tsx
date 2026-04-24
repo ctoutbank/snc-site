@@ -153,7 +153,7 @@ export default async function ModuloPage({ params }: Props) {
 
               {/* Formato rico: título + descrição contextual */}
               {m.useCasesRich && m.useCasesRich.length > 0 ? (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 0, background: 'var(--snc-dot-bg)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, background: 'var(--snc-dot-bg)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
                   {m.useCasesRich.map((uc, i) => (
                     <div key={uc.title} style={{ background: 'var(--snc-paper)', padding: '36px 32px 40px', display: 'flex', flexDirection: 'column', gap: 0, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
@@ -173,7 +173,7 @@ export default async function ModuloPage({ params }: Props) {
                 </div>
               ) : (
                 /* Fallback: apenas labels (formato simples) */
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 0, background: 'var(--snc-dot-bg)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, background: 'var(--snc-dot-bg)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
                   {m.useCases!.map((uc, i) => (
                     <div key={uc} style={{ background: 'var(--snc-paper)', padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: 12, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
                       <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--snc-brass)', letterSpacing: '.16em' }}>
@@ -203,7 +203,7 @@ export default async function ModuloPage({ params }: Props) {
                 </h2>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 0, background: 'var(--snc-dot-bg)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, background: 'var(--snc-dot-bg)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
                 {m.datasetItems.map((ds, i) => (
                   <div key={ds.id} style={{ background: 'var(--snc-paper)', padding: '28px 28px 32px', display: 'flex', flexDirection: 'column', gap: 10, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
