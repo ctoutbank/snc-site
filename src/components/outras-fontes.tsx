@@ -1,10 +1,9 @@
 export function OutrasFontes() {
   const fontes = [
-    'PGFN', 'CVM',
     'SUSEP', 'ANS', 'ANATEL', 'ANAC', 'ANVISA', 'ANP',
     'CNJ', 'TJ Estaduais', 'TJSP / TJRJ', 'TRT', 'Cartório de Protestos', 'Juntas Comerciais',
     'INCRA', 'ANA', 'FUNAI', 'ICMBio',
-    'INSS / CNIS', 'CadÚnico', 'SENATRAN', 'SINESP', 'SENAD', 'DRCI',
+    'INSS / CNIS', 'CadÚnico', 'SENATRAN', 'SINESP',
   ];
 
   return (
