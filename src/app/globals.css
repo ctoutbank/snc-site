@@ -86,43 +86,44 @@
 .snc-trust-in .items span { opacity: .8; }
 
 /* ===== FONTES SOBERANAS ===== */
-.snc-fontes-section { background: var(--snc-paper); border-top: 1px solid rgba(15,26,36,.1); border-bottom: 1px solid rgba(15,26,36,.1); padding: 56px 28px 48px; }
-.snc-fontes-header { max-width: 1180px; margin: 0 auto 40px; display: grid; grid-template-columns: auto 1fr auto; align-items: end; gap: 32px; padding-bottom: 28px; border-bottom: 1px solid rgba(15,26,36,.12); }
-.snc-fontes-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--snc-brass); letter-spacing: .22em; text-transform: uppercase; white-space: nowrap; padding-bottom: 4px; }
-.snc-fontes-headline { font-family: 'Libre Caslon Text', serif; font-size: clamp(26px,3.2vw,42px); font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; color: var(--snc-ink); }
-.snc-fontes-sub { font-size: 12px; color: #6b7785; line-height: 1.6; max-width: 280px; text-align: right; padding-bottom: 4px; }
+.snc-fontes-section { background: var(--snc-paper-2); }
 
-.snc-fontes-rows { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 0; }
-.snc-fontes-row { display: grid; grid-template-columns: 160px 1fr; align-items: baseline; gap: 20px; padding: 14px 0; border-bottom: 1px solid rgba(15,26,36,.07); }
+/* topo */
+.snc-fontes-top { max-width: 1180px; margin: 0 auto; padding: 52px 28px 36px; display: grid; grid-template-columns: auto 1fr auto; align-items: end; gap: 24px 40px; border-bottom: 1px solid rgba(15,26,36,.1); }
+.snc-fontes-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--snc-brass); letter-spacing: .22em; text-transform: uppercase; white-space: nowrap; }
+.snc-fontes-hl { font-family: 'Libre Caslon Text', serif; font-size: clamp(24px,3vw,38px); font-weight: 400; line-height: 1.08; letter-spacing: -0.02em; color: var(--snc-ink); margin: 0; }
+.snc-fontes-hl em { font-style: italic; color: #5a6a7a; }
+.snc-fontes-count { font-size: 12px; color: #6b7785; line-height: 1.65; text-align: right; margin: 0; }
+
+/* spotlight band — Opção C: brass italic sobre navy */
+.snc-fontes-bureaus { background: var(--snc-navy); padding: 24px 28px 28px; border-top: 3px solid var(--snc-brass); }
+.snc-fontes-bureaus-label { max-width: 1180px; margin: 0 auto 14px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(184,145,74,.55); letter-spacing: .26em; text-transform: uppercase; }
+.snc-fontes-bureaus-list { max-width: 1180px; margin: 0 auto; display: flex; align-items: baseline; flex-wrap: wrap; row-gap: 4px; }
+.snc-fontes-bureau-item { font-family: 'Libre Caslon Text', serif; font-size: clamp(15px,1.8vw,22px); color: var(--snc-brass); font-style: italic; font-weight: 400; white-space: nowrap; text-shadow: 0 1px 14px rgba(184,145,74,.28); }
+.snc-fontes-bureau-sep { color: var(--snc-brass); margin: 0 14px; font-size: 0.75em; opacity: .35; font-style: normal; }
+
+/* demais categorias */
+.snc-fontes-grid { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+.snc-fontes-row { display: grid; grid-template-columns: 160px 1fr; align-items: center; padding: 13px 0; border-bottom: 1px solid rgba(15,26,36,.07); }
 .snc-fontes-row:last-child { border-bottom: none; }
-.snc-fontes-row-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--snc-brass); letter-spacing: .18em; text-transform: uppercase; white-space: nowrap; padding-top: 3px; }
-.snc-fontes-row-items { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0; }
-.snc-fontes-item { display: inline-flex; align-items: baseline; gap: 4px; }
-.snc-fontes-dot { color: var(--snc-brass); font-weight: 400; margin: 0 10px; opacity: .7; }
-.snc-fontes-name { color: var(--snc-ink); font-weight: 500; letter-spacing: -0.01em; line-height: 1.2; }
-.snc-fontes-desc { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #8a94a3; letter-spacing: .08em; text-transform: uppercase; margin-left: 5px; }
+.snc-fontes-row-cat { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--snc-brass); letter-spacing: .16em; text-transform: uppercase; white-space: nowrap; }
+.snc-fontes-row-list { display: flex; align-items: center; gap: 0; overflow: hidden; white-space: nowrap; }
+.snc-fontes-row-item { font-family: 'Libre Caslon Text', serif; font-size: clamp(13px,1.4vw,17px); color: var(--snc-ink); font-weight: 400; white-space: nowrap; }
+.snc-fontes-row-sep { color: var(--snc-brass); margin: 0 12px; opacity: .55; }
 
-/* tier sizes */
-.snc-fontes-row--primary .snc-fontes-name { font-family: 'Libre Caslon Text', serif; font-size: clamp(20px,2.2vw,28px); font-weight: 400; }
-.snc-fontes-row--primary .snc-fontes-desc { font-size: 10px; }
-.snc-fontes-row--primary .snc-fontes-dot { font-size: 22px; }
-.snc-fontes-row--secondary .snc-fontes-name { font-family: 'Libre Caslon Text', serif; font-size: clamp(15px,1.6vw,20px); font-weight: 400; }
-.snc-fontes-row--secondary .snc-fontes-dot { font-size: 16px; }
-.snc-fontes-row--tertiary .snc-fontes-name { font-size: 13px; font-weight: 500; }
-.snc-fontes-row--tertiary .snc-fontes-dot { font-size: 13px; }
-.snc-fontes-row--tertiary .snc-fontes-desc { font-size: 8px; }
-
-.snc-fontes-footer { max-width: 1180px; margin: 32px auto 0; padding-top: 20px; border-top: 1px solid rgba(15,26,36,.12); display: flex; align-items: center; gap: 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--snc-brass); letter-spacing: .14em; text-transform: uppercase; }
-.snc-fontes-footer-dot { color: rgba(15,26,36,.3); }
+/* rodapé */
+.snc-fontes-bar { max-width: 1180px; margin: 0 auto; padding: 18px 28px 28px; display: flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--snc-brass); letter-spacing: .16em; text-transform: uppercase; }
+.snc-fontes-bar-dot { opacity: .35; }
 
 /* responsive */
-@media (max-width: 768px) {
-  .snc-fontes-header { grid-template-columns: 1fr; gap: 12px; }
-  .snc-fontes-sub { text-align: left; max-width: 100%; }
-  .snc-fontes-row { grid-template-columns: 1fr; gap: 6px; }
-  .snc-fontes-row-label { display: none; }
+@media (max-width: 860px) {
+  .snc-fontes-top { grid-template-columns: 1fr; gap: 10px; }
+  .snc-fontes-count { text-align: left; }
+  .snc-fontes-row { grid-template-columns: 1fr; gap: 4px; }
+  .snc-fontes-row-cat { display: none; }
+  .snc-fontes-row-list { flex-wrap: wrap; white-space: normal; }
+  .snc-fontes-row-item { font-size: 13px; }
 }
-
 
 /* ===== SECTION HEADERS ===== */
 .snc-sec { padding: 72px 28px; max-width: 1440px; margin: 0 auto; }

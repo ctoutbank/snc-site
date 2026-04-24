@@ -1,10 +1,18 @@
 export function FontesSoberanas() {
-  const bureaus = [
-    'Banco Central · SCR',
-    'SPC Brasil',
-    'Serasa Experian',
-    'Boa Vista SCPC',
-    'Quod',
+  const spotlight = [
+    'Banco Central do Brasil',
+    'COAF / UNIDAD',
+    'Receita Federal',
+    'Polícia Federal',
+    'STF',
+    'STJ',
+    'TSE',
+    'Polícia Civil',
+    'OFAC — EUA',
+    'ONU / UNODC',
+    'INTERPOL',
+    'TCU',
+    'CGU',
   ];
 
   const rows = [
@@ -45,11 +53,11 @@ export function FontesSoberanas() {
         </p>
       </div>
 
-      {/* Bureaus — banda destacada em navy */}
+      {/* Spotlight — banda institucional em brass */}
       <div className="snc-fontes-bureaus">
-        <div className="snc-fontes-bureaus-label">Bureaus de Crédito</div>
+        <div className="snc-fontes-bureaus-label">Fontes de Autoridade</div>
         <div className="snc-fontes-bureaus-list">
-          {bureaus.map((b, i) => (
+          {spotlight.map((b, i) => (
             <span key={b} className="snc-fontes-bureau-item">
               {i > 0 && <span className="snc-fontes-bureau-sep">·</span>}
               {b}
