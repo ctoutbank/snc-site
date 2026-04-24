@@ -62,7 +62,7 @@ export default async function ModuloPage({ params }: Props) {
               </Link>
             </div>
 
-            <div style={{ marginTop: 40 }}>
+            <div style={{ marginTop: 28 }}>
               <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, color: 'var(--snc-brass)', letterSpacing: '.18em', textTransform: 'uppercase', marginBottom: 18 }}>
                 M.{String(moduleIndex).padStart(2, '0')} · MÓDULO SNC
               </div>

@@ -61,7 +61,7 @@
 .snc-hero-bg { position: absolute; inset: 0; overflow: hidden; }
 .snc-hero-bg img { width: 100%; height: 100%; object-fit: cover; opacity: .35; filter: grayscale(1) contrast(1.08); }
 .snc-hero-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg,rgba(10,22,40,.6) 0%,rgba(10,22,40,.85) 60%,var(--snc-navy) 100%); }
-.snc-hero-inner { position: relative; padding: 70px 28px 0; max-width: 1440px; margin: 0 auto; }
+.snc-hero-inner { position: relative; padding: 40px 28px 0; max-width: 1440px; margin: 0 auto; }
 .snc-hero-meta { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; color: #9aa3b2; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 40px; padding-bottom: 16px; border-bottom: 1px solid #1c2a44; }
 .snc-hero-meta .l { display: flex; gap: 28px; align-items: center; }
 .snc-hero-meta .l span { display: flex; gap: 8px; align-items: center; }
