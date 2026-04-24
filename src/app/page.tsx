@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { SiteNav } from '@/components/site-nav';
 import { SiteFooter } from '@/components/site-footer';
 import { HomeHero } from '@/components/home-hero';
+import { TrustBar } from '@/components/trust-bar';
 import { FontesSoberanas } from '@/components/fontes-soberanas';
 import { EixosSection } from '@/components/eixos-section';
 import { ModulesPreview } from '@/components/modules-preview';
@@ -29,6 +30,7 @@ export default function Home() {
       <SiteNav />
       <main>
         <HomeHero />
+        <TrustBar />
         <FontesSoberanas />
         <EixosSection />
         <ModulesPreview />
