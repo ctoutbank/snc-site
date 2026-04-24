@@ -1,9 +1,9 @@
 export function OutrasFontes() {
   const fontes = [
-    'SPC Brasil', 'Serasa Experian', 'Boa Vista SCPC', 'Quod', 'PGFN', 'CVM',
+    'PGFN', 'CVM',
     'SUSEP', 'ANS', 'ANATEL', 'ANAC', 'ANVISA', 'ANP',
     'CNJ', 'TJ Estaduais', 'TJSP / TJRJ', 'TRT', 'Cartório de Protestos', 'Juntas Comerciais',
-    'IBAMA', 'SICAR / CAR', 'INCRA', 'ANA', 'FUNAI', 'ICMBio',
+    'INCRA', 'ANA', 'FUNAI', 'ICMBio',
     'INSS / CNIS', 'CadÚnico', 'SENATRAN', 'SINESP', 'SENAD', 'DRCI',
   ];
 

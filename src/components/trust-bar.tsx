@@ -3,7 +3,6 @@ export function TrustBar() {
     'Banco Central · SCR',
     'Serasa Experian',
     'Boa Vista SCPC',
-    'Quod',
     'SPC Brasil',
     'Receita Federal',
     'TSE',
