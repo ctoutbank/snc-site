@@ -34,6 +34,13 @@ export const metadata: Metadata = {
     'bureaus de crédito', 'SPC', 'Serasa', 'Boa Vista', 'SCR', 'BACEN',
     'LGPD', 'PEP', 'score de crédito', 'datasets', 'API',
   ],
+  icons: {
+    icon: [
+      { url: '/icon.png', type: 'image/png', sizes: '512x512' },
+    ],
+    shortcut: '/icon.png',
+    apple: '/icon.png',
+  },
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
