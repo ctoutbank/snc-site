@@ -54,9 +54,9 @@ export default async function BlogPostPage({ params }: Props) {
       <SiteNav />
 
       {/* ── Hero ── */}
-      <section className="snc-hero" style={{ minHeight: 480 }}>
+      <section className="snc-hero" style={{ minHeight: 360 }}>
         <div className="snc-hero-bg" style={{ background: 'var(--snc-navy)' }} />
-        <div className="snc-hero-inner" style={{ paddingBottom: 60 }}>
+        <div className="snc-hero-inner" style={{ paddingBottom: 48 }}>
           <div className="snc-hero-meta">
             <Link href="/blog" style={{ color: 'inherit', opacity: 0.7, fontSize: 12 }}>
               Blog
@@ -65,7 +65,7 @@ export default async function BlogPostPage({ params }: Props) {
             <span style={{ color: catColor, fontSize: 12 }}>{post.category}</span>
           </div>
 
-          <div style={{ marginTop: 28, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+          <div style={{ marginTop: 24, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
             <span style={{
               fontFamily: 'JetBrains Mono, monospace',
               fontSize: 9,
@@ -85,14 +85,26 @@ export default async function BlogPostPage({ params }: Props) {
             </span>
           </div>
 
-          <h1 className="snc-hero-title" style={{ marginTop: 20, maxWidth: 780 }}>
+          <h1
+            className="snc-hero-title"
+            style={{ marginTop: 18, maxWidth: 720, fontSize: 'clamp(24px, 2.8vw, 36px)', lineHeight: 1.15 }}
+          >
             {post.title}
-            {' '}
-            <em style={{ color: '#8a94a3' }}>{post.subtitle}</em>
           </h1>
+          <p style={{
+            fontFamily: "'Libre Caslon Text', serif",
+            fontStyle: 'italic',
+            fontSize: 14,
+            color: '#6a7a8a',
+            lineHeight: 1.4,
+            margin: '6px 0 0',
+            maxWidth: 600,
+          }}>
+            {post.subtitle}
+          </p>
 
-          <div className="snc-hero-lede">
-            <p style={{ color: '#8a94a3', fontSize: 16, lineHeight: 1.7, maxWidth: 620, margin: 0 }}>
+          <div className="snc-hero-lede" style={{ marginTop: 20 }}>
+            <p style={{ color: '#8a94a3', fontSize: 15, lineHeight: 1.7, maxWidth: 600, margin: 0 }}>
               {post.excerpt}
             </p>
           </div>
@@ -202,7 +214,7 @@ export default async function BlogPostPage({ params }: Props) {
                     }}>
                       {r.category}
                     </span>
-                    <h4 style={{ fontFamily: "'Libre Caslon Text', serif", fontWeight: 400, fontSize: 18, color: 'var(--snc-ink)', lineHeight: 1.2, margin: 0 }}>
+                    <h4 style={{ fontFamily: "'Libre Caslon Text', serif", fontWeight: 400, fontSize: 16, color: 'var(--snc-ink)', lineHeight: 1.25, margin: 0 }}>
                       {r.title}
                     </h4>
                     <p style={{ fontSize: 13, color: '#5a6a7a', lineHeight: 1.65, margin: 0, flex: 1 }}>{r.excerpt}</p>

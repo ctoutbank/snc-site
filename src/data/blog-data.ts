@@ -16,7 +16,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'lgpd-e-bureau-de-dados-como-conciliar',
     title: 'LGPD e Bureau de Dados',
-    subtitle: 'Como conciliar conformidade regulatória com decisão em tempo real',
+    subtitle: 'Conformidade e decisão sem conflito',
     date: '2026-04-18',
     category: 'Compliance',
     author: 'Equipe SNC',
@@ -36,7 +36,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'kyc-digital-alem-do-documento',
     title: 'KYC Digital além do documento',
-    subtitle: 'Por que a verificação de identidade em 2026 exige múltiplas camadas de dados',
+    subtitle: 'Verificação multicamada em tempo real',
     date: '2026-04-10',
     category: 'KYC',
     author: 'Equipe SNC',
@@ -55,7 +55,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'score-de-credito-como-interpretar',
     title: 'Score de Crédito',
-    subtitle: 'Como interpretar e usar corretamente os dados dos bureaus brasileiros',
+    subtitle: 'Quatro bureaus, uma leitura unificada',
     date: '2026-04-03',
     category: 'Crédito',
     author: 'Equipe SNC',
@@ -74,7 +74,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'due-diligence-digital-para-pj',
     title: 'Due Diligence Digital para PJ',
-    subtitle: 'Como automatizar a análise de sócios, vínculos e reputação empresarial',
+    subtitle: 'Sócios, vínculos e reputação automatizados',
     date: '2026-03-27',
     category: 'Due Diligence',
     author: 'Equipe SNC',
@@ -93,7 +93,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'prevencao-fraude-invisivel',
     title: 'A Fraude que você não vê',
-    subtitle: 'Identidades sintéticas e account takeover — os vetores invisíveis de risco em 2026',
+    subtitle: 'Identidades sintéticas e account takeover',
     date: '2026-03-20',
     category: 'Prevenção de Fraude',
     author: 'Equipe SNC',
@@ -112,7 +112,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'pep-e-sancoes-o-que-sua-empresa-precisa-saber',
     title: 'PEP e Sanções Internacionais',
-    subtitle: 'O que sua empresa precisa saber sobre compliance anti-lavagem em 2026',
+    subtitle: 'AML e compliance anti-lavagem em 2026',
     date: '2026-03-13',
     category: 'Compliance',
     author: 'Equipe SNC',
@@ -131,7 +131,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'enriquecimento-de-base-casos-de-uso',
     title: 'Enriquecimento de Base de Dados',
-    subtitle: '5 casos de uso que transformam uma base de clientes em vantagem competitiva',
+    subtitle: '5 casos que geram vantagem real',
     date: '2026-03-06',
     category: 'Dados',
     author: 'Equipe SNC',
@@ -151,7 +151,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'monitoramento-continuo-pos-onboarding',
     title: 'Monitoramento Contínuo',
-    subtitle: 'Por que o risco não termina no onboarding — e como proteger sua carteira em tempo real',
+    subtitle: 'Risco que muda depois do onboarding',
     date: '2026-02-27',
     category: 'Risco',
     author: 'Equipe SNC',

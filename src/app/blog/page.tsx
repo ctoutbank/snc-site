@@ -116,14 +116,14 @@ export default function BlogPage() {
                   <h2 style={{
                     fontFamily: "'Libre Caslon Text', serif",
                     fontWeight: 400,
-                    fontSize: 'clamp(26px, 3vw, 40px)',
+                    fontSize: 'clamp(22px, 2.2vw, 30px)',
                     color: '#fff',
-                    lineHeight: 1.1,
-                    margin: '0 0 12px',
+                    lineHeight: 1.15,
+                    margin: '0 0 8px',
                   }}>
                     {featured.title}
                   </h2>
-                  <p style={{ fontFamily: "'Libre Caslon Text', serif", fontStyle: 'italic', fontSize: 18, color: '#8a94a3', lineHeight: 1.3, margin: '0 0 24px' }}>
+                  <p style={{ fontFamily: "'Libre Caslon Text', serif", fontStyle: 'italic', fontSize: 13, color: '#6a7a8a', lineHeight: 1.4, margin: '0 0 20px', letterSpacing: '.01em' }}>
                     {featured.subtitle}
                   </p>
                   <p style={{ fontSize: 14, color: '#6a7a8a', lineHeight: 1.7, margin: 0 }}>
@@ -217,16 +217,13 @@ export default function BlogPage() {
                   <h3 style={{
                     fontFamily: "'Libre Caslon Text', serif",
                     fontWeight: 400,
-                    fontSize: 20,
+                    fontSize: 17,
                     color: 'var(--snc-ink)',
-                    lineHeight: 1.2,
-                    margin: '0 0 8px',
+                    lineHeight: 1.25,
+                    margin: '0 0 14px',
                   }}>
                     {post.title}
                   </h3>
-                  <p style={{ fontFamily: "'Libre Caslon Text', serif", fontStyle: 'italic', fontSize: 13, color: '#8a94a3', margin: '0 0 16px', lineHeight: 1.4 }}>
-                    {post.subtitle}
-                  </p>
                   <p style={{ fontSize: 13, color: '#5a6a7a', lineHeight: 1.7, margin: 0, flex: 1 }}>
                     {post.excerpt}
                   </p>
