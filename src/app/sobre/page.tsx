@@ -54,12 +54,12 @@ export default function SobrePage() {
             </h1>
             <div className="snc-hero-bottom" style={{ paddingBottom: 40 }}>
               <div className="snc-hero-lede">
-                O Sistema Nacional de Conformidade é uma plataforma brasileira de tecnologia criada
-                para garantir segurança, inteligência e rigor na análise de dados. Desde 2019,
-                evolui continuamente para atender instituições que operam com alto nível de exigência
-                regulatória. Atende o mercado financeiro, fintechs, varejo, operadoras de saúde e o
-                setor público, apoiando decisões mais precisas, redução de riscos e plena aderência
-                às normas vigentes.
+                O Sistema Nacional de Conformidade é uma plataforma brasileira de tecnologia desenvolvida
+                para assegurar integridade, consistência e rigor na análise de dados. Evolui continuamente
+                para atender organizações que operam sob elevados padrões regulatórios e demandam alto nível
+                de confiabilidade em seus processos. Atua de forma abrangente nos setores financeiro, fintechs,
+                varejo, seguros, telecomunicações, operadoras de saúde, exportações e no setor público,
+                sustentando decisões mais seguras, mitigação de riscos e conformidade integral com as normas vigentes.
               </div>
               <div className="snc-hero-stats">
                 <div className="s">
