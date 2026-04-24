@@ -4,6 +4,7 @@ import { SiteFooter } from '@/components/site-footer';
 import { HomeHero } from '@/components/home-hero';
 import { TrustBar } from '@/components/trust-bar';
 import { FontesSoberanas } from '@/components/fontes-soberanas';
+import { OutrasFontes } from '@/components/outras-fontes';
 import { EixosSection } from '@/components/eixos-section';
 import { ModulesPreview } from '@/components/modules-preview';
 import { ManifestoSection } from '@/components/manifesto-section';
@@ -32,6 +33,7 @@ export default function Home() {
         <HomeHero />
         <TrustBar />
         <FontesSoberanas />
+        <OutrasFontes />
         <EixosSection />
         <ModulesPreview />
         <ManifestoSection />
