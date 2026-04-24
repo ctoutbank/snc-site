@@ -24,7 +24,7 @@ function formatDate(dateStr: string) {
   return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
 }
 
-export default function BlogPage() {
+export default function ArtigosPage() {
   const [featured, ...rest] = BLOG_POSTS;
 
   return (
@@ -32,8 +32,7 @@ export default function BlogPage() {
       <SiteNav />
 
       {/* ── Hero ── */}
-      <section className="snc-hero" style={{ minHeight: 420 }}>
-        <div className="snc-hero-bg" style={{ background: 'var(--snc-navy)' }} />
+      <section className="snc-hero snc-hero-geo" style={{ minHeight: 420, background: 'var(--snc-navy)' }}>
         <div className="snc-hero-inner" style={{ paddingBottom: 60 }}>
           <div className="snc-hero-meta">
             <span className="snc-hero-tag">§ ARTIGOS · SNC</span>
@@ -172,7 +171,7 @@ export default function BlogPage() {
                   letterSpacing: '.2em',
                   textTransform: 'uppercase',
                 }}>
-                  SNC · Blog
+                  SNC · Artigos
                 </div>
               </div>
             </div>

@@ -54,12 +54,11 @@ export default async function BlogPostPage({ params }: Props) {
       <SiteNav />
 
       {/* ── Hero ── */}
-      <section className="snc-hero snc-hero-geo" style={{ minHeight: 360 }}>
-        <div className="snc-hero-bg" style={{ background: 'var(--snc-navy)' }} />
+      <section className="snc-hero snc-hero-geo" style={{ minHeight: 360, background: 'var(--snc-navy)' }}>
         <div className="snc-hero-inner" style={{ paddingBottom: 48 }}>
           <div className="snc-hero-meta">
             <Link href="/artigos" style={{ color: 'inherit', opacity: 0.7, fontSize: 12 }}>
-              Blog
+              Artigos
             </Link>
             <span style={{ opacity: 0.4, margin: '0 8px' }}>›</span>
             <span style={{ color: catColor, fontSize: 12 }}>{post.category}</span>
@@ -239,7 +238,7 @@ export default async function BlogPostPage({ params }: Props) {
                 Falar com um especialista →
               </Link>
               <Link href="/artigos" className="snc-btn snc-btn-ghost" style={{ fontSize: 12 }}>
-                ← Voltar ao Blog
+                ← Artigos
               </Link>
             </div>
           </div>
