@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'SNC — Sistema Nacional de Conformidade',
     description: '253 datasets. 9 bureaus. Uma única camada de decisão.',
-    images: [{ url: '/hero-bg.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=1200&q=80', width: 1200, height: 630 }],
   },
 };
 
