@@ -203,7 +203,7 @@ export default async function ModuloPage({ params }: Props) {
                 </h2>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, background: 'var(--snc-dot-bg)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, background: 'rgba(15,26,36,.12)', border: '1px solid rgba(15,26,36,.12)', overflow: 'hidden' }}>
                 {m.datasetItems.map((ds, i) => (
                   <div key={ds.id} style={{ background: '#ffffff', padding: '28px 28px 32px', display: 'flex', flexDirection: 'column', gap: 10, borderRight: '1px solid rgba(15,26,36,.12)', borderBottom: '1px solid rgba(15,26,36,.12)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
