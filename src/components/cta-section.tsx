@@ -31,7 +31,7 @@ export function CtaSection() {
               Porto Alegre · Sede
             </div>
             <div style={{ color: '#bcc4d1', fontSize: 13, lineHeight: 1.8 }}>
-              Av. Ipiranga, 40<br />Trend Office<br />Salas 1201 / 1212<br />CEP 90160-090 · Porto Alegre / RS
+              Av. Ipiranga, 40<br />Trend Office<br />Sala 1212<br />CEP 90160-090 · Porto Alegre / RS
             </div>
           </div>
         </div>

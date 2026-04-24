@@ -25,7 +25,7 @@ export function SiteNav() {
             <span className="dot" />
             Plataforma operacional · SLA 99,98%
           </span>
-          <span>Porto Alegre / RS &nbsp;·&nbsp; Trend Office &nbsp;·&nbsp; Av. Ipiranga, 40 · salas 1201 / 1212</span>
+          <span>Porto Alegre / RS &nbsp;·&nbsp; Trend Office &nbsp;·&nbsp; Av. Ipiranga, 40 · sala 1212</span>
         </div>
         <nav className="snc-nav">
           <Link href="/" className="snc-brand">
