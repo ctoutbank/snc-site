@@ -19,8 +19,16 @@ const nextConfig: NextConfig = {
         source: "/portal/:path*",
         destination: `${PORTAL_URL}/portal/:path*`,
       },
-      // REMOVIDO: /_next/static — causava MIDDLEWARE_INVOCATION_FAILED
-      // REMOVIDO: /api/:path* — conflitava com /api/contact local
+      // Mantém a rota local de contato intocada
+      {
+        source: "/api/contact",
+        destination: "/api/contact",
+      },
+      // Faz proxy de TODAS as outras rotas da API para o outbank-one
+      {
+        source: "/api/:path*",
+        destination: `${PORTAL_URL}/api/:path*`,
+      },
       {
         source: "/icon",
         destination: `${PORTAL_URL}/icon`,
