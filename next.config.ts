@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const PORTAL_URL = process.env.PORTAL_PROXY_URL || "https://outbank-one.vercel.app";
+const PORTAL_URL = process.env.PORTAL_PROXY_URL || "https://outbank.cloud";
 
 const nextConfig: NextConfig = {
   async redirects() {
