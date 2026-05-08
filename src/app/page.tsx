@@ -12,6 +12,7 @@ import { SetoresSection } from '@/components/setores-section';
 import { DatasetsSection } from '@/components/datasets-section';
 import { CertSection } from '@/components/cert-section';
 import { CtaSection } from '@/components/cta-section';
+import { SuperscoreSection } from '@/components/superscore-section';
 
 export const metadata: Metadata = {
   title: 'SNC — Sistema Nacional de Conformidade',
@@ -30,6 +31,7 @@ export default function Home() {
       <SiteNav />
       <main>
         <HomeHero />
+        <SuperscoreSection />
         <TrustBar />
         <OutrasFontes />
         <EixosSection />

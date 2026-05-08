@@ -3,9 +3,11 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { ProtocolValidationModal } from '@/components/protocol-validation-modal';
 
 const NAV_LINKS = [
   { href: '/', label: 'Início', match: (p: string) => p === '/' },
+  { href: '/superscore', label: 'SuperScore', match: (p: string) => p.startsWith('/superscore') },
   { href: '/plataforma', label: 'Plataforma', match: (p: string) => p.startsWith('/plataforma') },
   { href: '/jornadas', label: 'Jornadas', match: (p: string) => p.startsWith('/jornadas') },
   { href: '/setores', label: 'Setores', match: (p: string) => p.startsWith('/setores') },
@@ -16,6 +18,7 @@ const NAV_LINKS = [
 export function SiteNav() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [validationOpen, setValidationOpen] = useState(false);
 
   return (
     <>
@@ -45,12 +48,16 @@ export function SiteNav() {
           </div>
 
           <div className="snc-nav-cta">
+            <button
+              onClick={() => setValidationOpen(true)}
+              className="snc-btn snc-btn-ghost"
+              style={{ color: 'var(--snc-green-2)', border: '1px solid rgba(0, 240, 160, 0.2)' }}
+            >
+              Validar Relatório
+            </button>
             <a href="https://snc.consolle.one/auth/sign-in" className="snc-btn snc-btn-ghost">
               Área Restrita
             </a>
-            <Link href="/contato" className="snc-btn snc-btn-primary">
-              Solicitar Acesso →
-            </Link>
             <button className="snc-menu-btn" onClick={() => setMenuOpen(true)} aria-label="Abrir menu">
               <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.6">
                 <path d="M3 6h18M3 12h18M3 18h18" />
@@ -59,6 +66,11 @@ export function SiteNav() {
           </div>
         </nav>
       </header>
+
+      <ProtocolValidationModal
+        isOpen={validationOpen}
+        onClose={() => setValidationOpen(false)}
+      />
 
       {menuOpen && (
         <div className="snc-mobile-menu">
@@ -78,7 +90,13 @@ export function SiteNav() {
             </Link>
           ))}
           <div style={{ marginTop: 28, display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <Link href="/contato" className="snc-btn snc-btn-primary" onClick={() => setMenuOpen(false)} style={{ justifyContent: 'center' }}>Solicitar Acesso →</Link>
+            <button
+              onClick={() => { setMenuOpen(false); setValidationOpen(true); }}
+              className="snc-btn snc-btn-ghost"
+              style={{ justifyContent: 'center', color: 'var(--snc-green-2)', border: '1px solid rgba(0, 240, 160, 0.2)' }}
+            >
+              Validar Relatório
+            </button>
             <a href="https://snc.consolle.one/auth/sign-in" className="snc-btn snc-btn-ghost" style={{ justifyContent: 'center' }}>Área Restrita</a>
           </div>
           <div style={{ marginTop: 'auto', paddingTop: 30, fontSize: 11, color: '#8a94a3', letterSpacing: '.1em', textTransform: 'uppercase' }}>
