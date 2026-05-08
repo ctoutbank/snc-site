@@ -37,21 +37,53 @@ export function SuperscoreBenefits() {
         </div>
       </div>
 
-      <div className="snc-mod-cards-grid" style={{ background: 'var(--snc-paper-2)', border: '1px solid rgba(15,26,36,0.1)' }}>
+      <div
+        className="snc-mod-cards-grid"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: 0,
+          background: 'var(--snc-paper-2)',
+          border: '1px solid rgba(15,26,36,0.1)'
+        }}
+      >
         {BENEFITS.map((b, i) => (
           <Link key={b.slug} href="/contato" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.15 }}
-              className="snc-mod-card group hover:bg-[var(--snc-paper-3)] transition-colors"
-              style={{ minHeight: '320px', borderRight: '1px solid rgba(15,26,36,0.08)', borderBottom: '1px solid rgba(15,26,36,0.08)' }}
+              style={{
+                minHeight: 320,
+                padding: '36px 28px',
+                background: 'var(--snc-paper)',
+                borderRight: '1px solid rgba(15,26,36,0.08)',
+                borderBottom: '1px solid rgba(15,26,36,0.08)',
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+                cursor: 'pointer',
+                transition: 'background .2s'
+              }}
             >
-              <div className="tag">§ BENEFÍCIO 0{i + 1}</div>
-              <div className="cnt" style={{ fontSize: 32, marginBottom: 20, color: 'var(--snc-brass)' }}>{b.icon}</div>
-              <h4 className="snc-serif text-2xl font-normal mb-4 group-hover:text-[var(--snc-brass)] transition-colors">{b.title}</h4>
-              <p className="text-sm leading-relaxed text-[var(--snc-muted)]">{b.description}</p>
-              <div className="mt-8 text-[10px] uppercase tracking-widest text-[var(--snc-brass)] font-mono opacity-0 group-hover:opacity-100 transition-opacity">
+              <div
+                className="snc-mono"
+                style={{ fontSize: 10, color: 'var(--snc-brass)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 24 }}
+              >
+                § BENEFÍCIO 0{i + 1}
+              </div>
+              <div style={{ fontSize: 32, marginBottom: 20, color: 'var(--snc-brass)' }}>{b.icon}</div>
+              <h4
+                className="snc-serif"
+                style={{ fontSize: 24, fontWeight: 400, marginBottom: 16, color: 'var(--snc-ink)' }}
+              >
+                {b.title}
+              </h4>
+              <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--snc-muted)', flex: 1, margin: 0 }}>{b.description}</p>
+              <div
+                className="snc-mono"
+                style={{ marginTop: 24, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--snc-brass)' }}
+              >
                 Saiba mais →
               </div>
             </motion.div>
@@ -59,17 +91,48 @@ export function SuperscoreBenefits() {
         ))}
 
         <Link href="/contato" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
-          <div className="snc-mod-card flex items-center justify-center bg-[var(--snc-navy)] text-white group cursor-pointer overflow-hidden relative" style={{ height: '100%' }}>
-            <div className="relative z-10 text-center">
-              <div className="snc-mono text-[9px] text-[var(--snc-brass)] uppercase tracking-widest mb-2">PRÓXIMO PASSO</div>
-              <div className="text-lg font-serif">Implementar na<br /><span className="italic text-[var(--snc-brass)]">sua entidade</span></div>
-              <div className="mt-4 text-[10px] uppercase tracking-widest text-white/40 font-mono opacity-0 group-hover:opacity-100 transition-opacity">
+          <div
+            style={{
+              minHeight: 320,
+              padding: '36px 28px',
+              background: 'var(--snc-navy)',
+              color: '#fff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              overflow: 'hidden',
+              position: 'relative',
+              height: '100%'
+            }}
+          >
+            <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+              <div
+                className="snc-mono"
+                style={{ fontSize: 9, color: 'var(--snc-brass)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 8 }}
+              >
+                PRÓXIMO PASSO
+              </div>
+              <div style={{ fontSize: 18, fontFamily: "'Libre Caslon Text', serif" }}>
+                Implementar na<br />
+                <span style={{ fontStyle: 'italic', color: 'var(--snc-brass)' }}>sua entidade</span>
+              </div>
+              <div
+                className="snc-mono"
+                style={{ marginTop: 16, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.2em', color: 'rgba(255,255,255,0.5)' }}
+              >
                 Iniciar Parceria →
               </div>
             </div>
-            <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
-              <div className="w-full h-full" style={{ backgroundImage: 'radial-gradient(var(--snc-brass) 1px, transparent 1px)', backgroundSize: '10px 10px' }} />
-            </div>
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                opacity: 0.1,
+                backgroundImage: 'radial-gradient(var(--snc-brass) 1px, transparent 1px)',
+                backgroundSize: '10px 10px'
+              }}
+            />
           </div>
         </Link>
       </div>

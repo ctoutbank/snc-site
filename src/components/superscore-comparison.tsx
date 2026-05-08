@@ -35,41 +35,89 @@ export function SuperscoreComparison() {
       </div>
 
       <div className="snc-mod-section-wrap">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-[rgba(15,26,36,0.12)] bg-[var(--snc-paper-2)] overflow-hidden">
-          <div className="p-8 md:p-12 border-b md:border-b-0 md:border-r border-[rgba(15,26,36,0.12)]">
-            <div className="snc-mono text-[10px] text-[var(--snc-muted)] uppercase tracking-widest mb-6">— MODELO TRADICIONAL</div>
-            <h3 className="snc-serif text-3xl font-normal text-[var(--snc-ink)] mb-8">Fragmentação & Risco</h3>
+        <div
+          className="snc-superscore-comparison"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: 0,
+            border: '1px solid rgba(15,26,36,0.12)',
+            background: 'var(--snc-paper-2)',
+            overflow: 'hidden'
+          }}
+        >
+          {/* Tradicional */}
+          <div style={{ padding: '48px', borderRight: '1px solid rgba(15,26,36,0.12)' }}>
+            <div
+              className="snc-mono"
+              style={{ fontSize: 10, color: 'var(--snc-muted)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 24 }}
+            >
+              — MODELO TRADICIONAL
+            </div>
+            <h3
+              className="snc-serif"
+              style={{ fontSize: 30, fontWeight: 400, color: 'var(--snc-ink)', marginBottom: 32, lineHeight: 1.1 }}
+            >
+              Fragmentação &amp; Risco
+            </h3>
 
-            <div className="space-y-6">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
               {data.map((item, i) => (
-                <div key={i} className="flex gap-4 items-start opacity-60">
-                  <span className="text-[var(--snc-muted)] mt-1">—</span>
-                  <p className="text-sm text-[var(--snc-ink)] leading-relaxed">{item.trad}</p>
+                <div key={i} style={{ display: 'flex', gap: 16, alignItems: 'flex-start', opacity: 0.6 }}>
+                  <span style={{ color: 'var(--snc-muted)', marginTop: 4 }}>—</span>
+                  <p style={{ fontSize: 14, color: 'var(--snc-ink)', lineHeight: 1.6, margin: 0 }}>{item.trad}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="p-8 md:p-12 bg-white relative">
-            <div className="snc-mono text-[10px] text-[var(--snc-brass)] uppercase tracking-widest mb-6">+ SUPERSCORE ENGINE</div>
-            <h3 className="snc-serif text-3xl font-normal text-[var(--snc-navy)] mb-8">Unificação & Agilidade</h3>
+          {/* SuperScore */}
+          <div style={{ padding: '48px', background: '#fff', position: 'relative' }}>
+            <div
+              className="snc-mono"
+              style={{ fontSize: 10, color: 'var(--snc-brass)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 24 }}
+            >
+              + SUPERSCORE ENGINE
+            </div>
+            <h3
+              className="snc-serif"
+              style={{ fontSize: 30, fontWeight: 400, color: 'var(--snc-navy)', marginBottom: 32, lineHeight: 1.1 }}
+            >
+              Unificação &amp; Agilidade
+            </h3>
 
-            <div className="space-y-6">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
               {data.map((item, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, x: 10 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1 }}
-                  className="flex gap-4 items-start"
+                  style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}
                 >
-                  <span className="text-[var(--snc-green-2)] mt-1 font-bold">+</span>
-                  <p className="text-sm text-[var(--snc-navy)] font-medium leading-relaxed">{item.super}</p>
+                  <span style={{ color: 'var(--snc-green-2)', marginTop: 4, fontWeight: 700 }}>+</span>
+                  <p style={{ fontSize: 14, color: 'var(--snc-navy)', fontWeight: 500, lineHeight: 1.6, margin: 0 }}>{item.super}</p>
                 </motion.div>
               ))}
             </div>
 
-            <div className="absolute top-8 right-8 w-12 h-12 border border-[var(--snc-brass)] opacity-10 rounded-full flex items-center justify-center font-serif text-xs">
+            <div
+              style={{
+                position: 'absolute',
+                top: 32,
+                right: 32,
+                width: 48,
+                height: 48,
+                border: '1px solid var(--snc-brass)',
+                opacity: 0.1,
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontFamily: 'serif',
+                fontSize: 12
+              }}
+            >
               SNC
             </div>
           </div>

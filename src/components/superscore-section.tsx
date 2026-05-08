@@ -61,7 +61,10 @@ export function SuperscoreSection() {
           border: '1px solid rgba(255,255,255,0.05)'
         }}>
           <SuperscoreVisual />
-          <div className="absolute inset-0 pointer-events-none" style={{
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
             background: 'radial-gradient(circle at center, transparent 30%, var(--snc-navy) 100%)',
             opacity: 0.4
           }} />

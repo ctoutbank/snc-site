@@ -44,7 +44,7 @@ export function SuperscoreEngine() {
         </div>
       </div>
 
-      <div className="snc-eixos-grid">
+      <div className="snc-eixos-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
         {STEPS.map((step) => (
           <Link key={step.num} href={step.url} className="snc-eixo-card" style={{ textDecoration: 'none' }}>
             <div className="num">ETAPA {step.num}</div>

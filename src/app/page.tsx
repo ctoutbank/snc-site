@@ -31,10 +31,10 @@ export default function Home() {
       <SiteNav />
       <main>
         <HomeHero />
-        <SuperscoreSection />
         <TrustBar />
         <OutrasFontes />
         <EixosSection />
+        <SuperscoreSection />
         <ModulesPreview />
         <ManifestoSection />
         <JornadasSection />
