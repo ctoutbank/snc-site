@@ -11,6 +11,9 @@ export type ValidationResult = {
     timestamp: string;
     module: string;
     document: string;
+    documentType?: string;
+    name?: string;
+    datasets?: string[];
     hashMatches: boolean;
   };
 };
@@ -254,8 +257,8 @@ export function ProtocolValidationModal({ isOpen, onClose }: ProtocolValidationM
                 </button>
               </form>
             </>
-          ) : result.success && result.data?.hashMatches ? (
-            <ResultSuccess data={result.data} onReset={reset} />
+          ) : result.success && result.data ? (
+            <ResultSuccess data={result.data} message={result.message} onReset={reset} />
           ) : (
             <ResultError message={result.message} onReset={reset} />
           )}
@@ -284,22 +287,49 @@ export function ProtocolValidationModal({ isOpen, onClose }: ProtocolValidationM
   );
 }
 
-function ResultSuccess({ data, onReset }: { data: NonNullable<ValidationResult['data']>; onReset: () => void }) {
+function ResultSuccess({
+  data,
+  message,
+  onReset,
+}: {
+  data: NonNullable<ValidationResult['data']>;
+  message: string;
+  onReset: () => void;
+}) {
+  const matched = data.hashMatches;
+  const accent = matched ? 'var(--snc-green-2)' : '#c89a3a';
+  const accentBg = matched ? 'rgba(43, 168, 74, 0.1)' : 'rgba(184, 145, 74, 0.12)';
+  const accentBorder = matched ? 'rgba(43, 168, 74, 0.3)' : 'rgba(184, 145, 74, 0.4)';
+
+  const rows: Array<[string, string, boolean]> = [
+    ['Protocolo', data.protocol, true],
+    ['Data/Hora', new Date(data.timestamp).toLocaleString('pt-BR'), false],
+    ['Módulo', (data.module || '').toUpperCase(), false],
+  ];
+  if (data.documentType) rows.push(['Tipo', data.documentType, false]);
+  rows.push(['Documento', data.document, true]);
+  if (data.name) rows.push(['Titular', data.name, false]);
+
+  const datasets = data.datasets || [];
+  const datasetsLabel = datasets.length
+    ? `${datasets.length} dataset${datasets.length > 1 ? 's' : ''} consultado${datasets.length > 1 ? 's' : ''}`
+    : null;
+
   return (
     <div>
-      <div style={{ textAlign: 'center', marginBottom: 24 }}>
+      <div style={{ textAlign: 'center', marginBottom: 20 }}>
         <div
           style={{
             width: 56,
             height: 56,
             borderRadius: '50%',
-            background: 'rgba(43, 168, 74, 0.1)',
-            border: '1px solid rgba(43, 168, 74, 0.3)',
+            background: accentBg,
+            border: `1px solid ${accentBorder}`,
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: 'var(--snc-green-2)',
-            marginBottom: 16,
+            color: accent,
+            marginBottom: 14,
           }}
         >
           <CheckCircle2 width={28} height={28} />
@@ -308,15 +338,31 @@ function ResultSuccess({ data, onReset }: { data: NonNullable<ValidationResult['
           className="snc-serif"
           style={{ fontSize: 22, fontWeight: 400, color: 'var(--snc-navy)', marginBottom: 4 }}
         >
-          Documento autêntico
+          Consulta verificada
         </div>
         <div
           className="snc-mono"
-          style={{ fontSize: 10, color: 'var(--snc-green-2)', textTransform: 'uppercase', letterSpacing: '0.2em' }}
+          style={{ fontSize: 10, color: accent, textTransform: 'uppercase', letterSpacing: '0.2em' }}
         >
-          Integridade digital confirmada
+          {matched ? 'Integridade digital confirmada' : 'Consulta localizada'}
         </div>
       </div>
+
+      <p
+        style={{
+          fontSize: 12,
+          color: '#4a5662',
+          lineHeight: 1.6,
+          margin: '0 0 18px',
+          textAlign: 'center',
+          padding: '10px 14px',
+          background: accentBg,
+          border: `1px solid ${accentBorder}`,
+          borderRadius: 2,
+        }}
+      >
+        {message}
+      </p>
 
       <div
         style={{
@@ -342,33 +388,54 @@ function ResultSuccess({ data, onReset }: { data: NonNullable<ValidationResult['
           Metadados da Auditoria
         </div>
         <div style={{ padding: '4px 16px' }}>
-          {[
-            ['Protocolo', data.protocol, true],
-            ['Data/Hora', new Date(data.timestamp).toLocaleString('pt-BR'), false],
-            ['Módulo', (data.module || '').toUpperCase(), false],
-            ['Documento', data.document, true],
-          ].map(([label, value, mono]) => (
+          {rows.map(([label, value, mono], i) => (
             <div
-              key={label as string}
+              key={label}
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                gap: 16,
                 padding: '10px 0',
-                borderBottom: '1px solid rgba(15, 26, 36, 0.05)',
+                borderBottom: i < rows.length - 1 ? '1px solid rgba(15, 26, 36, 0.05)' : 'none',
                 fontSize: 13,
               }}
             >
-              <span style={{ color: 'var(--snc-muted)' }}>{label}</span>
+              <span style={{ color: 'var(--snc-muted)', flexShrink: 0 }}>{label}</span>
               <span
                 className={mono ? 'snc-mono' : ''}
-                style={{ color: 'var(--snc-ink)' }}
+                style={{ color: 'var(--snc-ink)', textAlign: 'right' }}
               >
                 {value}
               </span>
             </div>
           ))}
         </div>
+        {datasetsLabel && (
+          <div
+            style={{
+              padding: '12px 16px',
+              borderTop: '1px solid rgba(15, 26, 36, 0.08)',
+              background: 'rgba(15, 26, 36, 0.02)',
+            }}
+          >
+            <div
+              className="snc-mono"
+              style={{
+                fontSize: 9,
+                color: 'var(--snc-brass)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.2em',
+                marginBottom: 6,
+              }}
+            >
+              {datasetsLabel}
+            </div>
+            <div style={{ fontSize: 11, color: '#4a5662', lineHeight: 1.5, wordBreak: 'break-word' }}>
+              {datasets.join(' · ')}
+            </div>
+          </div>
+        )}
       </div>
 
       <button
