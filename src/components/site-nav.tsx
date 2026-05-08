@@ -51,11 +51,31 @@ export function SiteNav() {
             <button
               onClick={() => setValidationOpen(true)}
               className="snc-btn snc-btn-ghost"
-              style={{ color: 'var(--snc-green-2)', border: '1px solid rgba(0, 240, 160, 0.2)', fontFamily: 'inherit', fontSize: 13, lineHeight: 'inherit' }}
+              style={{
+                color: 'var(--snc-green-2)',
+                border: '1px solid rgba(0, 240, 160, 0.4)',
+                height: 40,
+                padding: '0 18px',
+                fontFamily: 'inherit',
+                fontSize: 13,
+                lineHeight: 1,
+                boxSizing: 'border-box',
+              }}
             >
               Validar Relatório
             </button>
-            <a href="https://snc.consolle.one/auth/sign-in" className="snc-btn snc-btn-ghost">
+            <a
+              href="https://snc.consolle.one/auth/sign-in"
+              className="snc-btn snc-btn-ghost"
+              style={{
+                height: 40,
+                padding: '0 18px',
+                fontFamily: 'inherit',
+                fontSize: 13,
+                lineHeight: 1,
+                boxSizing: 'border-box',
+              }}
+            >
               Área Restrita
             </a>
             <button className="snc-menu-btn" onClick={() => setMenuOpen(true)} aria-label="Abrir menu">
@@ -93,11 +113,35 @@ export function SiteNav() {
             <button
               onClick={() => { setMenuOpen(false); setValidationOpen(true); }}
               className="snc-btn snc-btn-ghost"
-              style={{ justifyContent: 'center', color: 'var(--snc-green-2)', border: '1px solid rgba(0, 240, 160, 0.2)' }}
+              style={{
+                justifyContent: 'center',
+                color: 'var(--snc-green-2)',
+                border: '1px solid rgba(0, 240, 160, 0.4)',
+                height: 44,
+                padding: '0 18px',
+                fontFamily: 'inherit',
+                fontSize: 13,
+                lineHeight: 1,
+                boxSizing: 'border-box',
+              }}
             >
               Validar Relatório
             </button>
-            <a href="https://snc.consolle.one/auth/sign-in" className="snc-btn snc-btn-ghost" style={{ justifyContent: 'center' }}>Área Restrita</a>
+            <a
+              href="https://snc.consolle.one/auth/sign-in"
+              className="snc-btn snc-btn-ghost"
+              style={{
+                justifyContent: 'center',
+                height: 44,
+                padding: '0 18px',
+                fontFamily: 'inherit',
+                fontSize: 13,
+                lineHeight: 1,
+                boxSizing: 'border-box',
+              }}
+            >
+              Área Restrita
+            </a>
           </div>
           <div style={{ marginTop: 'auto', paddingTop: 30, fontSize: 11, color: '#8a94a3', letterSpacing: '.1em', textTransform: 'uppercase' }}>
             Trend Office<br />Av. Ipiranga, 40 · Porto Alegre / RS
