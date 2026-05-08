@@ -51,7 +51,7 @@ export function SiteNav() {
             <button
               onClick={() => setValidationOpen(true)}
               className="snc-btn snc-btn-ghost"
-              style={{ color: 'var(--snc-green-2)', border: '1px solid rgba(0, 240, 160, 0.2)' }}
+              style={{ color: 'var(--snc-green-2)', border: '1px solid rgba(0, 240, 160, 0.2)', fontFamily: 'inherit', fontSize: 13, lineHeight: 'inherit' }}
             >
               Validar Relatório
             </button>

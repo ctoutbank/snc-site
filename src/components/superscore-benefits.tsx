@@ -27,7 +27,7 @@ const BENEFITS = [
 
 export function SuperscoreBenefits() {
   return (
-    <section className="snc-sec" style={{ padding: '120px 28px' }}>
+    <section className="snc-sec" style={{ padding: '70px 28px' }}>
       <div className="snc-sec-head" style={{ borderBottomColor: 'rgba(15,26,36,0.08)' }}>
         <div className="num">§ VALOR ESTRATÉGICO</div>
         <h2>Vantagens para o <span className="it">associado</span> e para a <span className="it">associação.</span></h2>

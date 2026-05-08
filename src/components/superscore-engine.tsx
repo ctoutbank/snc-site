@@ -34,7 +34,7 @@ const STEPS = [
 
 export function SuperscoreEngine() {
   return (
-    <section className="snc-sec" style={{ padding: '120px 28px' }}>
+    <section className="snc-sec" style={{ padding: '70px 28px' }}>
       <div className="snc-sec-head">
         <div className="num">§ O MOTOR</div>
         <h2>A engenharia por trás da <span className="it">decisão.</span></h2>

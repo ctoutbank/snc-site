@@ -68,7 +68,7 @@ export default function SuperscorePage() {
         </section>
 
         <section className="snc-cta">
-          <div className="snc-cta-in" style={{ gridTemplateColumns: '1fr', textAlign: 'center', padding: '120px 28px' }}>
+          <div className="snc-cta-in" style={{ gridTemplateColumns: '1fr', textAlign: 'center', padding: '70px 28px' }}>
             <div className="snc-cta-left" style={{ maxWidth: 800, margin: '0 auto' }}>
               <div className="kicker">§ ACESSO IMEDIATO</div>
               <h2>

@@ -20,7 +20,7 @@ const METRICS = [
 
 export function SuperscoreMetrics() {
   return (
-    <section className="snc-sec" style={{ background: 'var(--snc-navy)', color: '#fff', padding: '120px 28px' }}>
+    <section className="snc-sec" style={{ background: 'var(--snc-navy)', color: '#fff', padding: '70px 28px' }}>
       <div className="snc-sec-head" style={{ borderBottomColor: 'rgba(255,255,255,0.1)' }}>
         <div className="num" style={{ color: 'var(--snc-brass)' }}>§ PERFORMANCE</div>
         <h2 style={{ color: '#fff' }}>Impacto real na <span className="it" style={{ color: '#8a94a3' }}>última linha.</span></h2>

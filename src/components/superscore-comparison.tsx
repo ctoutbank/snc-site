@@ -24,8 +24,8 @@ export function SuperscoreComparison() {
   ];
 
   return (
-    <section className="snc-sec" style={{ padding: '120px 28px', background: 'var(--snc-paper)' }}>
-      <div className="snc-sec-head" style={{ marginBottom: 80 }}>
+    <section className="snc-sec" style={{ padding: '70px 28px', background: 'var(--snc-paper)' }}>
+      <div className="snc-sec-head" style={{ marginBottom: 48 }}>
         <div className="num">§ A ESCOLHA</div>
         <h2>Bureaus vendem <span className="it">silos.</span><br />O SuperScore entrega <span className="it">resposta.</span></h2>
         <div className="aside">
