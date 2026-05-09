@@ -39,7 +39,7 @@ export function RelatorioExemploSection() {
                 </div>
                 <div>
                    <h4 style={{ margin: '0 0 4px 0', fontSize: '18px', fontWeight: '600' }}>Fé Pública e Evidência</h4>
-                   <p style={{ fontSize: '14px', color: '#8a94a3', margin: 0, lineHeight: '1.5' }}>
+                   <p style={{ fontSize: '14px', color: '#4a5568', margin: 0, lineHeight: '1.5' }}>
                       Dados extraídos diretamente de fontes soberanas com registro de timestamp imutável.
                    </p>
                 </div>
@@ -51,7 +51,7 @@ export function RelatorioExemploSection() {
                 </div>
                 <div>
                    <h4 style={{ margin: '0 0 4px 0', fontSize: '18px', fontWeight: '600' }}>Rastreabilidade Digital</h4>
-                   <p style={{ fontSize: '14px', color: '#8a94a3', margin: 0, lineHeight: '1.5' }}>
+                   <p style={{ fontSize: '14px', color: '#4a5568', margin: 0, lineHeight: '1.5' }}>
                       Assinatura digital SHA-256 única para cada dossiê, garantindo a integridade absoluta da informação.
                    </p>
                 </div>
@@ -60,11 +60,12 @@ export function RelatorioExemploSection() {
 
           <div className="snc-ds-ctas" style={{ marginTop: '20px' }}>
             <Link
-              href="/plataforma"
+              href="/relatorio/snc/exemplo"
+              target="_blank"
               className="snc-btn snc-btn-primary"
               style={{ padding: '16px 28px', fontSize: '14px' }}
             >
-              Conheça a Plataforma <ExternalLink size={16} />
+              Visualizar Modelo de Relatório <ExternalLink size={16} />
             </Link>
           </div>
         </div>

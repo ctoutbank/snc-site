@@ -33,6 +33,11 @@ const nextConfig: NextConfig = {
         source: "/icon",
         destination: `${PORTAL_URL}/icon`,
       },
+      // Proxy do relatório SNC para outbank-one (inclui /relatorio/snc/exemplo)
+      {
+        source: "/relatorio/:path*",
+        destination: `${PORTAL_URL}/relatorio/:path*`,
+      },
     ];
   },
 };

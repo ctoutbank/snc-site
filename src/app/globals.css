@@ -585,6 +585,16 @@ img { display: block; max-width: 100%; }
   color: #fff;
   padding: 0;
 }
+.snc-ds-premium-alt {
+  background: var(--snc-dot-bg);
+  color: var(--snc-navy);
+  padding: 0;
+}
+.snc-ds-premium-alt .snc-ds-header h2 { color: var(--snc-navy); }
+.snc-ds-premium-alt .snc-ds-header-num { color: var(--snc-brass); }
+.snc-ds-premium-alt .snc-ds-header-right { color: #3a4252; }
+.snc-ds-premium-alt .snc-ds-copy { color: #3a4252; }
+.snc-ds-premium-alt .snc-ds-col-left { border-right-color: rgba(15,26,36,.12); }
 .snc-ds-header {
   display: grid;
   grid-template-columns: 1fr 1fr;
