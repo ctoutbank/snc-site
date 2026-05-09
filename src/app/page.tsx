@@ -9,6 +9,7 @@ import { ModulesPreview } from '@/components/modules-preview';
 import { ManifestoSection } from '@/components/manifesto-section';
 import { JornadasSection } from '@/components/jornadas-section';
 import { SetoresSection } from '@/components/setores-section';
+import { RelatorioExemploSection } from '@/components/relatorio-exemplo-section';
 import { DatasetsSection } from '@/components/datasets-section';
 import { CertSection } from '@/components/cert-section';
 import { CtaSection } from '@/components/cta-section';
@@ -39,6 +40,7 @@ export default function Home() {
         <ManifestoSection />
         <JornadasSection />
         <SetoresSection />
+        <RelatorioExemploSection />
         <DatasetsSection />
         <CertSection />
         <CtaSection />
