@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { RelatorioToolbar } from './toolbar';
 
 export const metadata: Metadata = {
   title: 'SNC · Relatório Exemplo #9999',
@@ -21,10 +22,14 @@ export default function RelatorioExemploPage() {
         :root{--navy:#0a1628;--paper:#f4f1ea;--ink:#0a0e16;--ink2:#3a4252;--rule:#1a2742;--green:#2ba84a;--greend:#1d7a36;--brass:#c8a25a;}
         html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;margin:0;padding:0}
         .r-tb{position:sticky;top:0;z-index:50;background:var(--navy);color:#fff;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--rule)}
+        .r-tb .left{display:flex;align-items:center;gap:18px}
+        .r-tb .right{display:flex;gap:10px}
         .r-tb .ref{font-family:'JetBrains Mono',monospace;font-size:11px;color:#8a94a3;letter-spacing:.1em;text-transform:uppercase}
         .r-tb .ref strong{color:#fff;font-weight:500}
         .r-btn{padding:10px 16px;font-size:12px;letter-spacing:.04em;text-transform:uppercase;font-family:'Inter',sans-serif;font-weight:500;border:1px solid #2a3a55;color:#fff;background:transparent;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .15s;text-decoration:none}
         .r-btn:hover{background:#17243b}
+        .r-btn.primary{background:var(--green);border-color:var(--green);color:#0a1628;font-weight:600}
+        .r-btn.primary:hover{background:var(--greend);color:#fff}
         .r-page{max-width:960px;margin:24px auto;background:var(--paper);box-shadow:0 18px 60px rgba(10,22,40,.18);position:relative;overflow:hidden}
         .r-wm{position:absolute;top:46%;left:50%;transform:translate(-50%,-50%) rotate(-22deg);font-family:'Libre Caslon Text',serif;font-size:140px;color:rgba(10,22,40,.04);pointer-events:none;font-style:italic;z-index:0;font-weight:700;white-space:nowrap}
         .r-page>*:not(.r-wm){position:relative;z-index:1}
@@ -118,15 +123,7 @@ export default function RelatorioExemploPage() {
       `}</style>
 
       {/* TOOLBAR */}
-      <div className="r-tb">
-        <div className="ref">
-          <strong>SNC</strong> &nbsp;·&nbsp; Relatório Consolidado &nbsp;·&nbsp; Protocolo <strong>{protocol}</strong>
-        </div>
-        <div style={{ display: 'flex', gap: 10 }}>
-          <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 9, letterSpacing: '.1em', color: '#b8914a', textTransform: 'uppercase', display: 'flex', alignItems: 'center' }}>DEMONSTRAÇÃO</span>
-          <a href="/" className="r-btn">← Voltar ao site</a>
-        </div>
-      </div>
+      <RelatorioToolbar protocol={protocol} />
 
       <div className="r-page">
         <div className="r-wm">SNC · DEMONSTRAÇÃO</div>
