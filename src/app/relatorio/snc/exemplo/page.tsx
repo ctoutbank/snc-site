@@ -114,17 +114,43 @@ export default function RelatorioExemploPage() {
           .r-tb{padding:10px 14px;flex-wrap:wrap;gap:8px}
         }
         @media print{
-          @page{size:A4;margin:1cm}
-          html,body{background:#fff !important}
+          @page{size:A4;margin:1.2cm 1cm}
+          html,body{background:#fff !important;font-size:11px;orphans:3;widows:3}
+          /* ocultar UI */
           .r-tb{display:none !important}
-          .r-page{margin:0;box-shadow:none;max-width:100%;overflow:visible}
+          /* container */
+          .r-page{margin:0;box-shadow:none;max-width:100%;width:100%;overflow:visible;background:var(--paper) !important}
+          /* cores exatas */
           *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;color-adjust:exact !important}
+          /* cabeçalho + meta: nunca quebrar internamente, nunca deixar órfão */
+          .r-head{padding:28px 24px 22px;page-break-inside:avoid;break-inside:avoid;page-break-after:avoid;break-after:avoid}
+          .r-head-top{page-break-inside:avoid;break-inside:avoid}
+          .r-title{page-break-inside:avoid;break-inside:avoid}
+          .r-ms{page-break-inside:avoid;break-inside:avoid;page-break-after:avoid;break-after:avoid}
+          /* sumário executivo: nunca quebrar */
+          .r-sec:not(.r-sec-results){page-break-inside:avoid;break-inside:avoid;padding:24px 24px}
+          .r-summary{page-break-inside:avoid;break-inside:avoid}
+          .r-sl .pfs{page-break-inside:avoid;break-inside:avoid}
+          .r-vrd{page-break-inside:avoid;break-inside:avoid}
+          .r-vrd-result{page-break-inside:avoid;break-inside:avoid}
+          /* §02 Resultados: sempre começa em nova página */
+          .r-sec-results{page-break-before:always !important;break-before:page !important;padding:24px 24px}
+          /* cabeçalho de cada bloco de dataset: nunca fica órfão */
+          .ds-hd{page-break-after:avoid;break-after:avoid}
+          /* linha de dado: nunca parte ao meio */
+          .ds-row{page-break-inside:avoid;break-inside:avoid}
+          /* bloco completo: não forçar avoid (evita saltar páginas em blocos grandes),
+             mas garante que o header sempre acompanha pelo menos a 1ª linha via ds-hd avoid */
+          .ds-block{page-break-inside:auto;break-inside:auto;margin-bottom:20px}
+          /* hash e seção de assinatura */
+          .hash-block{page-break-inside:avoid;break-inside:avoid}
+          .r-sh{page-break-after:avoid;break-after:avoid}
           h1,h2,h3,h4{page-break-after:avoid;break-after:avoid}
-          .r-sec{page-break-inside:avoid;break-inside:avoid}
-          .r-sec-results{page-break-before:always !important;break-before:page !important}
-          .r-sig{page-break-before:always;break-before:page;page-break-inside:avoid;break-inside:avoid}
-          .ds-block{page-break-inside:avoid;break-inside:avoid}
-          .r-head,.r-ms{page-break-after:avoid;break-after:avoid}
+          /* assinatura sempre em nova página */
+          .r-sig{page-break-before:always;break-before:page;page-break-inside:avoid;break-inside:avoid;padding:28px 24px}
+          .r-foot{padding:10px 24px;page-break-inside:avoid;break-inside:avoid}
+          /* reduz padding lateral de todas as seções */
+          .r-sec{padding-left:24px;padding-right:24px}
         }
       `}</style>
 
