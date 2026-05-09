@@ -117,8 +117,14 @@ export default function RelatorioExemploPage() {
           @page{size:A4;margin:1cm}
           html,body{background:#fff !important}
           .r-tb{display:none !important}
-          .r-page{margin:0;box-shadow:none;max-width:100%}
-          *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
+          .r-page{margin:0;box-shadow:none;max-width:100%;overflow:visible}
+          *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;color-adjust:exact !important}
+          h1,h2,h3,h4{page-break-after:avoid;break-after:avoid}
+          .r-sec{page-break-inside:avoid;break-inside:avoid}
+          .r-sec-results{page-break-before:always !important;break-before:page !important}
+          .r-sig{page-break-before:always;break-before:page;page-break-inside:avoid;break-inside:avoid}
+          .ds-block{page-break-inside:avoid;break-inside:avoid}
+          .r-head,.r-ms{page-break-after:avoid;break-after:avoid}
         }
       `}</style>
 
@@ -216,7 +222,7 @@ export default function RelatorioExemploPage() {
         </section>
 
         {/* §02 RESULTADOS */}
-        <section className="r-sec">
+        <section className="r-sec r-sec-results">
           <div className="r-sh">
             <div className="num">§ 02</div>
             <h2>Resultados da consulta</h2>
