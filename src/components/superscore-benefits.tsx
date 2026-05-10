@@ -48,7 +48,7 @@ export function SuperscoreBenefits() {
         }}
       >
         {BENEFITS.map((b, i) => (
-          <Link key={b.slug} href="/contato" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+          <Link key={b.slug} href={`/vantagens/${b.slug}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -90,7 +90,7 @@ export function SuperscoreBenefits() {
           </Link>
         ))}
 
-        <Link href="/contato" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+        <Link href="/vantagens/implementar" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
           <div
             style={{
               minHeight: 320,
