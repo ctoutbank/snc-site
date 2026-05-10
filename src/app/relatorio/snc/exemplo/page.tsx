@@ -146,9 +146,9 @@ export default function RelatorioExemploPage() {
           .hash-block{page-break-inside:avoid;break-inside:avoid}
           .r-sh{page-break-after:avoid;break-after:avoid}
           h1,h2,h3,h4{page-break-after:avoid;break-after:avoid}
-          /* assinatura sempre em nova página */
-          .r-sig{page-break-before:always;break-before:page;page-break-inside:avoid;break-inside:avoid;padding:28px 24px}
-          .r-foot{padding:10px 24px;page-break-inside:avoid;break-inside:avoid}
+          /* assinatura sempre em nova página; rodapé nunca fica sozinho */
+          .r-sig{page-break-before:always;break-before:page;page-break-inside:avoid;break-inside:avoid;page-break-after:avoid;break-after:avoid;padding:28px 24px}
+          .r-foot{page-break-before:avoid;break-before:avoid;page-break-inside:avoid;break-inside:avoid;padding:10px 24px}
           /* reduz padding lateral de todas as seções */
           .r-sec{padding-left:24px;padding-right:24px}
         }
