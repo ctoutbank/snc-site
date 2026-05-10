@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { RelatorioToolbar } from './toolbar';
 
 export const metadata: Metadata = {
   title: 'SNC · Relatório Exemplo #9999',
@@ -166,8 +165,56 @@ export default function RelatorioExemploPage() {
         }
       `}</style>
 
-      {/* TOOLBAR */}
-      <RelatorioToolbar protocol={protocol} />
+      {/* TOOLBAR — HTML puro + script inline (não depende de hidratação React) */}
+      <div className="r-tb">
+        <div className="left">
+          <span className="ref">Documento <strong>Nº {protocol}</strong></span>
+          <span className="ref" style={{ opacity: 0.6 }}>Versão Digital · Autenticada</span>
+        </div>
+        <div className="right">
+          <button type="button" className="r-btn" data-action="back">← Voltar</button>
+          <button type="button" className="r-btn" data-action="copy" data-label-default="Copiar link" data-label-copied="✓ Copiado">Copiar link</button>
+          <button type="button" className="r-btn primary" data-action="print">⎙ Baixar PDF</button>
+        </div>
+      </div>
+      <script dangerouslySetInnerHTML={{ __html: `
+        (function(){
+          document.addEventListener('click', function(e){
+            var btn = e.target && e.target.closest && e.target.closest('[data-action]');
+            if (!btn) return;
+            var action = btn.getAttribute('data-action');
+            if (action === 'back') {
+              if (window.history.length > 1) window.history.back();
+              else window.location.href = '/';
+            } else if (action === 'print') {
+              window.print();
+            } else if (action === 'copy') {
+              var url = window.location.href;
+              var done = function(){
+                var d = btn.getAttribute('data-label-copied') || '✓ Copiado';
+                var o = btn.getAttribute('data-label-default') || btn.textContent;
+                btn.textContent = d;
+                setTimeout(function(){ btn.textContent = o; }, 2000);
+              };
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(done).catch(function(){
+                  var ta = document.createElement('textarea');
+                  ta.value = url; ta.style.position='fixed'; ta.style.opacity='0';
+                  document.body.appendChild(ta); ta.select();
+                  try { document.execCommand('copy'); } catch(_){}
+                  document.body.removeChild(ta); done();
+                });
+              } else {
+                var ta = document.createElement('textarea');
+                ta.value = url; ta.style.position='fixed'; ta.style.opacity='0';
+                document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy'); } catch(_){}
+                document.body.removeChild(ta); done();
+              }
+            }
+          });
+        })();
+      ` }} />
 
       {/* RUNNING SIGNATURE — repete em toda página do PDF */}
       <div className="print-running-sig" aria-hidden="true">
