@@ -7,6 +7,23 @@ const nextConfig: NextConfig = {
     return [
       { source: "/blog", destination: "/artigos", permanent: true },
       { source: "/blog/:slug", destination: "/artigos/:slug", permanent: true },
+      // ⚠️ CRÍTICO — NÃO REMOVER ⚠️
+      // O HTML proxiado de /auth, /portal e /relatorio (vindo do outbank-one)
+      // referencia chunks JS/CSS via paths absolutos `/_next/static/...`.
+      // Esses chunks NÃO existem no build do snc-site (só existem no outbank-one).
+      // Sem este redirect, /auth/sign-in carrega o HTML mas o JS faz 404 →
+      // hidratação falha → o formulário de login não aparece.
+      //
+      // Usamos REDIRECT 302 (não rewrite) porque rewrite de /_next/static
+      // dispara MIDDLEWARE_INVOCATION_FAILED no edge runtime do Vercel.
+      // Cross-origin é seguro: os assets já servem com Access-Control-Allow-Origin: *.
+      //
+      // Histórico: removido no commit efb4cc6, restaurado após bug do auth/sign-in.
+      {
+        source: "/_next/static/:path*",
+        destination: `${PORTAL_URL}/_next/static/:path*`,
+        permanent: false,
+      },
     ];
   },
   async rewrites() {
