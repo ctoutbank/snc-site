@@ -26,10 +26,12 @@ export default function RelatorioExemploPage() {
         .r-tb .right{display:flex;gap:10px}
         .r-tb .ref{font-family:'JetBrains Mono',monospace;font-size:11px;color:#8a94a3;letter-spacing:.1em;text-transform:uppercase}
         .r-tb .ref strong{color:#fff;font-weight:500}
-        .r-btn{padding:10px 16px;font-size:12px;letter-spacing:.04em;text-transform:uppercase;font-family:'Inter',sans-serif;font-weight:500;border:1px solid #2a3a55;color:#fff;background:transparent;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .15s;text-decoration:none}
-        .r-btn:hover{background:#17243b}
-        .r-btn.primary{background:var(--green);border-color:var(--green);color:#0a1628;font-weight:600}
-        .r-btn.primary:hover{background:var(--greend);color:#fff}
+        .r-btn{padding:10px 16px;font-size:12px;letter-spacing:.04em;text-transform:uppercase;font-family:'Inter',sans-serif;font-weight:600;border:1px solid rgba(200,162,90,.55);color:#fff;background:rgba(255,255,255,.04);cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .15s;text-decoration:none;user-select:none}
+        .r-btn:hover{background:rgba(200,162,90,.18);border-color:var(--brass);color:var(--brass)}
+        .r-btn:active{transform:translateY(1px)}
+        .r-btn:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+        .r-btn.primary{background:var(--green);border-color:var(--green);color:#0a1628;font-weight:700}
+        .r-btn.primary:hover{background:var(--greend);border-color:var(--greend);color:#fff}
         .r-page{max-width:960px;margin:24px auto;background:var(--paper);box-shadow:0 18px 60px rgba(10,22,40,.18);position:relative;overflow:hidden}
         .r-wm{position:absolute;top:46%;left:50%;transform:translate(-50%,-50%) rotate(-22deg);font-family:'Libre Caslon Text',serif;font-size:140px;color:rgba(10,22,40,.04);pointer-events:none;font-style:italic;z-index:0;font-weight:700;white-space:nowrap}
         .r-page>*:not(.r-wm){position:relative;z-index:1}
