@@ -95,6 +95,8 @@ export default function RelatorioExemploPage() {
         .hash-block{margin-top:32px;padding-top:24px;border-top:1px solid #d4cfc1}
         .hash-block .lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--brass);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
         .hash-block .val{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink2);word-break:break-all;line-height:1.6;background:#fff;border:1px solid #d4cfc1;padding:12px 16px}
+        /* Assinatura recorrente em toda página do PDF — só aparece no print */
+        .print-running-sig{display:none}
         @media(max-width:720px){
           .r-page{margin:8px;width:auto}
           .r-head,.r-sec,.r-data,.r-sig,.r-foot{padding-left:20px;padding-right:20px}
@@ -114,8 +116,18 @@ export default function RelatorioExemploPage() {
           .r-tb{padding:10px 14px;flex-wrap:wrap;gap:8px}
         }
         @media print{
-          @page{size:A4;margin:1.2cm 1cm}
+          @page{size:A4;margin:1.2cm 1cm 1.8cm 1cm}
           html,body{background:#fff !important;font-size:11px;orphans:3;widows:3}
+          /* Assinatura SHA-256 fixa em TODA página — runner footer */
+          .print-running-sig{
+            display:flex;align-items:center;justify-content:space-between;gap:12px;
+            position:fixed;bottom:0;left:0;right:0;height:0.9cm;
+            padding:6px 1cm;background:var(--paper);border-top:1px solid #d4cfc1;
+            font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--ink2);
+            letter-spacing:.06em;text-transform:uppercase;z-index:9999
+          }
+          .print-running-sig .lbl{color:var(--brass);font-weight:700}
+          .print-running-sig .hash{color:var(--ink);font-weight:500;letter-spacing:.04em}
           /* ocultar UI */
           .r-tb{display:none !important}
           /* container */
@@ -156,6 +168,13 @@ export default function RelatorioExemploPage() {
 
       {/* TOOLBAR */}
       <RelatorioToolbar protocol={protocol} />
+
+      {/* RUNNING SIGNATURE — repete em toda página do PDF */}
+      <div className="print-running-sig" aria-hidden="true">
+        <span className="lbl">§ SHA-256</span>
+        <span className="hash">e3b0c44298fc1c14…7852b855</span>
+        <span className="lbl">PROTOCOLO {protocol}</span>
+      </div>
 
       <div className="r-page">
         <div className="r-wm">SNC · DEMONSTRAÇÃO</div>
