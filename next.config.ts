@@ -1,5 +1,12 @@
 import type { NextConfig } from "next";
 
+// 🔴 IMPORTANTE — IDENTIDADE DO PRODUTO
+// O PRODUTO chama-se `consolle.one` (ISOs: snc.consolle.one, bancoprisma.consolle.one, etc).
+// `outbank.cloud` é APENAS o hostname técnico/legado onde está hospedado o backend e
+// também é usado como domínio de marketing institucional.
+// NÃO use "outbank.cloud" para se referir ao SISTEMA — em UI, docs, conversas com o
+// usuário, ou comentários descrevendo o produto, use SEMPRE `consolle.one`.
+// Aqui aparece apenas como configuração técnica de proxy. Veja CLAUDE.md.
 const PORTAL_URL = process.env.PORTAL_PROXY_URL || "https://outbank.cloud";
 
 const nextConfig: NextConfig = {

@@ -1,5 +1,24 @@
 @AGENTS.md
 
+# 🔴 REGRA ABSOLUTA — IDENTIDADE DO PRODUTO
+
+`consolle.one` (e seus ISOs como `snc.consolle.one`, `bancoprisma.consolle.one`)
+é o **único nome** do nosso sistema. NUNCA se refira ao produto como "outbank.cloud".
+
+`outbank.cloud` é APENAS um domínio de marketing/promoção institucional. Pode aparecer:
+- Como hostname de backend em `PORTAL_PROXY_URL` (uso técnico/legado, ver `next.config.ts`)
+- Em landing pages institucionais e materiais de divulgação
+
+**NÃO PODE aparecer em:**
+- ❌ Documentação do produto, manuais, e-mails transacionais
+- ❌ Conversas com o usuário ("vou implementar no outbank.cloud" → use "no consolle.one" ou "no sistema")
+- ❌ Comentários de código que descrevem o sistema
+- ❌ URLs visíveis ao usuário final do produto
+
+> **Regra de bolso:** se está se referindo ao SISTEMA → diga `consolle.one`. Se está se referindo ao SITE DE MARKETING → pode dizer `outbank.cloud`. Em caso de dúvida, use `consolle.one`.
+
+---
+
 # 🚨 REGRA INVIOLÁVEL — LER ANTES DE QUALQUER MUDANÇA 🚨
 
 ## snc.consolle.one é a alma do projeto
