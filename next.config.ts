@@ -14,23 +14,20 @@ const nextConfig: NextConfig = {
     return [
       { source: "/blog", destination: "/artigos", permanent: true },
       { source: "/blog/:slug", destination: "/artigos/:slug", permanent: true },
-      // ⚠️ CRÍTICO — NÃO REMOVER ⚠️
-      // O HTML proxiado de /auth, /portal e /relatorio (vindo do outbank-one)
-      // referencia chunks JS/CSS via paths absolutos `/_next/static/...`.
-      // Esses chunks NÃO existem no build do snc-site (só existem no outbank-one).
-      // Sem este redirect, /auth/sign-in carrega o HTML mas o JS faz 404 →
-      // hidratação falha → o formulário de login não aparece.
+      // ⚠️ CRÍTICO — NÃO REINTRODUZIR redirect global de /_next/static/* aqui ⚠️
       //
-      // Usamos REDIRECT 302 (não rewrite) porque rewrite de /_next/static
-      // dispara MIDDLEWARE_INVOCATION_FAILED no edge runtime do Vercel.
-      // Cross-origin é seguro: os assets já servem com Access-Control-Allow-Origin: *.
+      // Histórico:
+      // - Antes existia um `redirect: /_next/static/:path* → outbank.cloud/_next/static/:path*`
+      //   para fazer o /auth/sign-in funcionar (chunks vinham do HTML proxiado).
+      // - PROBLEMA: esse redirect global pegava TAMBÉM os chunks LOCAIS do snc-site
+      //   (home, artigos, lgpd, /relatorio/snc/exemplo) — todas paginas locais ficavam
+      //   sem hidratar React, botões/menus travavam.
       //
-      // Histórico: removido no commit efb4cc6, restaurado após bug do auth/sign-in.
-      {
-        source: "/_next/static/:path*",
-        destination: `${PORTAL_URL}/_next/static/:path*`,
-        permanent: false,
-      },
+      // SOLUÇÃO ATUAL: src/middleware.ts faz a decisão de forma SELETIVA via Referer:
+      //   - Chunk veio de página proxiada (auth/portal/relatorio/snc/[id])  →  redireciona
+      //   - Chunk veio de página local                                       →  serve local
+      //
+      // Veja src/middleware.ts e CLAUDE.md.
     ];
   },
   async rewrites() {
