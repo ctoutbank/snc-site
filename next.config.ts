@@ -32,13 +32,17 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     return [
+      // Vercel apaga o host original em rewrites cross-deployment (snc.consolle.one
+      // → outbank.cloud vira host=outbank.cloud no destino). Passamos o tenant via
+      // query param porque é a única forma confiável de transmitir essa info.
+      // O outbank-one (auth/sign-in/page.tsx + forgot-password/page.tsx) lê ?tenant.
       {
         source: "/auth/:path*",
-        destination: `${PORTAL_URL}/auth/:path*`,
+        destination: `${PORTAL_URL}/auth/:path*?tenant=snc`,
       },
       {
         source: "/portal/:path*",
-        destination: `${PORTAL_URL}/portal/:path*`,
+        destination: `${PORTAL_URL}/portal/:path*?tenant=snc`,
       },
       // Mantém a rota local de contato intocada
       {
