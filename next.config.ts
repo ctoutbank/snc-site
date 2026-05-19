@@ -44,6 +44,16 @@ const nextConfig: NextConfig = {
         source: "/portal/:path*",
         destination: `${PORTAL_URL}/portal/:path*?tenant=snc`,
       },
+      // Páginas de autenticação secundárias (não cobertas por /auth/*):
+      // O snc-site adiciona ?tenant=snc para preservar o contexto do ISO no backend.
+      {
+        source: "/forgot-password",
+        destination: `${PORTAL_URL}/forgot-password?tenant=snc`,
+      },
+      {
+        source: "/reset-password/:path*",
+        destination: `${PORTAL_URL}/reset-password/:path*?tenant=snc`,
+      },
       // Mantém a rota local de contato intocada
       {
         source: "/api/contact",
