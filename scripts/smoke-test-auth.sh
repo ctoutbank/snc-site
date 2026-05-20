@@ -55,4 +55,24 @@ if [ -n "$LOCAL_CHUNK" ]; then
   echo "  ✓ Chunk local da home serve 200 (sem redirect indevido)"
 fi
 
+# 4. Auth health check: DB + tenant snc + JWT
+HEALTH=$(curl -sf "$BASE/api/health/auth" 2>/dev/null || echo "FAIL")
+if echo "$HEALTH" | grep -q '"ok":true'; then
+  MS=$(echo "$HEALTH" | grep -oE '"ms":[0-9]+' | grep -oE '[0-9]+')
+  echo "  ✓ Auth health: DB + tenant snc + JWT OK (${MS}ms)"
+else
+  echo "❌ /api/health/auth falhou: $HEALTH"
+  echo "   Verifique: DB connection, tenant 'snc' em customer_customization, JWT_SECRET."
+  exit 1
+fi
+
+# 5. forgot-password acessível (era 404 antes de mai/2026)
+FP_CODE=$(curl -so /dev/null -w "%{http_code}" "$BASE/forgot-password")
+if [ "$FP_CODE" != "200" ]; then
+  echo "❌ /forgot-password retornou $FP_CODE (esperado 200)"
+  echo "   Verifique rewrite /forgot-password → outbank.cloud em snc-site/next.config.ts"
+  exit 1
+fi
+echo "  ✓ /forgot-password acessível (200)"
+
 echo "✅ Smoke test passou"
