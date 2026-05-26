@@ -131,25 +131,25 @@ export const DATASET_META: Record<
   "vip-car": {
     titulo: "Relatório Completo do Veículo — VIP Car",
     subtitulo: "Relatório completo com proprietário, restrições, FIPE e infrações.",
-    fonte: "DENATRAN / SENATRAN · APIBrasil",
+    fonte: "DENATRAN / SENATRAN · SNC",
     cor: "#7B5EA7",
   },
   veiculo: {
     titulo: "Consulta Veicular — FIPE + Chassi",
     subtitulo: "Dados técnicos do veículo, tabela FIPE e chassi.",
-    fonte: "FIPE / DENATRAN · APIBrasil",
+    fonte: "DENATRAN / SENATRAN · SNC",
     cor: "#B8914A",
   },
   proprietario: {
     titulo: "Proprietário Atual do Veículo",
     subtitulo: "Identificação do proprietário atual pela placa.",
-    fonte: "DENATRAN / SENATRAN · APIBrasil",
+    fonte: "DENATRAN / SENATRAN · SNC",
     cor: "#4A8AB8",
   },
   credito: {
     titulo: "SCR Bacen + Score de Crédito",
     subtitulo: "Exposição de crédito no Banco Central e score de inadimplência.",
-    fonte: "Banco Central do Brasil · APIBrasil",
+    fonte: "DENATRAN / SENATRAN · SNC",
     cor: "#2BA84A",
   },
 };
