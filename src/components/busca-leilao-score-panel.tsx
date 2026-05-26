@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { gerarUrlRelatorio } from "@/lib/relatorio";
 
 // ─── Tipos mapeados ───────────────────────────────────────────────────────────
 
@@ -261,6 +262,26 @@ export function BuscaLeilaoScorePanel() {
       {/* ── Resultado ── */}
       {r && (
         <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+
+          {/* ── Botão Gerar Relatório ── */}
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
+            <button
+              onClick={() => {
+                const clean = placa.replace(/[^A-Z0-9]/g, "");
+                const { url } = gerarUrlRelatorio("leilao", clean, "PLACA", r as unknown as Record<string, unknown>);
+                window.open(url, "_blank");
+              }}
+              style={{
+                padding: "12px 24px", background: COR_ACCENT, color: "#fff",
+                fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
+                letterSpacing: "0.1em", textTransform: "uppercase" as const,
+                fontWeight: 700, border: "none", cursor: "pointer",
+                display: "flex", alignItems: "center", gap: 8,
+              }}
+            >
+              ⎙ Gerar Relatório
+            </button>
+          </div>
 
           {/* ── Score ── */}
           {r.score && (

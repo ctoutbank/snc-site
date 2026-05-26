@@ -68,6 +68,28 @@ function SumarioCard({ payload }: { payload: RelatorioPayload }) {
     );
   }
 
+  if (payload.dataset === 'leilao') {
+    const dv = (r.dadosVeiculo ?? {}) as Record<string, unknown>;
+    const sc = (r.score ?? {}) as Record<string, unknown>;
+    const placa = v(payload.documento);
+    const modelo = v(dv.marcaModelo);
+    return (
+      <div className="r-sl">
+        <div className="label">Veículo</div>
+        <div className="sname">{modelo}</div>
+        <div className="sdoc" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 15, letterSpacing: '0.08em', marginTop: 4 }}>{placa}</div>
+        <div className="pfs" style={{ gridTemplateColumns: '1fr 1fr' }}>
+          <div><div className="l">Pontuação</div><div className="v">{v(sc.pontuacao)}</div></div>
+          <div><div className="l">Aceitação</div><div className="v">{v(sc.aceitacao)}%</div></div>
+          <div><div className="l">% Sobre FIPE</div><div className="v">{v(sc.percentualSobreFipe)}%</div></div>
+          <div><div className="l">Vistoria</div><div className="v">{v(sc.exigeVistoriaEspecial)}</div></div>
+          <div><div className="l">Cor</div><div className="v">{v(dv.cor)}</div></div>
+          <div><div className="l">Km</div><div className="v">{dv.kilometragem ? `${parseInt(String(dv.kilometragem)).toLocaleString('pt-BR')} km` : '—'}</div></div>
+        </div>
+      </div>
+    );
+  }
+
   // credito
   const scr = (r.scr ?? {}) as Record<string, unknown>;
   const score = (r.score ?? {}) as Record<string, unknown>;
@@ -360,11 +382,126 @@ function DadosCredito({ r }: { r: Record<string, unknown> }) {
   );
 }
 
+// ─── Dados Leilão com Score ───────────────────────────────────────────────────
+function DadosLeilao({ r }: { r: Record<string, unknown> }) {
+  const sc = (r.score ?? {}) as Record<string, unknown>;
+  const dv = (r.dadosVeiculo ?? {}) as Record<string, unknown>;
+  const sin = (r.sinistro ?? {}) as Record<string, unknown>;
+  const ocorrencias = (r.ocorrencias ?? []) as Record<string, unknown>[];
+  const total = (r.totalOcorrencias ?? 0) as number;
+
+  const scoreCor = (p: unknown): string => {
+    if (p === 'A') return '#2ba84a';
+    if (p === 'B') return '#8BC34A';
+    if (p === 'C') return '#c8a25a';
+    if (p === 'D') return '#e07b6a';
+    return '#e05555';
+  };
+
+  return (
+    <>
+      {/* Score */}
+      <div className="src-badge">LEILÃO COM SCORE</div>
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 2, marginBottom: 2, marginTop: 8, alignItems: 'stretch' }}>
+        <div>
+          <div className="ds-hd"><span>SCORE DE LEILÃO</span></div>
+          <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Pontuação</div>
+              <div className="dv" style={{ fontSize: 28, fontFamily: "'Libre Caslon Text',serif", color: scoreCor(sc.pontuacao) }}>{v(sc.pontuacao)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Aceitação</div><div className="dv">{v(sc.aceitacao)}%</div></div>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">% Sobre FIPE</div><div className="dv">{v(sc.percentualSobreFipe)}%</div></div>
+          </div></div>
+          <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Descrição</div><div className="dv">{v(sc.descricaoPontuacao)}</div></div>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Exige Vistoria</div><div className="dv">{v(sc.exigeVistoriaEspecial)}</div></div>
+          </div></div>
+        </div>
+        {/* Sinistro */}
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div className="ds-hd"><span>INDÍCIO DE SINISTRO</span></div>
+          <div className="ds-row">
+            <div className="ds-row-inner"><div className="dk">Existe Ocorrência</div><div className="dv">{sin.existeOcorrencia ? 'SIM' : 'NÃO'}</div></div>
+            <span className={`chip chip-${sin.existeOcorrencia ? 'red' : 'green'}`}>{sin.existeOcorrencia ? 'CONSTA' : 'NÃO'}</span>
+          </div>
+          {sin.descricao && (
+            <div className="ds-row" style={{ flex: 1 }}>
+              <div className="ds-row-inner"><div className="dk">Descrição</div><div className="dv" style={{ fontSize: 10 }}>{v(sin.descricao)}</div></div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Dados do Veículo */}
+      <div style={{ marginBottom: 2, marginTop: 2 }}>
+        <div className="ds-hd"><span>DADOS DO VEÍCULO (LEILÃO)</span></div>
+        <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Marca/Modelo</div><div className="dv">{v(dv.marcaModelo)}</div></div>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Cor</div><div className="dv">{v(dv.cor)}</div></div>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(dv.chassi)}</div></div>
+        </div></div>
+        <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Motor</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(dv.motor)}</div></div>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Câmbio</div><div className="dv">{v(dv.cambio)}</div></div>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Combustível</div><div className="dv">{v(dv.combustivel)}</div></div>
+        </div></div>
+        <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Carroceria</div><div className="dv">{v(dv.carroceria)}</div></div>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Categoria</div><div className="dv">{v(dv.categoria)}</div></div>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Km</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{dv.kilometragem ? `${parseInt(String(dv.kilometragem)).toLocaleString('pt-BR')} km` : '—'}</div></div>
+        </div></div>
+      </div>
+
+      {/* Ocorrências de Leilão */}
+      <div className="src-badge">HISTÓRICO</div>
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd"><span>OCORRÊNCIAS DE LEILÃO</span><span className="ds-hd-badge">{total === 1 ? '1 registro' : `${total} registros`}</span></div>
+        {ocorrencias.length > 0 ? (
+          <div className="tbl-wrap">
+            <table className="snc-tbl">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Leiloeiro</th>
+                  <th>Lote</th>
+                  <th>Comitente</th>
+                  <th>Pátio</th>
+                  <th>Cond. Geral</th>
+                  <th>Cond. Câmbio</th>
+                  <th>Chassi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ocorrencias.map((o, i) => (
+                  <tr key={i} style={{ background: i % 2 === 0 ? '#faf8f1' : '#f4f1ea' }}>
+                    <td className="mono">{v(o.dataLeilao)}</td>
+                    <td>{v(o.leiloeiro)}</td>
+                    <td className="mono">{v(o.lote)}</td>
+                    <td>{v(o.comitente)}</td>
+                    <td>{v(o.patio)}</td>
+                    <td>{v(o.condicaoGeral)}</td>
+                    <td>{v(o.condicaoCambio)}</td>
+                    <td>{v(o.situacaoChassi)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Resultado</div><div className="dv">Nenhum registro de leilão</div></div><span className="chip chip-green">NADA CONSTA</span></div>
+        )}
+      </div>
+    </>
+  );
+}
+
 function DadosDataset({ dataset, resultado }: { dataset: DatasetTipo; resultado: Record<string, unknown> }) {
   if (dataset === 'vip-car') return <DadosVipCar r={resultado} />;
   if (dataset === 'veiculo') return <DadosVeiculo r={resultado} />;
   if (dataset === 'proprietario') return <DadosProprietario r={resultado} />;
   if (dataset === 'credito') return <DadosCredito r={resultado} />;
+  if (dataset === 'leilao') return <DadosLeilao r={resultado} />;
   return null;
 }
 

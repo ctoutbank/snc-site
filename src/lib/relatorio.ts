@@ -11,7 +11,7 @@
 
 // ─── Tipos de dataset suportados ──────────────────────────────────────────────
 
-export type DatasetTipo = "vip-car" | "veiculo" | "proprietario" | "credito";
+export type DatasetTipo = "vip-car" | "veiculo" | "proprietario" | "credito" | "leilao";
 
 export interface RelatorioPayload {
   dataset: DatasetTipo;
@@ -151,5 +151,11 @@ export const DATASET_META: Record<
     subtitulo: "Exposição de crédito no Banco Central e score de inadimplência.",
     fonte: "DENATRAN / SENATRAN",
     cor: "#2BA84A",
+  },
+  leilao: {
+    titulo: "Leilão com Score",
+    subtitulo: "Histórico de leilão, score de risco, indício de sinistro e condições do veículo.",
+    fonte: "DENATRAN / SENATRAN",
+    cor: "#D4A843",
   },
 };
