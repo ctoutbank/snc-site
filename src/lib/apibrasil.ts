@@ -455,4 +455,59 @@ export async function consultarProprietarioAtual(
   );
 }
 
+// ─────────────────────────────────────────────────────────
+// DATASET: Relatório Completo do Veículo (VIP Car)
+// POST /api/v2/consulta/veiculos/credits  { tipo: "vip-car" }
+// ─────────────────────────────────────────────────────────
 
+/** Payload para o relatório completo VIP Car */
+export interface VipCarPayload {
+  tipo: "vip-car";
+  placa: string;
+  homolog: boolean;
+}
+
+/**
+ * Resposta completa VIP Car — estrutura provisória.
+ * Campos exatos confirmados após primeiro teste em homolog
+ * inspecionando _raw no DevTools Network.
+ */
+export interface VipCarResponse {
+  status_code?: number;
+  error?: boolean;
+  message?: string;
+  homolog?: boolean;
+  data?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+/**
+ * Consulta o Relatório Completo (VIP Car) de um veículo pela placa.
+ *
+ * Endpoint: POST /api/v2/consulta/veiculos/credits
+ * Payload:  { tipo: "vip-car", placa, homolog }
+ *
+ * PROTOCOLO: Rodar em homolog primeiro. Só mudar para produção
+ * após autorização explícita do usuário (Denison).
+ *
+ * @param placa  Placa no formato antigo (ABC1234) ou Mercosul (ABC1D23)
+ */
+export async function consultarVipCar(
+  placa: string
+): Promise<VipCarResponse> {
+  const p = normalizarPlaca(placa);
+  if (!validarPlaca(p)) {
+    throw new APIBrasilError(
+      `Placa inválida: "${placa}". Use o formato ABC1234 (antigo) ou ABC1D23 (Mercosul).`,
+      400
+    );
+  }
+
+  const homolog = process.env.APIBRASIL_HOMOLOG === "true";
+
+  return apiFetch<VipCarPayload, VipCarResponse>(
+    "/api/v2/consulta/veiculos/credits",
+    "POST",
+    { tipo: "vip-car", placa: p, homolog }
+  );
+}
