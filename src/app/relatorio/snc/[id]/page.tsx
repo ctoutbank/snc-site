@@ -451,6 +451,11 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
           <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Categoria</div><div className="dv">{v(dv.categoria)}</div></div>
           <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Km</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{dv.kilometragem ? `${parseInt(String(dv.kilometragem)).toLocaleString('pt-BR')} km` : '—'}</div></div>
         </div></div>
+        <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Qtd. Eixos</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(dv.qtdEixos)}</div></div>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Eixo Traseiro</div><div className="dv">{v(dv.eixoTraseiro)}</div></div>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">RENAVAM</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(dv.renavam)}</div></div>
+        </div></div>
       </div>
 
       {/* Ocorrências de Leilão */}
