@@ -134,6 +134,8 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Marca/Modelo</div><div className="dv">{v(id.marcaModelo)}</div></div></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(id.chassi ?? prop.chassi ?? dt.chassi)}</div></div></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Motor</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.motor ?? dt.motor)}</div></div></div>
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Potência</div><div className="dv">{v(dt.potencia)}</div></div></div>
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Cilindrada</div><div className="dv">{v(dt.cilindrada)}</div></div></div>
           {id.municipio && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{id.uf ? `${v(id.municipio)} / ${v(id.uf)}` : v(id.municipio)}</div></div></div>}
         </div>
         {/* Coluna 2: Identificação — dados técnicos */}
@@ -141,8 +143,6 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
           <div className="ds-hd"><span>IDENTIFICAÇÃO DO VEÍCULO</span></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Carroceria</div><div className="dv">{v(dt.carroceria)}</div></div></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Procedência</div><div className="dv">{v(dt.procedencia)}</div></div></div>
-          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Potência</div><div className="dv">{v(dt.potencia)}</div></div></div>
-          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Cilindrada</div><div className="dv">{v(dt.cilindrada)}</div></div></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Espécie</div><div className="dv">{v(dt.especie ?? id.categoria)}</div></div></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Cap. Passageiros</div><div className="dv">{v(dt.capacidadePassageiros)}</div></div></div>
         </div>
