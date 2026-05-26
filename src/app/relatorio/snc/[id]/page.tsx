@@ -415,11 +415,11 @@ const CSS = `
   .r-title h1{font-family:'Libre Caslon Text',serif;font-size:38px;font-weight:400;line-height:1.05;letter-spacing:-.015em;margin:0}
   .r-title h1 .it{font-style:italic;color:#9aa3b2}
   .r-title .lede{margin-top:14px;font-size:13px;color:#bcc4d1;max-width:560px;line-height:1.55}
-  .r-ms{display:grid;grid-template-columns:repeat(5,1fr);background:#0e1d36;border-top:1px solid #1a2742}
-  .r-ms>div{padding:16px 20px;border-right:1px solid #1a2742}
+  .r-ms{display:flex;background:#0e1d36;border-top:1px solid #1a2742}
+  .r-ms>div{padding:16px 20px;border-right:1px solid #1a2742;flex:1;min-width:0}
   .r-ms>div:last-child{border-right:none}
-  .r-ms .l{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--brass);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
-  .r-ms .v{font-size:12px;color:#fff;font-family:'JetBrains Mono',monospace;letter-spacing:.02em}
+  .r-ms .l{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--brass);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;white-space:nowrap}
+  .r-ms .v{font-size:12px;color:#fff;font-family:'JetBrains Mono',monospace;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .r-sec{padding:40px 56px}
   .r-sec+.r-sec{border-top:1px solid #d4cfc1}
   .r-sh{display:flex;align-items:center;gap:2px;margin-bottom:24px}
@@ -485,9 +485,8 @@ const CSS = `
     .r-title{grid-template-columns:1fr;gap:10px}
     .r-kicker{writing-mode:horizontal-tb;transform:none}
     .r-title h1{font-size:26px}
-    .r-ms{grid-template-columns:repeat(3,1fr)}
-    .r-ms>div{border-bottom:1px solid #1a2742}
-    .r-ms>div:nth-child(3n){border-right:none}
+    .r-ms{flex-wrap:wrap}
+    .r-ms>div{flex:1 1 30%;border-bottom:1px solid #1a2742}
     .r-summary{grid-template-columns:1fr;gap:20px}
     .r-sig{grid-template-columns:1fr;gap:20px}
     .r-sig .right{border-left:none;border-top:1px solid #1a2742;padding:20px 0 0}
