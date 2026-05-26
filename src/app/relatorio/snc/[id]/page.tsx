@@ -680,7 +680,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
 
             {/* §02 RESULTADOS */}
             <section className="r-sec r-sec-results">
-              <div className="r-sh">
+              <div className="r-sh" style={{ marginBottom: 10 }}>
                 <div className="num">§ 02</div>
                 <h2>Resultados da consulta</h2>
                 <span className="badge">SNC AUTOSCORE</span>
