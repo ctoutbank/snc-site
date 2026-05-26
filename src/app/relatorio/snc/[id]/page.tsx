@@ -389,6 +389,7 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
   const sin = (r.sinistro ?? {}) as Record<string, unknown>;
   const ocorrencias = (r.ocorrencias ?? []) as Record<string, unknown>[];
   const total = (r.totalOcorrencias ?? 0) as number;
+  const cl = (r.checkList ?? null) as Record<string, unknown> | null;
 
   const scoreCor = (p: unknown): string => {
     if (p === 'A') return '#2ba84a';
@@ -497,6 +498,32 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Resultado</div><div className="dv">Nenhum registro de leilão</div></div><span className="chip chip-green">NADA CONSTA</span></div>
         )}
       </div>
+
+      {/* Checklist de Avarias */}
+      {!!cl && (
+        <>
+          <div className="src-badge">INSPEÇÃO</div>
+          <div style={{ marginTop: 8 }}>
+            <div className="ds-hd"><span>CHECKLIST DE AVARIAS</span></div>
+            <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Frente</div><div className="dv">{v(cl.frente)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Traseira</div><div className="dv">{v(cl.traseira)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Teto</div><div className="dv">{v(cl.teto)}</div></div>
+            </div></div>
+            <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Lateral Direita</div><div className="dv">{v(cl.lateralDireita)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Lateral Esquerda</div><div className="dv">{v(cl.lateralEsquerda)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Interior</div><div className="dv">{v(cl.interior)}</div></div>
+            </div></div>
+            <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Airbags</div><div className="dv">{v(cl.airbags)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Local Queimado</div><div className="dv">{v(cl.localQueimado)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Rodas Faltantes</div><div className="dv">{v(cl.rodasFaltantes)}</div></div>
+            </div></div>
+            <div className="ds-row"><div className="ds-row-inner"><div className="dk">Observações</div><div className="dv">{v(cl.observacoes)}</div></div></div>
+          </div>
+        </>
+      )}
     </>
   );
 }

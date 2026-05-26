@@ -123,17 +123,17 @@ function mapearLeilao(raw: Record<string, unknown>) {
     } : null,
 
     // Checklist do veículo
-    checkList: cl?.existe_informacao === "1" ? {
-      airbags: cl.airbags_rompidos ?? null,
-      frente: cl.frente?.descricao ?? null,
-      traseira: cl.traseira?.descricao ?? null,
-      lateralDireita: cl.lateral_direita?.descricao ?? null,
-      lateralEsquerda: cl.lateral_esquerda?.descricao ?? null,
-      teto: cl.teto?.descricao ?? null,
-      interior: cl.interior?.descricao ?? null,
-      localQueimado: cl.local_queimado ?? null,
-      rodasFaltantes: cl.rodas_faltantes ?? null,
-      observacoes: cl.observacoes ?? null,
+    checkList: cl ? {
+      airbags: cl.airbags_rompidos || null,
+      frente: cl.frente?.descricao || null,
+      traseira: cl.traseira?.descricao || null,
+      lateralDireita: cl.lateral_direita?.descricao || null,
+      lateralEsquerda: cl.lateral_esquerda?.descricao || null,
+      teto: cl.teto?.descricao || null,
+      interior: cl.interior?.descricao || null,
+      localQueimado: cl.local_queimado || null,
+      rodasFaltantes: cl.rodas_faltantes || null,
+      observacoes: cl.observacoes || null,
     } : null,
 
     // Ocorrências de leilão
@@ -155,11 +155,27 @@ function mapearLeilao(raw: Record<string, unknown>) {
   };
 }
 
+// ─── Mock checklist para HML ──────────────────────────────────────────────────
+
+const mockCheckList = {
+  airbags: "NÃO ROMPIDOS",
+  frente: "AVARIA MÉDIA",
+  traseira: "SEM AVARIA",
+  lateralDireita: "AVARIA LEVE — RISCO SUPERFICIAL",
+  lateralEsquerda: "SEM AVARIA",
+  teto: "SEM AVARIA",
+  interior: "DESGASTE NATURAL",
+  localQueimado: "NÃO IDENTIFICADO",
+  rodasFaltantes: "NENHUMA",
+  observacoes: "VEÍCULO EM CONDIÇÕES REGULARES PARA CIRCULAÇÃO",
+};
+
 // ─── GET Handler ──────────────────────────────────────────────────────────────
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const placa = (searchParams.get("placa") ?? "").trim();
+  const isHomolog = process.env.APIBRASIL_HOMOLOG === "true";
 
   if (!placa) {
     return NextResponse.json({ error: "Informe a placa do veículo." }, { status: 400 });
@@ -168,6 +184,11 @@ export async function GET(req: NextRequest) {
   try {
     const raw = await consultarLeilaoScore(placa);
     const leilao = mapearLeilao(raw as unknown as Record<string, unknown>);
+
+    // Em HML, injetar mock do checklist (API retorna vazio)
+    if (isHomolog && leilao) {
+      leilao.checkList = mockCheckList;
+    }
 
     return NextResponse.json({
       leilao,

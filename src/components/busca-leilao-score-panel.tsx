@@ -52,11 +52,24 @@ interface LeilaoOcorrencia {
   imagens: string[];
 }
 
+interface LeilaoCheckList {
+  airbags?: string | null;
+  frente?: string | null;
+  traseira?: string | null;
+  lateralDireita?: string | null;
+  lateralEsquerda?: string | null;
+  teto?: string | null;
+  interior?: string | null;
+  localQueimado?: string | null;
+  rodasFaltantes?: string | null;
+  observacoes?: string | null;
+}
+
 interface LeilaoResult {
   score: LeilaoScore | null;
   dadosVeiculo: LeilaoDadosVeiculo | null;
   sinistro: LeilaoSinistro | null;
-  checkList: Record<string, string | null> | null;
+  checkList: LeilaoCheckList | null;
   totalOcorrencias: number;
   ocorrencias: LeilaoOcorrencia[];
 }
@@ -410,10 +423,23 @@ export function BuscaLeilaoScorePanel() {
 
           {/* ── Checklist (se disponível) ── */}
           {r.checkList && (
-            <Bloco titulo="Checklist do Veículo">
-              {Object.entries(r.checkList).map(([key, val]) => (
-                val ? <DataRow key={key} label={key.replace(/([A-Z])/g, " $1").trim()} value={val} /> : null
-              ))}
+            <Bloco titulo="Checklist de Avarias">
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px" }}>
+                <div>
+                  <DataRow label="Frente" value={r.checkList.frente ?? "—"} highlight={!!r.checkList.frente?.match(/avaria/i)} />
+                  <DataRow label="Traseira" value={r.checkList.traseira ?? "—"} />
+                  <DataRow label="Lateral Direita" value={r.checkList.lateralDireita ?? "—"} highlight={!!r.checkList.lateralDireita?.match(/avaria/i)} />
+                  <DataRow label="Lateral Esquerda" value={r.checkList.lateralEsquerda ?? "—"} />
+                  <DataRow label="Teto" value={r.checkList.teto ?? "—"} />
+                </div>
+                <div>
+                  <DataRow label="Interior" value={r.checkList.interior ?? "—"} />
+                  <DataRow label="Airbags" value={r.checkList.airbags ?? "—"} />
+                  <DataRow label="Local Queimado" value={r.checkList.localQueimado ?? "—"} />
+                  <DataRow label="Rodas Faltantes" value={r.checkList.rodasFaltantes ?? "—"} />
+                  <DataRow label="Observações" value={r.checkList.observacoes ?? "—"} />
+                </div>
+              </div>
             </Bloco>
           )}
 
