@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { gerarUrlRelatorio } from "@/lib/relatorio";
 
 // ─── Tipos (alinhados com a resposta real da APIBrasil) ───────────────────────
 type TipoDoc = "CPF" | "CNPJ";
@@ -391,6 +392,45 @@ export function BuscaPanel() {
                 ))}
               </div>
             </div>
+          </div>
+
+          {/* Botão Gerar Relatório */}
+          <div style={{ marginTop: 2, padding: "20px 0", display: "flex", justifyContent: "flex-end" }}>
+            <button
+              id="credito-gerar-relatorio-btn"
+              onClick={() => {
+                const { url } = gerarUrlRelatorio(
+                  "credito",
+                  valor,
+                  tipo,
+                  resultado as unknown as Record<string, unknown>
+                );
+                window.open(url, "_blank");
+              }}
+              style={{
+                padding: "14px 28px",
+                background: "transparent",
+                border: "1px solid rgba(200,162,90,0.5)",
+                color: "#c8a25a",
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 11,
+                letterSpacing: "0.16em",
+                textTransform: "uppercase" as const,
+                cursor: "pointer",
+                display: "flex", alignItems: "center", gap: 10,
+                transition: "all 0.15s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(200,162,90,0.08)";
+                e.currentTarget.style.borderColor = "#c8a25a";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.borderColor = "rgba(200,162,90,0.5)";
+              }}
+            >
+              ⎙ Gerar Relatório
+            </button>
           </div>
 
           {/* Footer */}
