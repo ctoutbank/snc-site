@@ -80,6 +80,12 @@ function SumarioCard({ payload }: { payload: RelatorioPayload }) {
   );
 }
 
+// ─── Singular / plural de registro ──────────────────────────────────────────
+function reg(n: number | string): string {
+  const num = Number(n);
+  return `${num} ${num === 1 ? 'REGISTRO' : 'REGISTROS'}`;
+}
+
 // ─── Abreviação de órgão autuador ─────────────────────────────────────────────
 function abrOrg(s?: string): string {
   if (!s) return '—';
@@ -145,7 +151,7 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
       <div className="ds-block" style={{ marginTop: 8 }}>
         <div className="ds-hd">
           <span>INFRAÇÕES DE TRÂNSITO</span>
-          <span className="ds-hd-badge">{totalRenainf} REGISTRO(S)</span>
+          <span className="ds-hd-badge">{reg(totalRenainf)}</span>
         </div>
         {ocorrencias.length > 0 ? (
           <div className="tbl-wrap">
@@ -180,7 +186,7 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
         <>
           <div className="src-badge">PRECIFICADOR FIPE</div>
           <div className="ds-block" style={{ marginTop: 8 }}>
-            <div className="ds-hd"><span>TABELA DE PRECIFICAÇÃO</span><span className="ds-hd-badge">{prec.length} REGISTRO(S)</span></div>
+            <div className="ds-hd"><span>TABELA DE PRECIFICAÇÃO</span><span className="ds-hd-badge">{reg(prec.length)}</span></div>
             <div className="tbl-wrap">
               <div className="tbl-head-fipe">
                 <div className="tbl-th">Código</div>
