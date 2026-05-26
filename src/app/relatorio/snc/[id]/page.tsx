@@ -80,6 +80,23 @@ function SumarioCard({ payload }: { payload: RelatorioPayload }) {
   );
 }
 
+// ─── Abreviação de órgão autuador ─────────────────────────────────────────────
+function abrOrg(s?: string): string {
+  if (!s) return '—';
+  return s
+    .replace(/PREFEITURA\s+MUNICIPAL\s+DE\s+/gi, 'PREF. ')
+    .replace(/PREFEITURA\s+DE\s+/gi, 'PREF. ')
+    .replace(/SECRETARIA\s+(DE\s+ESTADO\s+)?DE\s+/gi, 'SECR. ')
+    .replace(/DEPARTAMENTO\s+DE\s+/gi, 'DEP. ')
+    .replace(/POLICIA\s+MILITAR/gi, 'PM')
+    .replace(/POLICIA\s+CIVIL/gi, 'PC')
+    .replace(/POLICIA\s+RODOVIARIA\s+FEDERAL/gi, 'PRF')
+    .replace(/POLICIA\s+RODOVIARIA/gi, 'PRF')
+    .trim()
+    .slice(0, 24)
+    .trimEnd();
+}
+
 // ─── §02 Resultados — VIP Car ─────────────────────────────────────────────────
 function DadosVipCar({ r }: { r: Record<string, unknown> }) {
   const id = (r.identificacao ?? {}) as Record<string, unknown>;
@@ -146,7 +163,7 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
                 <div className="tbl-td mono">{o.dataHora ?? '—'}</div>
                 <div className="tbl-td mono">{o.ait ?? '—'}</div>
                 <div className="tbl-td">{o.descricao ?? '—'}</div>
-                <div className="tbl-td">{o.orgao ?? '—'}</div>
+                <div className="tbl-td">{abrOrg(o.orgao)}</div>
                 <div className="tbl-td mono bold">{o.valor ?? '—'}</div>
                 <div className="tbl-td"><span className="chip chip-brass">CONSTA</span></div>
               </div>
@@ -376,7 +393,7 @@ const CSS = `
   .ds-row .dv{font-size:13px;color:var(--ink);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .src-badge{display:inline-flex;align-items:center;padding:5px 12px;border:1px solid #b8b0a0;color:var(--ink2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;background:var(--paper);margin:16px 0 0}
   .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  .tbl-head,.tbl-row-renainf{display:grid;grid-template-columns:max-content 130px 60px 1fr 160px max-content max-content;gap:0;min-width:560px;white-space:nowrap}
+  .tbl-head,.tbl-row-renainf{display:grid;grid-template-columns:max-content 130px 60px 1fr 220px max-content max-content;gap:0;min-width:580px;white-space:nowrap}
   .tbl-head-fipe,.tbl-row-fipe{display:grid;grid-template-columns:100px 1fr 100px 100px 130px;gap:0;min-width:580px;white-space:nowrap}
   .tbl-th{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;background:rgba(200,162,90,0.08);border-bottom:1px solid #d4cfc1;border-right:1px solid #ece7d8}
   .tbl-th:last-child{border-right:none}
