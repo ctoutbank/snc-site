@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { resend } from '@/lib/resend';
+import { getResend } from '@/lib/resend';
 
 const schema = z.object({
   fullName: z.string().min(3),
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
 
   const { fullName, email, institution, nature, context } = parsed.data;
 
-  const result = await resend.emails.send({
+  const result = await getResend().emails.send({
     from: 'SNC — Consolle <noreply@consolle.one>',
     to: ['ceo@outbank.com.br'],
     replyTo: email,
