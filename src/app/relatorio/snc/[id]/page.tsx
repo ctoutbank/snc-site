@@ -152,7 +152,6 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
             <>
               <div className="ds-hd"><span>PROPRIETÁRIO ATUAL</span></div>
               {(prop.municipio) && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{prop.uf ? `${v(prop.municipio)} / ${v(prop.uf)}` : v(prop.municipio)}</div></div></div>}
-              {prop.crlv && <div className="ds-row"><div className="ds-row-inner"><div className="dk">CRLV</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.crlv)}</div></div></div>}
             </>
           ) : (
             <>
@@ -642,7 +641,8 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
         <div className="r-ms">
           <div><div className="l">Proprietário Atual</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.nome as string ?? payload?.documento ?? '—'}</div></div>
           <div><div className="l">CPF/CNPJ</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.documento as string ?? '—'}</div></div>
-          <div><div className="l">Atualização no DENATRAN</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.dataAtualizacao as string ?? '—'}</div></div>
+          <div><div className="l">CRLV</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.crlv as string ?? '—'}</div></div>
+          <div><div className="l">Atualizado no DENATRAN</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.dataAtualizacao as string ?? '—'}</div></div>
           <div><div className="l">Validade do parecer</div><div className="v">30 dias corridos</div></div>
         </div>
 
