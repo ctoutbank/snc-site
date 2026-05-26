@@ -125,15 +125,33 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
 
   return (
     <>
-      {/* ROW 1: Identificação + Proprietário */}
+      {/* ROW 1: Identificação (com Dados Técnicos) + Proprietário */}
       <div className="src-badge">DENATRAN / SENATRAN</div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 2, marginTop: 8 }}>
         <div>
           <div className="ds-hd"><span>IDENTIFICAÇÃO DO VEÍCULO</span></div>
-          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Marca/Modelo</div><div className="dv">{v(id.marcaModelo)}</div></div></div>
-
-          {(id.chassi || prop.chassi || dt.chassi) && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(id.chassi ?? prop.chassi ?? dt.chassi)}</div></div></div>}
-          {(prop.motor || dt.motor) && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Motor</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.motor ?? dt.motor)}</div></div></div>}
+          {/* Marca/Modelo | Carroceria */}
+          <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Marca/Modelo</div><div className="dv">{v(id.marcaModelo)}</div></div>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Carroceria</div><div className="dv">{v(dt.carroceria)}</div></div>
+          </div></div>
+          {/* Chassi | Procedência */}
+          <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(id.chassi ?? prop.chassi ?? dt.chassi)}</div></div>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Procedência</div><div className="dv">{v(dt.procedencia)}</div></div>
+          </div></div>
+          {/* Motor | Potência | Cilindrada */}
+          <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Motor</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.motor ?? dt.motor)}</div></div>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Potência</div><div className="dv">{v(dt.potencia)}</div></div>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Cilindrada</div><div className="dv">{v(dt.cilindrada)}</div></div>
+          </div></div>
+          {/* Espécie | Cap. Passageiros */}
+          <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Espécie</div><div className="dv">{v(dt.especie ?? id.categoria)}</div></div>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Cap. Passageiros</div><div className="dv">{v(dt.capacidadePassageiros)}</div></div>
+          </div></div>
+          {/* Município / UF */}
           {id.municipio && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{id.uf ? `${v(id.municipio)} / ${v(id.uf)}` : v(id.municipio)}</div></div></div>}
         </div>
         <div>
@@ -155,39 +173,20 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
         </div>
       </div>
 
-      {/* ROW 2: Roubo/Furto + Dados Técnicos */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 2, marginTop: 2 }}>
-        <div>
-          <div className="ds-hd"><span>HISTÓRICO ROUBO/FURTO</span></div>
-          <div className="ds-row">
-            <div className="ds-row-inner"><div className="dk">Declaração de Roubo</div><div className="dv">{rf.declaracao ? 'SIM' : 'NÃO'}</div></div>
-            <span className={`chip chip-${rf.declaracao ? 'red' : 'green'}`}>{rf.declaracao ? 'CONSTA' : 'NÃO'}</span>
-          </div>
-          <div className="ds-row">
-            <div className="ds-row-inner"><div className="dk">Devolução Registrada</div><div className="dv">{rf.devolucao ? 'SIM' : 'NÃO'}</div></div>
-            <span className={`chip chip-${rf.devolucao ? 'brass' : 'green'}`}>{rf.devolucao ? 'CONSTA' : 'NÃO'}</span>
-          </div>
-          <div className="ds-row">
-            <div className="ds-row-inner"><div className="dk">Recuperação Registrada</div><div className="dv">{rf.recuperacao ? 'SIM' : 'NÃO'}</div></div>
-            <span className={`chip chip-${rf.recuperacao ? 'brass' : 'green'}`}>{rf.recuperacao ? 'CONSTA' : 'NÃO'}</span>
-          </div>
+      {/* ROW 2: Histórico Roubo/Furto */}
+      <div style={{ marginBottom: 2, marginTop: 2 }}>
+        <div className="ds-hd"><span>HISTÓRICO ROUBO/FURTO</span></div>
+        <div className="ds-row">
+          <div className="ds-row-inner"><div className="dk">Declaração de Roubo</div><div className="dv">{rf.declaracao ? 'SIM' : 'NÃO'}</div></div>
+          <span className={`chip chip-${rf.declaracao ? 'red' : 'green'}`}>{rf.declaracao ? 'CONSTA' : 'NÃO'}</span>
         </div>
-        <div>
-          {temDT ? (
-            <>
-              <div className="ds-hd"><span>DADOS TÉCNICOS</span></div>
-              {dt.carroceria && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Carroceria</div><div className="dv">{v(dt.carroceria)}</div></div></div>}
-              {dt.procedencia && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Procedência</div><div className="dv">{v(dt.procedencia)}</div></div></div>}
-              {dt.potencia && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Potência</div><div className="dv">{v(dt.potencia)}</div></div></div>}
-              {dt.cilindrada && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Cilindrada</div><div className="dv">{v(dt.cilindrada)}</div></div></div>}
-              {(dt.especie || dt.capacidadePassageiros) && <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}><div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Espécie</div><div className="dv">{v(dt.especie ?? id.categoria)}</div></div><div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Cap. Passageiros</div><div className="dv">{v(dt.capacidadePassageiros)}</div></div></div></div>}
-            </>
-          ) : (
-            <>
-              <div className="ds-hd"><span>DADOS TÉCNICOS</span></div>
-              <div className="ds-row"><div className="ds-row-inner"><div className="dk">Resultado</div><div className="dv">Dados não disponíveis nesta consulta</div></div></div>
-            </>
-          )}
+        <div className="ds-row">
+          <div className="ds-row-inner"><div className="dk">Devolução Registrada</div><div className="dv">{rf.devolucao ? 'SIM' : 'NÃO'}</div></div>
+          <span className={`chip chip-${rf.devolucao ? 'brass' : 'green'}`}>{rf.devolucao ? 'CONSTA' : 'NÃO'}</span>
+        </div>
+        <div className="ds-row">
+          <div className="ds-row-inner"><div className="dk">Recuperação Registrada</div><div className="dv">{rf.recuperacao ? 'SIM' : 'NÃO'}</div></div>
+          <span className={`chip chip-${rf.recuperacao ? 'brass' : 'green'}`}>{rf.recuperacao ? 'CONSTA' : 'NÃO'}</span>
         </div>
       </div>
 
