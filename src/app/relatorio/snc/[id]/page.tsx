@@ -169,7 +169,7 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
         <>
           <div className="src-badge">PRECIFICADOR FIPE</div>
           <div className="ds-block" style={{ marginTop: 8 }}>
-            <div className="ds-hd"><span>TABELA DE PRECIFICAÇÃO</span><span className="ds-hd-badge">{reg(prec.length)}</span></div>
+            <div className="ds-hd"><span>TABELA DE PRECIFICAÇÃO</span><span className="ds-hd-badge">{reg(prec.length)}</span><span className="chip chip-green" style={{ marginLeft: 8 }}>CONSTA</span></div>
             <div className="tbl-wrap">
               <table className="snc-tbl">
                 <thead>
@@ -204,6 +204,7 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
         <div className="ds-hd">
           <span>INFRAÇÕES DE TRÂNSITO</span>
           <span className="ds-hd-badge">{reg(totalRenainf)}</span>
+          <span className={`chip ${ocorrencias.length > 0 ? 'chip-brass' : 'chip-green'}`} style={{ marginLeft: 8 }}>{ocorrencias.length > 0 ? 'CONSTA' : 'NADA CONSTA'}</span>
         </div>
         {ocorrencias.length > 0 ? (
           <div className="tbl-wrap">
