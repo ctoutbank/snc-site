@@ -155,26 +155,32 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
         </div>
         {ocorrencias.length > 0 ? (
           <div className="tbl-wrap">
-            <div className="tbl-head">
-              <div className="tbl-th">Código</div>
-              <div className="tbl-th">Data/Hora</div>
-              <div className="tbl-th">AIT</div>
-              <div className="tbl-th">Descrição</div>
-              <div className="tbl-th">Órgão</div>
-              <div className="tbl-th">Valor</div>
-              <div className="tbl-th">Status</div>
-            </div>
-            {ocorrencias.map((o, i) => (
-              <div key={i} className="tbl-row-renainf" style={{ background: i % 2 === 0 ? '#faf8f1' : '#f4f1ea' }}>
-                <div className="tbl-td mono">{o.codigo ?? '—'}</div>
-                <div className="tbl-td mono">{o.dataHora ?? '—'}</div>
-                <div className="tbl-td mono">{o.ait ?? '—'}</div>
-                <div className="tbl-td">{o.descricao ?? '—'}</div>
-                <div className="tbl-td">{abrOrg(o.orgao)}</div>
-                <div className="tbl-td mono bold">{o.valor ?? '—'}</div>
-                <div className="tbl-td"><span className="chip chip-brass">CONSTA</span></div>
-              </div>
-            ))}
+            <table className="snc-tbl">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Data/Hora</th>
+                  <th>AIT</th>
+                  <th>Descrição</th>
+                  <th>Órgão</th>
+                  <th>Valor</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ocorrencias.map((o, i) => (
+                  <tr key={i} style={{ background: i % 2 === 0 ? '#faf8f1' : '#f4f1ea' }}>
+                    <td className="mono">{o.codigo ?? '—'}</td>
+                    <td className="mono">{o.dataHora ?? '—'}</td>
+                    <td className="mono">{o.ait ?? '—'}</td>
+                    <td>{o.descricao ?? '—'}</td>
+                    <td>{abrOrg(o.orgao)}</td>
+                    <td className="mono bold">{o.valor ?? '—'}</td>
+                    <td><span className="chip chip-brass">CONSTA</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         ) : (
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Resultado</div><div className="dv">Nenhuma infração registrada no RENAINF</div></div><span className="chip chip-green">NADA CONSTA</span></div>
@@ -188,22 +194,28 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
           <div className="ds-block" style={{ marginTop: 8 }}>
             <div className="ds-hd"><span>TABELA DE PRECIFICAÇÃO</span><span className="ds-hd-badge">{reg(prec.length)}</span></div>
             <div className="tbl-wrap">
-              <div className="tbl-head-fipe">
-                <div className="tbl-th">Código</div>
-                <div className="tbl-th">Fabricante/Modelo</div>
-                <div className="tbl-th">Ano Modelo</div>
-                <div className="tbl-th">Informante</div>
-                <div className="tbl-th">Preço</div>
-              </div>
-              {prec.map((item, i) => (
-                <div key={i} className="tbl-row-fipe" style={{ background: i % 2 === 0 ? '#faf8f1' : '#f4f1ea' }}>
-                  <div className="tbl-td mono">{v(item.codigo)}</div>
-                  <div className="tbl-td bold">{v(item.fabricanteModelo)}</div>
-                  <div className="tbl-td mono">{v(item.anoModelo)}</div>
-                  <div className="tbl-td mono">FIPE</div>
-                  <div className="tbl-td green">{v(item.preco)}</div>
-                </div>
-              ))}
+              <table className="snc-tbl">
+                <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Fabricante/Modelo</th>
+                    <th>Ano Modelo</th>
+                    <th>Informante</th>
+                    <th>Preço</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {prec.map((item, i) => (
+                    <tr key={i} style={{ background: i % 2 === 0 ? '#faf8f1' : '#f4f1ea' }}>
+                      <td className="mono">{v(item.codigo)}</td>
+                      <td className="bold">{v(item.fabricanteModelo)}</td>
+                      <td className="mono">{v(item.anoModelo)}</td>
+                      <td className="mono">FIPE</td>
+                      <td className="green">{v(item.preco)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </>
@@ -400,16 +412,15 @@ const CSS = `
   .ds-row .dv{font-size:13px;color:var(--ink);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .src-badge{display:inline-flex;align-items:center;padding:5px 12px;border:1px solid #b8b0a0;color:var(--ink2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;background:var(--paper);margin:16px 0 0}
   .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #c8bfa8;border-top:none}
-  .ds-hd-badge{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border:1px solid var(--brass);color:var(--brass);background:rgba(200,162,90,.12);white-space:nowrap}
-  .tbl-head,.tbl-row-renainf{display:grid;grid-template-columns:max-content 130px 60px 1fr 220px max-content max-content;gap:0;min-width:580px;white-space:nowrap}
-  .tbl-head-fipe,.tbl-row-fipe{display:grid;grid-template-columns:100px 1fr 100px 100px 130px;gap:0;min-width:580px;white-space:nowrap}
-  .tbl-th{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;background:rgba(200,162,90,0.08);border-bottom:1px solid #c8bfa8;border-right:1px solid #c8bfa8;text-align:center}
-  .tbl-th:last-child{border-right:none}
-  .tbl-td{font-size:12px;color:var(--ink);padding:12px 14px;border-bottom:1px solid #c8bfa8;border-right:1px solid #c8bfa8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;justify-content:center;text-align:center}
-  .tbl-td:last-child{border-right:none}
-  .tbl-td.mono{font-family:'JetBrains Mono',monospace;font-size:11px}
-  .tbl-td.bold{font-weight:700}
-  .tbl-td.green{color:var(--greend);font-weight:700;font-family:'JetBrains Mono',monospace}
+  .snc-tbl{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
+  .snc-tbl th{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.08em;text-transform:uppercase;padding:9px 14px;background:rgba(200,162,90,0.08);border-bottom:1px solid #c8bfa8;border-right:1px solid #c8bfa8;text-align:center;white-space:nowrap}
+  .snc-tbl th:last-child{border-right:none}
+  .snc-tbl td{padding:11px 14px;border-bottom:1px solid #c8bfa8;border-right:1px solid #c8bfa8;color:var(--ink);text-align:center;vertical-align:middle;white-space:nowrap}
+  .snc-tbl td:last-child{border-right:none}
+  .snc-tbl tr:last-child td{border-bottom:none}
+  .snc-tbl td.mono{font-family:'JetBrains Mono',monospace;font-size:11px}
+  .snc-tbl td.bold{font-weight:700;font-size:13px}
+  .snc-tbl td.green{color:var(--greend);font-weight:700;font-family:'JetBrains Mono',monospace;font-size:13px}
   .chip{font-size:9px;padding:3px 8px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-weight:700;white-space:nowrap;letter-spacing:.04em}
   .chip-brass{background:rgba(200,162,90,.12);color:#a07a30;border:1px solid rgba(200,162,90,.3)}
   .chip-green{background:rgba(43,168,74,.1);color:var(--greend);border:1px solid rgba(43,168,74,.3)}
@@ -576,7 +587,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
                 {meta?.titulo ?? 'Relatório'}
                 <br />
                 <span className="it">SNC AutoScore</span>{' '}
-                <span style={{ color: 'var(--brass)', fontStyle: 'normal', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.75em', letterSpacing: '0.1em' }}>{payload?.documento ?? ''}</span>
+                <span className="it" style={{ color: 'var(--brass)' }}>{payload?.documento ?? ''}</span>
               </h1>
               <div className="lede">{meta?.subtitulo ?? 'Documento gerado a partir de fontes oficiais.'}</div>
             </div>
