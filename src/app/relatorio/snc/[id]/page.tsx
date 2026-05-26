@@ -126,7 +126,7 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
   return (
     <>
       <div className="src-badge">DENATRAN / SENATRAN</div>
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 2, marginBottom: 2, marginTop: 8 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 2, marginBottom: 2, marginTop: 8, alignItems: 'stretch' }}>
         {/* Coluna esquerda: Identificação */}
         <div>
           <div className="ds-hd"><span>IDENTIFICAÇÃO DO VEÍCULO</span></div>
@@ -147,7 +147,7 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
           </div></div>
         </div>
         {/* Coluna direita: Histórico Roubo/Furto */}
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           <div className="ds-hd"><span>HISTÓRICO ROUBO/FURTO</span></div>
           <div className="ds-row">
             <div className="ds-row-inner"><div className="dk">Declaração de Roubo</div><div className="dv">{rf.declaracao ? 'SIM' : 'NÃO'}</div></div>
@@ -157,7 +157,7 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
             <div className="ds-row-inner"><div className="dk">Devolução Registrada</div><div className="dv">{rf.devolucao ? 'SIM' : 'NÃO'}</div></div>
             <span className={`chip chip-${rf.devolucao ? 'brass' : 'green'}`}>{rf.devolucao ? 'CONSTA' : 'NÃO'}</span>
           </div>
-          <div className="ds-row">
+          <div className="ds-row" style={{ flex: 1 }}>
             <div className="ds-row-inner"><div className="dk">Recuperação Registrada</div><div className="dv">{rf.recuperacao ? 'SIM' : 'NÃO'}</div></div>
             <span className={`chip chip-${rf.recuperacao ? 'brass' : 'green'}`}>{rf.recuperacao ? 'CONSTA' : 'NÃO'}</span>
           </div>
