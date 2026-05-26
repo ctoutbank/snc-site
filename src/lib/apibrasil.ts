@@ -384,3 +384,75 @@ export async function consultarPlacaFIPE(placa: string): Promise<PlacaFIPERespon
   );
 }
 
+// ─────────────────────────────────────────────────────────
+// DATASET: Proprietário Atual
+// POST /api/v2/consulta/veiculos/credits  { tipo: "proprietario-atual" }
+// ─────────────────────────────────────────────────────────
+
+/** Payload para consulta de proprietário atual do veículo */
+export interface ProprietarioAtualPayload {
+  tipo: "proprietario-atual";
+  placa: string;
+  homolog: boolean;
+}
+
+/**
+ * Dados do proprietário atual — estrutura provisória.
+ * Os campos exatos são confirmados após o primeiro teste em homolog
+ * inspecionando o campo _raw na resposta da rota.
+ */
+export interface ProprietarioAtualDados {
+  nome?: string;
+  cpfCnpj?: string;
+  municipio?: string;
+  uf?: string;
+  dataAquisicao?: string;
+  restricoes?: string[];
+  [key: string]: unknown;
+}
+
+/** Resposta completa do endpoint para proprietário atual */
+export interface ProprietarioAtualResponse {
+  status_code?: number;
+  error?: boolean;
+  message?: string;
+  homolog?: boolean;
+  data?: {
+    proprietario?: ProprietarioAtualDados;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+/**
+ * Consulta o proprietário atual de um veículo pela placa.
+ *
+ * Endpoint: POST /api/v2/consulta/veiculos/credits
+ * Payload:  { tipo: "proprietario-atual", placa, homolog }
+ *
+ * PROTOCOLO: Rodar em homolog primeiro. Só mudar para produção
+ * após autorização explícita do usuário (Denison).
+ *
+ * @param placa  Placa no formato antigo (ABC1234) ou Mercosul (ABC1D23)
+ */
+export async function consultarProprietarioAtual(
+  placa: string
+): Promise<ProprietarioAtualResponse> {
+  const p = normalizarPlaca(placa);
+  if (!validarPlaca(p)) {
+    throw new APIBrasilError(
+      `Placa inválida: "${placa}". Use o formato ABC1234 (antigo) ou ABC1D23 (Mercosul).`,
+      400
+    );
+  }
+
+  const homolog = process.env.APIBRASIL_HOMOLOG === "true";
+
+  return apiFetch<ProprietarioAtualPayload, ProprietarioAtualResponse>(
+    "/api/v2/consulta/veiculos/credits",
+    "POST",
+    { tipo: "proprietario-atual", placa: p, homolog }
+  );
+}
+
+
