@@ -144,7 +144,8 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
       <div className="src-badge">RENAINF</div>
       <div className="ds-block" style={{ marginTop: 8 }}>
         <div className="ds-hd">
-          <span>INFRAÇÕES DE TRÂNSITO · {totalRenainf} REGISTRO(S)</span>
+          <span>INFRAÇÕES DE TRÂNSITO</span>
+          <span className="ds-hd-badge">{totalRenainf} REGISTRO(S)</span>
         </div>
         {ocorrencias.length > 0 ? (
           <div className="tbl-wrap">
@@ -179,7 +180,7 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
         <>
           <div className="src-badge">PRECIFICADOR FIPE</div>
           <div className="ds-block" style={{ marginTop: 8 }}>
-            <div className="ds-hd"><span>TABELA DE PRECIFICAÇÃO · {prec.length} REGISTRO(S)</span></div>
+            <div className="ds-hd"><span>TABELA DE PRECIFICAÇÃO</span><span className="ds-hd-badge">{prec.length} REGISTRO(S)</span></div>
             <div className="tbl-wrap">
               <div className="tbl-head-fipe">
                 <div className="tbl-th">Código</div>
@@ -393,6 +394,7 @@ const CSS = `
   .ds-row .dv{font-size:13px;color:var(--ink);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .src-badge{display:inline-flex;align-items:center;padding:5px 12px;border:1px solid #b8b0a0;color:var(--ink2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;background:var(--paper);margin:16px 0 0}
   .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .ds-hd-badge{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border:1px solid var(--brass);color:var(--brass);background:rgba(200,162,90,.12);white-space:nowrap}
   .tbl-head,.tbl-row-renainf{display:grid;grid-template-columns:max-content 130px 60px 1fr 220px max-content max-content;gap:0;min-width:580px;white-space:nowrap}
   .tbl-head-fipe,.tbl-row-fipe{display:grid;grid-template-columns:100px 1fr 100px 100px 130px;gap:0;min-width:580px;white-space:nowrap}
   .tbl-th{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;background:rgba(200,162,90,0.08);border-bottom:1px solid #d4cfc1;border-right:1px solid #ece7d8;text-align:center}
