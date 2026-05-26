@@ -39,6 +39,7 @@ export function DatasetCard({
         background: ativo ? corBg : "rgba(255,255,255,0.02)",
         border: `1px solid ${ativo ? corBorder : "rgba(255,255,255,0.06)"}`,
         padding: "32px 28px",
+        height: "100%",
         display: "flex",
         flexDirection: "column",
         gap: 0,
@@ -125,5 +126,5 @@ export function DatasetCard({
     </div>
   );
 
-  return ativo ? <Link href={href} style={{ textDecoration: "none", display: "block" }}>{inner}</Link> : inner;
+  return ativo ? <Link href={href} style={{ textDecoration: "none", display: "flex", height: "100%" }}>{inner}</Link> : inner;
 }
