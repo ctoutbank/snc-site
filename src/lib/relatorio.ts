@@ -154,7 +154,7 @@ export const DATASET_META: Record<
   },
   leilao: {
     titulo: "Leilão com Score",
-    subtitulo: "Histórico de leilão, score de risco, indício de sinistro e condições do veículo.",
+    subtitulo: "Score de risco (pontuação A–E, aceitação, % sobre FIPE, vistoria), indício de sinistro, dados do veículo (marca/modelo, chassi, RENAVAM, cor, motor, câmbio, carroceria, categoria, quilometragem, eixos), histórico de leilões (data, leiloeiro, lote, comitente, pátio, condições e situação do chassi) e checklist de avarias.",
     fonte: "DENATRAN / SENATRAN",
     cor: "#D4A843",
   },

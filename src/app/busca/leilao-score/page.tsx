@@ -6,7 +6,7 @@ import { BuscaLeilaoScorePanel } from "@/components/busca-leilao-score-panel";
 export const metadata: Metadata = {
   title: "Leilão com Score — SNC",
   description:
-    "Consulte o histórico de leilão e score de risco de qualquer veículo pela placa.",
+    "Score de risco, indício de sinistro, dados do veículo, histórico de leilões e checklist de avarias pela placa.",
 };
 
 export default function BuscaLeilaoScorePage() {
@@ -40,8 +40,9 @@ export default function BuscaLeilaoScorePage() {
                 <span style={{ color: "#D4A843" }}>Score</span>
               </h1>
               <p style={{ fontSize: 16, color: "#8a94a3", lineHeight: 1.6, maxWidth: 540 }}>
-                Histórico de leilão e score de risco do veículo.
-                Identifique se o veículo já passou por leilão e avalie o grau de risco.
+                Score de risco (pontuação A–E, aceitação, % sobre FIPE), indício de sinistro,
+                dados do veículo (marca, chassi, RENAVAM, motor, câmbio, km, eixos),
+                histórico de leilões e checklist de avarias.
               </p>
             </div>
           </div>
