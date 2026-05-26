@@ -2,36 +2,34 @@
 
 import { useState, useCallback } from "react";
 
-// ─── Tipos ───────────────────────────────────────────────
+// ─── Tipos (alinhados com a resposta real da APIBrasil) ───────────────────────
 type TipoDoc = "CPF" | "CNPJ";
 
 interface ConsultaResult {
   scr: {
     error?: string;
-    nome?: string;
-    totalVencido?: number;
-    totalAVencer?: number;
-    totalPrejuizo?: number;
-    totalResponsabilidade?: number;
-    quantidadeInstituicoes?: number;
-    dataReferencia?: string;
-    modalidades?: { modalidade: string; vencido?: number; aVencer?: number; total?: number }[];
-    [key: string]: unknown;
+    totalAVencer?: string;
+    totalVencido?: string;
+    totalPrejuizo?: string;
+    limiteCredito?: string;
+    quantidadeInstituicoes?: string;
+    quantidadeOperacoes?: string;
+    databaseConsultada?: string;
+    dataInicioRelacionamento?: string;
+    coobrigacaoAssumida?: string;
+    coobrigacaoRecebida?: string;
+    tipoDocumento?: string;
+    operacoes?: { modalidade: string; subModalidade: string; total: string; percentual: string }[];
+    creditoAVencer?: { descricao: string; valor: string; qtdMeses: string }[];
   };
   score: {
     error?: string;
-    score?: number;
-    scoreLabel?: string;
+    pontuacao?: number | null;
     faixa?: string;
-    probabilidadeInadimplencia?: number;
-    fatoresNegativos?: string[];
-    fatoresPositivos?: string[];
-    dataConsulta?: string;
-    [key: string]: unknown;
   };
 }
 
-// ─── Formatação ───────────────────────────────────────────
+// ─── Formatação ───────────────────────────────────────────────────────────────
 function formatarDocumento(valor: string, tipo: TipoDoc): string {
   const digits = valor.replace(/\D/g, "");
   if (tipo === "CPF") {
@@ -49,13 +47,16 @@ function formatarDocumento(valor: string, tipo: TipoDoc): string {
     .replace(/(\d{4})(\d{1,2})$/, "$1-$2");
 }
 
-function formatarMoeda(valor?: number): string {
-  if (valor == null) return "—";
-  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(valor);
+/** Converte "16833,00" → "R$ 16.833,00" */
+function formatarValorBR(valor?: string): string {
+  if (!valor || valor === "—") return "—";
+  const num = parseFloat(valor.replace(/\./g, "").replace(",", "."));
+  if (isNaN(num)) return valor;
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(num);
 }
 
-// ─── Score Ring ───────────────────────────────────────────
-function ScoreRing({ score }: { score?: number }) {
+// ─── Score Ring ────────────────────────────────────────────────────────────────
+function ScoreRing({ score }: { score?: number | null }) {
   const val = score ?? 0;
   const pct = Math.min(val / 1000, 1);
   const r = 54;
@@ -100,13 +101,27 @@ function ScoreRing({ score }: { score?: number }) {
         </div>
       </div>
       <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: cor, letterSpacing: "0.14em", textTransform: "uppercase" }}>
-        {label}
+        {val > 0 ? label : "Sem dados"}
       </span>
     </div>
   );
 }
 
-// ─── Componente Principal ─────────────────────────────────
+// ─── Linha de dado ────────────────────────────────────────────────────────────
+function DataRow({ label, value, destaque }: { label: string; value: string; destaque?: boolean }) {
+  return (
+    <div style={{
+      display: "grid", gridTemplateColumns: "1fr auto",
+      padding: "13px 0", borderBottom: "1px solid rgba(255,255,255,0.06)",
+      gap: 16, alignItems: "center",
+    }}>
+      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#5a6a7a", letterSpacing: "0.1em", textTransform: "uppercase" }}>{label}</span>
+      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, color: destaque ? "#e07b6a" : "#fff", fontWeight: destaque ? 700 : 400 }}>{value}</span>
+    </div>
+  );
+}
+
+// ─── Componente Principal ──────────────────────────────────────────────────────
 export function BuscaPanel() {
   const [tipo, setTipo] = useState<TipoDoc>("CPF");
   const [valor, setValor] = useState("");
@@ -136,7 +151,6 @@ export function BuscaPanel() {
       return;
     }
 
-    // Endpoint SCR Bacen (v2) suporta apenas CPF
     if (tipo === "CNPJ") {
       setErro("A consulta SCR Bacen + Score está disponível apenas para CPF no momento.");
       return;
@@ -162,9 +176,12 @@ export function BuscaPanel() {
     if (e.key === "Enter") handleBuscar();
   };
 
+  const vencido = parseFloat((resultado?.scr?.totalVencido ?? "0").replace(",", "."));
+  const prejuizo = parseFloat((resultado?.scr?.totalPrejuizo ?? "0").replace(",", "."));
+
   return (
     <div>
-      {/* ── Input de busca ── */}
+      {/* ── Painel de busca ── */}
       <div style={{
         background: "rgba(255,255,255,0.03)",
         border: "1px solid rgba(255,255,255,0.1)",
@@ -183,9 +200,8 @@ export function BuscaPanel() {
                 fontFamily: "'JetBrains Mono', monospace",
                 fontSize: 11,
                 letterSpacing: "0.14em",
-                textTransform: "uppercase",
+                textTransform: "uppercase" as const,
                 color: tipo === t ? "#fff" : "#5a6a7a",
-                borderBottom: tipo === t ? "2px solid #2BA84A" : "2px solid transparent",
                 background: "none",
                 border: "none",
                 borderBottom: tipo === t ? "2px solid #2BA84A" : "2px solid transparent",
@@ -205,7 +221,7 @@ export function BuscaPanel() {
             <div style={{
               position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)",
               fontFamily: "'JetBrains Mono', monospace", fontSize: 10,
-              color: "#5a6a7a", letterSpacing: "0.14em", textTransform: "uppercase",
+              color: "#5a6a7a", letterSpacing: "0.14em", textTransform: "uppercase" as const,
               pointerEvents: "none",
             }}>
               {tipo}
@@ -245,12 +261,12 @@ export function BuscaPanel() {
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: 12,
               letterSpacing: "0.12em",
-              textTransform: "uppercase",
+              textTransform: "uppercase" as const,
               fontWeight: 700,
               border: "none",
               cursor: loading ? "not-allowed" : "pointer",
               transition: "background 0.15s",
-              whiteSpace: "nowrap",
+              whiteSpace: "nowrap" as const,
               display: "flex",
               alignItems: "center",
               gap: 10,
@@ -265,23 +281,13 @@ export function BuscaPanel() {
           </button>
         </div>
 
-        {/* Erro */}
         {erro && (
-          <div style={{
-            marginTop: 14,
-            padding: "10px 16px",
-            background: "rgba(192,57,43,0.15)",
-            border: "1px solid rgba(192,57,43,0.3)",
-            color: "#e07b6a",
-            fontFamily: "'JetBrains Mono', monospace",
-            fontSize: 12,
-            letterSpacing: "0.08em",
-          }}>
+          <div style={{ marginTop: 14, padding: "10px 16px", background: "rgba(192,57,43,0.15)", border: "1px solid rgba(192,57,43,0.3)", color: "#e07b6a", fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: "0.08em" }}>
             ⚠ {erro}
           </div>
         )}
 
-        <p style={{ marginTop: 16, fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#3a4a5a", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+        <p style={{ marginTop: 16, fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#3a4a5a", letterSpacing: "0.12em", textTransform: "uppercase" as const }}>
           Dados protegidos por criptografia · Consulta registrada conforme LGPD
         </p>
       </div>
@@ -289,15 +295,11 @@ export function BuscaPanel() {
       {/* ── Resultados ── */}
       {resultado && (
         <div id="busca-resultado" style={{ animation: "fadeUp 0.4s ease" }}>
-          {/* Header do resultado */}
-          <div style={{
-            display: "flex", alignItems: "center", gap: 16,
-            paddingBottom: 24, marginBottom: 28,
-            borderBottom: "1px solid rgba(255,255,255,0.1)",
-          }}>
+          {/* Header */}
+          <div style={{ display: "flex", alignItems: "center", gap: 16, paddingBottom: 24, marginBottom: 28, borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
             <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#2BA84A", boxShadow: "0 0 0 3px rgba(43,168,74,0.2)" }} />
-            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#2BA84A", letterSpacing: "0.18em", textTransform: "uppercase" }}>
-              Consulta concluída
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#2BA84A", letterSpacing: "0.18em", textTransform: "uppercase" as const }}>
+              Consulta concluída · Base {resultado.scr.databaseConsultada}
             </span>
             <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#3a4a5a", letterSpacing: "0.1em", marginLeft: "auto" }}>
               {new Date().toLocaleString("pt-BR")}
@@ -305,139 +307,104 @@ export function BuscaPanel() {
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
-            {/* ── Coluna SCR ── */}
+            {/* ── SCR Bacen ── */}
             <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", padding: "36px 32px" }}>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.22em", textTransform: "uppercase", marginBottom: 20 }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.22em", textTransform: "uppercase" as const, marginBottom: 20 }}>
                 SCR · Bacen
               </div>
               <h3 style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 28, fontWeight: 400, color: "#fff", marginBottom: 28, lineHeight: 1.1 }}>
-                Sistema de<br /><em style={{ color: "#8a94a3", fontStyle: "italic" }}>Crédito</em>
+                Sistema de<br /><em style={{ color: "#8a94a3" }}>Crédito</em>
               </h3>
 
-              {resultado.scr.error ? (
-                <div style={{ color: "#e07b6a", fontFamily: "'JetBrains Mono', monospace", fontSize: 12, padding: "16px", background: "rgba(192,57,43,0.1)", border: "1px solid rgba(192,57,43,0.2)" }}>
-                  {resultado.scr.error}
-                </div>
-              ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-                  {[
-                    { label: "Responsabilidade Total", val: formatarMoeda(resultado.scr.totalResponsabilidade) },
-                    { label: "A Vencer", val: formatarMoeda(resultado.scr.totalAVencer) },
-                    { label: "Vencido", val: formatarMoeda(resultado.scr.totalVencido), destaque: (resultado.scr.totalVencido ?? 0) > 0 },
-                    { label: "Prejuízo", val: formatarMoeda(resultado.scr.totalPrejuizo), destaque: (resultado.scr.totalPrejuizo ?? 0) > 0 },
-                    { label: "Instituições", val: resultado.scr.quantidadeInstituicoes != null ? String(resultado.scr.quantidadeInstituicoes) : "—" },
-                    { label: "Referência", val: resultado.scr.dataReferencia ?? "—" },
-                  ].map(({ label, val, destaque }) => (
-                    <div key={label} style={{
-                      display: "grid", gridTemplateColumns: "1fr auto",
-                      padding: "14px 0", borderBottom: "1px solid rgba(255,255,255,0.06)",
-                      gap: 16, alignItems: "center",
-                    }}>
-                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#5a6a7a", letterSpacing: "0.1em", textTransform: "uppercase" }}>{label}</span>
-                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, color: destaque ? "#e07b6a" : "#fff", fontWeight: destaque ? 700 : 400 }}>{val}</span>
+              <DataRow label="Crédito a Vencer" value={formatarValorBR(resultado.scr.totalAVencer)} />
+              <DataRow label="Crédito Vencido" value={formatarValorBR(resultado.scr.totalVencido)} destaque={vencido > 0} />
+              <DataRow label="Prejuízo" value={formatarValorBR(resultado.scr.totalPrejuizo)} destaque={prejuizo > 0} />
+              <DataRow label="Limite de Crédito" value={formatarValorBR(resultado.scr.limiteCredito)} />
+              <DataRow label="Coobrigação Assumida" value={formatarValorBR(resultado.scr.coobrigacaoAssumida)} />
+              <DataRow label="Qtd. Instituições" value={resultado.scr.quantidadeInstituicoes ?? "—"} />
+              <DataRow label="Qtd. Operações" value={resultado.scr.quantidadeOperacoes ?? "—"} />
+              <DataRow label="Início Relacionamento" value={resultado.scr.dataInicioRelacionamento ?? "—"} />
+              <DataRow label="Base de Dados" value={resultado.scr.databaseConsultada ?? "—"} />
+
+              {/* Operações por modalidade */}
+              {resultado.scr.operacoes && resultado.scr.operacoes.length > 0 && (
+                <div style={{ marginTop: 24 }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.18em", textTransform: "uppercase" as const, marginBottom: 12 }}>
+                    Operações por Modalidade
+                  </div>
+                  {resultado.scr.operacoes.slice(0, 8).map((op, i) => (
+                    <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr auto", padding: "9px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#7a8a9a", lineHeight: 1.4 }}>{op.subModalidade || op.modalidade}</span>
+                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#cfd6df" }}>{formatarValorBR(op.total)}</span>
                     </div>
                   ))}
+                </div>
+              )}
 
-                  {/* Modalidades */}
-                  {resultado.scr.modalidades && resultado.scr.modalidades.length > 0 && (
-                    <div style={{ marginTop: 20 }}>
-                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 12 }}>
-                        Modalidades
-                      </div>
-                      {resultado.scr.modalidades.slice(0, 5).map((m, i) => (
-                        <div key={i} style={{
-                          display: "grid", gridTemplateColumns: "1fr auto",
-                          padding: "10px 0", borderBottom: "1px solid rgba(255,255,255,0.04)",
-                        }}>
-                          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#7a8a9a" }}>{m.modalidade}</span>
-                          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#cfd6df" }}>{formatarMoeda(m.total)}</span>
-                        </div>
-                      ))}
+              {/* Crédito a vencer por prazo */}
+              {resultado.scr.creditoAVencer && resultado.scr.creditoAVencer.length > 0 && (
+                <div style={{ marginTop: 20 }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.18em", textTransform: "uppercase" as const, marginBottom: 12 }}>
+                    A Vencer por Prazo
+                  </div>
+                  {resultado.scr.creditoAVencer.slice(0, 6).map((c, i) => (
+                    <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr auto", padding: "9px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#7a8a9a" }}>{c.descricao}</span>
+                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#cfd6df" }}>{formatarValorBR(c.valor)}</span>
                     </div>
-                  )}
+                  ))}
                 </div>
               )}
             </div>
 
-            {/* ── Coluna Score ── */}
+            {/* ── Score ── */}
             <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", padding: "36px 32px" }}>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.22em", textTransform: "uppercase", marginBottom: 20 }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.22em", textTransform: "uppercase" as const, marginBottom: 20 }}>
                 Score · Crédito
               </div>
               <h3 style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 28, fontWeight: 400, color: "#fff", marginBottom: 28, lineHeight: 1.1 }}>
-                Indicador de<br /><em style={{ color: "#8a94a3", fontStyle: "italic" }}>Risco</em>
+                Indicador de<br /><em style={{ color: "#8a94a3" }}>Risco</em>
               </h3>
 
-              {resultado.score.error ? (
-                <div style={{ color: "#e07b6a", fontFamily: "'JetBrains Mono', monospace", fontSize: 12, padding: "16px", background: "rgba(192,57,43,0.1)", border: "1px solid rgba(192,57,43,0.2)" }}>
-                  {resultado.score.error}
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: 36 }}>
+                <ScoreRing score={resultado.score.pontuacao} />
+              </div>
+
+              <DataRow label="Pontuação" value={resultado.score.pontuacao != null ? String(resultado.score.pontuacao) : "—"} />
+              <DataRow label="Faixa de Risco" value={resultado.score.faixa ?? "—"} destaque={["RUIM", "PESSIMO", "PÉSSIMO"].includes(resultado.score.faixa ?? "")} />
+
+              {/* Legenda das faixas */}
+              <div style={{ marginTop: 28 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.18em", textTransform: "uppercase" as const, marginBottom: 14 }}>
+                  Referência de Faixas
                 </div>
-              ) : (
-                <div>
-                  <div style={{ display: "flex", justifyContent: "center", marginBottom: 32 }}>
-                    <ScoreRing score={resultado.score.score} />
+                {[
+                  { faixa: "Excelente", range: "700–1000", cor: "#2BA84A" },
+                  { faixa: "Bom", range: "500–699", cor: "#B8914A" },
+                  { faixa: "Regular", range: "300–499", cor: "#e07b39" },
+                  { faixa: "Baixo / Ruim", range: "0–299", cor: "#c0392b" },
+                ].map(({ faixa, range, cor }) => (
+                  <div key={faixa} style={{ display: "flex", justifyContent: "space-between", padding: "9px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: cor }}>{faixa}</span>
+                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#5a6a7a" }}>{range}</span>
                   </div>
-
-                  <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-                    {[
-                      { label: "Faixa", val: resultado.score.faixa ?? "—" },
-                      { label: "Prob. Inadimplência", val: resultado.score.probabilidadeInadimplencia != null ? `${(resultado.score.probabilidadeInadimplencia * 100).toFixed(1)}%` : "—" },
-                      { label: "Data Consulta", val: resultado.score.dataConsulta ?? "—" },
-                    ].map(({ label, val }) => (
-                      <div key={label} style={{
-                        display: "grid", gridTemplateColumns: "1fr auto",
-                        padding: "14px 0", borderBottom: "1px solid rgba(255,255,255,0.06)",
-                        gap: 16, alignItems: "center",
-                      }}>
-                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#5a6a7a", letterSpacing: "0.1em", textTransform: "uppercase" }}>{label}</span>
-                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, color: "#fff" }}>{val}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {resultado.score.fatoresNegativos && resultado.score.fatoresNegativos.length > 0 && (
-                    <div style={{ marginTop: 20 }}>
-                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#e07b6a", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 10 }}>
-                        Fatores de Risco
-                      </div>
-                      {resultado.score.fatoresNegativos.map((f, i) => (
-                        <div key={i} style={{ padding: "8px 12px", marginBottom: 4, background: "rgba(192,57,43,0.08)", border: "1px solid rgba(192,57,43,0.15)", fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#e07b6a" }}>
-                          — {f}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {resultado.score.fatoresPositivos && resultado.score.fatoresPositivos.length > 0 && (
-                    <div style={{ marginTop: 16 }}>
-                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#2BA84A", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: 10 }}>
-                        Fatores Positivos
-                      </div>
-                      {resultado.score.fatoresPositivos.map((f, i) => (
-                        <div key={i} style={{ padding: "8px 12px", marginBottom: 4, background: "rgba(43,168,74,0.08)", border: "1px solid rgba(43,168,74,0.2)", fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#2BA84A" }}>
-                          + {f}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Footer da consulta */}
+          {/* Footer */}
           <div style={{
             marginTop: 2, padding: "16px 24px",
             background: "rgba(255,255,255,0.02)",
             border: "1px solid rgba(255,255,255,0.06)",
             display: "flex", alignItems: "center", gap: 24,
             fontFamily: "'JetBrains Mono', monospace", fontSize: 10,
-            color: "#3a4a5a", letterSpacing: "0.1em", textTransform: "uppercase",
+            color: "#3a4a5a", letterSpacing: "0.1em", textTransform: "uppercase" as const,
           }}>
-            <span>Fonte: APIBrasil · SCR Bacen</span>
+            <span>Fonte: APIBrasil · SCR Bacen Oficial</span>
             <span>·</span>
             <span>LGPD Art. 7º, III</span>
-            <span>·</span>
             <span style={{ marginLeft: "auto" }}>SNC — Sistema Nacional de Conformidade</span>
           </div>
         </div>
@@ -447,7 +414,7 @@ export function BuscaPanel() {
         @keyframes spin { to { transform: rotate(360deg); } }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 768px) {
-          #busca-resultado > div:last-of-type { grid-template-columns: 1fr !important; }
+          #busca-resultado > div:nth-child(2) { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </div>
