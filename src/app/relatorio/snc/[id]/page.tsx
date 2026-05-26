@@ -121,10 +121,6 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
         <div>
           <div className="ds-hd"><span>IDENTIFICAÇÃO DO VEÍCULO</span></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Marca/Modelo</div><div className="dv">{v(id.marcaModelo)}</div></div></div>
-          <div className="ds-row">
-            <div className="ds-row-inner"><div className="dk">Status</div><div className="dv">{v(id.statusDescricao ?? 'SEM RESTRIÇÃO')}</div></div>
-            <span className="chip chip-green">{String(id.statusDescricao ?? 'SEM RESTRIÇÃO').toUpperCase()}</span>
-          </div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Categoria</div><div className="dv">{v(id.categoria)}</div></div></div>
           {id.chassi && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(id.chassi)}</div></div></div>}
           {id.municipio && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{v(id.municipio)} / {v(id.uf)}</div></div></div>}
@@ -615,7 +611,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
           </section>
         ) : (
           <>
-            {/* §01 SUMÁRIO — layout do mockup */}
+            {/* §01 SUMÁRIO */}
             <section className="r-sec">
               <div className="r-sh">
                 <div className="num">§ 01</div>
@@ -629,20 +625,15 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
                     <span className="r-vrd-tag">Parecer SNC consolidado</span>
                     <span className="r-vrd-stamp">✓ GERADO DIGITALMENTE</span>
                   </div>
-
-                  {/* Status integrado ao topo do card */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #ece7d8', marginBottom: 14 }}>
-                    <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 9, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--ink2)' }}>Status</span>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 9, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--greend)', background: 'rgba(43,168,74,.08)', border: '1px solid rgba(43,168,74,.3)', padding: '4px 10px' }}>
-                      <span>✓</span> CONSULTA CONCLUÍDA COM SUCESSO
-                    </span>
-                  </div>
-
                   <div className="r-vrd-result">
                     <div className="r-seal">✓</div>
                     <div className="r-vt">
-                      <h3>Consulta registrada</h3>
-                      <p>Dados processados e disponíveis para análise.</p>
+                      <h3>{(() => {
+                        const rid = (payload.resultado?.identificacao ?? payload.resultado?.veiculo ?? payload.resultado?.proprietario ?? {}) as Record<string, unknown>;
+                        const scr = (payload.resultado?.score ?? {}) as Record<string, unknown>;
+                        return String(rid.statusDescricao ?? scr.faixa ?? 'SEM RESTRIÇÃO');
+                      })()}</h3>
+                      <p>Consulta concluída com sucesso.</p>
                     </div>
                   </div>
                   <div className="r-vrd-msg">
@@ -652,6 +643,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
                 </div>
               </div>
             </section>
+
 
             {/* §02 RESULTADOS */}
             <section className="r-sec r-sec-results">
