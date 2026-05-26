@@ -164,6 +164,40 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
         </div>
       </div>
 
+      {/* Badge + PRECIFICADOR FIPE tabela responsiva */}
+      {prec.length > 0 && (
+        <>
+          <div className="src-badge">PRECIFICADOR FIPE</div>
+          <div className="ds-block" style={{ marginTop: 8 }}>
+            <div className="ds-hd"><span>TABELA DE PRECIFICAÇÃO</span><span className="ds-hd-badge">{reg(prec.length)}</span></div>
+            <div className="tbl-wrap">
+              <table className="snc-tbl">
+                <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Fabricante/Modelo</th>
+                    <th>Ano Modelo</th>
+                    <th>Informante</th>
+                    <th>Preço</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {prec.map((item, i) => (
+                    <tr key={i} style={{ background: i % 2 === 0 ? '#faf8f1' : '#f4f1ea' }}>
+                      <td className="mono">{v(item.codigo)}</td>
+                      <td className="bold">{v(item.fabricanteModelo)}</td>
+                      <td className="mono">{v(item.anoModelo)}</td>
+                      <td className="mono">FIPE</td>
+                      <td className="green">{v(item.preco)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+
       {/* Badge + RENAINF tabela responsiva */}
       <div className="src-badge">RENAINF</div>
       <div className="ds-block" style={{ marginTop: 8 }}>
@@ -204,40 +238,6 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Resultado</div><div className="dv">Nenhuma infração registrada no RENAINF</div></div><span className="chip chip-green">NADA CONSTA</span></div>
         )}
       </div>
-
-      {/* Badge + PRECIFICADOR FIPE tabela responsiva */}
-      {prec.length > 0 && (
-        <>
-          <div className="src-badge">PRECIFICADOR FIPE</div>
-          <div className="ds-block" style={{ marginTop: 8 }}>
-            <div className="ds-hd"><span>TABELA DE PRECIFICAÇÃO</span><span className="ds-hd-badge">{reg(prec.length)}</span></div>
-            <div className="tbl-wrap">
-              <table className="snc-tbl">
-                <thead>
-                  <tr>
-                    <th>Código</th>
-                    <th>Fabricante/Modelo</th>
-                    <th>Ano Modelo</th>
-                    <th>Informante</th>
-                    <th>Preço</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {prec.map((item, i) => (
-                    <tr key={i} style={{ background: i % 2 === 0 ? '#faf8f1' : '#f4f1ea' }}>
-                      <td className="mono">{v(item.codigo)}</td>
-                      <td className="bold">{v(item.fabricanteModelo)}</td>
-                      <td className="mono">{v(item.anoModelo)}</td>
-                      <td className="mono">FIPE</td>
-                      <td className="green">{v(item.preco)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </>
-      )}
 
       {/* PDF Oficial */}
       {pdf && (
