@@ -295,7 +295,7 @@ function DadosVeiculo({ r }: { r: Record<string, unknown> }) {
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Combustível</div><div className="dv">{v(vei.combustivel)}</div></div></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Ano Fabricação</div><div className="dv">{v(vei.anoFabricacao)}</div></div></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Ano Modelo</div><div className="dv">{v(vei.anoModelo)}</div></div></div>
-          {vei.chassi && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(vei.chassi)}</div></div></div>}
+          {!!vei.chassi && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(vei.chassi)}</div></div></div>}
         </div>
       </div>
       {principal && (
@@ -327,7 +327,7 @@ function DadosProprietario({ r }: { r: Record<string, unknown> }) {
         <div className="ds-row"><div className="ds-row-inner"><div className="dk">Nome</div><div className="dv">{v(p.nome)}</div></div></div>
         <div className="ds-row"><div className="ds-row-inner"><div className="dk">Documento (CPF/CNPJ)</div><div className="dv">{v(p.documento)}</div></div></div>
         <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{p.municipio ? `${p.municipio}${p.uf ? ` / ${p.uf}` : ''}` : '—'}</div></div></div>
-        <div className="ds-row"><div className="ds-row-inner"><div className="dk">Status</div><div className="dv">{v(p.statusDescricao)}</div></div>{p.statusDescricao && <span className="chip chip-green">{v(p.statusDescricao)}</span>}</div>
+        <div className="ds-row"><div className="ds-row-inner"><div className="dk">Status</div><div className="dv">{v(p.statusDescricao)}</div></div>{!!p.statusDescricao && <span className="chip chip-green">{v(p.statusDescricao)}</span>}</div>
       </div>
       <div>
         <div className="ds-hd"><span>DADOS DO VEÍCULO</span></div>
@@ -335,7 +335,7 @@ function DadosProprietario({ r }: { r: Record<string, unknown> }) {
         <div className="ds-row"><div className="ds-row-inner"><div className="dk">Placa / RENAVAM</div><div className="dv">{v(p.placa)} · {v(p.renavam)}</div></div></div>
         <div className="ds-row"><div className="ds-row-inner"><div className="dk">Ano Fab. / Modelo</div><div className="dv">{v(p.anoFabricacao)} / {v(p.anoModelo)}</div></div></div>
         <div className="ds-row"><div className="ds-row-inner"><div className="dk">Cor / Combustível</div><div className="dv">{v(p.cor)} · {v(p.combustivel)}</div></div></div>
-        {p.chassi && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(p.chassi)}</div></div></div>}
+        {!!p.chassi && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(p.chassi)}</div></div></div>}
       </div>
     </div>
   );
@@ -425,7 +425,7 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
             <div className="ds-row-inner"><div className="dk">Existe Ocorrência</div><div className="dv">{sin.existeOcorrencia ? 'SIM' : 'NÃO'}</div></div>
             <span className={`chip chip-${sin.existeOcorrencia ? 'red' : 'green'}`}>{sin.existeOcorrencia ? 'CONSTA' : 'NÃO'}</span>
           </div>
-          {sin.descricao && (
+          {!!sin.descricao && (
             <div className="ds-row" style={{ flex: 1 }}>
               <div className="ds-row-inner"><div className="dk">Descrição</div><div className="dv" style={{ fontSize: 10 }}>{v(sin.descricao)}</div></div>
             </div>
