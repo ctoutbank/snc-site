@@ -386,7 +386,7 @@ export function BuscaVeiculoPanel() {
             fontFamily: "'JetBrains Mono', monospace", fontSize: 10,
             color: "#3a4a5a", letterSpacing: "0.1em", textTransform: "uppercase" as const,
           }}>
-            <span>Fonte: APIBrasil · FIPE + Chassi</span>
+            <span>Fonte: FIPE / DENATRAN · SNC</span>
             <span>·</span>
             <span>LGPD Art. 7º, III</span>
             <span style={{ marginLeft: "auto" }}>SNC — Sistema Nacional de Conformidade</span>

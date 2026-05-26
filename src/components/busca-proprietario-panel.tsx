@@ -323,7 +323,7 @@ export function BuscaProprietarioPanel() {
             fontFamily: "'JetBrains Mono', monospace", fontSize: 10,
             color: "#3a4a5a", letterSpacing: "0.1em", textTransform: "uppercase" as const,
           }}>
-            <span>Fonte: APIBrasil · DENATRAN / SENATRAN</span>
+            <span>Fonte: DENATRAN / SENATRAN · SNC</span>
             <span>·</span>
             <span>LGPD Art. 7º, III</span>
             <span style={{ marginLeft: "auto" }}>SNC — Sistema Nacional de Conformidade</span>

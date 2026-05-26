@@ -402,7 +402,7 @@ export function BuscaPanel() {
             fontFamily: "'JetBrains Mono', monospace", fontSize: 10,
             color: "#3a4a5a", letterSpacing: "0.1em", textTransform: "uppercase" as const,
           }}>
-            <span>Fonte: APIBrasil · SCR Bacen Oficial</span>
+            <span>Fonte: Banco Central do Brasil · SNC</span>
             <span>·</span>
             <span>LGPD Art. 7º, III</span>
             <span style={{ marginLeft: "auto" }}>SNC — Sistema Nacional de Conformidade</span>
