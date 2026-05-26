@@ -383,7 +383,7 @@ const CSS = `
   .r-ms .v{font-size:12px;color:#fff;font-family:'JetBrains Mono',monospace;letter-spacing:.02em}
   .r-sec{padding:40px 56px}
   .r-sec+.r-sec{border-top:1px solid #d4cfc1}
-  .r-sh{display:flex;align-items:baseline;gap:4px;margin-bottom:24px}
+  .r-sh{display:flex;align-items:center;gap:2px;margin-bottom:24px}
   .r-sh .num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--brass);letter-spacing:.16em;text-transform:uppercase;min-width:70px}
   .r-sh h2{font-family:'Libre Caslon Text',serif;font-size:22px;font-weight:400;letter-spacing:-.01em;color:var(--ink);flex:1;margin:0}
   .r-sh .badge{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;border:1px solid #cfc7b1;color:var(--ink2)}
@@ -400,7 +400,7 @@ const CSS = `
   .r-vrd-stamp{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--greend)}
   .r-vrd-result{display:flex;align-items:center;gap:20px;padding:12px 0;border-top:1px solid #ece7d8;border-bottom:1px solid #ece7d8}
   .r-seal{width:56px;height:56px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;font-size:24px}
-  .r-vt h3{font-family:'Libre Caslon Text',serif;font-size:15px;font-weight:400;color:var(--greend);margin:0}
+  .r-vt h3{font-family:'Libre Caslon Text',serif;font-size:16px;font-weight:400;color:var(--greend);margin:0}
   .r-vt p{font-size:12px;color:var(--ink2);margin-top:3px;margin-bottom:0}
   .r-vrd-msg{font-size:12px;color:var(--ink);line-height:1.65;margin-top:14px}
   .ds-block{margin-bottom:2px}
