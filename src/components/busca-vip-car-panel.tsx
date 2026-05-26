@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { gerarUrlRelatorio } from "@/lib/relatorio";
+import { useHistoricoConsultas, HistoricoConsultas } from "@/components/historico-consultas";
 
 // ─── Tipos (estrutura real confirmada em homolog) ─────────────────────────────
 interface Identificacao {
@@ -149,6 +150,7 @@ export function BuscaVipCarPanel() {
   const [loading, setLoading]     = useState(false);
   const [erro, setErro]           = useState<string | null>(null);
   const [resultado, setResultado] = useState<VipCarResult | null>(null);
+  const { historico, salvar, limpar } = useHistoricoConsultas("vip-car");
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setPlaca(formatarPlaca(e.target.value));
@@ -170,6 +172,7 @@ export function BuscaVipCarPanel() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Erro na consulta.");
       setResultado(data as VipCarResult);
+      salvar(clean, data as Record<string, unknown>);
     } catch (e) {
       setErro(e instanceof Error ? e.message : "Erro inesperado.");
     } finally {
@@ -432,6 +435,18 @@ export function BuscaVipCarPanel() {
           </div>
         </div>
       )}
+
+      {/* ── Histórico de Consultas ── */}
+      <HistoricoConsultas
+        historico={historico}
+        onCarregar={(dados, p) => {
+          setPlaca(p.length === 7 ? `${p.slice(0, 3)}-${p.slice(3)}` : p);
+          setResultado(dados as unknown as VipCarResult);
+          setErro(null);
+        }}
+        onLimpar={limpar}
+        corAccent="#7B5EA7"
+      />
 
       <style>{`
         @keyframes spin   { to { transform: rotate(360deg); } }

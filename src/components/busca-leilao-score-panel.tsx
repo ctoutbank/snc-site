@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { gerarUrlRelatorio } from "@/lib/relatorio";
+import { useHistoricoConsultas, HistoricoConsultas } from "@/components/historico-consultas";
 
 // ─── Tipos mapeados ───────────────────────────────────────────────────────────
 
@@ -160,6 +161,7 @@ export function BuscaLeilaoScorePanel() {
   const [loading, setLoading]     = useState(false);
   const [erro, setErro]           = useState<string | null>(null);
   const [resultado, setResultado] = useState<LeilaoResult | null>(null);
+  const { historico, salvar, limpar } = useHistoricoConsultas("leilao");
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setPlaca(formatarPlaca(e.target.value));
@@ -181,6 +183,7 @@ export function BuscaLeilaoScorePanel() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Erro na consulta.");
       setResultado(data.leilao as LeilaoResult);
+      salvar(clean, data.leilao as Record<string, unknown>);
     } catch (e) {
       setErro(e instanceof Error ? e.message : "Erro inesperado.");
     } finally {
@@ -432,6 +435,18 @@ export function BuscaLeilaoScorePanel() {
           </details>
         </div>
       )}
+
+      {/* ── Histórico de Consultas ── */}
+      <HistoricoConsultas
+        historico={historico}
+        onCarregar={(dados, p) => {
+          setPlaca(p.length === 7 ? `${p.slice(0, 3)}-${p.slice(3)}` : p);
+          setResultado(dados as unknown as LeilaoResult);
+          setErro(null);
+        }}
+        onLimpar={limpar}
+        corAccent="#D4A843"
+      />
 
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </div>
