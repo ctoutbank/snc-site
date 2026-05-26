@@ -125,41 +125,28 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
 
   return (
     <>
-      {/* ROW 1: Identificação (2 colunas) + Proprietário */}
+      {/* IDENTIFICAÇÃO DO VEÍCULO — 3 campos por linha */}
       <div className="src-badge">DENATRAN / SENATRAN</div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 2, marginBottom: 2, marginTop: 8 }}>
-        {/* Coluna 1: Identificação — dados principais */}
-        <div>
-          <div className="ds-hd"><span>IDENTIFICAÇÃO DO VEÍCULO</span></div>
-          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Marca/Modelo</div><div className="dv">{v(id.marcaModelo)}</div></div></div>
-          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(id.chassi ?? prop.chassi ?? dt.chassi)}</div></div></div>
-          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Motor</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.motor ?? dt.motor)}</div></div></div>
-          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Potência</div><div className="dv">{v(dt.potencia)}</div></div></div>
-          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Cilindrada</div><div className="dv">{v(dt.cilindrada)}</div></div></div>
-          {id.municipio && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{id.uf ? `${v(id.municipio)} / ${v(id.uf)}` : v(id.municipio)}</div></div></div>}
-        </div>
-        {/* Coluna 2: Identificação — dados técnicos */}
-        <div>
-          <div className="ds-hd"><span>IDENTIFICAÇÃO DO VEÍCULO</span></div>
-          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Carroceria</div><div className="dv">{v(dt.carroceria)}</div></div></div>
-          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Procedência</div><div className="dv">{v(dt.procedencia)}</div></div></div>
-          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Espécie</div><div className="dv">{v(dt.especie ?? id.categoria)}</div></div></div>
-          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Cap. Passageiros</div><div className="dv">{v(dt.capacidadePassageiros)}</div></div></div>
-        </div>
-        {/* Coluna 3: Proprietário */}
-        <div>
-          {temProp ? (
-            <>
-              <div className="ds-hd"><span>PROPRIETÁRIO ATUAL</span></div>
-              {(prop.municipio) && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{prop.uf ? `${v(prop.municipio)} / ${v(prop.uf)}` : v(prop.municipio)}</div></div></div>}
-            </>
-          ) : (
-            <>
-              <div className="ds-hd"><span>PROPRIETÁRIO ATUAL</span></div>
-              <div className="ds-row"><div className="ds-row-inner"><div className="dk">Resultado</div><div className="dv">Dados não disponíveis nesta consulta</div></div></div>
-            </>
-          )}
-        </div>
+      <div style={{ marginBottom: 2, marginTop: 8 }}>
+        <div className="ds-hd"><span>IDENTIFICAÇÃO DO VEÍCULO</span></div>
+        {/* Marca/Modelo | Carroceria | Motor */}
+        <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Marca/Modelo</div><div className="dv">{v(id.marcaModelo)}</div></div>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Carroceria</div><div className="dv">{v(dt.carroceria)}</div></div>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Motor</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.motor ?? dt.motor)}</div></div>
+        </div></div>
+        {/* Chassi | Potência | Cilindrada */}
+        <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(id.chassi ?? prop.chassi ?? dt.chassi)}</div></div>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Potência</div><div className="dv">{v(dt.potencia)}</div></div>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Cilindrada</div><div className="dv">{v(dt.cilindrada)}</div></div>
+        </div></div>
+        {/* Espécie | Cap. Passageiros | CRLV */}
+        <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Espécie</div><div className="dv">{v(dt.especie ?? id.categoria)}</div></div>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Cap. Passageiros</div><div className="dv">{v(dt.capacidadePassageiros)}</div></div>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">CRLV</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.crlv)}</div></div>
+        </div></div>
       </div>
 
       {/* ROW 2: Histórico Roubo/Furto */}
@@ -641,7 +628,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
         <div className="r-ms">
           <div><div className="l">Proprietário Atual</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.nome as string ?? payload?.documento ?? '—'}</div></div>
           <div><div className="l">CPF/CNPJ</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.documento as string ?? '—'}</div></div>
-          <div><div className="l">CRLV</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.crlv as string ?? '—'}</div></div>
+          <div><div className="l">Município/UF</div><div className="v">{(() => { const p = payload?.resultado?.proprietario as Record<string, unknown> | undefined; const m = p?.municipio as string; const u = p?.uf as string; return m ? (u ? `${m} / ${u}` : m) : '—'; })()}</div></div>
           <div><div className="l">Atualiz. no DENATRAN</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.dataAtualizacao as string ?? '—'}</div></div>
           <div><div className="l">Validade do parecer</div><div className="v">30 dias corridos</div></div>
         </div>
