@@ -162,7 +162,7 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
               {prop.documento && <div className="ds-row"><div className="ds-row-inner"><div className="dk">CPF/CNPJ</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.documento)}</div></div></div>}
               {(prop.municipio) && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{prop.uf ? `${v(prop.municipio)} / ${v(prop.uf)}` : v(prop.municipio)}</div></div></div>}
               {prop.crlv && <div className="ds-row"><div className="ds-row-inner"><div className="dk">CRLV</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.crlv)}</div></div></div>}
-              {prop.dataAtualizacao && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Data Atualização</div><div className="dv">{v(prop.dataAtualizacao)}</div></div></div>}
+              {prop.dataAtualizacao && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Atualizado no DENATRAN em</div><div className="dv">{v(prop.dataAtualizacao)}</div></div></div>}
             </>
           ) : (
             <>
