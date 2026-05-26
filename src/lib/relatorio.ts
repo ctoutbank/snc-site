@@ -129,19 +129,19 @@ export const DATASET_META: Record<
   { titulo: string; subtitulo: string; fonte: string; cor: string }
 > = {
   "vip-car": {
-    titulo: "Relatório Completo do Veículo — SNC AutoScore",
+    titulo: "Relatório Completo do Veículo",
     subtitulo: "Relatório completo com proprietário, restrições, FIPE e infrações.",
     fonte: "DENATRAN / SENATRAN",
     cor: "#7B5EA7",
   },
   veiculo: {
-    titulo: "Relatório Completo do Veículo — SNC AutoScore",
+    titulo: "Relatório Completo do Veículo",
     subtitulo: "Dados técnicos do veículo, tabela FIPE e chassi.",
     fonte: "DENATRAN / SENATRAN",
     cor: "#B8914A",
   },
   proprietario: {
-    titulo: "Relatório Completo do Veículo — SNC AutoScore",
+    titulo: "Relatório Completo do Veículo",
     subtitulo: "Identificação do proprietário atual pela placa.",
     fonte: "DENATRAN / SENATRAN",
     cor: "#4A8AB8",

@@ -572,7 +572,12 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
           <div className="r-title">
             <div className="r-kicker">§ Relatório Consolidado</div>
             <div>
-              <h1>{meta?.titulo ?? 'Relatório'} <span className="it">{payload?.documento ?? ''}</span></h1>
+              <h1>
+                {meta?.titulo ?? 'Relatório'}
+                <br />
+                <span className="it">SNC AutoScore</span>{' '}
+                <span style={{ color: 'var(--brass)', fontStyle: 'normal', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.75em', letterSpacing: '0.1em' }}>{payload?.documento ?? ''}</span>
+              </h1>
               <div className="lede">{meta?.subtitulo ?? 'Documento gerado a partir de fontes oficiais.'}</div>
             </div>
           </div>
