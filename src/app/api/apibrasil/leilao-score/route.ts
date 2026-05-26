@@ -1,12 +1,162 @@
 import { NextRequest, NextResponse } from "next/server";
 import { consultarLeilaoScore, APIBrasilError } from "@/lib/apibrasil";
 
-/**
- * GET /api/apibrasil/leilao-score?placa=ABC1234
- *
- * Consulta Leilão com Score via APIBrasil.
- * Em HML retorna os dados brutos para inspeção da estrutura real.
- */
+// ─── Interfaces da resposta real ──────────────────────────────────────────────
+
+interface LeilaoOcorrencia {
+  data_leilao?: string;
+  leiloeiro?: string;
+  lote?: string;
+  comitente?: string;
+  patio?: string;
+  condicao_geral_veiculo?: string;
+  condicao_motor?: string;
+  condicao_mecanica?: string;
+  condicao_cambio?: string;
+  situacao_chassi?: string;
+  observacoes?: string;
+  imagens?: string[];
+}
+
+interface LeilaoScore {
+  aceitacao?: string;
+  descricao_pontuacao?: string;
+  exige_vistoria_especial?: string;
+  percentual_sobre_tabela_referencia?: string;
+  pontuacao?: string;
+}
+
+interface DadosVeiculo {
+  ano_fabricacao?: string;
+  ano_modelo?: string;
+  cambio?: string;
+  carroceria?: string;
+  categoria?: string;
+  chassi?: string;
+  combustivel?: string;
+  cor?: string;
+  eixo_traseiro?: string;
+  kilometragem?: string;
+  marca_modelo?: string;
+  motor?: string;
+  placa?: string;
+  qtd_eixos?: string;
+  renavam?: string;
+}
+
+interface CheckListVeiculo {
+  existe_informacao?: string;
+  airbags_rompidos?: string;
+  frente?: { codigo?: string; descricao?: string };
+  traseira?: { codigo?: string; descricao?: string };
+  lateral_direita?: { codigo?: string; descricao?: string };
+  lateral_esquerda?: { codigo?: string; descricao?: string };
+  teto?: { codigo?: string; descricao?: string };
+  interior?: { codigo?: string; descricao?: string };
+  local_queimado?: string;
+  rodas_faltantes?: string;
+  observacoes?: string;
+}
+
+interface LeilaoRaw {
+  dados_veiculo?: DadosVeiculo;
+  ocorrencias?: LeilaoOcorrencia[];
+  quantidade_ocorrencias?: string;
+  score?: LeilaoScore;
+  check_list_veiculo?: CheckListVeiculo;
+  status_retorno?: { codigo?: string; descricao?: string };
+}
+
+interface IndicioSinistro {
+  descricao_ocorrencia?: string;
+  existe_ocorrencia?: string;
+  status_retorno?: { codigo?: string; descricao?: string };
+}
+
+// ─── Mapeamento ───────────────────────────────────────────────────────────────
+
+function mapearLeilao(raw: Record<string, unknown>) {
+  const data = raw?.data as Record<string, unknown> | undefined;
+  const veicular = data?.veicular as Record<string, unknown> | undefined;
+  const leilao = veicular?.leilao as LeilaoRaw | undefined;
+  const sinistro = veicular?.indicio_sinistro as IndicioSinistro | undefined;
+
+  if (!leilao) return null;
+
+  const dv = leilao.dados_veiculo;
+  const sc = leilao.score;
+  const cl = leilao.check_list_veiculo;
+
+  return {
+    // Score
+    score: {
+      pontuacao: sc?.pontuacao ?? null,
+      aceitacao: sc?.aceitacao ?? null,
+      descricaoPontuacao: sc?.descricao_pontuacao ?? null,
+      exigeVistoriaEspecial: sc?.exige_vistoria_especial ?? null,
+      percentualSobreFipe: sc?.percentual_sobre_tabela_referencia ?? null,
+    },
+
+    // Dados do veículo no leilão
+    dadosVeiculo: dv ? {
+      placa: dv.placa ?? null,
+      marcaModelo: dv.marca_modelo ?? null,
+      anoFabricacao: dv.ano_fabricacao ?? null,
+      anoModelo: dv.ano_modelo ?? null,
+      chassi: dv.chassi ?? null,
+      renavam: dv.renavam ?? null,
+      cor: dv.cor ?? null,
+      combustivel: dv.combustivel ?? null,
+      motor: dv.motor ?? null,
+      cambio: dv.cambio ?? null,
+      carroceria: dv.carroceria ?? null,
+      categoria: dv.categoria ?? null,
+      kilometragem: dv.kilometragem ?? null,
+      qtdEixos: dv.qtd_eixos ?? null,
+      eixoTraseiro: dv.eixo_traseiro ?? null,
+    } : null,
+
+    // Indício de sinistro
+    sinistro: sinistro ? {
+      existeOcorrencia: sinistro.existe_ocorrencia === "1",
+      descricao: sinistro.descricao_ocorrencia ?? null,
+    } : null,
+
+    // Checklist do veículo
+    checkList: cl?.existe_informacao === "1" ? {
+      airbags: cl.airbags_rompidos ?? null,
+      frente: cl.frente?.descricao ?? null,
+      traseira: cl.traseira?.descricao ?? null,
+      lateralDireita: cl.lateral_direita?.descricao ?? null,
+      lateralEsquerda: cl.lateral_esquerda?.descricao ?? null,
+      teto: cl.teto?.descricao ?? null,
+      interior: cl.interior?.descricao ?? null,
+      localQueimado: cl.local_queimado ?? null,
+      rodasFaltantes: cl.rodas_faltantes ?? null,
+      observacoes: cl.observacoes ?? null,
+    } : null,
+
+    // Ocorrências de leilão
+    totalOcorrencias: parseInt(leilao.quantidade_ocorrencias ?? "0", 10),
+    ocorrencias: (leilao.ocorrencias ?? []).map((o) => ({
+      dataLeilao: o.data_leilao ?? "—",
+      leiloeiro: o.leiloeiro ?? "—",
+      lote: o.lote ?? "—",
+      comitente: o.comitente ?? "—",
+      patio: o.patio ?? "—",
+      condicaoGeral: o.condicao_geral_veiculo ?? "—",
+      condicaoMotor: o.condicao_motor ?? "—",
+      condicaoMecanica: o.condicao_mecanica ?? "—",
+      condicaoCambio: o.condicao_cambio ?? "—",
+      situacaoChassi: o.situacao_chassi ?? "—",
+      observacoes: o.observacoes ?? "—",
+      imagens: o.imagens ?? [],
+    })),
+  };
+}
+
+// ─── GET Handler ──────────────────────────────────────────────────────────────
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const placa = (searchParams.get("placa") ?? "").trim();
@@ -17,9 +167,10 @@ export async function GET(req: NextRequest) {
 
   try {
     const raw = await consultarLeilaoScore(placa);
+    const leilao = mapearLeilao(raw as unknown as Record<string, unknown>);
 
     return NextResponse.json({
-      leilao: raw?.data ?? null,
+      leilao,
       _raw: raw,
     });
   } catch (err) {
