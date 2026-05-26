@@ -125,24 +125,24 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
 
   return (
     <>
-      {/* ROW 1: Identificação (com Dados Técnicos) + Proprietário */}
+      {/* ROW 1: Identificação (2 colunas) + Proprietário */}
       <div className="src-badge">DENATRAN / SENATRAN</div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 2, marginTop: 8 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 2, marginBottom: 2, marginTop: 8 }}>
+        {/* Coluna 1: Identificação — dados principais */}
         <div>
           <div className="ds-hd"><span>IDENTIFICAÇÃO DO VEÍCULO</span></div>
-          {/* Marca/Modelo | Carroceria */}
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Marca/Modelo</div><div className="dv">{v(id.marcaModelo)}</div></div></div>
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(id.chassi ?? prop.chassi ?? dt.chassi)}</div></div></div>
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Motor</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.motor ?? dt.motor)}</div></div></div>
+          {id.municipio && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{id.uf ? `${v(id.municipio)} / ${v(id.uf)}` : v(id.municipio)}</div></div></div>}
+        </div>
+        {/* Coluna 2: Identificação — dados técnicos */}
+        <div>
+          <div className="ds-hd"><span>IDENTIFICAÇÃO DO VEÍCULO</span></div>
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Carroceria</div><div className="dv">{v(dt.carroceria)}</div></div></div>
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Procedência</div><div className="dv">{v(dt.procedencia)}</div></div></div>
+          {/* Potência | Cilindrada */}
           <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
-            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Marca/Modelo</div><div className="dv">{v(id.marcaModelo)}</div></div>
-            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Carroceria</div><div className="dv">{v(dt.carroceria)}</div></div>
-          </div></div>
-          {/* Chassi | Procedência */}
-          <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
-            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(id.chassi ?? prop.chassi ?? dt.chassi)}</div></div>
-            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Procedência</div><div className="dv">{v(dt.procedencia)}</div></div>
-          </div></div>
-          {/* Motor | Potência | Cilindrada */}
-          <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
-            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Motor</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.motor ?? dt.motor)}</div></div>
             <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Potência</div><div className="dv">{v(dt.potencia)}</div></div>
             <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Cilindrada</div><div className="dv">{v(dt.cilindrada)}</div></div>
           </div></div>
@@ -151,9 +151,8 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
             <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Espécie</div><div className="dv">{v(dt.especie ?? id.categoria)}</div></div>
             <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Cap. Passageiros</div><div className="dv">{v(dt.capacidadePassageiros)}</div></div>
           </div></div>
-          {/* Município / UF */}
-          {id.municipio && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{id.uf ? `${v(id.municipio)} / ${v(id.uf)}` : v(id.municipio)}</div></div></div>}
         </div>
+        {/* Coluna 3: Proprietário */}
         <div>
           {temProp ? (
             <>
