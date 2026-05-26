@@ -365,8 +365,9 @@ const CSS = `
   .r-page>*:not(.r-wm){position:relative;z-index:1}
   .r-head{background:var(--navy);color:#fff;padding:38px 56px 30px;border-bottom:6px solid var(--green)}
   .r-head-top{display:flex;justify-content:space-between;align-items:center;gap:30px;padding-bottom:24px;border-bottom:1px solid #1a2742}
-  .r-brand-meta{display:flex;align-items:center}
-  .r-brand-meta .t1{font-family:'Libre Caslon Text',serif;font-size:16px;line-height:1}
+  .r-brand-meta{display:flex;align-items:center;gap:16px}
+  .r-brand-meta .sep{width:1px;height:36px;background:#2a3a55}
+  .r-brand-meta .t1{font-family:'Libre Caslon Text',serif;font-size:18px;line-height:1;color:#fff}
   .r-brand-meta .t2{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#8a94a3;margin-top:6px}
   .r-did{text-align:right;font-family:'JetBrains Mono',monospace}
   .r-did .lbl{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);margin-bottom:6px}
@@ -571,10 +572,11 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
         <header className="r-head">
           <div className="r-head-top">
             <div className="r-brand-meta">
-              <img src="/snc-logo.png" alt="SNC" style={{ height: 32, width: 'auto', marginRight: 12, verticalAlign: 'middle' }} />
+              <img src="/snc-logo.png" alt="SNC" style={{ height: 48, width: 'auto' }} />
+              <div className="sep" />
               <div>
                 <div className="t1">Sistema Nacional de Conformidade</div>
-                <div className="t2">Relatório oficial de consulta · Documento autenticado</div>
+                <div className="t2">Relatório oficial de consulta</div>
               </div>
             </div>
             <div className="r-did">
