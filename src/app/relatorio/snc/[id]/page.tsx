@@ -133,9 +133,7 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Marca/Modelo</div><div className="dv">{v(id.marcaModelo)}</div></div></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Categoria</div><div className="dv">{v(id.categoria)}</div></div></div>
           {(id.chassi || prop.chassi || dt.chassi) && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(id.chassi ?? prop.chassi ?? dt.chassi)}</div></div></div>}
-          {(prop.cor || dt.cor) && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Cor</div><div className="dv">{v(prop.cor ?? dt.cor)}</div></div></div>}
           {(prop.motor || dt.motor) && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Motor</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.motor ?? dt.motor)}</div></div></div>}
-          {prop.renavam && <div className="ds-row"><div className="ds-row-inner"><div className="dk">RENAVAM</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.renavam)}</div></div></div>}
           {id.municipio && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{id.uf ? `${v(id.municipio)} / ${v(id.uf)}` : v(id.municipio)}</div></div></div>}
         </div>
         <div>
@@ -147,10 +145,6 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
               {(prop.municipio) && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{prop.uf ? `${v(prop.municipio)} / ${v(prop.uf)}` : v(prop.municipio)}</div></div></div>}
               {prop.crlv && <div className="ds-row"><div className="ds-row-inner"><div className="dk">CRLV</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.crlv)}</div></div></div>}
               {prop.dataAtualizacao && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Data Atualização</div><div className="dv">{v(prop.dataAtualizacao)}</div></div></div>}
-              <div className="ds-row">
-                <div className="ds-row-inner"><div className="dk">Status</div><div className="dv">{v(prop.statusDescricao ?? 'SEM RESTRIÇÃO')}</div></div>
-                <span className="chip chip-green">OK</span>
-              </div>
             </>
           ) : (
             <>
