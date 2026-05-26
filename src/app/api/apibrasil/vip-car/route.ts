@@ -253,39 +253,46 @@ export async function GET(req: NextRequest) {
       console.warn("[vip-car] proprietario falhou:", propRes.reason);
     }
 
+    const isHomolog = process.env.APIBRASIL_HOMOLOG === "true";
+
+    // Em HML, forçar dados mock completos (API retorna dados genéricos/vazios)
+    const mockDadosTecnicos = {
+      cor: "VERMELHA",
+      chassi: "9BWZZZ377VT004251",
+      marca: "VW",
+      modelo: "FOX 1.0 GII",
+      anoFabricacao: 2012,
+      anoModelo: 2013,
+      combustivel: "ALCOOL/GASOLINA",
+      categoria: "AUTOMÓVEL",
+      motor: "CCC178906",
+      potencia: "76CV",
+      cilindrada: "999",
+      capacidadePassageiros: "5",
+      carroceria: "HATCHBACK",
+      especie: "PASSAGEIRO",
+      tipo: "AUTOMÓVEL",
+      procedencia: "NACIONAL",
+    };
+
+    const mockProprietario = {
+      nome: "DENISON ZIMMER DA LUZ",
+      documento: "971.082.000-15",
+      renavam: "00456789012",
+      municipio: "BELO HORIZONTE",
+      uf: "MG",
+      cor: "VERMELHA",
+      motor: "CCC178906",
+      chassi: "9BWZZZ377VT004251",
+      crlv: "00123456789",
+      dataAtualizacao: "15/03/2025",
+      statusDescricao: "SEM RESTRIÇÃO",
+    };
+
     return NextResponse.json({
       ...mapeado,
-      dadosTecnicos: dadosTecnicos ?? {
-        cor: "VERMELHA",
-        chassi: "9BWZZZ377VT004251",
-        marca: "VW",
-        modelo: "FOX 1.0 GII",
-        anoFabricacao: 2012,
-        anoModelo: 2013,
-        combustivel: "ALCOOL/GASOLINA",
-        categoria: "AUTOMÓVEL",
-        motor: "CCC178906",
-        potencia: "76CV",
-        cilindrada: "999",
-        capacidadePassageiros: "5",
-        carroceria: "HATCHBACK",
-        especie: "PASSAGEIRO",
-        tipo: "AUTOMÓVEL",
-        procedencia: "NACIONAL",
-      },
-      proprietario: proprietario ?? {
-        nome: "DENISON ZIMMER DA LUZ",
-        documento: "971.082.000-15",
-        renavam: "00456789012",
-        municipio: "BELO HORIZONTE",
-        uf: "MG",
-        cor: "VERMELHA",
-        motor: "CCC178906",
-        chassi: "9BWZZZ377VT004251",
-        crlv: "00123456789",
-        dataAtualizacao: "15/03/2025",
-        statusDescricao: "SEM RESTRIÇÃO",
-      },
+      dadosTecnicos: isHomolog ? mockDadosTecnicos : (dadosTecnicos ?? null),
+      proprietario: isHomolog ? mockProprietario : (proprietario ?? null),
       _raw: vipRaw,
     });
   } catch (err) {
