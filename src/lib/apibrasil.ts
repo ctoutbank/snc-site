@@ -1,81 +1,140 @@
 /**
- * APIBrasil — Cliente REST
- * Documentação: https://doc.apibrasil.io
+ * APIBrasil — Cliente REST (snc-site)
  *
- * Autenticação via Bearer Token:
- * 1ª prioridade: APIBRASIL_BEARER_TOKEN (direto, sem latência)
- * 2ª prioridade: login dinâmico com APIBRASIL_EMAIL + APIBRASIL_PASSWORD
+ * Referência oficial:
+ *   POST https://gateway.apibrasil.io/api/v2/consulta/cpf/credits
+ *   Body: { tipo: "scr-bacen-score", cpf: "...", homolog: false }
+ *   Header: Authorization: Bearer <APIBRASIL_BEARER_TOKEN>
+ *
+ * Configuração via variáveis de ambiente (.env.local):
+ *   APIBRASIL_BEARER_TOKEN  — token JWT (prioridade)
+ *   APIBRASIL_EMAIL         — fallback: e-mail de login
+ *   APIBRASIL_PASSWORD      — fallback: senha de login
+ *   APIBRASIL_HOMOLOG       — "true" para ambiente de testes
  */
 
-const BASE_URL = "https://gateway.apibrasil.io";
+// ─── Configuração ────────────────────────────────────────
 
-// Cache de token em memória (fallback para login dinâmico)
-let _token: string | null = null;
+const BASE_URL = "https://gateway.apibrasil.io";
+const REQUEST_TIMEOUT_MS = 120_000; // 120s (alinhado com o --max-time 120 da APIBrasil)
+
+// ─── Cache de token (login dinâmico) ────────────────────
+
+let _cachedToken: string | null = null;
 let _tokenExpiry: number | null = null;
 
 async function getToken(): Promise<string> {
-  // 1ª prioridade: Bearer Token pré-configurado (zero latência)
+  // 1ª prioridade: token estático configurado no ambiente
   const staticToken = process.env.APIBRASIL_BEARER_TOKEN;
   if (staticToken) return staticToken;
 
-  // 2ª prioridade: login dinâmico com email/senha
+  // 2ª prioridade: login dinâmico (reusa enquanto válido)
   const now = Date.now();
-  if (_token && _tokenExpiry && now < _tokenExpiry) return _token;
+  if (_cachedToken && _tokenExpiry && now < _tokenExpiry) return _cachedToken;
 
   const email = process.env.APIBRASIL_EMAIL;
   const password = process.env.APIBRASIL_PASSWORD;
 
   if (!email || !password) {
-    throw new Error(
-      "[APIBrasil] Configure APIBRASIL_BEARER_TOKEN ou APIBRASIL_EMAIL + APIBRASIL_PASSWORD."
+    throw new APIBrasilError(
+      "Configure APIBRASIL_BEARER_TOKEN ou APIBRASIL_EMAIL + APIBRASIL_PASSWORD.",
+      0
     );
   }
 
-  const res = await fetch(`${BASE_URL}/api/oauth/exchange`, {
+  const res = await fetchWithTimeout(`${BASE_URL}/api/oauth/exchange`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
 
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`[APIBrasil] Auth falhou (${res.status}): ${body}`);
-  }
+  const data = await parseResponse<{ token?: string; access_token?: string; data?: { token?: string } }>(res);
+  const token = data.token ?? data.access_token ?? data.data?.token;
 
-  const data = await res.json();
-  const token: string =
-    data.token ?? data.access_token ?? data.data?.token ?? data.data?.access_token;
+  if (!token) throw new APIBrasilError("Token não encontrado na resposta de autenticação.", 0);
 
-  if (!token) throw new Error("[APIBrasil] Token não encontrado na resposta.");
-
-  _token = token;
-  _tokenExpiry = now + 55 * 60 * 1000; // expira em 55 min (margem de segurança)
+  _cachedToken = token;
+  _tokenExpiry = now + 55 * 60 * 1000; // 55 min de margem
   return token;
 }
 
-async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+// ─── Helpers ─────────────────────────────────────────────
+
+async function fetchWithTimeout(url: string, options: RequestInit): Promise<Response> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new APIBrasilError(`Timeout após ${REQUEST_TIMEOUT_MS / 1000}s`, 408);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function parseResponse<T>(res: Response): Promise<T> {
+  const text = await res.text();
+  let json: unknown;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    throw new APIBrasilError(`Resposta não-JSON (${res.status}): ${text.slice(0, 200)}`, res.status);
+  }
+
+  if (!res.ok) {
+    const err = json as Record<string, unknown>;
+    const message =
+      (typeof err?.message === "string" ? err.message : null) ??
+      (typeof err?.error === "string" ? err.error : null) ??
+      `HTTP ${res.status}`;
+    throw new APIBrasilError(message, res.status, err);
+  }
+
+  return json as T;
+}
+
+// ─── Erro tipado ──────────────────────────────────────────
+
+export class APIBrasilError extends Error {
+  constructor(
+    message: string,
+    public readonly statusCode: number,
+    public readonly details?: Record<string, unknown>
+  ) {
+    super(`[APIBrasil] ${message}`);
+    this.name = "APIBrasilError";
+  }
+}
+
+// ─── Fetch autenticado ────────────────────────────────────
+
+async function apiFetch<TBody, TResponse>(
+  path: string,
+  method: "GET" | "POST",
+  body?: TBody
+): Promise<TResponse> {
   const token = await getToken();
 
-  const res = await fetch(`${BASE_URL}${path}`, {
-    ...options,
+  const res = await fetchWithTimeout(`${BASE_URL}${path}`, {
+    method,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
-      ...options.headers,
     },
+    ...(body ? { body: JSON.stringify(body) } : {}),
   });
 
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`[APIBrasil] ${path} → ${res.status}: ${body}`);
-  }
-
-  return res.json() as Promise<T>;
+  return parseResponse<TResponse>(res);
 }
 
-// ─────────────────────────────────────────
-// Tipos
-// ─────────────────────────────────────────
+// ─────────────────────────────────────────────────────────
+// TIPOS
+// ─────────────────────────────────────────────────────────
+
+// ── CNPJ ─────────────────────────────────────────────────
 
 export interface CNPJData {
   cnpj: string;
@@ -99,6 +158,8 @@ export interface CNPJData {
   [key: string]: unknown;
 }
 
+// ── CEP ──────────────────────────────────────────────────
+
 export interface CEPData {
   cep: string;
   logradouro: string;
@@ -111,29 +172,39 @@ export interface CEPData {
   [key: string]: unknown;
 }
 
+// ── SCR Bacen + Score ─────────────────────────────────────
+
+/** Payload enviado para o endpoint de crédito CPF */
+export interface SCRScorePayload {
+  tipo: "scr-bacen-score";
+  cpf: string;
+  homolog: boolean;
+}
+
+/** Dados de modalidade SCR */
+export interface SCRModalidade {
+  modalidade: string;
+  vencido?: number;
+  aVencer?: number;
+  prejuizo?: number;
+  total?: number;
+}
+
+/** Bloco SCR Bacen dentro da resposta */
 export interface SCRData {
-  documento: string;
-  tipo: "CPF" | "CNPJ";
   nome?: string;
-  modalidades?: {
-    modalidade: string;
-    vencido?: number;
-    aVencer?: number;
-    prejuizo?: number;
-    total?: number;
-  }[];
   totalVencido?: number;
   totalAVencer?: number;
   totalPrejuizo?: number;
   totalResponsabilidade?: number;
   quantidadeInstituicoes?: number;
   dataReferencia?: string;
+  modalidades?: SCRModalidade[];
   [key: string]: unknown;
 }
 
+/** Bloco Score dentro da resposta */
 export interface ScoreData {
-  documento: string;
-  tipo: "CPF" | "CNPJ";
   score?: number;
   scoreLabel?: string;
   faixa?: string;
@@ -144,38 +215,62 @@ export interface ScoreData {
   [key: string]: unknown;
 }
 
-// ─────────────────────────────────────────
-// Consultas
-// ─────────────────────────────────────────
+/** Resposta completa do endpoint /api/v2/consulta/cpf/credits */
+export interface SCRScoreResponse {
+  status?: number | string;
+  message?: string;
+  data?: {
+    scr?: SCRData;
+    score?: ScoreData;
+    [key: string]: unknown;
+  };
+  scr?: SCRData;
+  score?: ScoreData;
+  [key: string]: unknown;
+}
+
+// ─────────────────────────────────────────────────────────
+// CONSULTAS
+// ─────────────────────────────────────────────────────────
 
 /** Consulta dados completos de um CNPJ */
 export async function consultarCNPJ(cnpj: string): Promise<CNPJData> {
   const digits = cnpj.replace(/\D/g, "");
-  if (digits.length !== 14) throw new Error("CNPJ deve ter 14 dígitos.");
-  return apiFetch<CNPJData>(`/api/consulta/cnpj?cnpj=${digits}`);
+  if (digits.length !== 14) throw new APIBrasilError("CNPJ deve ter 14 dígitos.", 400);
+  return apiFetch<undefined, CNPJData>(`/api/consulta/cnpj?cnpj=${digits}`, "GET");
 }
 
 /** Consulta endereço por CEP */
 export async function consultarCEP(cep: string): Promise<CEPData> {
   const digits = cep.replace(/\D/g, "");
-  if (digits.length !== 8) throw new Error("CEP deve ter 8 dígitos.");
-  return apiFetch<CEPData>(`/api/consulta/cep?cep=${digits}`);
+  if (digits.length !== 8) throw new APIBrasilError("CEP deve ter 8 dígitos.", 400);
+  return apiFetch<undefined, CEPData>(`/api/consulta/cep?cep=${digits}`, "GET");
 }
 
-/** Consulta SCR Bacen — dívidas e exposição de crédito (CPF ou CNPJ) */
-export async function consultarSCR(documento: string): Promise<SCRData> {
-  const digits = documento.replace(/\D/g, "");
-  const tipo = digits.length === 11 ? "CPF" : "CNPJ";
-  return apiFetch<SCRData>(`/api/consulta/scr?documento=${digits}&tipo=${tipo}`, {
-    method: "GET",
-  });
-}
+/**
+ * Consulta SCR Bacen + Score de Crédito para um CPF.
+ *
+ * Endpoint: POST /api/v2/consulta/cpf/credits
+ * Payload:  { tipo: "scr-bacen-score", cpf, homolog }
+ *
+ * @param cpf     CPF com ou sem formatação
+ * @returns       Resposta bruta da APIBrasil (SCR + Score combinados)
+ */
+export async function consultarSCRScore(cpf: string): Promise<SCRScoreResponse> {
+  const digits = cpf.replace(/\D/g, "");
+  if (digits.length !== 11) throw new APIBrasilError("CPF deve ter 11 dígitos.", 400);
 
-/** Consulta Score de crédito (CPF ou CNPJ) */
-export async function consultarScore(documento: string): Promise<ScoreData> {
-  const digits = documento.replace(/\D/g, "");
-  const tipo = digits.length === 11 ? "CPF" : "CNPJ";
-  return apiFetch<ScoreData>(`/api/consulta/score?documento=${digits}&tipo=${tipo}`, {
-    method: "GET",
-  });
+  const homolog = process.env.APIBRASIL_HOMOLOG === "true";
+
+  const payload: SCRScorePayload = {
+    tipo: "scr-bacen-score",
+    cpf: digits,
+    homolog,
+  };
+
+  return apiFetch<SCRScorePayload, SCRScoreResponse>(
+    "/api/v2/consulta/cpf/credits",
+    "POST",
+    payload
+  );
 }

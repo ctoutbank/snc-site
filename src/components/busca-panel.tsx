@@ -130,8 +130,15 @@ export function BuscaPanel() {
   const handleBuscar = useCallback(async () => {
     const digits = valor.replace(/\D/g, "");
     const esperado = tipo === "CPF" ? 11 : 14;
+
     if (digits.length !== esperado) {
       setErro(`${tipo} inválido. Verifique e tente novamente.`);
+      return;
+    }
+
+    // Endpoint SCR Bacen (v2) suporta apenas CPF
+    if (tipo === "CNPJ") {
+      setErro("A consulta SCR Bacen + Score está disponível apenas para CPF no momento.");
       return;
     }
 
