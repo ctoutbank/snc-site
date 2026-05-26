@@ -756,7 +756,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
                 {meta?.titulo ?? 'Relatório'}
                 <br />
                 <span style={{ color: '#fff' }}>SNC AutoScore</span>
-                <span style={{ color: '#9aa3b2' }}>{' — Placa: '}</span>
+                <span className="it" style={{ color: '#9aa3b2' }}>{' — Placa: '}</span>
                 <span style={{ color: 'var(--brass)' }}>{payload?.documento ?? ''}</span>
               </h1>
               <div className="lede">{meta?.subtitulo ?? 'Documento gerado a partir de fontes oficiais.'}</div>
