@@ -400,7 +400,7 @@ const CSS = `
   .r-vrd-stamp{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--greend)}
   .r-vrd-result{display:flex;align-items:center;gap:20px;padding:12px 0;border-top:1px solid #ece7d8;border-bottom:1px solid #ece7d8}
   .r-seal{width:56px;height:56px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;font-size:24px}
-  .r-vt h3{font-family:'Libre Caslon Text',serif;font-size:20px;font-weight:400;color:var(--greend);margin:0}
+  .r-vt h3{font-family:'Libre Caslon Text',serif;font-size:15px;font-weight:400;color:var(--greend);margin:0;white-space:nowrap}
   .r-vt p{font-size:12px;color:var(--ink2);margin-top:3px;margin-bottom:0}
   .r-vrd-msg{font-size:12px;color:var(--ink);line-height:1.65;margin-top:14px}
   .ds-block{margin-bottom:2px}
