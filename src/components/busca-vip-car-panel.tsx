@@ -38,12 +38,43 @@ interface RenainfOcorrencia {
   valor: string;
 }
 
+interface ProprietarioResult {
+  nome?: string | null;
+  documento?: string | null;
+  renavam?: string | null;
+  municipio?: string | null;
+  uf?: string | null;
+  cor?: string | null;
+  motor?: string | null;
+  chassi?: string | null;
+  crlv?: string | null;
+  dataAtualizacao?: string | null;
+  statusDescricao?: string | null;
+}
+
+interface DadosTecnicosResult {
+  cor?: string | null;
+  chassi?: string | null;
+  marca?: string | null;
+  modelo?: string | null;
+  motor?: string | null;
+  potencia?: string | null;
+  cilindrada?: string | null;
+  capacidadePassageiros?: string | null;
+  carroceria?: string | null;
+  especie?: string | null;
+  tipo?: string | null;
+  procedencia?: string | null;
+}
+
 interface VipCarResult {
   identificacao: Identificacao | null;
   rouboFurto: RouboFurto | null;
   precificador: PrecificadorItem[];
   renainf: { total: string; ocorrencias: RenainfOcorrencia[] };
   pdf: string | null;
+  proprietario?: ProprietarioResult | null;
+  dadosTecnicos?: DadosTecnicosResult | null;
 }
 
 // ─── Formatação de placa ──────────────────────────────────────────────────────
