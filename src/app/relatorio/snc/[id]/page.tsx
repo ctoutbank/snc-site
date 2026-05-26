@@ -531,7 +531,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
         <div className="r-ms">
           <div><div className="l">{payload?.documentoLabel ?? 'Consulta'}</div><div className="v">{payload?.documento ?? '—'}</div></div>
           <div><div className="l">Dataset</div><div className="v">SNC AutoScore</div></div>
-          <div><div className="l">Módulo</div><div className="v">SNC</div></div>
+          <div><div className="l">Módulo</div><div className="v">SNC Veículos</div></div>
           <div><div className="l">Validade do parecer</div><div className="v">30 dias corridos</div></div>
         </div>
 
