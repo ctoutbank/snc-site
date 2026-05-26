@@ -360,11 +360,11 @@ const CSS = `
   .r-btn:hover{background:#17243b}
   .r-btn.primary{background:var(--green);border-color:var(--green);color:#0a1628;font-weight:600}
   .r-btn.primary:hover{background:var(--greend);color:#fff}
-  .r-page{max-width:960px;margin:24px auto;background:var(--paper);box-shadow:0 18px 60px rgba(10,22,40,.18);position:relative;overflow:hidden}
+  .r-page{max-width:960px;margin:0 auto;background:var(--paper);box-shadow:0 18px 60px rgba(10,22,40,.18);position:relative;overflow:hidden}
   .r-wm{position:absolute;top:46%;left:50%;transform:translate(-50%,-50%) rotate(-22deg);font-family:'Libre Caslon Text',serif;font-size:140px;color:rgba(10,22,40,.04);pointer-events:none;font-style:italic;z-index:0;font-weight:700;white-space:nowrap}
   .r-page>*:not(.r-wm){position:relative;z-index:1}
   .r-head{background:var(--navy);color:#fff;padding:38px 56px 30px;border-bottom:6px solid var(--green)}
-  .r-head-top{display:flex;justify-content:space-between;align-items:flex-start;gap:30px;padding-bottom:24px;border-bottom:1px solid #1a2742}
+  .r-head-top{display:flex;justify-content:space-between;align-items:center;gap:30px;padding-bottom:24px;border-bottom:1px solid #1a2742}
   .r-brand-meta{display:flex;align-items:center}
   .r-brand-meta .t1{font-family:'Libre Caslon Text',serif;font-size:16px;line-height:1}
   .r-brand-meta .t2{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#8a94a3;margin-top:6px}
