@@ -92,10 +92,11 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
 
   return (
     <>
-      {/* Identificação + Roubo/Furto lado a lado */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 2 }}>
+      {/* Badge fonte + Identificação + Roubo/Furto lado a lado */}
+      <div className="src-badge">DENATRAN / SENATRAN</div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 2, marginTop: 8 }}>
         <div>
-          <div className="ds-hd"><span>IDENTIFICAÇÃO DO VEÍCULO · DENATRAN/SENATRAN</span></div>
+          <div className="ds-hd"><span>IDENTIFICAÇÃO DO VEÍCULO</span></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Marca/Modelo</div><div className="dv">{v(id.marcaModelo)}</div></div></div>
           <div className="ds-row">
             <div className="ds-row-inner"><div className="dk">Status</div><div className="dv">{v(id.statusDescricao ?? 'SEM RESTRIÇÃO')}</div></div>
@@ -122,52 +123,66 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
         </div>
       </div>
 
-      {/* RENAINF — tabela multi-coluna */}
-      <div className="ds-block">
+      {/* Badge + RENAINF tabela responsiva */}
+      <div className="src-badge">RENAINF</div>
+      <div className="ds-block" style={{ marginTop: 8 }}>
         <div className="ds-hd">
-          <span>RENAINF · INFRAÇÕES DE TRÂNSITO · {totalRenainf} REGISTRO(S)</span>
-          <span style={{ opacity: 0.6 }}>renainf</span>
+          <span>INFRAÇÕES DE TRÂNSITO · {totalRenainf} REGISTRO(S)</span>
         </div>
         {ocorrencias.length > 0 ? (
-          <>
-            {/* Cabeçalho da tabela */}
-            <div style={{ display: 'grid', gridTemplateColumns: '130px 110px 70px 1fr 120px 110px 80px', gap: 12, padding: '8px 16px', background: 'rgba(200,162,90,0.08)', borderBottom: '1px solid #d4cfc1', fontFamily: "'JetBrains Mono',monospace", fontSize: 9, color: 'var(--ink2)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-              <span>Código</span><span>Data/Hora</span><span>AIT</span><span>Descrição</span><span>Órgão</span><span>Valor</span><span>Status</span>
+          <div className="tbl-wrap">
+            <div className="tbl-head">
+              <div className="tbl-th">Código</div>
+              <div className="tbl-th">Data/Hora</div>
+              <div className="tbl-th">AIT</div>
+              <div className="tbl-th">Descrição</div>
+              <div className="tbl-th">Órgão</div>
+              <div className="tbl-th">Valor</div>
+              <div className="tbl-th">Status</div>
             </div>
             {ocorrencias.map((o, i) => (
-              <div key={i} style={{ display: 'grid', gridTemplateColumns: '130px 110px 70px 1fr 120px 110px 80px', gap: 12, padding: '12px 16px', background: i % 2 === 0 ? '#faf8f1' : '#f4f1ea', borderBottom: '1px solid #d4cfc1', alignItems: 'center' }}>
-                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11, color: 'var(--ink)' }}>{o.codigo ?? '—'}</span>
-                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11 }}>{o.dataHora ?? '—'}</span>
-                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11 }}>{o.ait ?? '—'}</span>
-                <span style={{ fontSize: 12, color: 'var(--ink)' }}>{o.descricao ?? '—'}</span>
-                <span style={{ fontSize: 12 }}>{o.orgao ?? '—'}</span>
-                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 600 }}>{o.valor ?? '—'}</span>
-                <span className="chip chip-brass">CONSTA</span>
+              <div key={i} className="tbl-row-renainf" style={{ background: i % 2 === 0 ? '#faf8f1' : '#f4f1ea' }}>
+                <div className="tbl-td mono">{o.codigo ?? '—'}</div>
+                <div className="tbl-td mono">{o.dataHora ?? '—'}</div>
+                <div className="tbl-td mono">{o.ait ?? '—'}</div>
+                <div className="tbl-td">{o.descricao ?? '—'}</div>
+                <div className="tbl-td">{o.orgao ?? '—'}</div>
+                <div className="tbl-td mono bold">{o.valor ?? '—'}</div>
+                <div className="tbl-td"><span className="chip chip-brass">CONSTA</span></div>
               </div>
             ))}
-          </>
+          </div>
         ) : (
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Resultado</div><div className="dv">Nenhuma infração registrada no RENAINF</div></div><span className="chip chip-green">NADA CONSTA</span></div>
         )}
       </div>
 
-      {/* PRECIFICADOR FIPE — tabela multi-coluna */}
+      {/* Badge + PRECIFICADOR FIPE tabela responsiva */}
       {prec.length > 0 && (
-        <div className="ds-block">
-          <div className="ds-hd"><span>PRECIFICADOR FIPE</span><span style={{ opacity: 0.6 }}>{prec.length} registro(s)</span></div>
-          <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr 110px 110px 140px', gap: 12, padding: '8px 16px', background: 'rgba(200,162,90,0.08)', borderBottom: '1px solid #d4cfc1', fontFamily: "'JetBrains Mono',monospace", fontSize: 9, color: 'var(--ink2)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-            <span>Código</span><span>Fabricante/Modelo</span><span>Ano Modelo</span><span>Informante</span><span>Preço</span>
-          </div>
-          {prec.map((item, i) => (
-            <div key={i} style={{ display: 'grid', gridTemplateColumns: '110px 1fr 110px 110px 140px', gap: 12, padding: '12px 16px', background: i % 2 === 0 ? '#faf8f1' : '#f4f1ea', borderBottom: '1px solid #d4cfc1', alignItems: 'center' }}>
-              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 11 }}>{v(item.codigo)}</span>
-              <span style={{ fontSize: 13, fontWeight: 500 }}>{v(item.fabricanteModelo)}</span>
-              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(item.anoModelo)}</span>
-              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>FIPE</span>
-              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700, color: 'var(--greend)' }}>{v(item.preco)}</span>
+        <>
+          <div className="src-badge">PRECIFICADOR FIPE</div>
+          <div className="ds-block" style={{ marginTop: 8 }}>
+            <div className="ds-hd"><span>TABELA DE PRECIFICAÇÃO · {prec.length} REGISTRO(S)</span></div>
+            <div className="tbl-wrap">
+              <div className="tbl-head-fipe">
+                <div className="tbl-th">Código</div>
+                <div className="tbl-th">Fabricante/Modelo</div>
+                <div className="tbl-th">Ano Modelo</div>
+                <div className="tbl-th">Informante</div>
+                <div className="tbl-th">Preço</div>
+              </div>
+              {prec.map((item, i) => (
+                <div key={i} className="tbl-row-fipe" style={{ background: i % 2 === 0 ? '#faf8f1' : '#f4f1ea' }}>
+                  <div className="tbl-td mono">{v(item.codigo)}</div>
+                  <div className="tbl-td bold">{v(item.fabricanteModelo)}</div>
+                  <div className="tbl-td mono">{v(item.anoModelo)}</div>
+                  <div className="tbl-td mono">FIPE</div>
+                  <div className="tbl-td green">{v(item.preco)}</div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        </>
       )}
 
       {/* PDF Oficial */}
@@ -354,11 +369,22 @@ const CSS = `
   .r-vt p{font-size:12px;color:var(--ink2);margin-top:3px;margin-bottom:0}
   .r-vrd-msg{font-size:12px;color:var(--ink);line-height:1.65;margin-top:14px}
   .ds-block{margin-bottom:2px}
-  .ds-hd{background:var(--navy);color:#fff;font-size:9px;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase}
+  .ds-hd{background:var(--navy);color:#fff;font-size:9px;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
   .ds-row{padding:11px 16px;display:flex;justify-content:space-between;align-items:center;background:#faf8f1;border:1px solid #d4cfc1;border-top:none;gap:16px}
-  .ds-row-inner{flex:1}
-  .ds-row .dk{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px}
-  .ds-row .dv{font-size:13px;color:var(--ink);font-weight:500}
+  .ds-row-inner{flex:1;min-width:0}
+  .ds-row .dk{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;white-space:nowrap}
+  .ds-row .dv{font-size:13px;color:var(--ink);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .src-badge{display:inline-flex;align-items:center;padding:5px 12px;border:1px solid #b8b0a0;color:var(--ink2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;background:var(--paper);margin:16px 0 0}
+  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tbl-head,.tbl-row-renainf{display:grid;grid-template-columns:100px 130px 60px 1fr 160px 100px 80px;gap:0;min-width:700px;white-space:nowrap}
+  .tbl-head-fipe,.tbl-row-fipe{display:grid;grid-template-columns:100px 1fr 100px 100px 130px;gap:0;min-width:580px;white-space:nowrap}
+  .tbl-th{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;background:rgba(200,162,90,0.08);border-bottom:1px solid #d4cfc1;border-right:1px solid #ece7d8}
+  .tbl-th:last-child{border-right:none}
+  .tbl-td{font-size:12px;color:var(--ink);padding:12px 14px;border-bottom:1px solid #d4cfc1;border-right:1px solid #ece7d8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center}
+  .tbl-td:last-child{border-right:none}
+  .tbl-td.mono{font-family:'JetBrains Mono',monospace;font-size:11px}
+  .tbl-td.bold{font-weight:700}
+  .tbl-td.green{color:var(--greend);font-weight:700;font-family:'JetBrains Mono',monospace}
   .chip{font-size:9px;padding:3px 8px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-weight:700;white-space:nowrap;letter-spacing:.04em}
   .chip-brass{background:rgba(200,162,90,.12);color:#a07a30;border:1px solid rgba(200,162,90,.3)}
   .chip-green{background:rgba(43,168,74,.1);color:var(--greend);border:1px solid rgba(43,168,74,.3)}
