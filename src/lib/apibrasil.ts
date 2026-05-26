@@ -111,6 +111,39 @@ export interface CEPData {
   [key: string]: unknown;
 }
 
+export interface SCRData {
+  documento: string;
+  tipo: "CPF" | "CNPJ";
+  nome?: string;
+  modalidades?: {
+    modalidade: string;
+    vencido?: number;
+    aVencer?: number;
+    prejuizo?: number;
+    total?: number;
+  }[];
+  totalVencido?: number;
+  totalAVencer?: number;
+  totalPrejuizo?: number;
+  totalResponsabilidade?: number;
+  quantidadeInstituicoes?: number;
+  dataReferencia?: string;
+  [key: string]: unknown;
+}
+
+export interface ScoreData {
+  documento: string;
+  tipo: "CPF" | "CNPJ";
+  score?: number;
+  scoreLabel?: string;
+  faixa?: string;
+  probabilidadeInadimplencia?: number;
+  fatoresNegativos?: string[];
+  fatoresPositivos?: string[];
+  dataConsulta?: string;
+  [key: string]: unknown;
+}
+
 // ─────────────────────────────────────────
 // Consultas
 // ─────────────────────────────────────────
@@ -127,4 +160,22 @@ export async function consultarCEP(cep: string): Promise<CEPData> {
   const digits = cep.replace(/\D/g, "");
   if (digits.length !== 8) throw new Error("CEP deve ter 8 dígitos.");
   return apiFetch<CEPData>(`/api/consulta/cep?cep=${digits}`);
+}
+
+/** Consulta SCR Bacen — dívidas e exposição de crédito (CPF ou CNPJ) */
+export async function consultarSCR(documento: string): Promise<SCRData> {
+  const digits = documento.replace(/\D/g, "");
+  const tipo = digits.length === 11 ? "CPF" : "CNPJ";
+  return apiFetch<SCRData>(`/api/consulta/scr?documento=${digits}&tipo=${tipo}`, {
+    method: "GET",
+  });
+}
+
+/** Consulta Score de crédito (CPF ou CNPJ) */
+export async function consultarScore(documento: string): Promise<ScoreData> {
+  const digits = documento.replace(/\D/g, "");
+  const tipo = digits.length === 11 ? "CPF" : "CNPJ";
+  return apiFetch<ScoreData>(`/api/consulta/score?documento=${digits}&tipo=${tipo}`, {
+    method: "GET",
+  });
 }
