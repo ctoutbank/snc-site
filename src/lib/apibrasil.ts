@@ -252,9 +252,6 @@ export async function consultarCEP(cep: string): Promise<CEPData> {
  *
  * Endpoint: POST /api/v2/consulta/cpf/credits
  * Payload:  { tipo: "scr-bacen-score", cpf, homolog }
- *
- * @param cpf     CPF com ou sem formatação
- * @returns       Resposta bruta da APIBrasil (SCR + Score combinados)
  */
 export async function consultarSCRScore(cpf: string): Promise<SCRScoreResponse> {
   const digits = cpf.replace(/\D/g, "");
@@ -262,15 +259,128 @@ export async function consultarSCRScore(cpf: string): Promise<SCRScoreResponse> 
 
   const homolog = process.env.APIBRASIL_HOMOLOG === "true";
 
-  const payload: SCRScorePayload = {
-    tipo: "scr-bacen-score",
-    cpf: digits,
-    homolog,
-  };
-
   return apiFetch<SCRScorePayload, SCRScoreResponse>(
     "/api/v2/consulta/cpf/credits",
     "POST",
-    payload
+    { tipo: "scr-bacen-score", cpf: digits, homolog }
   );
 }
+
+// ─────────────────────────────────────────────────────────
+// DATASET: Placa FIPE (Com Chassi)
+// POST /api/v2/consulta/veiculos/credits
+// ─────────────────────────────────────────────────────────
+
+/** Payload enviado para o endpoint de veículos */
+export interface PlacaFIPEPayload {
+  tipo: "fipe-chassi";
+  placa: string;
+  homolog: boolean;
+}
+
+/** Dados FIPE de uma tabela de referência */
+export interface FIPEItem {
+  Codigo?: string;
+  Marca?: string;
+  Modelo?: string;
+  AnoModelo?: string | number;
+  Combustivel?: string;
+  CodigoFipe?: string;
+  MesReferencia?: string;
+  TipoVeiculo?: number;
+  SiglaCombustivel?: string;
+  Valor?: string;
+  [key: string]: unknown;
+}
+
+/** Informações do chassi / características do veículo */
+export interface VeiculoChassi {
+  chassi?: string;
+  motor?: string;
+  cor?: string;
+  anoFabricacao?: string | number;
+  anoModelo?: string | number;
+  potencia?: string;
+  cilindrada?: string;
+  capacidadePassageiros?: string | number;
+  carroceria?: string;
+  especie?: string;
+  tipo?: string;
+  combustivel?: string;
+  procedencia?: string;
+  [key: string]: unknown;
+}
+
+/** Dados consolidados do veículo */
+export interface VeiculoDados {
+  placa?: string;
+  marca?: string;
+  modelo?: string;
+  versao?: string;
+  anoFabricacao?: string | number;
+  anoModelo?: string | number;
+  cor?: string;
+  combustivel?: string;
+  municipio?: string;
+  uf?: string;
+  situacao?: string;
+  restricoes?: string[];
+  chassi?: VeiculoChassi;
+  fipe?: FIPEItem[];
+  [key: string]: unknown;
+}
+
+/** Resposta completa do endpoint /api/v2/consulta/veiculos/credits */
+export interface PlacaFIPEResponse {
+  status?: number | string;
+  message?: string;
+  data?: {
+    veiculo?: VeiculoDados;
+    fipe?: FIPEItem[];
+    chassi?: VeiculoChassi;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+// ─── Validação de placa (padrão antigo e Mercosul) ───────
+
+const PLACA_ANTIGA = /^[A-Z]{3}\d{4}$/;
+const PLACA_MERCOSUL = /^[A-Z]{3}\d[A-Z]\d{2}$/;
+
+export function normalizarPlaca(placa: string): string {
+  return placa.toUpperCase().replace(/[^A-Z0-9]/g, "");
+}
+
+export function validarPlaca(placa: string): boolean {
+  const p = normalizarPlaca(placa);
+  return PLACA_ANTIGA.test(p) || PLACA_MERCOSUL.test(p);
+}
+
+/**
+ * Consulta dados FIPE + Chassi de um veículo pela placa.
+ *
+ * Endpoint: POST /api/v2/consulta/veiculos/credits
+ * Payload:  { tipo: "fipe-chassi", placa, homolog }
+ *
+ * @param placa   Placa no formato antigo (ABC1234) ou Mercosul (ABC1D23)
+ * @returns       Resposta bruta da APIBrasil com FIPE e dados do chassi
+ */
+export async function consultarPlacaFIPE(placa: string): Promise<PlacaFIPEResponse> {
+  const p = normalizarPlaca(placa);
+  if (!validarPlaca(p)) {
+    throw new APIBrasilError(
+      `Placa inválida: "${placa}". Use o formato ABC1234 (antigo) ou ABC1D23 (Mercosul).`,
+      400
+    );
+  }
+
+  const homolog = process.env.APIBRASIL_HOMOLOG === "true";
+
+  return apiFetch<PlacaFIPEPayload, PlacaFIPEResponse>(
+    "/api/v2/consulta/veiculos/credits",
+    "POST",
+    { tipo: "fipe-chassi", placa: p, homolog }
+  );
+}
+
