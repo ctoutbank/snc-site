@@ -151,11 +151,8 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
           {temProp ? (
             <>
               <div className="ds-hd"><span>PROPRIETÁRIO ATUAL</span></div>
-              <div className="ds-row"><div className="ds-row-inner"><div className="dk">Nome</div><div className="dv">{v(prop.nome)}</div></div></div>
-              {prop.documento && <div className="ds-row"><div className="ds-row-inner"><div className="dk">CPF/CNPJ</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.documento)}</div></div></div>}
               {(prop.municipio) && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{prop.uf ? `${v(prop.municipio)} / ${v(prop.uf)}` : v(prop.municipio)}</div></div></div>}
               {prop.crlv && <div className="ds-row"><div className="ds-row-inner"><div className="dk">CRLV</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.crlv)}</div></div></div>}
-              {prop.dataAtualizacao && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Atualizado no DENATRAN em</div><div className="dv">{v(prop.dataAtualizacao)}</div></div></div>}
             </>
           ) : (
             <>
@@ -643,9 +640,9 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
 
         {/* META STRIP */}
         <div className="r-ms">
-          <div><div className="l">{payload?.documentoLabel ?? 'Consulta'}</div><div className="v">{payload?.documento ?? '—'}</div></div>
-          <div><div className="l">Dataset</div><div className="v">SNC AutoScore</div></div>
-          <div><div className="l">Módulo</div><div className="v">SNC Veículos</div></div>
+          <div><div className="l">Proprietário Atual</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.nome as string ?? payload?.documento ?? '—'}</div></div>
+          <div><div className="l">CPF/CNPJ</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.documento as string ?? '—'}</div></div>
+          <div><div className="l">Atualização no DENATRAN</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.dataAtualizacao as string ?? '—'}</div></div>
           <div><div className="l">Validade do parecer</div><div className="v">30 dias corridos</div></div>
         </div>
 
