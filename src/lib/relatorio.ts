@@ -66,13 +66,24 @@ export function serializarDados(payload: RelatorioPayload): string {
 
 /**
  * Deserializa o Base64 URL-safe de volta para o payload tipado.
+ * Funciona tanto no browser (atob) quanto no Node.js (Buffer).
  * Retorna null em caso de erro de parsing.
  */
 export function deserializarDados(base64: string): RelatorioPayload | null {
   try {
-    // Reconverte de URL-safe para Base64 padrão
+    // Reconverte de URL-safe para Base64 padrão + padding
     const b64 = base64.replace(/-/g, "+").replace(/_/g, "/");
-    const json = decodeURIComponent(escape(atob(b64)));
+    const padded = b64 + "==".slice(0, (4 - (b64.length % 4)) % 4);
+
+    let json: string;
+    if (typeof Buffer !== "undefined") {
+      // Node.js (server-side / Next.js SSR)
+      json = Buffer.from(padded, "base64").toString("utf-8");
+    } else {
+      // Browser
+      json = decodeURIComponent(escape(atob(padded)));
+    }
+
     const parsed = JSON.parse(json) as RelatorioPayload;
     if (!parsed.dataset || !parsed.documento || !parsed.resultado) return null;
     return parsed;
