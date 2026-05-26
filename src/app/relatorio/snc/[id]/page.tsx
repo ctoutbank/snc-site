@@ -45,7 +45,7 @@ function SumarioCard({ payload }: { payload: RelatorioPayload }) {
     const anoFab = v(id.anoFabricacao);
     const anoMod = v(id.anoModelo);
     const comb = v(id.combustivel);
-    const mun = id.municipio ? `${id.municipio} / ${id.uf ?? ''}` : '—';
+    const mun = id.municipio ? `${id.municipio}${id.uf ? ` / ${id.uf}` : ''}` : '—';
 
     return (
       <div className="r-sl">
@@ -123,7 +123,7 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Marca/Modelo</div><div className="dv">{v(id.marcaModelo)}</div></div></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Categoria</div><div className="dv">{v(id.categoria)}</div></div></div>
           {id.chassi && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(id.chassi)}</div></div></div>}
-          {id.municipio && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{v(id.municipio)} / {v(id.uf)}</div></div></div>}
+          {id.municipio && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{id.uf ? `${v(id.municipio)} / ${v(id.uf)}` : v(id.municipio)}</div></div></div>}
         </div>
         <div>
           <div className="ds-hd"><span>HISTÓRICO ROUBO/FURTO</span></div>
@@ -282,7 +282,7 @@ function DadosProprietario({ r }: { r: Record<string, unknown> }) {
         <div className="ds-hd"><span>PROPRIETÁRIO ATUAL · DENATRAN/SENATRAN</span></div>
         <div className="ds-row"><div className="ds-row-inner"><div className="dk">Nome</div><div className="dv">{v(p.nome)}</div></div></div>
         <div className="ds-row"><div className="ds-row-inner"><div className="dk">Documento (CPF/CNPJ)</div><div className="dv">{v(p.documento)}</div></div></div>
-        <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{p.municipio ? `${p.municipio} / ${p.uf ?? ''}` : '—'}</div></div></div>
+        <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{p.municipio ? `${p.municipio}${p.uf ? ` / ${p.uf}` : ''}` : '—'}</div></div></div>
         <div className="ds-row"><div className="ds-row-inner"><div className="dk">Status</div><div className="dv">{v(p.statusDescricao)}</div></div>{p.statusDescricao && <span className="chip chip-green">{v(p.statusDescricao)}</span>}</div>
       </div>
       <div>
@@ -383,11 +383,11 @@ const CSS = `
   .r-ms .v{font-size:12px;color:#fff;font-family:'JetBrains Mono',monospace;letter-spacing:.02em}
   .r-sec{padding:40px 56px}
   .r-sec+.r-sec{border-top:1px solid #d4cfc1}
-  .r-sh{display:flex;align-items:baseline;gap:8px;margin-bottom:24px}
+  .r-sh{display:flex;align-items:baseline;gap:4px;margin-bottom:24px}
   .r-sh .num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--brass);letter-spacing:.16em;text-transform:uppercase;min-width:70px}
   .r-sh h2{font-family:'Libre Caslon Text',serif;font-size:22px;font-weight:400;letter-spacing:-.01em;color:var(--ink);flex:1;margin:0}
   .r-sh .badge{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;border:1px solid #cfc7b1;color:var(--ink2)}
-  .r-summary{display:grid;grid-template-columns:1fr 1.4fr;gap:36px;align-items:start}
+  .r-summary{display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:start}
   .r-sl .label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;color:var(--ink2);text-transform:uppercase;margin-bottom:10px}
   .r-sl .sname{font-family:'Libre Caslon Text',serif;font-size:26px;line-height:1.1;letter-spacing:-.01em;margin-bottom:4px;font-weight:700}
   .r-sl .pfs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px;padding-top:16px;border-top:1px solid #d4cfc1}
@@ -408,7 +408,7 @@ const CSS = `
   .ds-row{padding:11px 16px;display:flex;justify-content:space-between;align-items:center;background:#faf8f1;border:1px solid #d4cfc1;border-top:none;gap:16px}
   .ds-row-inner{flex:1;min-width:0}
   .ds-row .dk{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;white-space:nowrap}
-  .ds-row .dv{font-size:13px;color:var(--ink);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ds-row .dv{font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:400;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .src-badge{display:inline-flex;align-items:center;padding:5px 12px;border:1px solid #b8b0a0;color:var(--ink2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;background:var(--paper);margin:16px 0 0}
   .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #c8bfa8;border-top:none}
   .snc-tbl{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
