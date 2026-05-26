@@ -53,21 +53,26 @@ export function gerarProtocolo(id: string, data?: Date): string {
 // ─── Serialização / deserialização ────────────────────────────────────────────
 
 /**
- * Serializa o payload do relatório para Base64 (seguro para URL).
+ * Serializa o payload do relatório para Base64 URL-safe.
+ * Usa btoa() nativo (browser + Node), convertendo para URL-safe manualmente.
  */
 export function serializarDados(payload: RelatorioPayload): string {
   const json = JSON.stringify(payload);
-  // btoa funciona em browser e em Node 16+
-  return Buffer.from(json, "utf-8").toString("base64url");
+  // btoa é suportado em browser e Node 16+
+  const b64 = btoa(unescape(encodeURIComponent(json)));
+  // Converte para URL-safe: + → -, / → _, remove =
+  return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
 }
 
 /**
- * Deserializa o Base64 de volta para o payload tipado.
+ * Deserializa o Base64 URL-safe de volta para o payload tipado.
  * Retorna null em caso de erro de parsing.
  */
 export function deserializarDados(base64: string): RelatorioPayload | null {
   try {
-    const json = Buffer.from(base64, "base64url").toString("utf-8");
+    // Reconverte de URL-safe para Base64 padrão
+    const b64 = base64.replace(/-/g, "+").replace(/_/g, "/");
+    const json = decodeURIComponent(escape(atob(b64)));
     const parsed = JSON.parse(json) as RelatorioPayload;
     if (!parsed.dataset || !parsed.documento || !parsed.resultado) return null;
     return parsed;
