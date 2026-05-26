@@ -2,52 +2,38 @@
 
 import { useState, useCallback } from "react";
 
-// ─── Tipos ────────────────────────────────────────────────────────────────────
+// ─── Tipos (alinhados com a resposta real da APIBrasil) ───────────────────────
 interface FIPEItem {
-  Codigo?: string;
-  Marca?: string;
-  Modelo?: string;
-  AnoModelo?: string | number;
-  Combustivel?: string;
-  CodigoFipe?: string;
-  MesReferencia?: string;
-  Valor?: string;
-  SiglaCombustivel?: string;
+  codigoFipe: string;
+  modelo: string;
+  anoModelo: string | number;
+  combustivel: string;
+  mesReferencia: string;
+  valor: string;
+  valorNum: number;
+  principal: boolean;
+}
+
+interface HistoricoItem {
+  mes: string;
+  valor: number;
+  valorFormatado: string;
 }
 
 interface VeiculoResult {
   veiculo: {
-    error?: string;
     placa?: string;
     marca?: string;
     modelo?: string;
-    versao?: string;
     anoFabricacao?: string | number;
     anoModelo?: string | number;
     cor?: string;
     combustivel?: string;
-    municipio?: string;
-    uf?: string;
-    situacao?: string;
-    restricoes?: string[];
-    chassi?: {
-      chassi?: string;
-      motor?: string;
-      cor?: string;
-      potencia?: string;
-      cilindrada?: string;
-      capacidadePassageiros?: string | number;
-      carroceria?: string;
-      especie?: string;
-      tipo?: string;
-      combustivel?: string;
-      procedencia?: string;
-    };
-    [key: string]: unknown;
+    categoria?: string;
+    chassi?: string;
   };
   fipe: FIPEItem[];
-  chassi: Record<string, unknown>;
-  _raw?: Record<string, unknown>;
+  historico: HistoricoItem[];
 }
 
 // ─── Formatação de placa ──────────────────────────────────────────────────────
@@ -61,13 +47,11 @@ function formatarPlaca(valor: string): string {
 function DataRow({
   label,
   value,
-  destaque,
-  cor,
+  mono = true,
 }: {
   label: string;
   value: string;
-  destaque?: boolean;
-  cor?: string;
+  mono?: boolean;
 }) {
   return (
     <div style={{
@@ -78,29 +62,65 @@ function DataRow({
       <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#5a6a7a", letterSpacing: "0.1em", textTransform: "uppercase" as const }}>
         {label}
       </span>
-      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, color: cor ?? (destaque ? "#e07b6a" : "#fff"), fontWeight: destaque ? 700 : 400 }}>
+      <span style={{ fontFamily: mono ? "'JetBrains Mono', monospace" : "'Inter', sans-serif", fontSize: 13, color: "#fff" }}>
         {value}
       </span>
     </div>
   );
 }
 
-// ─── Badge de situação ────────────────────────────────────────────────────────
-function SituacaoBadge({ situacao }: { situacao?: string }) {
-  if (!situacao) return null;
-  const ok = situacao.toUpperCase().includes("REGULAR") || situacao.toUpperCase().includes("ATIVO");
+// ─── Mini Sparkline ───────────────────────────────────────────────────────────
+function Sparkline({ dados }: { dados: HistoricoItem[] }) {
+  if (dados.length < 2) return null;
+  const valores = dados.map((d) => d.valor);
+  const min = Math.min(...valores);
+  const max = Math.max(...valores);
+  const range = max - min || 1;
+  const w = 280;
+  const h = 60;
+  const pad = 8;
+
+  const pts = dados.map((d, i) => {
+    const x = pad + (i / (dados.length - 1)) * (w - pad * 2);
+    const y = h - pad - ((d.valor - min) / range) * (h - pad * 2);
+    return `${x},${y}`;
+  });
+
+  const ultimo = dados[dados.length - 1];
+  const penultimo = dados[dados.length - 2];
+  const subiu = ultimo.valor >= penultimo.valor;
+
   return (
-    <div style={{
-      display: "inline-flex", alignItems: "center", gap: 8,
-      padding: "6px 14px",
-      background: ok ? "rgba(43,168,74,0.12)" : "rgba(192,57,43,0.12)",
-      border: `1px solid ${ok ? "rgba(43,168,74,0.3)" : "rgba(192,57,43,0.3)"}`,
-      marginBottom: 24,
-    }}>
-      <div style={{ width: 6, height: 6, borderRadius: "50%", background: ok ? "#2BA84A" : "#c0392b" }} />
-      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: ok ? "#2BA84A" : "#e07b6a", letterSpacing: "0.14em", textTransform: "uppercase" as const }}>
-        {situacao}
-      </span>
+    <div style={{ marginTop: 24 }}>
+      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.18em", textTransform: "uppercase" as const, marginBottom: 12 }}>
+        Histórico de Valores FIPE
+      </div>
+      <svg width={w} height={h} style={{ overflow: "visible" }}>
+        <polyline
+          points={pts.join(" ")}
+          fill="none"
+          stroke={subiu ? "#2BA84A" : "#e07b39"}
+          strokeWidth="1.5"
+          strokeLinejoin="round"
+        />
+        {/* Ponto atual */}
+        {pts.length > 0 && (
+          <circle
+            cx={parseFloat(pts[pts.length - 1].split(",")[0])}
+            cy={parseFloat(pts[pts.length - 1].split(",")[1])}
+            r="3"
+            fill={subiu ? "#2BA84A" : "#e07b39"}
+          />
+        )}
+      </svg>
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
+        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#3a4a5a" }}>
+          {dados[0]?.mes}
+        </span>
+        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#3a4a5a" }}>
+          {ultimo?.mes}
+        </span>
+      </div>
     </div>
   );
 }
@@ -133,7 +153,7 @@ export function BuscaVeiculoPanel() {
       const res = await fetch(`/api/apibrasil/veiculo?placa=${clean}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Erro na consulta.");
-      setResultado(data);
+      setResultado(data as VeiculoResult);
     } catch (e) {
       setErro(e instanceof Error ? e.message : "Erro inesperado.");
     } finally {
@@ -147,11 +167,12 @@ export function BuscaVeiculoPanel() {
 
   const v = resultado?.veiculo ?? {};
   const fipeList = resultado?.fipe ?? [];
-  const ch = (v.chassi as VeiculoResult["veiculo"]["chassi"]) ?? (resultado?.chassi ?? {});
+  const historico = resultado?.historico ?? [];
+  const principal = fipeList.find((f) => f.principal) ?? fipeList[0];
 
   return (
     <div>
-      {/* ── Painel de busca ── */}
+      {/* ── Input de Placa ── */}
       <div style={{
         background: "rgba(255,255,255,0.03)",
         border: "1px solid rgba(255,255,255,0.1)",
@@ -186,7 +207,7 @@ export function BuscaVeiculoPanel() {
                 letterSpacing: "0.14em",
                 padding: "18px 18px 18px 82px",
                 outline: "none",
-                textTransform: "uppercase",
+                textTransform: "uppercase" as const,
                 transition: "border-color 0.15s",
               }}
               onFocus={(e) => (e.target.style.borderColor = "#B8914A")}
@@ -210,9 +231,7 @@ export function BuscaVeiculoPanel() {
               cursor: loading ? "not-allowed" : "pointer",
               transition: "background 0.15s",
               whiteSpace: "nowrap" as const,
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
+              display: "flex", alignItems: "center", gap: 10,
             }}
           >
             {loading ? (
@@ -242,15 +261,35 @@ export function BuscaVeiculoPanel() {
           <div style={{ display: "flex", alignItems: "center", gap: 16, paddingBottom: 24, marginBottom: 28, borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
             <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#B8914A", boxShadow: "0 0 0 3px rgba(184,145,74,0.2)" }} />
             <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#B8914A", letterSpacing: "0.18em", textTransform: "uppercase" as const }}>
-              Consulta concluída · {v.placa ?? placa.replace(/[^A-Z0-9]/g, "")}
+              Consulta concluída
             </span>
             <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#3a4a5a", marginLeft: "auto" }}>
               {new Date().toLocaleString("pt-BR")}
             </span>
           </div>
 
-          {/* Situação */}
-          {v.situacao && <SituacaoBadge situacao={v.situacao} />}
+          {/* Valor FIPE em destaque */}
+          {principal && (
+            <div style={{
+              padding: "28px 32px", marginBottom: 2,
+              background: "rgba(43,168,74,0.06)",
+              border: "1px solid rgba(43,168,74,0.2)",
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+            }}>
+              <div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#5a6a7a", letterSpacing: "0.18em", textTransform: "uppercase" as const, marginBottom: 8 }}>
+                  Valor FIPE · {principal.mesReferencia}
+                </div>
+                <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 52, color: "#fff", lineHeight: 1 }}>
+                  {principal.valor}
+                </div>
+              </div>
+              <div style={{ textAlign: "right" as const }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#5a6a7a", letterSpacing: "0.14em", textTransform: "uppercase" as const, marginBottom: 6 }}>Código FIPE</div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 18, color: "#B8914A" }}>{principal.codigoFipe}</div>
+              </div>
+            </div>
+          )}
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2, marginBottom: 2 }}>
             {/* ── Dados do Veículo ── */}
@@ -258,73 +297,57 @@ export function BuscaVeiculoPanel() {
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.22em", textTransform: "uppercase" as const, marginBottom: 20 }}>
                 Veículo · Identificação
               </div>
-              <h3 style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 26, fontWeight: 400, color: "#fff", marginBottom: 24, lineHeight: 1.1 }}>
-                {v.marca ?? "—"}<br />
-                <em style={{ color: "#8a94a3", fontSize: 20 }}>{v.modelo ?? ""}</em>
+              <h3 style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 24, fontWeight: 400, color: "#fff", marginBottom: 24, lineHeight: 1.2 }}>
+                {v.marca ?? "—"}
+                <br />
+                <em style={{ color: "#8a94a3", fontSize: 18 }}>{v.modelo ?? ""}</em>
               </h3>
 
-              <DataRow label="Versão" value={String(v.versao ?? "—")} />
               <DataRow label="Ano Fabricação" value={String(v.anoFabricacao ?? "—")} />
               <DataRow label="Ano Modelo" value={String(v.anoModelo ?? "—")} />
               <DataRow label="Cor" value={String(v.cor ?? "—")} />
               <DataRow label="Combustível" value={String(v.combustivel ?? "—")} />
-              <DataRow label="Município / UF" value={v.municipio && v.uf ? `${v.municipio} / ${v.uf}` : String(v.municipio ?? v.uf ?? "—")} />
+              <DataRow label="Categoria" value={String(v.categoria ?? "—")} />
 
-              {/* Restrições */}
-              {v.restricoes && v.restricoes.length > 0 && (
-                <div style={{ marginTop: 20 }}>
-                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#e07b6a", letterSpacing: "0.18em", textTransform: "uppercase" as const, marginBottom: 10 }}>
-                    Restrições
-                  </div>
-                  {v.restricoes.map((r, i) => (
-                    <div key={i} style={{ padding: "8px 12px", marginBottom: 4, background: "rgba(192,57,43,0.08)", border: "1px solid rgba(192,57,43,0.2)", fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#e07b6a" }}>
-                      ⚠ {r}
-                    </div>
-                  ))}
+              {/* Chassi em destaque */}
+              {v.chassi && v.chassi !== "—" && (
+                <div style={{ marginTop: 20, padding: "14px 18px", background: "rgba(184,145,74,0.08)", border: "1px solid rgba(184,145,74,0.2)" }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.2em", textTransform: "uppercase" as const, marginBottom: 6 }}>Chassi</div>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, color: "#fff", letterSpacing: "0.06em", wordBreak: "break-all" as const }}>{v.chassi}</div>
                 </div>
               )}
             </div>
 
-            {/* ── Chassi ── */}
+            {/* ── Histórico + FIPE detalhe ── */}
             <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", padding: "36px 32px" }}>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.22em", textTransform: "uppercase" as const, marginBottom: 20 }}>
-                Chassi · Especificações
+                FIPE · Evolução
               </div>
-              <h3 style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 26, fontWeight: 400, color: "#fff", marginBottom: 24, lineHeight: 1.1 }}>
-                Dados<br /><em style={{ color: "#8a94a3" }}>Técnicos</em>
+              <h3 style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 24, fontWeight: 400, color: "#fff", marginBottom: 24, lineHeight: 1.2 }}>
+                Referência<br /><em style={{ color: "#8a94a3" }}>{principal?.mesReferencia ?? "—"}</em>
               </h3>
 
-              {/* Número do chassi em destaque */}
-              {ch?.chassi && (
-                <div style={{ padding: "14px 18px", background: "rgba(184,145,74,0.08)", border: "1px solid rgba(184,145,74,0.2)", marginBottom: 20 }}>
-                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.2em", textTransform: "uppercase" as const, marginBottom: 6 }}>Chassi</div>
-                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 14, color: "#fff", letterSpacing: "0.08em", wordBreak: "break-all" as const }}>{ch.chassi}</div>
-                </div>
-              )}
+              <DataRow label="Código FIPE" value={principal?.codigoFipe ?? "—"} />
+              <DataRow label="Valor Atual" value={principal?.valor ?? "—"} />
+              <DataRow label="Mês Referência" value={principal?.mesReferencia ?? "—"} />
+              <DataRow label="Combustível" value={principal?.combustivel ?? "—"} />
+              <DataRow label="Ano Modelo" value={String(principal?.anoModelo ?? "—")} />
 
-              <DataRow label="Motor" value={String(ch?.motor ?? "—")} />
-              <DataRow label="Potência" value={String(ch?.potencia ?? "—")} />
-              <DataRow label="Cilindrada" value={String(ch?.cilindrada ?? "—")} />
-              <DataRow label="Carroceria" value={String(ch?.carroceria ?? "—")} />
-              <DataRow label="Espécie" value={String(ch?.especie ?? "—")} />
-              <DataRow label="Tipo" value={String(ch?.tipo ?? "—")} />
-              <DataRow label="Passageiros" value={String(ch?.capacidadePassageiros ?? "—")} />
-              <DataRow label="Procedência" value={String(ch?.procedencia ?? "—")} />
-              <DataRow label="Combustível" value={String(ch?.combustivel ?? "—")} />
+              {historico.length > 1 && <Sparkline dados={historico} />}
             </div>
           </div>
 
-          {/* ── Tabela FIPE ── */}
-          {fipeList.length > 0 && (
-            <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", padding: "36px 32px", marginTop: 2 }}>
+          {/* ── Tabela FIPE todos os anos ── */}
+          {fipeList.length > 1 && (
+            <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", padding: "36px 32px", marginBottom: 2 }}>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.22em", textTransform: "uppercase" as const, marginBottom: 20 }}>
-                FIPE · Tabela de Referência
+                FIPE · Todos os Anos/Versões
               </div>
               <div style={{ overflowX: "auto" as const }}>
                 <table style={{ width: "100%", borderCollapse: "collapse" as const }}>
                   <thead>
                     <tr>
-                      {["Código FIPE", "Referência", "Marca", "Modelo", "Ano", "Combustível", "Valor"].map((h) => (
+                      {["Código FIPE", "Modelo", "Ano Modelo", "Combustível", "Referência", "Valor"].map((h) => (
                         <th key={h} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#5a6a7a", letterSpacing: "0.14em", textTransform: "uppercase" as const, textAlign: "left" as const, padding: "10px 14px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
                           {h}
                         </th>
@@ -333,14 +356,19 @@ export function BuscaVeiculoPanel() {
                   </thead>
                   <tbody>
                     {fipeList.map((item, i) => (
-                      <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-                        <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#B8914A", padding: "11px 14px" }}>{item.CodigoFipe ?? "—"}</td>
-                        <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#7a8a9a", padding: "11px 14px" }}>{item.MesReferencia ?? "—"}</td>
-                        <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#cfd6df", padding: "11px 14px" }}>{item.Marca ?? "—"}</td>
-                        <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#cfd6df", padding: "11px 14px" }}>{item.Modelo ?? "—"}</td>
-                        <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#8a94a3", padding: "11px 14px" }}>{item.AnoModelo ?? "—"}</td>
-                        <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#8a94a3", padding: "11px 14px" }}>{item.SiglaCombustivel ?? item.Combustivel ?? "—"}</td>
-                        <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, color: "#2BA84A", fontWeight: 700, padding: "11px 14px" }}>{item.Valor ?? "—"}</td>
+                      <tr
+                        key={i}
+                        style={{
+                          borderBottom: "1px solid rgba(255,255,255,0.04)",
+                          background: item.principal ? "rgba(184,145,74,0.06)" : "transparent",
+                        }}
+                      >
+                        <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#B8914A", padding: "11px 14px" }}>{item.codigoFipe}</td>
+                        <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#cfd6df", padding: "11px 14px", maxWidth: 240, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" as const }}>{item.modelo}</td>
+                        <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#8a94a3", padding: "11px 14px" }}>{item.anoModelo}</td>
+                        <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#8a94a3", padding: "11px 14px" }}>{item.combustivel}</td>
+                        <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#7a8a9a", padding: "11px 14px" }}>{item.mesReferencia}</td>
+                        <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, color: "#2BA84A", fontWeight: item.principal ? 700 : 400, padding: "11px 14px" }}>{item.valor}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -351,7 +379,7 @@ export function BuscaVeiculoPanel() {
 
           {/* Footer */}
           <div style={{
-            marginTop: 2, padding: "16px 24px",
+            padding: "16px 24px",
             background: "rgba(255,255,255,0.02)",
             border: "1px solid rgba(255,255,255,0.06)",
             display: "flex", alignItems: "center", gap: 24,

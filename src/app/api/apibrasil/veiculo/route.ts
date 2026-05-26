@@ -1,38 +1,99 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  consultarPlacaFIPE,
-  APIBrasilError,
-  type PlacaFIPEResponse,
-  type FIPEItem,
-  type VeiculoDados,
-  type VeiculoChassi,
-} from "@/lib/apibrasil";
+import { consultarPlacaFIPE, APIBrasilError } from "@/lib/apibrasil";
 
-// ─── Extração flexível dos blocos da resposta ─────────────────────────────────
-// A APIBrasil pode retornar dados em diferentes níveis dependendo da versão
-function extrairDados(raw: PlacaFIPEResponse): {
-  veiculo: VeiculoDados;
-  fipe: FIPEItem[];
-  chassi: VeiculoChassi;
-} {
-  const d = raw?.data as Record<string, unknown> | undefined;
+// ─── Tipos da resposta real da APIBrasil ──────────────────────────────────────
+interface ResultadoItem {
+  anoFabricacao?: number;
+  anoModelo?: string | number;
+  categoria?: string;
+  chassi?: string;
+  codigoFipe?: string;
+  combustivel?: string;
+  cor?: string;
+  marca?: string;
+  mesReferencia?: string;
+  modelo?: string;
+  principal?: boolean;
+  url?: string;
+  valor?: number;
+  historico?: { mes: string; valor: number }[];
+  extra?: {
+    categoria?: { descricao: string; sintetico: string };
+    combustivel?: { descricao: string; sintetico: string };
+  };
+}
 
-  const veiculo: VeiculoDados =
-    (d?.veiculo as VeiculoDados) ??
-    (d?.dados as VeiculoDados) ??
-    {};
+interface APIBrasilVeiculoRaw {
+  status_code?: number;
+  error?: boolean;
+  message?: string;
+  valor_consulta?: number;
+  homolog?: boolean;
+  data?: {
+    resultados?: ResultadoItem[];
+  };
+}
 
-  const fipe: FIPEItem[] =
-    (d?.fipe as FIPEItem[]) ??
-    (veiculo?.fipe as FIPEItem[]) ??
-    [];
+// ─── Formatação de moeda ───────────────────────────────────────────────────────
+function formatarBRL(valor?: number): string {
+  if (valor === undefined || valor === null) return "—";
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(valor);
+}
 
-  const chassi: VeiculoChassi =
-    (d?.chassi as VeiculoChassi) ??
-    (veiculo?.chassi as VeiculoChassi) ??
-    {};
+// ─── Mapeia a resposta real para o formato da UI ──────────────────────────────
+function mapearResultados(raw: APIBrasilVeiculoRaw) {
+  const resultados: ResultadoItem[] = raw?.data?.resultados ?? [];
 
-  return { veiculo, fipe, chassi };
+  // Item principal (marcado como principal: true ou o primeiro da lista)
+  const principal = resultados.find((r) => r.principal === true) ?? resultados[0];
+
+  const veiculo = principal
+    ? {
+        placa: "",                         // a placa não vem na resposta
+        marca: principal.marca ?? "—",
+        modelo: principal.modelo ?? "—",
+        anoFabricacao: principal.anoFabricacao ?? "—",
+        anoModelo: principal.anoModelo ?? "—",
+        cor: principal.cor ?? "—",
+        combustivel: principal.combustivel ?? "—",
+        categoria: principal.categoria ?? "—",
+        chassi: principal.chassi ?? "—",
+      }
+    : {};
+
+  // Tabela FIPE — um item por resultado único (sem duplicatas por codigoFipe)
+  const vistosCodigosStr = new Set<string>();
+  const fipe = resultados
+    .filter((r) => {
+      const key = `${r.codigoFipe}-${r.anoModelo}`;
+      if (vistosCodigosStr.has(key)) return false;
+      vistosCodigosStr.add(key);
+      return true;
+    })
+    .map((r) => ({
+      codigoFipe: r.codigoFipe ?? "—",
+      modelo: r.modelo ?? "—",
+      anoModelo: r.anoModelo ?? "—",
+      combustivel: r.combustivel ?? "—",
+      mesReferencia: r.mesReferencia ?? "—",
+      valor: formatarBRL(r.valor),
+      valorNum: r.valor ?? 0,
+      principal: r.principal ?? false,
+    }));
+
+  // Histórico de valores (do item principal)
+  const historico = (principal?.historico ?? []).map((h) => ({
+    mes: h.mes,
+    valor: h.valor,
+    valorFormatado: formatarBRL(h.valor),
+  }));
+
+  return { veiculo, fipe, historico };
 }
 
 // ─── Route Handler ────────────────────────────────────────────────────────────
@@ -41,17 +102,16 @@ export async function GET(req: NextRequest) {
   const placa = (searchParams.get("placa") ?? "").trim();
 
   if (!placa) {
-    return NextResponse.json(
-      { error: "Informe a placa do veículo." },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Informe a placa do veículo." }, { status: 400 });
   }
 
   try {
     const raw = await consultarPlacaFIPE(placa);
-    const { veiculo, fipe, chassi } = extrairDados(raw);
+    const { veiculo, fipe, historico } = mapearResultados(
+      raw as unknown as APIBrasilVeiculoRaw
+    );
 
-    return NextResponse.json({ veiculo, fipe, chassi, _raw: raw });
+    return NextResponse.json({ veiculo, fipe, historico, _raw: raw });
   } catch (err) {
     if (err instanceof APIBrasilError) {
       console.error(`[/api/apibrasil/veiculo] ${err.message}`, err.details);
