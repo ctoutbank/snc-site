@@ -40,7 +40,7 @@ function SumarioCard({ payload }: { payload: RelatorioPayload }) {
 
   if (payload.dataset === 'vip-car' || payload.dataset === 'veiculo' || payload.dataset === 'proprietario') {
     const id = (r.identificacao ?? r.veiculo ?? r.proprietario ?? {}) as Record<string, unknown>;
-    const placa = v(id.placa ?? payload.documento);
+    const placa = v(payload.documento);
     const modelo = v(id.marcaModelo ?? id.modelo);
     const anoFab = v(id.anoFabricacao);
     const anoMod = v(id.anoModelo);
@@ -626,13 +626,20 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
                     <span className="r-vrd-tag">Parecer SNC consolidado</span>
                     <span className="r-vrd-stamp">✓ GERADO DIGITALMENTE</span>
                   </div>
-                  <div className="r-vrd-result">
-                    <div className="r-seal">✓</div>
-                    <div className="r-vt">
-                      <h3>Consulta concluída</h3>
-                      <p>Dados processados e disponíveis para análise.</p>
-                    </div>
-                  </div>
+                  {(() => {
+                    const rid = (payload.resultado?.identificacao ?? payload.resultado?.veiculo ?? payload.resultado?.proprietario ?? {}) as Record<string, unknown>;
+                    const status = String(rid.statusDescricao ?? 'CONSULTA CONCLUÍDA');
+                    const negativo = /roubo|furto|restri|bloqueio|alena|renajud|impedimento/i.test(status);
+                    return (
+                      <div className="r-vrd-result">
+                        <div className="r-seal" style={negativo ? { background: '#d32f2f' } : {}}>{negativo ? '✗' : '✓'}</div>
+                        <div className="r-vt">
+                          <h3 style={negativo ? { color: '#d32f2f' } : {}}>{status}</h3>
+                          <p>{negativo ? 'Foram encontradas pendências neste veículo.' : 'Dados processados e disponíveis para análise.'}</p>
+                        </div>
+                      </div>
+                    );
+                  })()}
                   <div className="r-vrd-msg">
                     Consulta realizada em {emitidoEm}. Documento com validade de 30 dias corridos a partir da data de emissão.
                     Rastreável à fonte primária conforme LGPD Lei 13.709/2018, art. 7º, V.
