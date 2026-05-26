@@ -474,6 +474,7 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
                   <th>Comitente</th>
                   <th>Pátio</th>
                   <th>Cond. Geral</th>
+                  <th>Cond. Câmbio</th>
                 </tr>
               </thead>
               <tbody>
@@ -485,6 +486,7 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
                     <td>{v(o.comitente)}</td>
                     <td>{v(o.patio)}</td>
                     <td>{v(o.condicaoGeral)}</td>
+                    <td>{v(o.condicaoCambio)}</td>
                   </tr>
                 ))}
               </tbody>
