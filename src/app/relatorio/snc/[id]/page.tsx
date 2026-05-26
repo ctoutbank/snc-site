@@ -402,7 +402,7 @@ const CSS = `
   .r-title .lede{margin-top:14px;font-size:13px;color:#bcc4d1;max-width:560px;line-height:1.55}
   .r-ms{display:flex;background:#0e1d36;border-top:1px solid #1a2742}
   .r-ms>div{padding:16px 20px;border-right:1px solid #1a2742;flex:1;min-width:0}
-  .r-ms>div:first-child{flex:0 0 30%;min-width:auto}
+  .r-ms>div:first-child{flex:1.5;min-width:0}
   .r-ms>div:last-child{border-right:none}
   .r-ms .l{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--brass);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;white-space:nowrap}
   .r-ms .v{font-size:12px;color:#fff;font-family:'JetBrains Mono',monospace;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
