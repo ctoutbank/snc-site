@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { consultarVipCar, consultarPlacaFIPE, consultarProprietarioAtual, APIBrasilError } from "@/lib/apibrasil";
+import { consultarVipCar, consultarPlacaFIPE, consultarProprietarioAtual, consultarLeilaoScore, APIBrasilError } from "@/lib/apibrasil";
 
 // ─── Estrutura real confirmada em homolog ─────────────────────────────────────
 // _raw.data.veicular:
@@ -223,11 +223,12 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // Chamadas paralelas — se fipe ou proprietário falhar, o relatório funciona com VIP Car
-    const [vipRes, fipeRes, propRes] = await Promise.allSettled([
+    // Chamadas paralelas — se fipe, proprietário ou leilão falhar, o relatório funciona com VIP Car
+    const [vipRes, fipeRes, propRes, leilaoRes] = await Promise.allSettled([
       consultarVipCar(placa),
       consultarPlacaFIPE(placa),
       consultarProprietarioAtual(placa),
+      consultarLeilaoScore(placa),
     ]);
 
     // VIP Car é obrigatório
@@ -251,6 +252,14 @@ export async function GET(req: NextRequest) {
       proprietario = propMapeado.proprietario;
     } else {
       console.warn("[vip-car] proprietario falhou:", propRes.reason);
+    }
+
+    // Leilão com Score (opcional — graceful degradation)
+    let leilao = null;
+    if (leilaoRes.status === "fulfilled") {
+      leilao = (leilaoRes.value as Record<string, unknown>)?.data ?? null;
+    } else {
+      console.warn("[vip-car] leilao-score falhou:", leilaoRes.reason);
     }
 
     const isHomolog = process.env.APIBRASIL_HOMOLOG === "true";
@@ -289,10 +298,19 @@ export async function GET(req: NextRequest) {
       statusDescricao: "SEM RESTRIÇÃO",
     };
 
+    const mockLeilao = {
+      score: 85,
+      scoreLabel: "BAIXO RISCO",
+      historico: [],
+      totalLeiloes: 0,
+      indicio: false,
+    };
+
     return NextResponse.json({
       ...mapeado,
       dadosTecnicos: isHomolog ? mockDadosTecnicos : (dadosTecnicos ?? null),
       proprietario: isHomolog ? mockProprietario : (proprietario ?? null),
+      leilao: isHomolog ? mockLeilao : (leilao ?? null),
       _raw: vipRaw,
     });
   } catch (err) {

@@ -511,3 +511,60 @@ export async function consultarVipCar(
     { tipo: "vip-car", placa: p, homolog }
   );
 }
+
+// ─────────────────────────────────────────────────────────
+// DATASET: Leilão com Score
+// POST /api/v2/consulta/veiculos/credits  { tipo: "leilao-completo-score" }
+// ─────────────────────────────────────────────────────────
+
+/** Payload para consulta de Leilão com Score do veículo */
+export interface LeilaoScorePayload {
+  tipo: "leilao-completo-score";
+  placa: string;
+  homolog: boolean;
+}
+
+/**
+ * Resposta completa Leilão com Score — estrutura provisória.
+ * Campos exatos confirmados após primeiro teste em homolog
+ * inspecionando _raw no DevTools Network.
+ */
+export interface LeilaoScoreResponse {
+  status_code?: number;
+  error?: boolean;
+  message?: string;
+  homolog?: boolean;
+  data?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+/**
+ * Consulta Leilão com Score de um veículo pela placa.
+ *
+ * Endpoint: POST /api/v2/consulta/veiculos/credits
+ * Payload:  { tipo: "leilao-completo-score", placa, homolog }
+ *
+ * PROTOCOLO: Rodar em homolog primeiro. Só mudar para produção
+ * após autorização explícita do usuário (Denison).
+ *
+ * @param placa  Placa no formato antigo (ABC1234) ou Mercosul (ABC1D23)
+ */
+export async function consultarLeilaoScore(
+  placa: string
+): Promise<LeilaoScoreResponse> {
+  const p = normalizarPlaca(placa);
+  if (!validarPlaca(p)) {
+    throw new APIBrasilError(
+      `Placa inválida: "${placa}". Use o formato ABC1234 (antigo) ou ABC1D23 (Mercosul).`,
+      400
+    );
+  }
+
+  const homolog = process.env.APIBRASIL_HOMOLOG === "true";
+
+  return apiFetch<LeilaoScorePayload, LeilaoScoreResponse>(
+    "/api/v2/consulta/veiculos/credits",
+    "POST",
+    { tipo: "leilao-completo-score", placa: p, homolog }
+  );
+}
