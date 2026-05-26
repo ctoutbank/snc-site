@@ -387,7 +387,7 @@ const CSS = `
   .r-ms .v{font-size:12px;color:#fff;font-family:'JetBrains Mono',monospace;letter-spacing:.02em}
   .r-sec{padding:40px 56px}
   .r-sec+.r-sec{border-top:1px solid #d4cfc1}
-  .r-sh{display:flex;align-items:baseline;gap:18px;margin-bottom:24px}
+  .r-sh{display:flex;align-items:baseline;gap:8px;margin-bottom:24px}
   .r-sh .num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--brass);letter-spacing:.16em;text-transform:uppercase;min-width:70px}
   .r-sh h2{font-family:'Libre Caslon Text',serif;font-size:22px;font-weight:400;letter-spacing:-.01em;color:var(--ink);flex:1;margin:0}
   .r-sh .badge{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;border:1px solid #cfc7b1;color:var(--ink2)}
@@ -649,7 +649,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
               <div className="r-sh">
                 <div className="num">§ 02</div>
                 <h2>Resultados da consulta</h2>
-                <span className="badge">{meta?.fonte ?? 'DENATRAN / SENATRAN · SNC'}</span>
+                <span className="badge">SNC AUTOSCORE</span>
               </div>
 
               <DadosDataset dataset={payload.dataset} resultado={payload.resultado} />
