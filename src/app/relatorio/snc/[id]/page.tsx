@@ -417,7 +417,7 @@ const CSS = `
   .r-sl .sname{font-family:'Libre Caslon Text',serif;font-size:26px;line-height:1.1;letter-spacing:-.015em;margin-bottom:4px;font-weight:400}
   .r-sl .pfs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px;padding-top:16px;border-top:1px solid #d4cfc1}
   .r-sl .pfs>div .l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--ink2);text-transform:uppercase;margin-bottom:3px}
-  .r-sl .pfs>div .v{font-size:13px;color:var(--ink);font-weight:500}
+  .r-sl .pfs>div .v{font-size:13px;color:var(--ink);font-weight:500;font-family:'JetBrains Mono',monospace}
   .r-vrd{background:#fff;border:1px solid #d4cfc1;padding:24px 26px;position:relative}
   .r-vrd::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--green)}
   .r-vrd-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
