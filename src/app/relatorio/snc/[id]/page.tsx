@@ -399,13 +399,13 @@ const CSS = `
   .ds-row .dk{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;white-space:nowrap}
   .ds-row .dv{font-size:13px;color:var(--ink);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .src-badge{display:inline-flex;align-items:center;padding:5px 12px;border:1px solid #b8b0a0;color:var(--ink2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;background:var(--paper);margin:16px 0 0}
-  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #c8bfa8;border-top:none}
   .ds-hd-badge{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border:1px solid var(--brass);color:var(--brass);background:rgba(200,162,90,.12);white-space:nowrap}
   .tbl-head,.tbl-row-renainf{display:grid;grid-template-columns:max-content 130px 60px 1fr 220px max-content max-content;gap:0;min-width:580px;white-space:nowrap}
   .tbl-head-fipe,.tbl-row-fipe{display:grid;grid-template-columns:100px 1fr 100px 100px 130px;gap:0;min-width:580px;white-space:nowrap}
-  .tbl-th{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;background:rgba(200,162,90,0.08);border-bottom:1px solid #d4cfc1;border-right:1px solid #ece7d8;text-align:center}
+  .tbl-th{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;background:rgba(200,162,90,0.08);border-bottom:1px solid #c8bfa8;border-right:1px solid #c8bfa8;text-align:center}
   .tbl-th:last-child{border-right:none}
-  .tbl-td{font-size:12px;color:var(--ink);padding:12px 14px;border-bottom:1px solid #d4cfc1;border-right:1px solid #ece7d8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;justify-content:center}
+  .tbl-td{font-size:12px;color:var(--ink);padding:12px 14px;border-bottom:1px solid #c8bfa8;border-right:1px solid #c8bfa8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;justify-content:center;text-align:center}
   .tbl-td:last-child{border-right:none}
   .tbl-td.mono{font-family:'JetBrains Mono',monospace;font-size:11px}
   .tbl-td.bold{font-weight:700}
