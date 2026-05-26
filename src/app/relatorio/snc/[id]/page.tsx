@@ -60,9 +60,9 @@ function SumarioCard({ payload }: { payload: RelatorioPayload }) {
           <div><div className="l">Ano Fabricação</div><div className="v">{anoFab}</div></div>
           <div><div className="l">Ano Modelo</div><div className="v">{anoMod}</div></div>
           <div><div className="l">Combustível</div><div className="v">{comb}</div></div>
-          <div><div className="l">Município</div><div className="v">{mun}</div></div>
           <div><div className="l">Cor</div><div className="v">{cor}</div></div>
           <div><div className="l">RENAVAM</div><div className="v">{renavam}</div></div>
+          <div><div className="l">Município</div><div className="v">{mun}</div></div>
         </div>
       </div>
     );
