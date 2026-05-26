@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { consultarVipCar, APIBrasilError } from "@/lib/apibrasil";
+import { consultarVipCar, consultarPlacaFIPE, consultarProprietarioAtual, APIBrasilError } from "@/lib/apibrasil";
 
 // ─── Estrutura real confirmada em homolog ─────────────────────────────────────
 // _raw.data.veicular:
@@ -119,6 +119,101 @@ function mapearVipCar(raw: Record<string, unknown>) {
   return { identificacao, rouboFurto, precificador, renainf, pdf };
 }
 
+// ─── Mapear dados do fipe-chassi ──────────────────────────────────────────────
+interface ResultadoFipe {
+  anoFabricacao?: number;
+  anoModelo?: string | number;
+  categoria?: string;
+  chassi?: string;
+  codigoFipe?: string;
+  combustivel?: string;
+  cor?: string;
+  marca?: string;
+  modelo?: string;
+  principal?: boolean;
+  valor?: number;
+  historico?: { mes: string; valor: number }[];
+  extra?: {
+    categoria?: { descricao: string; sintetico: string };
+    combustivel?: { descricao: string; sintetico: string };
+  };
+  [key: string]: unknown;
+}
+
+function mapearFipeChassi(raw: Record<string, unknown>) {
+  const data = raw?.data as Record<string, unknown> | undefined;
+  const resultados = (data?.resultados as ResultadoFipe[]) ?? [];
+  const principal = resultados.find((r) => r.principal === true) ?? resultados[0];
+
+  if (!principal) return { dadosTecnicos: null };
+
+  return {
+    dadosTecnicos: {
+      cor: principal.cor ?? null,
+      chassi: principal.chassi ?? null,
+      marca: principal.marca ?? null,
+      modelo: principal.modelo ?? null,
+      anoFabricacao: principal.anoFabricacao ?? null,
+      anoModelo: principal.anoModelo ?? null,
+      combustivel: principal.combustivel ?? null,
+      categoria: principal.categoria ?? null,
+      // Campos extras vindos do objeto raiz (se existirem)
+      motor: (principal as Record<string, unknown>).motor ?? null,
+      potencia: (principal as Record<string, unknown>).potencia ?? null,
+      cilindrada: (principal as Record<string, unknown>).cilindrada ?? null,
+      capacidadePassageiros: (principal as Record<string, unknown>).capacidadePassageiros ?? null,
+      carroceria: (principal as Record<string, unknown>).carroceria ?? null,
+      especie: (principal as Record<string, unknown>).especie ?? null,
+      tipo: (principal as Record<string, unknown>).tipo ?? null,
+      procedencia: (principal as Record<string, unknown>).procedencia ?? null,
+    },
+  };
+}
+
+// ─── Mapear dados do proprietário ─────────────────────────────────────────────
+interface ProprietarioRaw {
+  proprietario_nome?: string;
+  proprietario_documento?: string;
+  placa?: string;
+  renavam?: string;
+  municipio?: string;
+  uf?: string;
+  marca_modelo?: string;
+  ano_fabricacao?: string;
+  ano_modelo?: string;
+  cor_veiculo?: string;
+  combustivel?: string;
+  motor?: string;
+  chassi?: string;
+  crlv?: string;
+  data_atualizacao?: string;
+  status_retorno?: { codigo?: string; descricao?: string };
+}
+
+function mapearProprietarioParaVipCar(raw: Record<string, unknown>) {
+  const data = raw?.data as Record<string, unknown> | undefined;
+  const veicular = data?.veicular as Record<string, unknown> | undefined;
+  const p = veicular?.proprietario_atual_veiculo as ProprietarioRaw | undefined;
+
+  if (!p) return { proprietario: null };
+
+  return {
+    proprietario: {
+      nome: p.proprietario_nome ?? null,
+      documento: p.proprietario_documento ?? null,
+      renavam: p.renavam ?? null,
+      municipio: p.municipio ?? null,
+      uf: p.uf ?? null,
+      cor: p.cor_veiculo ?? null,
+      motor: p.motor ?? null,
+      chassi: p.chassi ?? null,
+      crlv: p.crlv ?? null,
+      dataAtualizacao: p.data_atualizacao ?? null,
+      statusDescricao: p.status_retorno?.descricao ?? null,
+    },
+  };
+}
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const placa = (searchParams.get("placa") ?? "").trim();
@@ -128,9 +223,42 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const raw    = await consultarVipCar(placa);
-    const mapeado = mapearVipCar(raw as unknown as Record<string, unknown>);
-    return NextResponse.json({ ...mapeado, _raw: raw });
+    // Chamadas paralelas — se fipe ou proprietário falhar, o relatório funciona com VIP Car
+    const [vipRes, fipeRes, propRes] = await Promise.allSettled([
+      consultarVipCar(placa),
+      consultarPlacaFIPE(placa),
+      consultarProprietarioAtual(placa),
+    ]);
+
+    // VIP Car é obrigatório
+    if (vipRes.status === "rejected") throw vipRes.reason;
+    const vipRaw = vipRes.value;
+    const mapeado = mapearVipCar(vipRaw as unknown as Record<string, unknown>);
+
+    // FIPE-Chassi (opcional — graceful degradation)
+    let dadosTecnicos = null;
+    if (fipeRes.status === "fulfilled") {
+      const fipeMapeado = mapearFipeChassi(fipeRes.value as unknown as Record<string, unknown>);
+      dadosTecnicos = fipeMapeado.dadosTecnicos;
+    } else {
+      console.warn("[vip-car] fipe-chassi falhou:", fipeRes.reason);
+    }
+
+    // Proprietário (opcional — graceful degradation)
+    let proprietario = null;
+    if (propRes.status === "fulfilled") {
+      const propMapeado = mapearProprietarioParaVipCar(propRes.value as unknown as Record<string, unknown>);
+      proprietario = propMapeado.proprietario;
+    } else {
+      console.warn("[vip-car] proprietario falhou:", propRes.reason);
+    }
+
+    return NextResponse.json({
+      ...mapeado,
+      dadosTecnicos,
+      proprietario,
+      _raw: vipRaw,
+    });
   } catch (err) {
     if (err instanceof APIBrasilError) {
       console.error(`[/api/apibrasil/vip-car] ${err.message}`, err.details);
@@ -144,3 +272,4 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
+

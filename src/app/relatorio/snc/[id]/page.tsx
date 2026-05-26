@@ -40,12 +40,16 @@ function SumarioCard({ payload }: { payload: RelatorioPayload }) {
 
   if (payload.dataset === 'vip-car' || payload.dataset === 'veiculo' || payload.dataset === 'proprietario') {
     const id = (r.identificacao ?? r.veiculo ?? r.proprietario ?? {}) as Record<string, unknown>;
+    const prop = (r.proprietario ?? {}) as Record<string, unknown>;
+    const dt = (r.dadosTecnicos ?? {}) as Record<string, unknown>;
     const placa = v(payload.documento);
     const modelo = v(id.marcaModelo ?? id.modelo);
     const anoFab = v(id.anoFabricacao);
     const anoMod = v(id.anoModelo);
     const comb = v(id.combustivel);
     const mun = id.municipio ? `${id.municipio}${id.uf ? ` / ${id.uf}` : ''}` : '—';
+    const cor = v(prop.cor ?? dt.cor);
+    const renavam = v(prop.renavam);
 
     return (
       <div className="r-sl">
@@ -57,6 +61,8 @@ function SumarioCard({ payload }: { payload: RelatorioPayload }) {
           <div><div className="l">Ano Modelo</div><div className="v">{anoMod}</div></div>
           <div><div className="l">Combustível</div><div className="v">{comb}</div></div>
           <div><div className="l">Município</div><div className="v">{mun}</div></div>
+          <div><div className="l">Cor</div><div className="v">{cor}</div></div>
+          <div><div className="l">RENAVAM</div><div className="v">{renavam}</div></div>
         </div>
       </div>
     );
@@ -112,19 +118,51 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
   const pdf = r.pdf as string | null;
   const ocorrencias = renainf?.ocorrencias ?? [];
   const totalRenainf = renainf?.total ?? ocorrencias.length;
+  const prop = (r.proprietario ?? {}) as Record<string, unknown>;
+  const dt = (r.dadosTecnicos ?? {}) as Record<string, unknown>;
+  const temProp = prop && prop.nome;
+  const temDT = dt && (dt.cor || dt.motor || dt.carroceria);
 
   return (
     <>
-      {/* Badge fonte + Identificação + Roubo/Furto lado a lado */}
+      {/* ROW 1: Identificação + Proprietário */}
       <div className="src-badge">DENATRAN / SENATRAN</div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 2, marginTop: 8 }}>
         <div>
           <div className="ds-hd"><span>IDENTIFICAÇÃO DO VEÍCULO</span></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Marca/Modelo</div><div className="dv">{v(id.marcaModelo)}</div></div></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Categoria</div><div className="dv">{v(id.categoria)}</div></div></div>
-          {id.chassi && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(id.chassi)}</div></div></div>}
+          {(id.chassi || prop.chassi || dt.chassi) && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(id.chassi ?? prop.chassi ?? dt.chassi)}</div></div></div>}
+          {(prop.cor || dt.cor) && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Cor</div><div className="dv">{v(prop.cor ?? dt.cor)}</div></div></div>}
+          {(prop.motor || dt.motor) && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Motor</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.motor ?? dt.motor)}</div></div></div>}
+          {prop.renavam && <div className="ds-row"><div className="ds-row-inner"><div className="dk">RENAVAM</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.renavam)}</div></div></div>}
           {id.municipio && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{id.uf ? `${v(id.municipio)} / ${v(id.uf)}` : v(id.municipio)}</div></div></div>}
         </div>
+        <div>
+          {temProp ? (
+            <>
+              <div className="ds-hd"><span>PROPRIETÁRIO ATUAL</span></div>
+              <div className="ds-row"><div className="ds-row-inner"><div className="dk">Nome</div><div className="dv">{v(prop.nome)}</div></div></div>
+              {prop.documento && <div className="ds-row"><div className="ds-row-inner"><div className="dk">CPF/CNPJ</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.documento)}</div></div></div>}
+              {(prop.municipio) && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Município / UF</div><div className="dv">{prop.uf ? `${v(prop.municipio)} / ${v(prop.uf)}` : v(prop.municipio)}</div></div></div>}
+              {prop.crlv && <div className="ds-row"><div className="ds-row-inner"><div className="dk">CRLV</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.crlv)}</div></div></div>}
+              {prop.dataAtualizacao && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Data Atualização</div><div className="dv">{v(prop.dataAtualizacao)}</div></div></div>}
+              <div className="ds-row">
+                <div className="ds-row-inner"><div className="dk">Status</div><div className="dv">{v(prop.statusDescricao ?? 'SEM RESTRIÇÃO')}</div></div>
+                <span className="chip chip-green">OK</span>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="ds-hd"><span>PROPRIETÁRIO ATUAL</span></div>
+              <div className="ds-row"><div className="ds-row-inner"><div className="dk">Resultado</div><div className="dv">Dados não disponíveis nesta consulta</div></div></div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* ROW 2: Roubo/Furto + Dados Técnicos */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 2, marginTop: 2 }}>
         <div>
           <div className="ds-hd"><span>HISTÓRICO ROUBO/FURTO</span></div>
           <div className="ds-row">
@@ -139,6 +177,24 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
             <div className="ds-row-inner"><div className="dk">Recuperação Registrada</div><div className="dv">{rf.recuperacao ? 'SIM' : 'NÃO'}</div></div>
             <span className={`chip chip-${rf.recuperacao ? 'brass' : 'green'}`}>{rf.recuperacao ? 'CONSTA' : 'NÃO'}</span>
           </div>
+        </div>
+        <div>
+          {temDT ? (
+            <>
+              <div className="ds-hd"><span>DADOS TÉCNICOS</span></div>
+              {dt.carroceria && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Carroceria</div><div className="dv">{v(dt.carroceria)}</div></div></div>}
+              {dt.especie && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Espécie</div><div className="dv">{v(dt.especie)}</div></div></div>}
+              {dt.procedencia && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Procedência</div><div className="dv">{v(dt.procedencia)}</div></div></div>}
+              {dt.potencia && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Potência</div><div className="dv">{v(dt.potencia)}</div></div></div>}
+              {dt.cilindrada && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Cilindrada</div><div className="dv">{v(dt.cilindrada)}</div></div></div>}
+              {dt.capacidadePassageiros && <div className="ds-row"><div className="ds-row-inner"><div className="dk">Cap. Passageiros</div><div className="dv">{v(dt.capacidadePassageiros)}</div></div></div>}
+            </>
+          ) : (
+            <>
+              <div className="ds-hd"><span>DADOS TÉCNICOS</span></div>
+              <div className="ds-row"><div className="ds-row-inner"><div className="dk">Resultado</div><div className="dv">Dados não disponíveis nesta consulta</div></div></div>
+            </>
+          )}
         </div>
       </div>
 
