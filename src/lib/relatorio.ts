@@ -130,7 +130,7 @@ export const DATASET_META: Record<
 > = {
   "vip-car": {
     titulo: "Relatório Completo do Veículo",
-    subtitulo: "Identificação, proprietário, restrições, histórico de roubo/furto, infrações de trânsito (RENAINF), precificação FIPE e documento oficial SENATRAN/DENATRAN.",
+    subtitulo: "Identificação, proprietário atual, dados técnicos (motor, potência, cilindrada, carroceria), histórico de roubo/furto, indício de sinistro, infrações de trânsito (RENAINF), precificação FIPE com chassi e documento oficial SENATRAN/DENATRAN.",
     fonte: "DENATRAN / SENATRAN",
     cor: "#7B5EA7",
   },

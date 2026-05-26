@@ -40,8 +40,9 @@ export default function BuscaVipCarPage() {
                 <span style={{ color: "#7B5EA7" }}>VIP Car</span>
               </h1>
               <p style={{ fontSize: 16, color: "#8a94a3", lineHeight: 1.6, maxWidth: 540 }}>
-                Relatório completo do veículo: proprietário, restrições, débitos,
-                sinistros, recalls, leilões e histórico FIPE em um único documento.
+                Relatório completo do veículo: identificação, proprietário atual, dados
+                técnicos, histórico de roubo/furto, sinistro, infrações de trânsito (RENAINF),
+                precificação FIPE com chassi e documento oficial SENATRAN/DENATRAN.
               </p>
             </div>
           </div>
