@@ -223,10 +223,13 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
 
       {/* PDF Oficial */}
       {pdf && (
-        <div className="ds-block">
-          <div className="ds-hd"><span>DOCUMENTO PDF OFICIAL · SENATRAN/DENATRAN</span></div>
-          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Relatório Oficial</div><div className="dv"><a href={pdf} target="_blank" rel="noopener noreferrer" style={{ color: '#2ba84a', textDecoration: 'underline' }}>↓ Download do PDF Oficial</a></div></div></div>
-        </div>
+        <>
+          <div className="src-badge">DOCUMENTO OFICIAL</div>
+          <div className="ds-block" style={{ marginTop: 8 }}>
+            <div className="ds-hd"><span>DOCUMENTO PDF OFICIAL · SENATRAN/DENATRAN</span></div>
+            <div className="ds-row"><div className="ds-row-inner"><div className="dk">Relatório Oficial</div><div className="dv"><a href={pdf} target="_blank" rel="noopener noreferrer" style={{ color: '#2ba84a', textDecoration: 'underline' }}>↓ Download do PDF Oficial</a></div></div></div>
+          </div>
+        </>
       )}
     </>
   );
