@@ -414,12 +414,12 @@ const CSS = `
   .snc-tbl{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
   .snc-tbl th{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.08em;text-transform:uppercase;padding:9px 14px;background:rgba(200,162,90,0.08);border-bottom:1px solid #c8bfa8;border-right:1px solid #c8bfa8;text-align:center;white-space:nowrap}
   .snc-tbl th:last-child{border-right:none}
-  .snc-tbl td{padding:11px 14px;border-bottom:1px solid #c8bfa8;border-right:1px solid #c8bfa8;color:var(--ink);text-align:center;vertical-align:middle;white-space:nowrap}
+  .snc-tbl td{padding:11px 14px;border-bottom:1px solid #c8bfa8;border-right:1px solid #c8bfa8;color:var(--ink);text-align:center;vertical-align:middle;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:400}
   .snc-tbl td:last-child{border-right:none}
   .snc-tbl tr:last-child td{border-bottom:none}
   .snc-tbl td.mono{font-family:'JetBrains Mono',monospace;font-size:11px}
-  .snc-tbl td.bold{font-weight:700;font-size:13px}
-  .snc-tbl td.green{color:var(--greend);font-weight:700;font-family:'JetBrains Mono',monospace;font-size:13px}
+  .snc-tbl td.bold{font-size:11px}
+  .snc-tbl td.green{color:var(--greend);font-family:'JetBrains Mono',monospace;font-size:11px}
   .chip{font-size:9px;padding:3px 8px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-weight:700;white-space:nowrap;letter-spacing:.04em}
   .chip-brass{background:rgba(200,162,90,.12);color:#a07a30;border:1px solid rgba(200,162,90,.3)}
   .chip-green{background:rgba(43,168,74,.1);color:var(--greend);border:1px solid rgba(43,168,74,.3)}
