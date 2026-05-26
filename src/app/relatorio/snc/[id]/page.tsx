@@ -464,31 +464,27 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
       <div className="ds-block" style={{ marginTop: 8 }}>
         <div className="ds-hd"><span>OCORRÊNCIAS DE LEILÃO</span><span className="ds-hd-badge">{total === 1 ? '1 registro' : `${total} registros`}</span></div>
         {ocorrencias.length > 0 ? (
-          <div className="tbl-wrap">
-            <table className="snc-tbl">
+          <div className="tbl-wrap" style={{ overflow: 'hidden' }}>
+            <table className="snc-tbl" style={{ tableLayout: 'fixed', width: '100%' }}>
               <thead>
                 <tr>
-                  <th>Data</th>
-                  <th>Leiloeiro</th>
-                  <th>Lote</th>
-                  <th>Comitente</th>
-                  <th>Pátio</th>
-                  <th>Cond. Geral</th>
-                  <th>Cond. Câmbio</th>
-                  <th>Chassi</th>
+                  <th style={{ width: '12%' }}>Data</th>
+                  <th style={{ width: '20%' }}>Leiloeiro</th>
+                  <th style={{ width: '6%' }}>Lote</th>
+                  <th style={{ width: '28%' }}>Comitente</th>
+                  <th style={{ width: '14%' }}>Pátio</th>
+                  <th style={{ width: '20%' }}>Cond. Geral</th>
                 </tr>
               </thead>
               <tbody>
                 {ocorrencias.map((o, i) => (
                   <tr key={i} style={{ background: i % 2 === 0 ? '#faf8f1' : '#f4f1ea' }}>
                     <td className="mono">{v(o.dataLeilao)}</td>
-                    <td>{v(o.leiloeiro)}</td>
+                    <td style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{v(o.leiloeiro)}</td>
                     <td className="mono">{v(o.lote)}</td>
-                    <td>{v(o.comitente)}</td>
-                    <td>{v(o.patio)}</td>
+                    <td style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{v(o.comitente)}</td>
+                    <td style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{v(o.patio)}</td>
                     <td>{v(o.condicaoGeral)}</td>
-                    <td>{v(o.condicaoCambio)}</td>
-                    <td>{v(o.situacaoChassi)}</td>
                   </tr>
                 ))}
               </tbody>
