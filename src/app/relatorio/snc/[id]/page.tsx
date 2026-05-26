@@ -415,7 +415,7 @@ const CSS = `
   .r-title h1{font-family:'Libre Caslon Text',serif;font-size:38px;font-weight:400;line-height:1.05;letter-spacing:-.015em;margin:0}
   .r-title h1 .it{font-style:italic;color:#9aa3b2}
   .r-title .lede{margin-top:14px;font-size:13px;color:#bcc4d1;max-width:560px;line-height:1.55}
-  .r-ms{display:grid;grid-template-columns:1fr auto auto 1fr 1fr;background:#0e1d36;border-top:1px solid #1a2742}
+  .r-ms{display:grid;grid-template-columns:repeat(5,1fr);background:#0e1d36;border-top:1px solid #1a2742}
   .r-ms>div{padding:16px 20px;border-right:1px solid #1a2742}
   .r-ms>div:last-child{border-right:none}
   .r-ms .l{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--brass);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
