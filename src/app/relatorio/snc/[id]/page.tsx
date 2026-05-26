@@ -141,16 +141,10 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
           <div className="ds-hd"><span>IDENTIFICAÇÃO DO VEÍCULO</span></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Carroceria</div><div className="dv">{v(dt.carroceria)}</div></div></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Procedência</div><div className="dv">{v(dt.procedencia)}</div></div></div>
-          {/* Potência | Cilindrada */}
-          <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
-            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Potência</div><div className="dv">{v(dt.potencia)}</div></div>
-            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Cilindrada</div><div className="dv">{v(dt.cilindrada)}</div></div>
-          </div></div>
-          {/* Espécie | Cap. Passageiros */}
-          <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
-            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Espécie</div><div className="dv">{v(dt.especie ?? id.categoria)}</div></div>
-            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Cap. Passageiros</div><div className="dv">{v(dt.capacidadePassageiros)}</div></div>
-          </div></div>
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Potência</div><div className="dv">{v(dt.potencia)}</div></div></div>
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Cilindrada</div><div className="dv">{v(dt.cilindrada)}</div></div></div>
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Espécie</div><div className="dv">{v(dt.especie ?? id.categoria)}</div></div></div>
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Cap. Passageiros</div><div className="dv">{v(dt.capacidadePassageiros)}</div></div></div>
         </div>
         {/* Coluna 3: Proprietário */}
         <div>
