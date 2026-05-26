@@ -395,7 +395,7 @@ const CSS = `
   .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .tbl-head,.tbl-row-renainf{display:grid;grid-template-columns:max-content 130px 60px 1fr 220px max-content max-content;gap:0;min-width:580px;white-space:nowrap}
   .tbl-head-fipe,.tbl-row-fipe{display:grid;grid-template-columns:100px 1fr 100px 100px 130px;gap:0;min-width:580px;white-space:nowrap}
-  .tbl-th{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;background:rgba(200,162,90,0.08);border-bottom:1px solid #d4cfc1;border-right:1px solid #ece7d8}
+  .tbl-th{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;background:rgba(200,162,90,0.08);border-bottom:1px solid #d4cfc1;border-right:1px solid #ece7d8;text-align:center}
   .tbl-th:last-child{border-right:none}
   .tbl-td{font-size:12px;color:var(--ink);padding:12px 14px;border-bottom:1px solid #d4cfc1;border-right:1px solid #ece7d8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center}
   .tbl-td:last-child{border-right:none}
