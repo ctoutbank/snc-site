@@ -75,7 +75,7 @@ function SumarioCard({ payload }: { payload: RelatorioPayload }) {
       <div className="r-sl">
         <div className="label">Veículo</div>
         <div className="sname">{modelo.replace('/', ' - ')}</div>
-        <div className="sdoc" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 15, letterSpacing: '0.08em', marginTop: 4 }}>{placa}</div>
+        <div className="sdoc" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 15, letterSpacing: '0.08em', marginTop: 4 }}>Placa: {placa}</div>
         <div className="pfs" style={{ gridTemplateColumns: '1fr 1fr' }}>
           <div><div className="l">Modelo</div><div className="v">{marcaEModeloInfo.modelo}</div></div>
           <div><div className="l">Marca</div><div className="v">{marcaEModeloInfo.marca}</div></div>
@@ -100,7 +100,7 @@ function SumarioCard({ payload }: { payload: RelatorioPayload }) {
       <div className="r-sl">
         <div className="label">Veículo</div>
         <div className="sname">{modelo.replace('/', ' - ')}</div>
-        <div className="sdoc" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 15, letterSpacing: '0.08em', marginTop: 4 }}>{placa}</div>
+        <div className="sdoc" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 15, letterSpacing: '0.08em', marginTop: 4 }}>Placa: {placa}</div>
         <div className="pfs" style={{ gridTemplateColumns: '1fr 1fr' }}>
           <div><div className="l">Modelo</div><div className="v">{marcaEModeloInfo.modelo}</div></div>
           <div><div className="l">Marca</div><div className="v">{marcaEModeloInfo.marca}</div></div>
