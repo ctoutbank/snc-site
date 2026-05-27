@@ -55,18 +55,14 @@ export default function BuscaVipCarPage() {
           padding: "0 28px 80px",
         }}>
           <div style={{ maxWidth: 1100, margin: "0 auto", paddingTop: 48 }}>
-            <div style={{
-              display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
-              gap: 0, marginBottom: 36,
-              border: "1px solid rgba(255,255,255,0.06)",
-            }}>
+            <div className="ds-stats-grid" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
               {[
                 { num: "VIP", label: "Relatório Completo" },
                 { num: "8+", label: "Blocos de Dados" },
                 { num: "2", label: "Formatos de Placa" },
                 { num: "Real-time", label: "Atualização" },
               ].map(({ num, label }) => (
-                <div key={label} style={{ padding: "20px 24px", borderRight: "1px solid rgba(255,255,255,0.06)" }}>
+              <div key={label} className="ds-stat-item">
                   <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 24, color: "#7B5EA7", lineHeight: 1, marginBottom: 6 }}>
                     {num}
                   </div>
@@ -82,6 +78,14 @@ export default function BuscaVipCarPage() {
         </section>
       </main>
       <SiteFooter />
+
+      <style>{`
+        .ds-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-bottom:36px}
+        .ds-stat-item{padding:20px 24px;border-right:1px solid rgba(255,255,255,0.06)}
+        .ds-stat-item:last-child{border-right:none}
+        @media(max-width:768px){.ds-stats-grid{grid-template-columns:repeat(2,1fr)}.ds-stat-item:nth-child(2){border-right:none}}
+        @media(max-width:480px){.ds-stats-grid{grid-template-columns:1fr 1fr}.ds-stat-item{padding:14px 16px}}
+      `}</style>
     </div>
   );
 }
