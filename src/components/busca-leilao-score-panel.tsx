@@ -174,12 +174,12 @@ export function BuscaLeilaoScorePanel() {
   const [loading, setLoading]     = useState(false);
   const [erro, setErro]           = useState<string | null>(null);
   const [resultado, setResultado] = useState<LeilaoResult | null>(null);
+  const [activeTab, setActiveTab] = useState<"geral" | "veiculo" | "historico" | "inspecao">("geral");
   const { historico, salvar, limpar } = useHistoricoConsultas("leilao");
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setPlaca(formatarPlaca(e.target.value));
     setErro(null);
-    setResultado(null);
   }, []);
 
   const handleBuscar = useCallback(async () => {
@@ -191,6 +191,7 @@ export function BuscaLeilaoScorePanel() {
     setLoading(true);
     setErro(null);
     setResultado(null);
+    setActiveTab("geral");
     try {
       const res  = await fetch(`/api/apibrasil/leilao-score?placa=${clean}`);
       const data = await res.json();
@@ -277,10 +278,21 @@ export function BuscaLeilaoScorePanel() {
 
       {/* ── Resultado ── */}
       {r && (
-        <div id="leilao-resultado" style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <div id="leilao-resultado" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
 
-          {/* ── Botão Gerar Relatório ── */}
-          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
+          {/* ── Cabeçalho do Resultado & Botão Gerar Relatório ── */}
+          <div style={{
+            display: "flex", justifyContent: "space-between", alignItems: "center",
+            background: "rgba(255,255,255,0.02)",
+            border: "1px solid rgba(255,255,255,0.06)",
+            padding: "16px 24px", marginBottom: 8
+          }}>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#5a6a7a", letterSpacing: "0.1em" }}>CONSULTA DE LEILÃO</span>
+              <span style={{ fontSize: 18, color: "#fff", fontWeight: 700, fontFamily: "'Libre Caslon Text', serif", marginTop: 4 }}>
+                {r.dadosVeiculo?.marcaModelo ? r.dadosVeiculo.marcaModelo.replace('/', ' - ') : 'Veículo'}
+              </span>
+            </div>
             <button
               onClick={() => {
                 const clean = placa.replace(/[^A-Z0-9]/g, "");
@@ -293,168 +305,274 @@ export function BuscaLeilaoScorePanel() {
                 letterSpacing: "0.1em", textTransform: "uppercase" as const,
                 fontWeight: 700, border: "none", cursor: "pointer",
                 display: "flex", alignItems: "center", gap: 8,
+                transition: "background 0.2s"
               }}
+              onMouseOver={(e) => (e.currentTarget.style.background = "#b8913c")}
+              onMouseOut={(e) => (e.currentTarget.style.background = COR_ACCENT)}
             >
               ⎙ Gerar Relatório
             </button>
           </div>
 
-          {/* ── Score ── */}
-          {r.score && (
-            <Bloco titulo="Score de Leilão">
-              <div style={{ display: "flex", alignItems: "center", gap: 24, marginBottom: 16 }}>
-                <div style={{
-                  fontFamily: "'Libre Caslon Text', serif", fontSize: 64,
-                  color: scoreCor(r.score.pontuacao), lineHeight: 1,
-                  display: "flex", alignItems: "baseline", gap: 8,
-                }}>
-                  {r.score.pontuacao ?? "—"}
-                  <span style={{ fontSize: 18, fontFamily: "'JetBrains Mono', monospace", opacity: 0.5 }}>
-                    / {r.score.aceitacao ?? "—"}%
-                  </span>
-                </div>
-                <div>
-                  <div style={{
-                    fontFamily: "'JetBrains Mono', monospace", fontSize: 12,
-                    color: scoreCor(r.score.pontuacao), fontWeight: 700,
-                    letterSpacing: "0.1em", textTransform: "uppercase" as const,
-                  }}>
-                    {r.score.descricaoPontuacao ?? "—"}
-                  </div>
-                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#5a6a7a", marginTop: 4 }}>
-                    Pontuação A–E · A = menor risco
-                  </div>
-                </div>
-              </div>
-              <DataRow label="% Sobre Tabela FIPE" value={r.score.percentualSobreFipe ? `${r.score.percentualSobreFipe}%` : "—"} />
-              <DataRow label="Exige Vistoria" value={r.score.exigeVistoriaEspecial ?? "—"} />
-            </Bloco>
-          )}
-
-          {/* ── Indício de Sinistro ── */}
-          {r.sinistro && (
-            <Bloco titulo="Indício de Sinistro">
-              <IndicadorBool label="Existe Ocorrência de Sinistro" valor={r.sinistro.existeOcorrencia} />
-              {r.sinistro.descricao && (
-                <DataRow label="Descrição" value={r.sinistro.descricao} highlight={r.sinistro.existeOcorrencia} />
-              )}
-            </Bloco>
-          )}
-
-          {/* ── Dados do Veículo (Leilão) ── */}
-          {r.dadosVeiculo && (
-            <Bloco titulo="Dados do Veículo">
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px" }}>
-                <div>
-                  <DataRow label="Placa" value={r.dadosVeiculo.placa ?? "—"} mono />
-                  <DataRow label="Marca/Modelo" value={r.dadosVeiculo.marcaModelo ?? "—"} />
-                  <DataRow label="Ano Fabricação" value={r.dadosVeiculo.anoFabricacao ?? "—"} mono />
-                  <DataRow label="Ano Modelo" value={r.dadosVeiculo.anoModelo ?? "—"} mono />
-                  <DataRow label="Chassi" value={r.dadosVeiculo.chassi ?? "—"} mono />
-                  <DataRow label="RENAVAM" value={r.dadosVeiculo.renavam ?? "—"} mono />
-                  <DataRow label="Cor" value={r.dadosVeiculo.cor ?? "—"} />
-                  <DataRow label="Combustível" value={r.dadosVeiculo.combustivel ?? "—"} />
-                </div>
-                <div>
-                  <DataRow label="Motor" value={r.dadosVeiculo.motor ?? "—"} mono />
-                  <DataRow label="Câmbio" value={r.dadosVeiculo.cambio ?? "—"} />
-                  <DataRow label="Carroceria" value={r.dadosVeiculo.carroceria ?? "—"} />
-                  <DataRow label="Categoria" value={r.dadosVeiculo.categoria ?? "—"} />
-                  <DataRow label="Kilometragem" value={r.dadosVeiculo.kilometragem ? `${parseInt(r.dadosVeiculo.kilometragem).toLocaleString("pt-BR")} km` : "—"} />
-                  <DataRow label="Qtd. Eixos" value={r.dadosVeiculo.qtdEixos ?? "—"} />
-                  <DataRow label="Eixo Traseiro" value={r.dadosVeiculo.eixoTraseiro ?? "—"} />
-                </div>
-              </div>
-            </Bloco>
-          )}
-
-          {/* ── Ocorrências de Leilão ── */}
-          <Bloco titulo="Histórico de Leilões" badge={`${r.totalOcorrencias} registro${r.totalOcorrencias !== 1 ? "s" : ""}`}>
-            {r.ocorrencias.length > 0 ? (
-              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                {r.ocorrencias.map((o, i) => (
-                  <div key={i} style={{
-                    background: "rgba(255,255,255,0.02)",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                    padding: "20px 24px",
-                  }}>
-                    <div style={{
-                      display: "flex", justifyContent: "space-between", alignItems: "center",
-                      marginBottom: 14, paddingBottom: 10,
-                      borderBottom: "1px solid rgba(255,255,255,0.06)",
-                    }}>
-                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: COR_ACCENT, letterSpacing: "0.14em", textTransform: "uppercase" as const }}>
-                        Leilão #{i + 1} · {o.dataLeilao}
-                      </span>
-                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#5a6a7a" }}>
-                        Lote {o.lote}
-                      </span>
-                    </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px" }}>
-                      <div>
-                        <DataRow label="Data" value={o.dataLeilao} mono />
-                        <DataRow label="Leiloeiro" value={o.leiloeiro} />
-                        <DataRow label="Lote" value={o.lote} mono />
-                        <DataRow label="Comitente" value={o.comitente} />
-                        <DataRow label="Pátio" value={o.patio} />
-                      </div>
-                      <div>
-                        <DataRow label="Cond. Geral" value={o.condicaoGeral} />
-                        <DataRow label="Cond. Motor" value={o.condicaoMotor} />
-                        <DataRow label="Cond. Mecânica" value={o.condicaoMecanica} />
-                        <DataRow label="Cond. Câmbio" value={o.condicaoCambio} />
-                        <DataRow label="Situação Chassi" value={o.situacaoChassi} />
-                      </div>
-                    </div>
-                    {o.observacoes && o.observacoes !== "—" && (
-                      <div style={{ marginTop: 10, padding: "8px 12px", background: "rgba(212,168,67,0.06)", border: "1px solid rgba(212,168,67,0.15)", fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#8a94a3" }}>
-                        💬 {o.observacoes}
-                      </div>
-                    )}
-                    {o.imagens && o.imagens.length > 0 && (
-                      <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap", gap: 8 }}>
-                        {o.imagens.map((img, j) => (
-                          <a key={j} href={img} target="_blank" rel="noopener noreferrer" style={{
-                            padding: "4px 10px", background: "rgba(212,168,67,0.08)", border: "1px solid rgba(212,168,67,0.2)",
-                            fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: COR_ACCENT,
-                            letterSpacing: "0.1em", textDecoration: "none", textTransform: "uppercase" as const,
-                          }}>
-                            📷 Imagem {j + 1}
-                          </a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: "#2BA84A", padding: "12px 0" }}>
-                Nenhum registro de leilão encontrado
-              </div>
+          {/* ── Menu de Abas ── */}
+          <div style={{
+            display: "flex",
+            gap: 4,
+            background: "rgba(255,255,255,0.02)",
+            border: "1px solid rgba(255,255,255,0.06)",
+            padding: 4,
+            marginBottom: 16,
+            flexWrap: "wrap"
+          }}>
+            <button
+              onClick={() => setActiveTab("geral")}
+              style={{
+                flex: 1, minWidth: 150, padding: "14px 16px",
+                background: activeTab === "geral" ? "rgba(212,168,67,0.12)" : "transparent",
+                color: activeTab === "geral" ? COR_ACCENT : "#8a94a3",
+                border: "none", cursor: "pointer",
+                fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700,
+                letterSpacing: "0.1em", textTransform: "uppercase" as const,
+                transition: "all 0.2s",
+                borderBottom: `2px solid ${activeTab === "geral" ? COR_ACCENT : "transparent"}`,
+              }}
+            >
+              📊 Score & Sinistro
+            </button>
+            <button
+              onClick={() => setActiveTab("veiculo")}
+              style={{
+                flex: 1, minWidth: 150, padding: "14px 16px",
+                background: activeTab === "veiculo" ? "rgba(212,168,67,0.12)" : "transparent",
+                color: activeTab === "veiculo" ? COR_ACCENT : "#8a94a3",
+                border: "none", cursor: "pointer",
+                fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700,
+                letterSpacing: "0.1em", textTransform: "uppercase" as const,
+                transition: "all 0.2s",
+                borderBottom: `2px solid ${activeTab === "veiculo" ? COR_ACCENT : "transparent"}`,
+              }}
+            >
+              🚗 Dados do Veículo
+            </button>
+            <button
+              onClick={() => setActiveTab("historico")}
+              style={{
+                flex: 1, minWidth: 150, padding: "14px 16px",
+                background: activeTab === "historico" ? "rgba(212,168,67,0.12)" : "transparent",
+                color: activeTab === "historico" ? COR_ACCENT : "#8a94a3",
+                border: "none", cursor: "pointer",
+                fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700,
+                letterSpacing: "0.1em", textTransform: "uppercase" as const,
+                transition: "all 0.2s",
+                borderBottom: `2px solid ${activeTab === "historico" ? COR_ACCENT : "transparent"}`,
+              }}
+            >
+              🔨 Histórico ({r.totalOcorrencias})
+            </button>
+            {r.checkList && (
+              <button
+                onClick={() => setActiveTab("inspecao")}
+                style={{
+                  flex: 1, minWidth: 150, padding: "14px 16px",
+                  background: activeTab === "inspecao" ? "rgba(212,168,67,0.12)" : "transparent",
+                  color: activeTab === "inspecao" ? COR_ACCENT : "#8a94a3",
+                  border: "none", cursor: "pointer",
+                  fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700,
+                  letterSpacing: "0.1em", textTransform: "uppercase" as const,
+                  transition: "all 0.2s",
+                  borderBottom: `2px solid ${activeTab === "inspecao" ? COR_ACCENT : "transparent"}`,
+                }}
+              >
+                📋 Checklist Avarias
+              </button>
             )}
-          </Bloco>
+          </div>
 
-          {/* ── Checklist (se disponível) ── */}
-          {r.checkList && (
-            <Bloco titulo="Checklist de Avarias">
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px" }}>
-                <div>
-                  <DataRow label="Frente" value={r.checkList.frente ?? "—"} highlight={!!r.checkList.frente?.match(/avaria/i)} />
-                  <DataRow label="Traseira" value={r.checkList.traseira ?? "—"} />
-                  <DataRow label="Lateral Direita" value={r.checkList.lateralDireita ?? "—"} highlight={!!r.checkList.lateralDireita?.match(/avaria/i)} />
-                  <DataRow label="Lateral Esquerda" value={r.checkList.lateralEsquerda ?? "—"} />
-                  <DataRow label="Teto" value={r.checkList.teto ?? "—"} />
+          {/* ── Conteúdo das Abas ── */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            {/* Aba 1: Score & Sinistro */}
+            {activeTab === "geral" && (
+              <>
+                {r.score && (
+                  <Bloco titulo="Score de Leilão">
+                    <div style={{ display: "flex", alignItems: "center", gap: 24, marginBottom: 16 }}>
+                      <div style={{
+                        fontFamily: "'Libre Caslon Text', serif", fontSize: 64,
+                        color: scoreCor(r.score.pontuacao), lineHeight: 1,
+                        display: "flex", alignItems: "baseline", gap: 8,
+                      }}>
+                        {r.score.pontuacao ?? "—"}
+                        <span style={{ fontSize: 18, fontFamily: "'JetBrains Mono', monospace", opacity: 0.5 }}>
+                          / {r.score.aceitacao ?? "—"}%
+                        </span>
+                      </div>
+                      <div>
+                        <div style={{
+                          fontFamily: "'JetBrains Mono', monospace", fontSize: 12,
+                          color: scoreCor(r.score.pontuacao), fontWeight: 700,
+                          letterSpacing: "0.1em", textTransform: "uppercase" as const,
+                        }}>
+                          {r.score.descricaoPontuacao ?? "—"}
+                        </div>
+                        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#5a6a7a", marginTop: 4 }}>
+                          Pontuação A–E · A = menor risco
+                        </div>
+                      </div>
+                    </div>
+                    <DataRow label="% Sobre Tabela FIPE" value={r.score.percentualSobreFipe ? `${r.score.percentualSobreFipe}%` : "—"} />
+                    <DataRow label="Exige Vistoria" value={r.score.exigeVistoriaEspecial ?? "—"} />
+                  </Bloco>
+                )}
+
+                {r.sinistro && (
+                  <Bloco titulo="Indício de Sinistro">
+                    <div style={{
+                      background: r.sinistro.existeOcorrencia ? "rgba(153,27,27,0.08)" : "rgba(43,168,74,0.06)",
+                      border: `1px solid ${r.sinistro.existeOcorrencia ? "rgba(153,27,27,0.2)" : "rgba(43,168,74,0.15)"}`,
+                      padding: "16px 20px", marginBottom: 16, display: "flex", alignItems: "center", gap: 12
+                    }}>
+                      <div style={{
+                        width: 24, height: 24, borderRadius: "50%",
+                        background: r.sinistro.existeOcorrencia ? "#c0392b" : "#2ba84a",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontSize: 12, color: "#fff", fontWeight: 700
+                      }}>
+                        {r.sinistro.existeOcorrencia ? "✕" : "✓"}
+                      </div>
+                      <div>
+                        <div style={{
+                          fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 700,
+                          color: r.sinistro.existeOcorrencia ? "#e07b6a" : "#2BA84A", letterSpacing: "0.08em"
+                        }}>
+                          {r.sinistro.existeOcorrencia ? "OCORRÊNCIA CONSTATADA" : "NADA CONSTA DE SINISTRO"}
+                        </div>
+                      </div>
+                    </div>
+                    {r.sinistro.descricao && (
+                      <DataRow label="Descrição" value={r.sinistro.descricao} highlight={r.sinistro.existeOcorrencia} />
+                    )}
+                  </Bloco>
+                )}
+              </>
+            )}
+
+            {/* Aba 2: Dados do Veículo */}
+            {activeTab === "veiculo" && r.dadosVeiculo && (
+              <Bloco titulo="Dados do Veículo">
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px" }}>
+                  <div>
+                    <DataRow label="Placa" value={r.dadosVeiculo.placa ?? "—"} mono />
+                    <DataRow label="Marca/Modelo" value={r.dadosVeiculo.marcaModelo ? r.dadosVeiculo.marcaModelo.replace('/', ' - ') : "—"} />
+                    <DataRow label="Ano Fabricação" value={r.dadosVeiculo.anoFabricacao ?? "—"} mono />
+                    <DataRow label="Ano Modelo" value={r.dadosVeiculo.anoModelo ?? "—"} mono />
+                    <DataRow label="Chassi" value={r.dadosVeiculo.chassi ?? "—"} mono />
+                    <DataRow label="RENAVAM" value={r.dadosVeiculo.renavam ?? "—"} mono />
+                    <DataRow label="Cor" value={r.dadosVeiculo.cor ?? "—"} />
+                    <DataRow label="Combustível" value={r.dadosVeiculo.combustivel ?? "—"} />
+                  </div>
+                  <div>
+                    <DataRow label="Motor" value={r.dadosVeiculo.motor ?? "—"} mono />
+                    <DataRow label="Câmbio" value={r.dadosVeiculo.cambio ?? "—"} />
+                    <DataRow label="Carroceria" value={r.dadosVeiculo.carroceria ?? "—"} />
+                    <DataRow label="Categoria" value={r.dadosVeiculo.categoria ?? "—"} />
+                    <DataRow label="Kilometragem" value={r.dadosVeiculo.kilometragem ? `${parseInt(r.dadosVeiculo.kilometragem).toLocaleString("pt-BR")} km` : "—"} />
+                    <DataRow label="Qtd. Eixos" value={r.dadosVeiculo.qtdEixos ?? "—"} />
+                    <DataRow label="Eixo Traseiro" value={r.dadosVeiculo.eixoTraseiro ?? "—"} />
+                  </div>
                 </div>
-                <div>
-                  <DataRow label="Interior" value={r.checkList.interior ?? "—"} />
-                  <DataRow label="Airbags" value={r.checkList.airbags ?? "—"} />
-                  <DataRow label="Local Queimado" value={r.checkList.localQueimado ?? "—"} />
-                  <DataRow label="Rodas Faltantes" value={r.checkList.rodasFaltantes ?? "—"} />
-                  <DataRow label="Observações" value={r.checkList.observacoes ?? "—"} />
+              </Bloco>
+            )}
+
+            {/* Aba 3: Histórico de Leilões */}
+            {activeTab === "historico" && (
+              <Bloco titulo="Histórico de Leilões" badge={`${r.totalOcorrencias} registro${r.totalOcorrencias !== 1 ? "s" : ""}`}>
+                {r.ocorrencias.length > 0 ? (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                    {r.ocorrencias.map((o, i) => (
+                      <div key={i} style={{
+                        background: "rgba(255,255,255,0.02)",
+                        border: "1px solid rgba(255,255,255,0.06)",
+                        padding: "20px 24px",
+                      }}>
+                        <div style={{
+                          display: "flex", justifyContent: "space-between", alignItems: "center",
+                          marginBottom: 14, paddingBottom: 10,
+                          borderBottom: "1px solid rgba(255,255,255,0.06)",
+                        }}>
+                          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: COR_ACCENT, letterSpacing: "0.14em", textTransform: "uppercase" as const }}>
+                            Leilão #{i + 1} · {o.dataLeilao}
+                          </span>
+                          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#5a6a7a" }}>
+                            Lote {o.lote}
+                          </span>
+                        </div>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px" }}>
+                          <div>
+                            <DataRow label="Data" value={o.dataLeilao} mono />
+                            <DataRow label="Leiloeiro" value={o.leiloeiro} />
+                            <DataRow label="Lote" value={o.lote} mono />
+                            <DataRow label="Comitente" value={o.comitente} />
+                            <DataRow label="Pátio" value={o.patio} />
+                          </div>
+                          <div>
+                            <DataRow label="Cond. Geral" value={o.condicaoGeral} />
+                            <DataRow label="Cond. Motor" value={o.condicaoMotor} />
+                            <DataRow label="Cond. Mecânica" value={o.condicaoMecanica} />
+                            <DataRow label="Cond. Câmbio" value={o.condicaoCambio} />
+                            <DataRow label="Situação Chassi" value={o.situacaoChassi} />
+                          </div>
+                        </div>
+                        {o.observacoes && o.observacoes !== "—" && (
+                          <div style={{ marginTop: 10, padding: "8px 12px", background: "rgba(212,168,67,0.06)", border: "1px solid rgba(212,168,67,0.15)", fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#8a94a3" }}>
+                            💬 {o.observacoes}
+                          </div>
+                        )}
+                        {o.imagens && o.imagens.length > 0 && (
+                          <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap", gap: 8 }}>
+                            {o.imagens.map((img, j) => (
+                              <a key={j} href={img} target="_blank" rel="noopener noreferrer" style={{
+                                padding: "4px 10px", background: "rgba(212,168,67,0.08)", border: "1px solid rgba(212,168,67,0.2)",
+                                fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: COR_ACCENT,
+                                letterSpacing: "0.1em", textDecoration: "none", textTransform: "uppercase" as const,
+                              }}>
+                                📷 Imagem {j + 1}
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: "#2BA84A", padding: "12px 0" }}>
+                    Nenhum registro de leilão encontrado
+                  </div>
+                )}
+              </Bloco>
+            )}
+
+            {/* Aba 4: Checklist de Avarias */}
+            {activeTab === "inspecao" && r.checkList && (
+              <Bloco titulo="Checklist de Avarias">
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px" }}>
+                  <div>
+                    <DataRow label="Frente" value={r.checkList.frente ?? "—"} highlight={!!r.checkList.frente?.match(/avaria/i)} />
+                    <DataRow label="Traseira" value={r.checkList.traseira ?? "—"} />
+                    <DataRow label="Lateral Direita" value={r.checkList.lateralDireita ?? "—"} highlight={!!r.checkList.lateralDireita?.match(/avaria/i)} />
+                    <DataRow label="Lateral Esquerda" value={r.checkList.lateralEsquerda ?? "—"} />
+                    <DataRow label="Teto" value={r.checkList.teto ?? "—"} />
+                  </div>
+                  <div>
+                    <DataRow label="Interior" value={r.checkList.interior ?? "—"} />
+                    <DataRow label="Airbags" value={r.checkList.airbags ?? "—"} />
+                    <DataRow label="Local Queimado" value={r.checkList.localQueimado ?? "—"} />
+                    <DataRow label="Rodas Faltantes" value={r.checkList.rodasFaltantes ?? "—"} />
+                    <DataRow label="Observações" value={r.checkList.observacoes ?? "—"} />
+                  </div>
                 </div>
-              </div>
-            </Bloco>
-          )}
+              </Bloco>
+            )}
+          </div>
 
           {/* ── Debug ── */}
           <details style={{ marginTop: 8 }}>
@@ -481,6 +599,7 @@ export function BuscaLeilaoScorePanel() {
         onCarregar={(dados, p) => {
           setPlaca(p.length === 7 ? `${p.slice(0, 3)}-${p.slice(3)}` : p);
           setResultado(dados as unknown as LeilaoResult);
+          setActiveTab("geral");
           setErro(null);
         }}
         onLimpar={limpar}
