@@ -926,7 +926,14 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
               <div><div className="l">Atualiz. no DENATRAN</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.dataAtualizacao as string ?? '—'}</div></div>
             </>
           )}
-          <div style={{ marginLeft: 'auto' }}><div className="l">Validade do parecer</div><div className="v">30 dias corridos</div></div>
+          {payload?.dataset === 'leilao' ? (
+            <div style={{ marginLeft: 'auto', flex: 'none', textAlign: 'right' }}>
+              <div className="l">Data da consulta</div>
+              <div className="v">{new Date().toLocaleDateString('pt-BR')} — {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
+            </div>
+          ) : (
+            <div><div className="l">Validade do parecer</div><div className="v">30 dias corridos</div></div>
+          )}
         </div>
 
         {!payload ? (
