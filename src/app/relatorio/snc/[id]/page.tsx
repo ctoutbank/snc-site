@@ -483,7 +483,7 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
                   return (
                     <Fragment key={i}>
                       {/* Linha 1: dados gerais */}
-                      <tr style={{ background: bg }}>
+                      <tr style={{ background: bg, borderTop: '1px solid #c8bfa8' }}>
                         <td className="mono" style={{ paddingTop: 10 }}>{v(o.dataLeilao)}</td>
                         <td style={{ paddingTop: 10 }}>{v(o.leiloeiro)}</td>
                         <td className="mono" style={{ paddingTop: 10 }}>{v(o.lote)}</td>
@@ -494,9 +494,9 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
                       <tr style={{
                         background: bg,
                         fontSize: '0.82em',
-                        borderBottom: 'none',
+                        borderBottom: '1px solid #c8bfa8',
                       }}>
-                        <td colSpan={5} style={{ padding: '4px 12px 10px' }}>
+                        <td colSpan={5} style={{ padding: '4px 12px 10px', borderBottom: 'none' }}>
                           <div style={{
                             display: 'flex', gap: 14, flexWrap: 'wrap',
                             paddingLeft: 8, borderLeft: '2px solid #c8a25a',
