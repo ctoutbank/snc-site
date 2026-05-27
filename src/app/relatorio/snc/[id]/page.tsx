@@ -926,7 +926,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
               <div><div className="l">Atualiz. no DENATRAN</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.dataAtualizacao as string ?? '—'}</div></div>
             </>
           )}
-          <div><div className="l">Validade do parecer</div><div className="v">30 dias corridos</div></div>
+          <div style={{ marginLeft: 'auto' }}><div className="l">Validade do parecer</div><div className="v">30 dias corridos</div></div>
         </div>
 
         {!payload ? (
