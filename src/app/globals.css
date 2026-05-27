@@ -13,6 +13,27 @@
   --snc-brass: #B8914A;
   --snc-muted: #8a94a3;
   --snc-dot-bg: radial-gradient(circle, rgba(15,26,36,.18) 1px, var(--snc-paper) 1px) center/14px 14px;
+
+  /* ── Dataset accent colors ─────────────────────────────── */
+  --ds-01:        #2BA84A;               /* SCR Bacen + Score  — verde    */
+  --ds-01-bg:     rgba(43,168,74,0.08);
+  --ds-01-border: rgba(43,168,74,0.25);
+
+  --ds-02:        #B8914A;               /* FIPE + Chassi      — bronze   */
+  --ds-02-bg:     rgba(184,145,74,0.08);
+  --ds-02-border: rgba(184,145,74,0.25);
+
+  --ds-03:        #4A8AB8;               /* Proprietário Atual — azul     */
+  --ds-03-bg:     rgba(74,138,184,0.08);
+  --ds-03-border: rgba(74,138,184,0.25);
+
+  --ds-04:        #7B5EA7;               /* VIP Car            — violeta  */
+  --ds-04-bg:     rgba(123,94,167,0.08);
+  --ds-04-border: rgba(123,94,167,0.25);
+
+  --ds-05:        #D4A843;               /* Leilão com Score   — ouro     */
+  --ds-05-bg:     rgba(212,168,67,0.08);
+  --ds-05-border: rgba(212,168,67,0.25);
 }
 
 /* ===== RESET ===== */

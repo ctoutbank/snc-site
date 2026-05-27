@@ -14,76 +14,74 @@ export default function BuscaProprietarioPage() {
     <div className="snc-root">
       <SiteNav />
       <main>
-        {/* ── Hero ── */}
-        <section className="snc-hero snc-hero-geo" style={{ minHeight: "auto" }}>
-          <div className="snc-hero-inner" style={{ paddingBottom: 0 }}>
-            <div className="snc-hero-meta">
-              <div className="l">
-                <span>
-                  <span className="snc-mono" style={{ color: "var(--snc-brass)", fontSize: 10 }}>DATASET</span>
-                  &nbsp;PROPRIETÁRIO · VEÍCULOS · PLACA
-                </span>
-                <span>Consulta em tempo real</span>
-              </div>
-              <div className="snc-mono" style={{ fontSize: 10, color: "#3a4a5a" }}>
-                LGPD · ART. 7º III
-              </div>
-            </div>
+        <section className="busca-main-section">
+          <div className="busca-panel-inner">
 
-            <div style={{ maxWidth: 760, paddingBottom: 60 }}>
-              <div className="snc-mono" style={{ fontSize: 11, color: "var(--snc-brass)", letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 20 }}>
-                03 · Veículos
+            <div className="busca-header-compact">
+              <div className="snc-mono sub-meta">
+                DATASET 03 · PROPRIETÁRIO · VEÍCULOS · PLACA · LGPD ART. 7º III
               </div>
-              <h1 style={{ fontFamily: "'Libre Caslon Text', serif", fontWeight: 400, fontSize: "clamp(48px, 7vw, 96px)", lineHeight: 0.95, letterSpacing: "-0.025em", color: "#fff", marginBottom: 24 }}>
-                Proprietário<br />
-                <span style={{ fontStyle: "italic", color: "#bcc4d1" }}>Atual</span>
+              <h1 className="busca-title-compact">
+                Proprietário <span className="it">Atual</span>
               </h1>
-              <p style={{ fontSize: 16, color: "#8a94a3", lineHeight: 1.6, maxWidth: 540 }}>
+              <p className="busca-desc-compact">
                 Identifique o proprietário atual de qualquer veículo a partir da placa,
                 nos formatos antigo e Mercosul.
               </p>
             </div>
-          </div>
-        </section>
-
-        {/* ── Painel ── */}
-        <section style={{
-          background: "var(--snc-navy)",
-          borderTop: "1px solid #17243b",
-          padding: "0 28px 80px",
-        }}>
-          <div style={{ maxWidth: 1100, margin: "0 auto", paddingTop: 48 }}>
-            {/* Stats */}
-            <div className="ds-stats-grid" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
-              {[
-                { num: "Nome", label: "Proprietário" },
-                { num: "CPF/CNPJ", label: "Identificação" },
-                { num: "2", label: "Formatos de Placa" },
-                { num: "Real-time", label: "Atualização" },
-              ].map(({ num, label }) => (
-                <div key={label} className="ds-stat-item">
-                  <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 24, color: "#4A8AB8", lineHeight: 1, marginBottom: 6 }}>
-                    {num}
-                  </div>
-                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#5a6a7a", letterSpacing: "0.16em", textTransform: "uppercase" }}>
-                    {label}
-                  </div>
-                </div>
-              ))}
-            </div>
 
             <BuscaProprietarioPanel />
+
           </div>
         </section>
       </main>
       <SiteFooter />
 
       <style>{`
-        .ds-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-bottom:36px}
-        .ds-stat-item{padding:20px 24px;border-right:1px solid rgba(255,255,255,0.06)}
-        .ds-stat-item:last-child{border-right:none}
-        @media(max-width:768px){.ds-stats-grid{grid-template-columns:repeat(2,1fr)}.ds-stat-item:nth-child(2){border-right:none}}
-        @media(max-width:480px){.ds-stats-grid{grid-template-columns:1fr 1fr}.ds-stat-item{padding:14px 16px}}
+        .busca-main-section {
+          background: var(--snc-navy);
+          border-top: 1px solid #17243b;
+          padding: 60px 28px 80px;
+        }
+        .busca-panel-inner {
+          max-width: 1100px;
+          margin: 0 auto;
+        }
+        .busca-header-compact {
+          margin-bottom: 36px;
+        }
+        .busca-header-compact .sub-meta {
+          font-size: 9px;
+          color: var(--snc-brass);
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+        }
+        .busca-title-compact {
+          font-family: 'Libre Caslon Text', serif;
+          font-weight: 400;
+          font-size: 32px;
+          color: #fff;
+          margin: 8px 0 12px;
+        }
+        .busca-title-compact .it {
+          font-style: italic;
+          color: #bcc4d1;
+        }
+        .busca-desc-compact {
+          font-size: 13px;
+          color: #8a94a3;
+          line-height: 1.6;
+          max-width: 720px;
+          margin: 0;
+        }
+        @media (max-width: 768px) {
+          .busca-main-section { padding: 40px 16px 48px; }
+          .busca-title-compact { font-size: 28px; }
+          .busca-desc-compact { font-size: 12px; }
+        }
+        @media (max-width: 480px) {
+          .busca-title-compact { font-size: 24px; }
+        }
       `}</style>
     </div>
   );
