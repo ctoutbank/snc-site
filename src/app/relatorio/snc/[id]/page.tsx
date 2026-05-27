@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { gerarProtocolo, DATASET_META, type RelatorioPayload, type DatasetTipo } from '@/lib/relatorio';
 
@@ -473,21 +474,35 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
                   <th>Lote</th>
                   <th>Comitente</th>
                   <th>Pátio</th>
-                  <th>Cond. Geral</th>
-                  <th>Cond. Câmbio</th>
                 </tr>
               </thead>
               <tbody>
                 {ocorrencias.map((o, i) => (
-                  <tr key={i} style={{ background: i % 2 === 0 ? '#faf8f1' : '#f4f1ea' }}>
-                    <td className="mono">{v(o.dataLeilao)}</td>
-                    <td>{v(o.leiloeiro)}</td>
-                    <td className="mono">{v(o.lote)}</td>
-                    <td>{v(o.comitente)}</td>
-                    <td>{v(o.patio)}</td>
-                    <td>{v(o.condicaoGeral)}</td>
-                    <td>{v(o.condicaoCambio)}</td>
-                  </tr>
+                  <Fragment key={i}>
+                    {/* Linha 1: dados gerais */}
+                    <tr style={{ background: i % 2 === 0 ? '#faf8f1' : '#f4f1ea' }}>
+                      <td className="mono">{v(o.dataLeilao)}</td>
+                      <td>{v(o.leiloeiro)}</td>
+                      <td className="mono">{v(o.lote)}</td>
+                      <td>{v(o.comitente)}</td>
+                      <td>{v(o.patio)}</td>
+                    </tr>
+                    {/* Linha 2: condições */}
+                    <tr style={{ background: i % 2 === 0 ? '#f6f3eb' : '#f0ede5', fontSize: '0.85em' }}>
+                      <td colSpan={5} style={{ padding: '4px 12px 8px' }}>
+                        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+                          <span><strong style={{ color: '#8a7a5a' }}>Geral:</strong> {v(o.condicaoGeral)}</span>
+                          <span><strong style={{ color: '#8a7a5a' }}>Motor:</strong> {v(o.condicaoMotor)}</span>
+                          <span><strong style={{ color: '#8a7a5a' }}>Mecânica:</strong> {v(o.condicaoMecanica)}</span>
+                          <span><strong style={{ color: '#8a7a5a' }}>Câmbio:</strong> {v(o.condicaoCambio)}</span>
+                          <span><strong style={{ color: '#8a7a5a' }}>Chassi:</strong> {v(o.situacaoChassi)}</span>
+                          {!!o.observacoes && String(o.observacoes) !== '—' && (
+                            <span><strong style={{ color: '#8a7a5a' }}>Obs:</strong> {v(o.observacoes)}</span>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  </Fragment>
                 ))}
               </tbody>
             </table>

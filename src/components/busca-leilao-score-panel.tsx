@@ -411,6 +411,19 @@ export function BuscaLeilaoScorePanel() {
                         💬 {o.observacoes}
                       </div>
                     )}
+                    {o.imagens && o.imagens.length > 0 && (
+                      <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap", gap: 8 }}>
+                        {o.imagens.map((img, j) => (
+                          <a key={j} href={img} target="_blank" rel="noopener noreferrer" style={{
+                            padding: "4px 10px", background: "rgba(212,168,67,0.08)", border: "1px solid rgba(212,168,67,0.2)",
+                            fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: COR_ACCENT,
+                            letterSpacing: "0.1em", textDecoration: "none", textTransform: "uppercase" as const,
+                          }}>
+                            📷 Imagem {j + 1}
+                          </a>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
