@@ -918,10 +918,14 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
 
         {/* META STRIP */}
         <div className="r-ms">
-          <div><div className="l">Proprietário Atual</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.nome as string ?? payload?.documento ?? '—'}</div></div>
-          <div><div className="l">CPF/CNPJ</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.documento as string ?? '—'}</div></div>
-          <div><div className="l">Município/UF</div><div className="v">{(() => { const p = payload?.resultado?.proprietario as Record<string, unknown> | undefined; const m = p?.municipio as string; const u = p?.uf as string; return m ? (u ? `${m}-${u}` : m) : '—'; })()}</div></div>
-          <div><div className="l">Atualiz. no DENATRAN</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.dataAtualizacao as string ?? '—'}</div></div>
+          {payload?.dataset !== 'leilao' && (
+            <>
+              <div><div className="l">Proprietário Atual</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.nome as string ?? payload?.documento ?? '—'}</div></div>
+              <div><div className="l">CPF/CNPJ</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.documento as string ?? '—'}</div></div>
+              <div><div className="l">Município/UF</div><div className="v">{(() => { const p = payload?.resultado?.proprietario as Record<string, unknown> | undefined; const m = p?.municipio as string; const u = p?.uf as string; return m ? (u ? `${m}-${u}` : m) : '—'; })()}</div></div>
+              <div><div className="l">Atualiz. no DENATRAN</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.dataAtualizacao as string ?? '—'}</div></div>
+            </>
+          )}
           <div><div className="l">Validade do parecer</div><div className="v">30 dias corridos</div></div>
         </div>
 
