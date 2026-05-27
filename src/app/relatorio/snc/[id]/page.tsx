@@ -512,6 +512,10 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
                           </div>
                         </td>
                       </tr>
+                      {/* Espaço entre ocorrências */}
+                      {!isLast && (
+                        <tr><td colSpan={5} style={{ padding: 0, height: 6, background: '#ebe6d8', borderBottom: '1px solid #d5cdb8' }} /></tr>
+                      )}
                     </Fragment>
                   );
                 })}
