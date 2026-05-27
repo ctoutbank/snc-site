@@ -446,6 +446,7 @@ export function BuscaVipCarPanel() {
         }}
         onLimpar={limpar}
         corAccent="#7B5EA7"
+        scrollTargetId="vip-car-resultado"
       />
 
       <style>{`

@@ -75,6 +75,7 @@ interface Props {
   onCarregar: (dados: Record<string, unknown>, placa: string) => void;
   onLimpar: () => void;
   corAccent?: string;
+  scrollTargetId?: string;
 }
 
 function formatarData(iso: string): string {
@@ -92,8 +93,21 @@ function formatarPlaca(p: string): string {
   return p;
 }
 
-export function HistoricoConsultas({ historico, onCarregar, onLimpar, corAccent = "#D4A843" }: Props) {
+export function HistoricoConsultas({ historico, onCarregar, onLimpar, corAccent = "#D4A843", scrollTargetId }: Props) {
   if (historico.length === 0) return null;
+
+  const handleCarregar = (dados: Record<string, unknown>, placa: string) => {
+    onCarregar(dados, placa);
+    // Scroll to result
+    setTimeout(() => {
+      const target = scrollTargetId ? document.getElementById(scrollTargetId) : null;
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }, 100);
+  };
 
   return (
     <div style={{ marginTop: 32 }}>
@@ -113,7 +127,15 @@ export function HistoricoConsultas({ historico, onCarregar, onLimpar, corAccent 
             fontFamily: "'JetBrains Mono', monospace", fontSize: 9,
             color: "#5a6a7a", background: "none", border: "1px solid rgba(255,255,255,0.1)",
             padding: "4px 10px", cursor: "pointer", letterSpacing: "0.08em",
-            textTransform: "uppercase" as const,
+            textTransform: "uppercase" as const, transition: "all 0.15s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = "#e07b6a";
+            e.currentTarget.style.borderColor = "rgba(224,123,106,0.4)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = "#5a6a7a";
+            e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
           }}
         >
           Limpar
@@ -125,9 +147,9 @@ export function HistoricoConsultas({ historico, onCarregar, onLimpar, corAccent 
         border: "1px solid rgba(255,255,255,0.08)",
         overflow: "hidden",
       }}>
-        {/* Header */}
-        <div style={{
-          display: "grid", gridTemplateColumns: "60px 100px 1fr 100px",
+        {/* Header — hidden on mobile */}
+        <div className="hist-header" style={{
+          display: "grid", gridTemplateColumns: "50px 100px 1fr 110px",
           padding: "10px 16px", gap: 12,
           background: "rgba(255,255,255,0.03)",
           borderBottom: "1px solid rgba(255,255,255,0.08)",
@@ -144,8 +166,9 @@ export function HistoricoConsultas({ historico, onCarregar, onLimpar, corAccent 
         {historico.map((h, i) => (
           <div
             key={h.id}
+            className="hist-row"
             style={{
-              display: "grid", gridTemplateColumns: "60px 100px 1fr 100px",
+              display: "grid", gridTemplateColumns: "50px 100px 1fr 110px",
               padding: "10px 16px", gap: 12, alignItems: "center",
               borderBottom: i < historico.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none",
               background: i % 2 === 0 ? "transparent" : "rgba(255,255,255,0.01)",
@@ -161,20 +184,47 @@ export function HistoricoConsultas({ historico, onCarregar, onLimpar, corAccent 
               {formatarData(h.timestamp)}
             </span>
             <button
-              onClick={() => onCarregar(h.dados, h.placa)}
+              onClick={() => handleCarregar(h.dados, h.placa)}
+              className="hist-btn"
               style={{
                 fontFamily: "'JetBrains Mono', monospace", fontSize: 9,
                 color: corAccent, background: `${corAccent}15`,
-                border: `1px solid ${corAccent}40`, padding: "4px 10px",
+                border: `1px solid ${corAccent}40`, padding: "6px 12px",
                 cursor: "pointer", letterSpacing: "0.08em",
                 textTransform: "uppercase" as const, textAlign: "center",
+                transition: "all 0.15s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = `${corAccent}35`;
+                e.currentTarget.style.borderColor = corAccent;
+                e.currentTarget.style.transform = "translateY(-1px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = `${corAccent}15`;
+                e.currentTarget.style.borderColor = `${corAccent}40`;
+                e.currentTarget.style.transform = "translateY(0)";
               }}
             >
-              Carregar
+              ↑ Carregar
             </button>
           </div>
         ))}
       </div>
+
+      <style>{`
+        @media (max-width: 600px) {
+          .hist-header { display: none !important; }
+          .hist-row {
+            grid-template-columns: 1fr 1fr !important;
+            gap: 6px !important;
+            padding: 12px 16px !important;
+          }
+          .hist-btn {
+            grid-column: 1 / -1;
+            width: 100%;
+          }
+        }
+      `}</style>
     </div>
   );
 }

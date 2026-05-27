@@ -277,7 +277,7 @@ export function BuscaLeilaoScorePanel() {
 
       {/* ── Resultado ── */}
       {r && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <div id="leilao-resultado" style={{ display: "flex", flexDirection: "column", gap: 2 }}>
 
           {/* ── Botão Gerar Relatório ── */}
           <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
@@ -485,6 +485,7 @@ export function BuscaLeilaoScorePanel() {
         }}
         onLimpar={limpar}
         corAccent="#D4A843"
+        scrollTargetId="leilao-resultado"
       />
 
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
