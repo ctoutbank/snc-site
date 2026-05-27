@@ -188,6 +188,10 @@ export async function GET(req: NextRequest) {
     // Em HML, injetar mocks completos (API retorna dados genéricos)
     if (isHomolog && leilao) {
       leilao.checkList = mockCheckList;
+      leilao.sinistro = {
+        existeOcorrencia: true,
+        descricao: "SINISTRO PARCIAL — COLISÃO FRONTAL REGISTRADA EM 12/2021",
+      };
       leilao.totalOcorrencias = 4;
       leilao.ocorrencias = [
         {
