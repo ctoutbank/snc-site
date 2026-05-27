@@ -188,8 +188,24 @@ export async function GET(req: NextRequest) {
     const raw = await consultarLeilaoScore(placa);
     const leilao = mapearLeilao(raw as unknown as Record<string, unknown>);
 
-    // Em HML, injetar mocks completos (API retorna dados genéricos)
     if (isHomolog && leilao) {
+      leilao.dadosVeiculo = {
+        placa: placa.toUpperCase(),
+        marcaModelo: "CHEVROLET/PRISMA ELX",
+        anoFabricacao: "2019",
+        anoModelo: "2020",
+        chassi: "9BWZZZ99Z99999999",
+        renavam: "123456789",
+        cor: "PRATA",
+        combustivel: "FLEX",
+        motor: "12345678",
+        cambio: "MANUAL",
+        carroceria: "SEDAN",
+        categoria: "PARTICULAR",
+        kilometragem: "45000",
+        qtdEixos: "2",
+        eixoTraseiro: "SIMPLES",
+      };
       leilao.checkList = mockCheckList;
       leilao.sinistro = {
         existeOcorrencia: true,
