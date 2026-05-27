@@ -422,16 +422,39 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
         </div>
         {/* Sinistro */}
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div className="ds-hd"><span>INDÍCIO DE SINISTRO</span></div>
-          <div className="ds-row">
-            <div className="ds-row-inner"><div className="dk">Existe Ocorrência</div><div className="dv">{sin.existeOcorrencia ? 'SIM' : 'NÃO'}</div></div>
-            <span className={`chip chip-${sin.existeOcorrencia ? 'red' : 'green'}`}>{sin.existeOcorrencia ? 'CONSTA' : 'NÃO'}</span>
-          </div>
-          {!!sin.descricao && (
-            <div className="ds-row" style={{ flex: 1 }}>
-              <div className="ds-row-inner"><div className="dk">Descrição</div><div className="dv" style={{ fontSize: 10 }}>{v(sin.descricao)}</div></div>
+          <div className="ds-hd" style={{ background: sin.existeOcorrencia ? 'rgba(192,57,43,0.12)' : 'rgba(43,168,74,0.08)' }}><span>INDÍCIO DE SINISTRO</span></div>
+          <div style={{
+            flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: sin.existeOcorrencia ? '#fff5f5' : '#f5faf5',
+            borderLeft: `4px solid ${sin.existeOcorrencia ? '#c0392b' : '#2ba84a'}`,
+            padding: '16px 20px', gap: 16,
+          }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{
+                width: 44, height: 44, borderRadius: '50%', margin: '0 auto 8px',
+                background: sin.existeOcorrencia ? '#c0392b' : '#2ba84a',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 20, color: '#fff',
+              }}>
+                {sin.existeOcorrencia ? '✕' : '✓'}
+              </div>
+              <div style={{
+                fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700,
+                color: sin.existeOcorrencia ? '#c0392b' : '#2ba84a',
+                letterSpacing: '0.08em', textTransform: 'uppercase',
+              }}>
+                {sin.existeOcorrencia ? 'CONSTA' : 'NADA CONSTA'}
+              </div>
+              {!!sin.descricao && (
+                <div style={{
+                  fontFamily: "'JetBrains Mono',monospace", fontSize: 9,
+                  color: '#3a4252', marginTop: 6, letterSpacing: '0.06em',
+                }}>
+                  {v(sin.descricao)}
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
 
