@@ -466,7 +466,7 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
         <div className="ds-hd"><span>OCORRÊNCIAS DE LEILÃO</span><span className="ds-hd-badge">{total === 1 ? '1 registro' : `${total} registros`}</span></div>
         {ocorrencias.length > 0 ? (
           <div className="tbl-wrap" style={{ overflow: 'hidden' }}>
-            <table className="snc-tbl" style={{ width: '100%', wordBreak: 'break-word' }}>
+            <table className="snc-tbl" style={{ width: '100%', wordBreak: 'break-word', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
                   <th>Data</th>
@@ -477,33 +477,44 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
                 </tr>
               </thead>
               <tbody>
-                {ocorrencias.map((o, i) => (
-                  <Fragment key={i}>
-                    {/* Linha 1: dados gerais */}
-                    <tr style={{ background: i % 2 === 0 ? '#faf8f1' : '#f4f1ea' }}>
-                      <td className="mono">{v(o.dataLeilao)}</td>
-                      <td>{v(o.leiloeiro)}</td>
-                      <td className="mono">{v(o.lote)}</td>
-                      <td>{v(o.comitente)}</td>
-                      <td>{v(o.patio)}</td>
-                    </tr>
-                    {/* Linha 2: condições */}
-                    <tr style={{ background: i % 2 === 0 ? '#f6f3eb' : '#f0ede5', fontSize: '0.85em' }}>
-                      <td colSpan={5} style={{ padding: '4px 12px 8px' }}>
-                        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-                          <span><strong style={{ color: '#8a7a5a' }}>Geral:</strong> {v(o.condicaoGeral)}</span>
-                          <span><strong style={{ color: '#8a7a5a' }}>Motor:</strong> {v(o.condicaoMotor)}</span>
-                          <span><strong style={{ color: '#8a7a5a' }}>Mecânica:</strong> {v(o.condicaoMecanica)}</span>
-                          <span><strong style={{ color: '#8a7a5a' }}>Câmbio:</strong> {v(o.condicaoCambio)}</span>
-                          <span><strong style={{ color: '#8a7a5a' }}>Chassi:</strong> {v(o.situacaoChassi)}</span>
-                          {!!o.observacoes && String(o.observacoes) !== '—' && (
-                            <span><strong style={{ color: '#8a7a5a' }}>Obs:</strong> {v(o.observacoes)}</span>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  </Fragment>
-                ))}
+                {ocorrencias.map((o, i) => {
+                  const bg = i % 2 === 0 ? '#faf8f1' : '#f3f0e8';
+                  const isLast = i === ocorrencias.length - 1;
+                  return (
+                    <Fragment key={i}>
+                      {/* Linha 1: dados gerais */}
+                      <tr style={{ background: bg }}>
+                        <td className="mono" style={{ paddingTop: 10 }}>{v(o.dataLeilao)}</td>
+                        <td style={{ paddingTop: 10 }}>{v(o.leiloeiro)}</td>
+                        <td className="mono" style={{ paddingTop: 10 }}>{v(o.lote)}</td>
+                        <td style={{ paddingTop: 10 }}>{v(o.comitente)}</td>
+                        <td style={{ paddingTop: 10 }}>{v(o.patio)}</td>
+                      </tr>
+                      {/* Linha 2: condições */}
+                      <tr style={{
+                        background: bg,
+                        fontSize: '0.82em',
+                        borderBottom: isLast ? 'none' : '2px solid #d5cdb8',
+                      }}>
+                        <td colSpan={5} style={{ padding: '4px 12px 10px' }}>
+                          <div style={{
+                            display: 'flex', gap: 14, flexWrap: 'wrap',
+                            paddingLeft: 8, borderLeft: '2px solid #c8a25a',
+                          }}>
+                            <span><strong style={{ color: '#8a7a5a' }}>Geral:</strong> {v(o.condicaoGeral)}</span>
+                            <span><strong style={{ color: '#8a7a5a' }}>Motor:</strong> {v(o.condicaoMotor)}</span>
+                            <span><strong style={{ color: '#8a7a5a' }}>Mecânica:</strong> {v(o.condicaoMecanica)}</span>
+                            <span><strong style={{ color: '#8a7a5a' }}>Câmbio:</strong> {v(o.condicaoCambio)}</span>
+                            <span><strong style={{ color: '#8a7a5a' }}>Chassi:</strong> {v(o.situacaoChassi)}</span>
+                            {!!o.observacoes && String(o.observacoes) !== '—' && (
+                              <span><strong style={{ color: '#8a7a5a' }}>Obs:</strong> {v(o.observacoes)}</span>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    </Fragment>
+                  );
+                })}
               </tbody>
             </table>
           </div>
