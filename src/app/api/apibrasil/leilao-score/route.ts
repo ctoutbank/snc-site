@@ -185,9 +185,68 @@ export async function GET(req: NextRequest) {
     const raw = await consultarLeilaoScore(placa);
     const leilao = mapearLeilao(raw as unknown as Record<string, unknown>);
 
-    // Em HML, injetar mock do checklist (API retorna vazio)
+    // Em HML, injetar mocks completos (API retorna dados genéricos)
     if (isHomolog && leilao) {
       leilao.checkList = mockCheckList;
+      leilao.totalOcorrencias = 4;
+      leilao.ocorrencias = [
+        {
+          dataLeilao: "14/03/2022",
+          leiloeiro: "ALFA LEILÕES LTDA",
+          lote: "208",
+          comitente: "BANCO CENTRAL S/A",
+          patio: "CURITIBA-PR",
+          condicaoGeral: "REGULAR",
+          condicaoMotor: "FUNCIONANDO",
+          condicaoMecanica: "VERIFICAR",
+          condicaoCambio: "VERIFICAR",
+          situacaoChassi: "ÍNTEGRO",
+          observacoes: "VEÍCULO APTO PARA CIRCULAÇÃO COM RESSALVAS",
+          imagens: [],
+        },
+        {
+          dataLeilao: "27/09/2021",
+          leiloeiro: "BETA LEILÕES",
+          lote: "512",
+          comitente: "SEGURADORA PREMIUM LTDA",
+          patio: "LONDRINA-PR",
+          condicaoGeral: "AVARIADO",
+          condicaoMotor: "NÃO FUNCIONA",
+          condicaoMecanica: "COMPROMETIDA",
+          condicaoCambio: "N/C",
+          situacaoChassi: "ÍNTEGRO",
+          observacoes: "SINISTRO PARCIAL — COLISÃO FRONTAL",
+          imagens: ["https://example.com/img1.jpg", "https://example.com/img2.jpg"],
+        },
+        {
+          dataLeilao: "05/06/2020",
+          leiloeiro: "GAMMA LEILÕES S/A",
+          lote: "74",
+          comitente: "TRANSPORTES RODOVIÁRIOS ME",
+          patio: "MARINGÁ-PR",
+          condicaoGeral: "BOM",
+          condicaoMotor: "FUNCIONANDO",
+          condicaoMecanica: "BOM ESTADO",
+          condicaoCambio: "BOM ESTADO",
+          situacaoChassi: "NÃO DIVULGADO",
+          observacoes: "",
+          imagens: [],
+        },
+        {
+          dataLeilao: "18/07/2019",
+          leiloeiro: "DELTA LEILÕES",
+          lote: "940",
+          comitente: "JUSTIÇA FEDERAL — 3ª VARA",
+          patio: "SÃO PAULO-SP",
+          condicaoGeral: "SUCATA",
+          condicaoMotor: "INOPERANTE",
+          condicaoMecanica: "COMPROMETIDA",
+          condicaoCambio: "AVARIADO",
+          situacaoChassi: "ADULTERADO",
+          observacoes: "VEÍCULO PARA DESMONTE — SEM CONDIÇÕES DE CIRCULAÇÃO",
+          imagens: ["https://example.com/img3.jpg"],
+        },
+      ];
     }
 
     return NextResponse.json({
