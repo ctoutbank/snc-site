@@ -391,6 +391,7 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
   const ocorrencias = (r.ocorrencias ?? []) as Record<string, unknown>[];
   const total = (r.totalOcorrencias ?? 0) as number;
   const cl = (r.checkList ?? null) as Record<string, unknown> | null;
+  const sinistros = (r.historicoSinistros ?? []) as Record<string, unknown>[];
 
   const scoreCor = (p: unknown): string => {
     if (p === 'A') return '#2ba84a';
@@ -422,12 +423,15 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
         </div>
         {/* Sinistro */}
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div className="ds-hd" style={{ background: sin.existeOcorrencia ? 'rgba(192,57,43,0.12)' : 'rgba(43,168,74,0.08)' }}><span>INDÍCIO DE SINISTRO</span></div>
+          <div className="ds-hd" style={{
+            background: sin.existeOcorrencia ? '#991b1b' : 'var(--navy)',
+          }}><span>INDÍCIO DE SINISTRO</span></div>
           <div style={{
             flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: sin.existeOcorrencia ? '#fff5f5' : '#f5faf5',
-            borderLeft: `4px solid ${sin.existeOcorrencia ? '#c0392b' : '#2ba84a'}`,
-            padding: '16px 20px', gap: 16,
+            background: sin.existeOcorrencia ? '#fdf0f0' : '#f0fdf4',
+            border: `1px solid ${sin.existeOcorrencia ? '#e8b4b4' : '#b4e8c0'}`,
+            borderTop: 'none',
+            padding: '18px 20px', gap: 16,
           }}>
             <div style={{ textAlign: 'center' }}>
               <div style={{
@@ -439,7 +443,7 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
                 {sin.existeOcorrencia ? '✕' : '✓'}
               </div>
               <div style={{
-                fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700,
+                fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 700,
                 color: sin.existeOcorrencia ? '#c0392b' : '#2ba84a',
                 letterSpacing: '0.08em', textTransform: 'uppercase',
               }}>
@@ -448,7 +452,8 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
               {!!sin.descricao && (
                 <div style={{
                   fontFamily: "'JetBrains Mono',monospace", fontSize: 9,
-                  color: '#3a4252', marginTop: 6, letterSpacing: '0.06em',
+                  color: sin.existeOcorrencia ? '#7a2020' : '#1d5a2a',
+                  marginTop: 6, letterSpacing: '0.06em',
                 }}>
                   {v(sin.descricao)}
                 </div>
@@ -572,6 +577,75 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
               <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Rodas Faltantes</div><div className="dv">{v(cl.rodasFaltantes)}</div></div>
             </div></div>
             <div className="ds-row"><div className="ds-row-inner"><div className="dk">Observações</div><div className="dv">{v(cl.observacoes)}</div></div></div>
+          </div>
+        </>
+      )}
+
+      {/* Histórico de Sinistros */}
+      {sinistros.length > 0 && (
+        <>
+          <div className="src-badge" style={{ borderColor: '#c0392b', color: '#991b1b' }}>SINISTROS</div>
+          <div style={{ marginTop: 8 }}>
+            <div className="ds-hd" style={{ background: '#991b1b' }}>
+              <span>HISTÓRICO DE SINISTROS</span>
+              <span className="ds-hd-badge" style={{ borderColor: 'rgba(255,255,255,0.3)' }}>
+                {sinistros.length === 1 ? '1 registro' : `${sinistros.length} registros`}
+              </span>
+            </div>
+            <div className="tbl-wrap" style={{ overflow: 'hidden' }}>
+              <table className="snc-tbl" style={{ width: '100%', wordBreak: 'break-word', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ background: 'rgba(153,27,27,0.08)' }}>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Seguradora</th>
+                    <th>Valor</th>
+                    <th>Situação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sinistros.map((s, i) => {
+                    const isLast = i === sinistros.length - 1;
+                    return (
+                      <Fragment key={i}>
+                        <tr style={{ background: '#ffffff', borderTop: '1px solid #c8bfa8' }}>
+                          <td className="mono" style={{ paddingTop: 10 }}>{v(s.data)}</td>
+                          <td style={{ paddingTop: 10, color: '#991b1b', fontWeight: 600 }}>{v(s.tipo)}</td>
+                          <td style={{ paddingTop: 10 }}>{v(s.seguradora)}</td>
+                          <td className="mono" style={{ paddingTop: 10 }}>{v(s.valor)}</td>
+                          <td style={{ paddingTop: 10 }}>
+                            <span style={{
+                              padding: '2px 8px', fontSize: 9, letterSpacing: '0.06em',
+                              background: 'rgba(153,27,27,0.08)', color: '#991b1b',
+                              border: '1px solid rgba(153,27,27,0.2)',
+                            }}>
+                              {v(s.situacao)}
+                            </span>
+                          </td>
+                        </tr>
+                        <tr style={{
+                          background: '#ffffff', fontSize: '0.82em',
+                          borderBottom: '1px solid #c8bfa8',
+                        }}>
+                          <td colSpan={5} style={{ padding: '4px 12px 10px', borderBottom: 'none' }}>
+                            <div style={{
+                              paddingLeft: 8, borderLeft: '2px solid #c0392b',
+                              fontFamily: "'JetBrains Mono',monospace", fontSize: 10,
+                              color: '#3a4252',
+                            }}>
+                              {v(s.descricao)}
+                            </div>
+                          </td>
+                        </tr>
+                        {!isLast && (
+                          <tr><td colSpan={5} style={{ padding: 0, height: 8, background: '#f4f1ea', border: 'none' }} /></tr>
+                        )}
+                      </Fragment>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </>
       )}

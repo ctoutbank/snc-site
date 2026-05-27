@@ -152,6 +152,9 @@ function mapearLeilao(raw: Record<string, unknown>) {
       observacoes: o.observacoes ?? "—",
       imagens: o.imagens ?? [],
     })),
+
+    // Histórico de sinistros (registros detalhados)
+    historicoSinistros: [] as { data: string; tipo: string; seguradora: string; valor: string; situacao: string; descricao: string }[],
   };
 }
 
@@ -192,6 +195,32 @@ export async function GET(req: NextRequest) {
         existeOcorrencia: true,
         descricao: "SINISTRO PARCIAL — COLISÃO FRONTAL REGISTRADA EM 12/2021",
       };
+      leilao.historicoSinistros = [
+        {
+          data: "12/12/2021",
+          tipo: "COLISÃO FRONTAL",
+          seguradora: "PORTO SEGURO S/A",
+          valor: "R$ 18.500,00",
+          situacao: "INDENIZADO PARCIAL",
+          descricao: "DANOS NA PARTE FRONTAL — PARA-CHOQUE, CAPÔ E FARÓIS",
+        },
+        {
+          data: "03/08/2020",
+          tipo: "ALAGAMENTO",
+          seguradora: "BRADESCO SEGUROS",
+          valor: "R$ 7.200,00",
+          situacao: "INDENIZADO PARCIAL",
+          descricao: "INFILTRAÇÃO NO PAINEL E MÓDULO ELETRÔNICO",
+        },
+        {
+          data: "15/01/2019",
+          tipo: "COLISÃO TRASEIRA",
+          seguradora: "LIBERTY SEGUROS",
+          valor: "R$ 4.800,00",
+          situacao: "REPARADO",
+          descricao: "DANOS LEVES — PARA-CHOQUE TRASEIRO E LANTERNA",
+        },
+      ];
       leilao.totalOcorrencias = 4;
       leilao.ocorrencias = [
         {
