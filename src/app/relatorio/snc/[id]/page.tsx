@@ -39,11 +39,14 @@ function obterMarcaEModelo(marcaModelo: unknown) {
   if (typeof marcaModelo !== 'string' || !marcaModelo) {
     return { marca: '—', modelo: '—' };
   }
-  const partes = marcaModelo.split('/');
+  let partes = marcaModelo.split('/');
+  if (partes.length === 1 && marcaModelo.includes(' - ')) {
+    partes = marcaModelo.split(' - ');
+  }
   if (partes.length > 1) {
     return {
       marca: partes[0].trim(),
-      modelo: partes.slice(1).join('/').trim()
+      modelo: partes.slice(1).join(' - ').trim()
     };
   }
   return { marca: '—', modelo: marcaModelo.trim() };
@@ -71,7 +74,7 @@ function SumarioCard({ payload }: { payload: RelatorioPayload }) {
     return (
       <div className="r-sl">
         <div className="label">Veículo</div>
-        <div className="sname">{modelo}</div>
+        <div className="sname">{modelo.replace('/', ' - ')}</div>
         <div className="sdoc" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 15, letterSpacing: '0.08em', marginTop: 4 }}>{placa}</div>
         <div className="pfs" style={{ gridTemplateColumns: '1fr 1fr' }}>
           <div><div className="l">Modelo</div><div className="v">{marcaEModeloInfo.modelo}</div></div>
@@ -96,7 +99,7 @@ function SumarioCard({ payload }: { payload: RelatorioPayload }) {
     return (
       <div className="r-sl">
         <div className="label">Veículo</div>
-        <div className="sname">{modelo}</div>
+        <div className="sname">{modelo.replace('/', ' - ')}</div>
         <div className="sdoc" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 15, letterSpacing: '0.08em', marginTop: 4 }}>{placa}</div>
         <div className="pfs" style={{ gridTemplateColumns: '1fr 1fr' }}>
           <div><div className="l">Modelo</div><div className="v">{marcaEModeloInfo.modelo}</div></div>
