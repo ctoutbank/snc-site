@@ -35,6 +35,21 @@ function v(val: unknown): string {
   return val == null || val === '' ? '—' : String(val);
 }
 
+function obterMarcaEModelo(marcaModelo: unknown) {
+  if (typeof marcaModelo !== 'string' || !marcaModelo) {
+    return { marca: '—', modelo: '—' };
+  }
+  const partes = marcaModelo.split('/');
+  if (partes.length > 1) {
+    return {
+      marca: partes[0].trim(),
+      modelo: partes.slice(1).join('/').trim()
+    };
+  }
+  return { marca: '—', modelo: marcaModelo.trim() };
+}
+
+
 // ─── §01 Sumário — card esquerdo por dataset ──────────────────────────────────
 function SumarioCard({ payload }: { payload: RelatorioPayload }) {
   const r = payload.resultado;
@@ -154,7 +169,8 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
         <div>
           <div className="ds-hd"><span>IDENTIFICAÇÃO DO VEÍCULO</span></div>
           <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
-            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Marca/Modelo</div><div className="dv">{v(id.marcaModelo)}</div></div>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Marca</div><div className="dv">{obterMarcaEModelo(id.marcaModelo).marca}</div></div>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Modelo</div><div className="dv">{obterMarcaEModelo(id.marcaModelo).modelo}</div></div>
             <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">CRLV</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.crlv)}</div></div>
             <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(id.chassi ?? prop.chassi ?? dt.chassi)}</div></div>
           </div></div>
@@ -332,7 +348,10 @@ function DadosProprietario({ r }: { r: Record<string, unknown> }) {
       </div>
       <div>
         <div className="ds-hd"><span>DADOS DO VEÍCULO</span></div>
-        <div className="ds-row"><div className="ds-row-inner"><div className="dk">Marca / Modelo</div><div className="dv">{v(p.marcaModelo)}</div></div></div>
+        <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Marca</div><div className="dv">{obterMarcaEModelo(p.marcaModelo).marca}</div></div>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Modelo</div><div className="dv">{obterMarcaEModelo(p.marcaModelo).modelo}</div></div>
+        </div></div>
         <div className="ds-row"><div className="ds-row-inner"><div className="dk">Placa / RENAVAM</div><div className="dv">{v(p.placa)} · {v(p.renavam)}</div></div></div>
         <div className="ds-row"><div className="ds-row-inner"><div className="dk">Ano Fab. / Modelo</div><div className="dv">{v(p.anoFabricacao)} / {v(p.anoModelo)}</div></div></div>
         <div className="ds-row"><div className="ds-row-inner"><div className="dk">Cor / Combustível</div><div className="dv">{v(p.cor)} · {v(p.combustivel)}</div></div></div>
@@ -467,7 +486,8 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
       <div style={{ marginBottom: 2, marginTop: 2 }}>
         <div className="ds-hd"><span>DADOS DO VEÍCULO (LEILÃO)</span></div>
         <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
-          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Marca/Modelo</div><div className="dv">{v(dv.marcaModelo)}</div></div>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Marca</div><div className="dv">{obterMarcaEModelo(dv.marcaModelo).marca}</div></div>
+          <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Modelo</div><div className="dv">{obterMarcaEModelo(dv.marcaModelo).modelo}</div></div>
           <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Cor</div><div className="dv">{v(dv.cor)}</div></div>
           <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(dv.chassi)}</div></div>
         </div></div>
