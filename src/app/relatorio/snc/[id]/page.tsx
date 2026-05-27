@@ -545,18 +545,32 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
                         borderBottom: '1px solid #c8bfa8',
                       }}>
                         <td colSpan={5} style={{ padding: '4px 12px 10px', borderBottom: 'none' }}>
-                          <div style={{
-                            display: 'flex', gap: 14, flexWrap: 'wrap',
-                            paddingLeft: 8, borderLeft: '2px solid #c8a25a',
-                          }}>
-                            <span><strong style={{ color: '#8a7a5a' }}>Geral:</strong> {v(o.condicaoGeral)}</span>
-                            <span><strong style={{ color: '#8a7a5a' }}>Motor:</strong> {v(o.condicaoMotor)}</span>
-                            <span><strong style={{ color: '#8a7a5a' }}>Mecânica:</strong> {v(o.condicaoMecanica)}</span>
-                            <span><strong style={{ color: '#8a7a5a' }}>Câmbio:</strong> {v(o.condicaoCambio)}</span>
-                            <span><strong style={{ color: '#8a7a5a' }}>Chassi:</strong> {v(o.situacaoChassi)}</span>
-                            {!!o.observacoes && String(o.observacoes) !== '—' && (
-                              <span><strong style={{ color: '#8a7a5a' }}>Obs:</strong> {v(o.observacoes)}</span>
-                            )}
+                          <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <div style={{
+                              fontFamily: "'JetBrains Mono',monospace",
+                              fontWeight: 700,
+                              fontSize: 13,
+                              color: '#c8a25a',
+                              width: 18,
+                              textAlign: 'center',
+                              marginRight: 6
+                            }}>
+                              {i + 1}
+                            </div>
+                            <div style={{
+                              flex: 1,
+                              display: 'flex', gap: 14, flexWrap: 'wrap',
+                              paddingLeft: 8, borderLeft: '2px solid #c8a25a',
+                            }}>
+                              <span><strong style={{ color: '#8a7a5a' }}>Geral:</strong> {v(o.condicaoGeral)}</span>
+                              <span><strong style={{ color: '#8a7a5a' }}>Motor:</strong> {v(o.condicaoMotor)}</span>
+                              <span><strong style={{ color: '#8a7a5a' }}>Mecânica:</strong> {v(o.condicaoMecanica)}</span>
+                              <span><strong style={{ color: '#8a7a5a' }}>Câmbio:</strong> {v(o.condicaoCambio)}</span>
+                              <span><strong style={{ color: '#8a7a5a' }}>Chassi:</strong> {v(o.situacaoChassi)}</span>
+                              {!!o.observacoes && String(o.observacoes) !== '—' && (
+                                <span><strong style={{ color: '#8a7a5a' }}>Obs:</strong> {v(o.observacoes)}</span>
+                              )}
+                            </div>
                           </div>
                         </td>
                       </tr>
