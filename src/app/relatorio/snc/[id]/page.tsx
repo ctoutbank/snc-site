@@ -514,7 +514,7 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
                       </tr>
                       {/* Espaço entre ocorrências */}
                       {!isLast && (
-                        <tr><td colSpan={5} style={{ padding: 0, height: 5, background: '#2a3040' }} /></tr>
+                        <tr><td colSpan={5} style={{ padding: 0, height: 8, background: '#f4f1ea', border: 'none' }} /></tr>
                       )}
                     </Fragment>
                   );
