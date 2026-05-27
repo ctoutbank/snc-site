@@ -661,15 +661,29 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
                           background: '#ffffff', fontSize: '0.82em',
                           borderBottom: '1px solid #c8bfa8',
                         }}>
-                          <td colSpan={5} style={{ padding: '4px 12px 10px', borderBottom: 'none' }}>
+                        <td colSpan={5} style={{ padding: '4px 12px 10px', borderBottom: 'none' }}>
+                          <div style={{ display: 'flex', alignItems: 'center' }}>
                             <div style={{
+                              fontFamily: "'JetBrains Mono',monospace",
+                              fontWeight: 700,
+                              fontSize: 13,
+                              color: '#c0392b',
+                              width: 18,
+                              textAlign: 'center',
+                              marginRight: 6
+                            }}>
+                              {i + 1}
+                            </div>
+                            <div style={{
+                              flex: 1,
                               paddingLeft: 8, borderLeft: '2px solid #c0392b',
                               fontFamily: "'JetBrains Mono',monospace", fontSize: 10,
                               color: '#3a4252',
                             }}>
                               {v(s.descricao)}
                             </div>
-                          </td>
+                          </div>
+                        </td>
                         </tr>
                         {!isLast && (
                           <tr><td colSpan={5} style={{ padding: 0, height: 8, background: '#f4f1ea', border: 'none' }} /></tr>
