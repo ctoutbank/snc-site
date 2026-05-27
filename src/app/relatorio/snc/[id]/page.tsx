@@ -478,7 +478,7 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
               </thead>
               <tbody>
                 {ocorrencias.map((o, i) => {
-                  const bg = i % 2 === 0 ? '#faf8f1' : '#f3f0e8';
+                  const bg = '#ffffff';
                   const isLast = i === ocorrencias.length - 1;
                   return (
                     <Fragment key={i}>
@@ -494,7 +494,7 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
                       <tr style={{
                         background: bg,
                         fontSize: '0.82em',
-                        borderBottom: isLast ? 'none' : '2px solid #d5cdb8',
+                        borderBottom: 'none',
                       }}>
                         <td colSpan={5} style={{ padding: '4px 12px 10px' }}>
                           <div style={{
@@ -514,7 +514,7 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
                       </tr>
                       {/* Espaço entre ocorrências */}
                       {!isLast && (
-                        <tr><td colSpan={5} style={{ padding: 0, height: 6, background: '#ebe6d8', borderBottom: '1px solid #d5cdb8' }} /></tr>
+                        <tr><td colSpan={5} style={{ padding: 0, height: 5, background: '#2a3040' }} /></tr>
                       )}
                     </Fragment>
                   );
