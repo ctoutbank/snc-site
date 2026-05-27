@@ -927,7 +927,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
             </>
           )}
           {payload?.dataset === 'leilao' ? (
-            <div style={{ marginLeft: 'auto', flex: 'none', textAlign: 'right' }}>
+            <div style={{ marginLeft: 'auto', flex: 'none', textAlign: 'right', paddingRight: 56 }}>
               <div className="l">Data da consulta</div>
               <div className="v">{new Date().toLocaleDateString('pt-BR')} — {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
             </div>
