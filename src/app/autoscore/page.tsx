@@ -274,8 +274,6 @@ export default function AutoScoreHubPage() {
               fontFamily: "'JetBrains Mono', monospace", fontSize: 10,
               color: "#3a4a5a", letterSpacing: "0.1em", textTransform: "uppercase",
             }}>
-              <span>Provedor: Sistema Nacional de Conformidade</span>
-              <span>·</span>
               <span>Novas verificações adicionadas continuamente</span>
               <span style={{ marginLeft: "auto" }}>SNC — Sistema Nacional de Conformidade</span>
             </div>
