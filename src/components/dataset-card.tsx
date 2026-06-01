@@ -2,6 +2,120 @@
 
 import Link from "next/link";
 
+const ACCENT_CSS = `
+  .ds-card {
+    border-top: 3px solid #17243b !important; /* Navi */
+    background: rgba(10, 22, 40, 0.45) !important; /* Navi */
+    border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.05) !important;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease !important;
+  }
+  .ds-card.ds-card-breve {
+    border-top: 3px solid rgba(255, 255, 255, 0.04) !important;
+    background: rgba(255, 255, 255, 0.01) !important;
+  }
+  .ds-card .card-num {
+    color: #2a3a4a !important; /* Muted */
+    transition: color 0.18s ease !important;
+  }
+  .ds-card.ds-card-ativo .card-num {
+    color: #5a6a7a !important; /* Navi active number */
+  }
+  .ds-card .card-tag {
+    color: #4a5a6a !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+    background: transparent !important;
+    transition: all 0.18s ease !important;
+  }
+  .ds-card.ds-card-ativo .card-tag {
+    color: #7a8a9a !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+  }
+  .ds-card .card-status-dot {
+    background: #3a4a5a !important;
+    box-shadow: none !important;
+    transition: all 0.18s ease !important;
+  }
+  .ds-card.ds-card-ativo .card-status-dot {
+    background: #5a6a7a !important;
+  }
+  .ds-card .card-status-text {
+    color: #3a4a5a !important;
+    transition: all 0.18s ease !important;
+  }
+  .ds-card.ds-card-ativo .card-status-text {
+    color: #7a8a9a !important;
+  }
+  .ds-card .card-status-box {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    transition: all 0.18s ease !important;
+  }
+  .ds-card.ds-card-ativo .card-status-box {
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+  }
+  .ds-card .card-action {
+    color: #3a4a5a !important;
+    transition: color 0.18s ease !important;
+  }
+  .ds-card.ds-card-ativo .card-action {
+    color: #5a6a7a !important;
+  }
+  .ds-card .card-sub {
+    color: #3a4a5a !important;
+    transition: color 0.18s ease !important;
+  }
+  .ds-card.ds-card-ativo .card-sub {
+    color: #7a8a9a !important;
+  }
+  .ds-card .card-input-val {
+    color: #3a4a5a !important;
+    transition: color 0.18s ease !important;
+  }
+  .ds-card.ds-card-ativo .card-input-val {
+    color: #7a8a9a !important;
+  }
+
+  /* Hover com Âmbar */
+  .ds-card.ds-card-ativo:hover {
+    transform: translateY(-3px) !important;
+    border-color: #D4A843 !important; /* Amber border */
+    border-top-color: #D4A843 !important; /* Amber top border */
+    box-shadow: 0 8px 32px rgba(212, 168, 67, 0.15) !important;
+  }
+  .ds-card.ds-card-ativo:hover .card-num {
+    color: #D4A843 !important; /* Amber number */
+  }
+  .ds-card.ds-card-ativo:hover .card-tag {
+    color: #D4A843 !important; /* Amber tags */
+    border-color: rgba(212, 168, 67, 0.3) !important;
+    background: rgba(212, 168, 67, 0.06) !important;
+  }
+  .ds-card.ds-card-ativo:hover .card-status-dot {
+    background: #D4A843 !important;
+    box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.2) !important;
+  }
+  .ds-card.ds-card-ativo:hover .card-status-text {
+    color: #D4A843 !important;
+  }
+  .ds-card.ds-card-ativo:hover .card-status-box {
+    border-color: rgba(212, 168, 67, 0.3) !important;
+    background: rgba(212, 168, 67, 0.06) !important;
+  }
+  .ds-card.ds-card-ativo:hover .card-action {
+    color: #D4A843 !important; /* Amber action button */
+  }
+  .ds-card.ds-card-ativo:hover .card-sub {
+    color: #D4A843 !important;
+  }
+  .ds-card.ds-card-ativo:hover .card-input-val {
+    color: #D4A843 !important;
+  }
+`;
+
 interface DatasetCardProps {
   id: string;
   titulo: string;
@@ -36,71 +150,41 @@ export function DatasetCard({
   const inner = (
     <div
       id={`dataset-card-${id}`}
-      className="ds-card"
+      className={`ds-card ${ativo ? "ds-card-ativo" : "ds-card-breve"}`}
       style={{
-        /* barra de acento no topo — detalhe diferencial por dataset */
-        borderTop: `3px solid ${ativo ? cor : "rgba(255,255,255,0.08)"}`,
-        background: ativo ? corBg : "rgba(255,255,255,0.02)",
-        borderRight: `1px solid ${ativo ? corBorder : "rgba(255,255,255,0.06)"}`,
-        borderBottom: `1px solid ${ativo ? corBorder : "rgba(255,255,255,0.06)"}`,
-        borderLeft: `1px solid ${ativo ? corBorder : "rgba(255,255,255,0.06)"}`,
         padding: "28px 28px 24px",
         height: "100%",
         display: "flex",
         flexDirection: "column",
         gap: 0,
-        transition: "transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease",
         cursor: ativo ? "pointer" : "default",
         position: "relative",
         overflow: "hidden",
       }}
-      onMouseEnter={(e) => {
-        if (!ativo) return;
-        const el = e.currentTarget as HTMLDivElement;
-        el.style.transform = "translateY(-3px)";
-        el.style.borderRightColor = cor;
-        el.style.borderBottomColor = cor;
-        el.style.borderLeftColor = cor;
-        el.style.boxShadow = `0 8px 32px ${cor}22`;
-      }}
-      onMouseLeave={(e) => {
-        if (!ativo) return;
-        const el = e.currentTarget as HTMLDivElement;
-        el.style.transform = "translateY(0)";
-        el.style.borderRightColor = corBorder;
-        el.style.borderBottomColor = corBorder;
-        el.style.borderLeftColor = corBorder;
-        el.style.boxShadow = "none";
-      }}
     >
+      <style dangerouslySetInnerHTML={{ __html: ACCENT_CSS }} />
+
       {/* Número + Status */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
-        <span style={{
+        <span className="card-num" style={{
           fontFamily: "'Libre Caslon Text', serif",
           fontSize: 48,
-          color: ativo ? cor : "#2a3a4a",
           lineHeight: 1,
           fontWeight: 400,
         }}>
           {id}
         </span>
-        <div style={{
+        <div className="card-status-box" style={{
           padding: "4px 10px",
-          background: ativo ? `${cor}22` : "rgba(255,255,255,0.04)",
-          border: `1px solid ${ativo ? `${cor}55` : "rgba(255,255,255,0.08)"}`,
           display: "flex", alignItems: "center", gap: 6,
         }}>
-          <div style={{
+          <div className="card-status-dot" style={{
             width: 5, height: 5,
             borderRadius: "50%",
-            background: ativo ? cor : "#3a4a5a",
-            /* glow no dot quando ativo */
-            boxShadow: ativo ? `0 0 0 3px ${cor}33` : "none",
           }} />
-          <span style={{
+          <span className="card-status-text" style={{
             fontFamily: "'JetBrains Mono', monospace",
             fontSize: 9,
-            color: ativo ? cor : "#3a4a5a",
             letterSpacing: "0.18em",
             textTransform: "uppercase",
           }}>
@@ -119,10 +203,9 @@ export function DatasetCard({
         }}>
           {titulo}
         </h2>
-        <div style={{
+        <div className="card-sub" style={{
           fontFamily: "'JetBrains Mono', monospace",
           fontSize: 10,
-          color: ativo ? cor : "#3a4a5a",
           letterSpacing: "0.16em",
           textTransform: "uppercase",
           marginTop: 6,
@@ -145,15 +228,12 @@ export function DatasetCard({
       {/* Tags de campos */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 20 }}>
         {campos.map((c) => (
-          <span key={c} style={{
+          <span key={c} className="card-tag" style={{
             fontFamily: "'JetBrains Mono', monospace",
             fontSize: 9,
-            color: ativo ? cor : "#3a4a5a",
             padding: "3px 8px",
-            border: `1px solid ${ativo ? `${cor}44` : "rgba(255,255,255,0.05)"}`,
             letterSpacing: "0.1em",
             textTransform: "uppercase",
-            background: ativo ? `${cor}0d` : "transparent",
           }}>
             {c}
           </span>
@@ -167,7 +247,7 @@ export function DatasetCard({
         alignItems: "center",
         marginTop: "auto",
         paddingTop: 20,
-        borderTop: `1px solid ${ativo ? corBorder : "rgba(255,255,255,0.04)"}`,
+        borderTop: "1px solid rgba(255,255,255,0.04)",
       }}>
         <div>
           <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#3a4a5a", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 3 }}>
@@ -181,15 +261,14 @@ export function DatasetCard({
           <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#3a4a5a", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 3 }}>
             Input
           </div>
-          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: ativo ? cor : "#3a4a5a" }}>
+          <div className="card-input-val" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10 }}>
             {tipo}
           </div>
         </div>
         {ativo && (
-          <div style={{
+          <div className="card-action" style={{
             fontFamily: "'JetBrains Mono', monospace",
             fontSize: 10,
-            color: cor,
             letterSpacing: "0.12em",
           }}>
             Consultar →

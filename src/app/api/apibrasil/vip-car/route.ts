@@ -285,8 +285,8 @@ export async function GET(req: NextRequest) {
     };
 
     const mockProprietario = {
-      nome: "DENISON ZIMMER DA LUZ",
-      documento: "971.082.000-15",
+      nome: "João da Silva",
+      documento: "123.456.789-00",
       renavam: "00456789012",
       municipio: "BELO HORIZONTE",
       uf: "MG",
@@ -299,12 +299,73 @@ export async function GET(req: NextRequest) {
     };
 
     const mockLeilao = {
-      score: 85,
-      scoreLabel: "BAIXO RISCO",
-      historico: [],
-      totalLeiloes: 0,
-      indicio: false,
+      score: 68,
+      scoreLabel: "ALTO RISCO",
+      totalLeiloes: 2,
+      indicio: true,
+      historico: [
+        {
+          data: "27/09/2021",
+          leiloeiro: "BETA LEILÕES S/A",
+          lote: "512",
+          comitente: "SULAMÉRICA COMPANHIA NACIONAL DE SEGUROS",
+          patio: "CONTAGEM - MG",
+          valorArremate: "R$ 18.500,00",
+          condicaoGeral: "RECUPERADO DE SINISTRO (MÉDIA MONTA)",
+          situacaoChassi: "ADULTERADO / REGRAVADO",
+        },
+        {
+          data: "05/06/2020",
+          leiloeiro: "GAMMA LEILÕES",
+          lote: "74",
+          comitente: "PORTO SEGURO CIA DE SEGUROS",
+          patio: "BETIM - MG",
+          valorArremate: "R$ 31.200,00",
+          condicaoGeral: "RECUPERADO DE FINANCIAMENTO",
+          situacaoChassi: "ÍNTEGRO",
+        }
+      ],
     };
+
+    if (isHomolog) {
+      // Injetar dados ricos de roubo/furto no mapeado
+      mapeado.rouboFurto = {
+        declaracao: true,
+        devolucao: false,
+        recuperacao: true,
+      };
+
+      // Injetar dados ricos de infrações (RENAINF) no mapeado
+      mapeado.renainf = {
+        total: "3",
+        ocorrencias: [
+          {
+            auto: "A10892736",
+            dataHora: "12/12/2021 14:30:00",
+            descricao: "TRANSITAR EM VELOCIDADE SUPERIOR À MÁXIMA PERMITIDA EM ATÉ 20%",
+            orgao: "DPRF - BRASÍLIA/DF",
+            codigo: "74550",
+            valor: "R$ 130,16",
+          },
+          {
+            auto: "B28938746",
+            dataHora: "03/08/2020 09:15:00",
+            descricao: "DIRIGIR VEÍCULO MANUSEANDO TELEFONE CELULAR",
+            orgao: "DETRAN/MG - BELO HORIZONTE",
+            codigo: "76332",
+            valor: "R$ 293,47",
+          },
+          {
+            auto: "C92837462",
+            dataHora: "15/01/2019 18:45:00",
+            descricao: "ESTACIONAR EM DESACORDO COM A REGULAMENTAÇÃO",
+            orgao: "BHTRANS - BELO HORIZONTE/MG",
+            codigo: "55412",
+            valor: "R$ 195,23",
+          },
+        ],
+      };
+    }
 
     return NextResponse.json({
       ...mapeado,

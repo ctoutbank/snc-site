@@ -37,6 +37,10 @@ interface VeiculoResult {
   historico: HistoricoItem[];
 }
 
+// ─── Cores Padrão AutoScore ──────────────────────────────────────────────────
+const COR_ACCENT = "#D4A843"; // Âmbar padrão AutoScore
+const COR_ACCENT_DIM = "rgba(212,168,67,0.2)";
+
 // ─── Formatação de placa ──────────────────────────────────────────────────────
 function formatarPlaca(valor: string): string {
   const clean = valor.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 7);
@@ -93,7 +97,7 @@ function Sparkline({ dados }: { dados: HistoricoItem[] }) {
 
   return (
     <div style={{ marginTop: 24 }}>
-      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.18em", textTransform: "uppercase" as const, marginBottom: 12 }}>
+      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: COR_ACCENT, letterSpacing: "0.18em", textTransform: "uppercase" as const, marginBottom: 12 }}>
         Histórico de Valores FIPE
       </div>
       <svg width={w} height={h} style={{ overflow: "visible" }}>
@@ -211,7 +215,7 @@ export function BuscaVeiculoPanel() {
                 textTransform: "uppercase" as const,
                 transition: "border-color 0.15s",
               }}
-              onFocus={(e) => (e.target.style.borderColor = "#B8914A")}
+              onFocus={(e) => (e.target.style.borderColor = COR_ACCENT)}
               onBlur={(e) => (e.target.style.borderColor = "rgba(255,255,255,0.15)")}
             />
           </div>
@@ -221,7 +225,7 @@ export function BuscaVeiculoPanel() {
             disabled={loading}
             style={{
               padding: "18px 36px",
-              background: loading ? "rgba(184,145,74,0.4)" : "#B8914A",
+              background: loading ? "rgba(212,168,67,0.4)" : COR_ACCENT,
               color: "#1a1100",
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: 12,
@@ -260,8 +264,8 @@ export function BuscaVeiculoPanel() {
         <div id="veiculo-resultado" style={{ animation: "fadeUp 0.4s ease" }}>
           {/* Header */}
           <div style={{ display: "flex", alignItems: "center", gap: 16, paddingBottom: 24, marginBottom: 28, borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
-            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#B8914A", boxShadow: "0 0 0 3px rgba(184,145,74,0.2)" }} />
-            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#B8914A", letterSpacing: "0.18em", textTransform: "uppercase" as const }}>
+            <div style={{ width: 8, height: 8, borderRadius: "50%", background: COR_ACCENT, boxShadow: `0 0 0 3px ${COR_ACCENT_DIM}` }} />
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: COR_ACCENT, letterSpacing: "0.18em", textTransform: "uppercase" as const }}>
               Consulta concluída
             </span>
             <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#3a4a5a", marginLeft: "auto" }}>
@@ -273,8 +277,8 @@ export function BuscaVeiculoPanel() {
           {principal && (
             <div style={{
               padding: "28px 32px", marginBottom: 2,
-              background: "rgba(43,168,74,0.06)",
-              border: "1px solid rgba(43,168,74,0.2)",
+              background: "rgba(212,168,67,0.06)",
+              border: `1px solid ${COR_ACCENT_DIM}`,
               display: "flex", alignItems: "center", justifyContent: "space-between",
             }}>
               <div>
@@ -287,7 +291,7 @@ export function BuscaVeiculoPanel() {
               </div>
               <div style={{ textAlign: "right" as const }}>
                 <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#5a6a7a", letterSpacing: "0.14em", textTransform: "uppercase" as const, marginBottom: 6 }}>Código FIPE</div>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 18, color: "#B8914A" }}>{principal.codigoFipe}</div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 18, color: COR_ACCENT }}>{principal.codigoFipe}</div>
               </div>
             </div>
           )}
@@ -295,7 +299,7 @@ export function BuscaVeiculoPanel() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2, marginBottom: 2 }}>
             {/* ── Dados do Veículo ── */}
             <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", padding: "36px 32px" }}>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.22em", textTransform: "uppercase" as const, marginBottom: 20 }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: COR_ACCENT, letterSpacing: "0.22em", textTransform: "uppercase" as const, marginBottom: 20 }}>
                 Veículo · Identificação
               </div>
               <h3 style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 24, fontWeight: 400, color: "#fff", marginBottom: 24, lineHeight: 1.2 }}>
@@ -312,8 +316,8 @@ export function BuscaVeiculoPanel() {
 
               {/* Chassi em destaque */}
               {v.chassi && v.chassi !== "—" && (
-                <div style={{ marginTop: 20, padding: "14px 18px", background: "rgba(184,145,74,0.08)", border: "1px solid rgba(184,145,74,0.2)" }}>
-                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.2em", textTransform: "uppercase" as const, marginBottom: 6 }}>Chassi</div>
+                <div style={{ marginTop: 20, padding: "14px 18px", background: "rgba(212,168,67,0.08)", border: `1px solid ${COR_ACCENT_DIM}` }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: COR_ACCENT, letterSpacing: "0.2em", textTransform: "uppercase" as const, marginBottom: 6 }}>Chassi</div>
                   <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, color: "#fff", letterSpacing: "0.06em", wordBreak: "break-all" as const }}>{v.chassi}</div>
                 </div>
               )}
@@ -321,7 +325,7 @@ export function BuscaVeiculoPanel() {
 
             {/* ── Histórico + FIPE detalhe ── */}
             <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", padding: "36px 32px" }}>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.22em", textTransform: "uppercase" as const, marginBottom: 20 }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: COR_ACCENT, letterSpacing: "0.22em", textTransform: "uppercase" as const, marginBottom: 20 }}>
                 FIPE · Evolução
               </div>
               <h3 style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 24, fontWeight: 400, color: "#fff", marginBottom: 24, lineHeight: 1.2 }}>
@@ -341,7 +345,7 @@ export function BuscaVeiculoPanel() {
           {/* ── Tabela FIPE todos os anos ── */}
           {fipeList.length > 1 && (
             <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", padding: "36px 32px", marginBottom: 2 }}>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.22em", textTransform: "uppercase" as const, marginBottom: 20 }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: COR_ACCENT, letterSpacing: "0.22em", textTransform: "uppercase" as const, marginBottom: 20 }}>
                 FIPE · Todos os Anos/Versões
               </div>
               <div style={{ overflowX: "auto" as const }}>
@@ -358,13 +362,13 @@ export function BuscaVeiculoPanel() {
                   <tbody>
                     {fipeList.map((item, i) => (
                       <tr
-                        key={i}
-                        style={{
-                          borderBottom: "1px solid rgba(255,255,255,0.04)",
-                          background: item.principal ? "rgba(184,145,74,0.06)" : "transparent",
-                        }}
+                         key={i}
+                         style={{
+                           borderBottom: "1px solid rgba(255,255,255,0.04)",
+                           background: item.principal ? "rgba(212,168,67,0.06)" : "transparent",
+                         }}
                       >
-                        <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#B8914A", padding: "11px 14px" }}>{item.codigoFipe}</td>
+                        <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: COR_ACCENT, padding: "11px 14px" }}>{item.codigoFipe}</td>
                         <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#cfd6df", padding: "11px 14px", maxWidth: 240, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" as const }}>{item.modelo}</td>
                         <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#8a94a3", padding: "11px 14px" }}>{item.anoModelo}</td>
                         <td style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#8a94a3", padding: "11px 14px" }}>{item.combustivel}</td>
@@ -394,8 +398,8 @@ export function BuscaVeiculoPanel() {
               style={{
                 padding: "14px 28px",
                 background: "transparent",
-                border: "1px solid rgba(200,162,90,0.5)",
-                color: "#c8a25a",
+                border: `1px solid ${COR_ACCENT_DIM}`,
+                color: COR_ACCENT,
                 fontFamily: "'JetBrains Mono', monospace",
                 fontSize: 11,
                 letterSpacing: "0.16em",
@@ -405,12 +409,12 @@ export function BuscaVeiculoPanel() {
                 transition: "all 0.15s",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(200,162,90,0.08)";
-                e.currentTarget.style.borderColor = "#c8a25a";
+                e.currentTarget.style.background = "rgba(212,168,67,0.08)";
+                e.currentTarget.style.borderColor = COR_ACCENT;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.borderColor = "rgba(200,162,90,0.5)";
+                e.currentTarget.style.borderColor = COR_ACCENT_DIM;
               }}
             >
               ⎙ Gerar Relatório

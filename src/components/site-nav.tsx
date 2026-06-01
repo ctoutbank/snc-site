@@ -5,15 +5,57 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { ProtocolValidationModal } from '@/components/protocol-validation-modal';
 
-const NAV_LINKS = [
-  { href: '/', label: 'Início', match: (p: string) => p === '/' },
-  { href: '/superscore', label: 'SuperScore', match: (p: string) => p.startsWith('/superscore') },
-  { href: '/plataforma', label: 'Plataforma', match: (p: string) => p.startsWith('/plataforma') },
-  { href: '/jornadas', label: 'Jornadas', match: (p: string) => p.startsWith('/jornadas') },
-  { href: '/setores', label: 'Setores', match: (p: string) => p.startsWith('/setores') },
-  { href: '/datasets', label: 'Datasets', match: (p: string) => p.startsWith('/datasets') },
-  { href: '/sobre', label: 'A Instituição', match: (p: string) => p.startsWith('/sobre') },
+interface SubItem {
+  href: string;
+  label: string;
+  match: (p: string) => boolean;
+}
+
+interface NavItem {
+  href?: string;
+  label: string;
+  match: (p: string) => boolean;
+  dropdown?: SubItem[];
+  hidden?: boolean;
+}
+
+const NAV_LINKS: NavItem[] = [
+  { href: '/',            label: 'Início',        match: (p) => p === '/' },
+  {
+    label: 'Serviços',
+    match: (p) => p.startsWith('/superscore') || p.startsWith('/autoscore'),
+    hidden: true,
+    dropdown: [
+      { href: '/superscore', label: 'SuperScore', match: (p) => p.startsWith('/superscore') },
+      { href: '/autoscore',  label: 'AutoScore',  match: (p) => p.startsWith('/autoscore')  },
+    ],
+  },
+  { href: '/plataforma',  label: 'Plataforma',    match: (p) => p.startsWith('/plataforma') },
+  { href: '/jornadas',    label: 'Jornadas',       match: (p) => p.startsWith('/jornadas')   },
+  { href: '/setores',     label: 'Setores',        match: (p) => p.startsWith('/setores')    },
+  { href: '/datasets',    label: 'Datasets',       match: (p) => p.startsWith('/datasets')   },
+  { href: '/sobre',       label: 'A Instituição',  match: (p) => p.startsWith('/sobre')      },
 ];
+
+/* Estilos idênticos ao .snc-navlinks a do globals.css */
+const linkStyle: React.CSSProperties = {
+  padding: '10px 14px',
+  fontSize: 13,
+  color: '#cfd6df',
+  borderRadius: 2,
+  letterSpacing: '0.02em',
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 4,
+  cursor: 'pointer',
+  transition: 'background .15s, color .15s',
+  background: 'none',
+  border: 'none',
+  fontFamily: 'inherit',
+  fontWeight: 'inherit',
+  textDecoration: 'none',
+  whiteSpace: 'nowrap' as const,
+};
 
 export function SiteNav() {
   const pathname = usePathname();
@@ -22,6 +64,40 @@ export function SiteNav() {
 
   return (
     <>
+      {/* Apenas o posicionamento do dropdown — sem tocar em cores ou tipografia */}
+      <style>{`
+        .snc-dd { position: relative; }
+        .snc-dd-menu {
+          position: absolute;
+          top: calc(100% + 4px);
+          left: 50%;
+          transform: translateX(-50%);
+          min-width: 152px;
+          background: var(--snc-navy);
+          border: 1px solid #17243b;
+          border-radius: 2px;
+          box-shadow: 0 8px 24px rgba(0,0,0,.35);
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity .15s, visibility .15s;
+          z-index: 200;
+        }
+        .snc-dd:hover .snc-dd-menu { opacity: 1; visibility: visible; }
+        .snc-dd-menu a {
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 10px 14px;
+          font-size: 13px;
+          color: #cfd6df;
+          letter-spacing: .02em;
+          border-bottom: 1px solid #17243b;
+          transition: background .15s, color .15s;
+          text-decoration: none;
+        }
+        .snc-dd-menu a:last-child { border-bottom: none; }
+        .snc-dd-menu a:hover { color: #fff; background: #17243b; }
+        .snc-dd-menu a.active { color: var(--snc-navy); background: var(--snc-paper); }
+      `}</style>
+
       <header className="snc-topbar">
         <div className="strip">
           <span>
@@ -40,11 +116,40 @@ export function SiteNav() {
           </Link>
 
           <div className="snc-navlinks">
-            {NAV_LINKS.map((link) => (
-              <Link key={link.href} href={link.href} className={link.match(pathname) ? 'active' : ''}>
-                {link.label}
-              </Link>
-            ))}
+            {NAV_LINKS.filter(i => !i.hidden).map((item) => {
+              if (item.dropdown) {
+                const active = item.match(pathname);
+                return (
+                  <div key={item.label} className="snc-dd">
+                    <button
+                      style={{
+                        ...linkStyle,
+                        ...(active ? { color: 'var(--snc-navy)', background: 'var(--snc-paper)' } : {}),
+                      }}
+                    >
+                      {item.label}
+                      <span style={{ fontSize: 9, opacity: .55, marginLeft: 1 }}>▾</span>
+                    </button>
+                    <div className="snc-dd-menu">
+                      {item.dropdown.map((sub) => (
+                        <Link key={sub.href} href={sub.href} className={sub.match(pathname) ? 'active' : ''}>
+                          {sub.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href!}
+                  className={item.match(pathname) ? 'active' : ''}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </div>
 
           <div className="snc-nav-cta">
@@ -54,12 +159,9 @@ export function SiteNav() {
               style={{
                 color: 'var(--snc-green-2)',
                 border: '1px solid rgba(0, 240, 160, 0.4)',
-                height: 40,
-                padding: '0 18px',
-                fontFamily: 'inherit',
-                fontSize: 13,
-                lineHeight: 1,
-                boxSizing: 'border-box',
+                height: 40, padding: '0 18px',
+                fontFamily: 'inherit', fontSize: 13,
+                lineHeight: 1, boxSizing: 'border-box',
               }}
             >
               Validar Relatório
@@ -68,12 +170,9 @@ export function SiteNav() {
               href="https://snc.consolle.one/auth/sign-in"
               className="snc-btn snc-btn-ghost"
               style={{
-                height: 40,
-                padding: '0 18px',
-                fontFamily: 'inherit',
-                fontSize: 13,
-                lineHeight: 1,
-                boxSizing: 'border-box',
+                height: 40, padding: '0 18px',
+                fontFamily: 'inherit', fontSize: 13,
+                lineHeight: 1, boxSizing: 'border-box',
               }}
             >
               Área Restrita
@@ -98,17 +197,57 @@ export function SiteNav() {
             <img src="/snc-logo.png" alt="SNC" height={36} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
             <button className="mm-close" onClick={() => setMenuOpen(false)} aria-label="Fechar">×</button>
           </div>
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setMenuOpen(false)}
-              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 0', borderBottom: '1px solid #17243b', fontFamily: 'Libre Caslon Text, serif', fontSize: '22px', color: 'inherit', textDecoration: 'none' }}
-            >
-              {link.label}
-              <span style={{ color: 'var(--snc-green-2)', fontSize: '18px' }}>→</span>
-            </Link>
-          ))}
+
+          {NAV_LINKS.filter(i => !i.hidden).map((item) => {
+            if (item.dropdown) {
+              return (
+                <div key={item.label}>
+                  {/* Label do grupo — mesmo estilo dos itens mas sem seta, sem link */}
+                  <div style={{
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                    padding: '18px 0', borderBottom: '1px solid #17243b',
+                    fontFamily: 'Libre Caslon Text, serif', fontSize: '22px',
+                    color: '#cfd6df',
+                  }}>
+                    {item.label}
+                  </div>
+                  {item.dropdown.map((sub) => (
+                    <Link
+                      key={sub.href}
+                      href={sub.href}
+                      onClick={() => setMenuOpen(false)}
+                      style={{
+                        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                        padding: '14px 0 14px 20px', borderBottom: '1px solid #17243b',
+                        fontFamily: 'Libre Caslon Text, serif', fontSize: '18px',
+                        color: 'inherit', textDecoration: 'none',
+                      }}
+                    >
+                      {sub.label}
+                      <span style={{ color: 'var(--snc-green-2)', fontSize: '16px' }}>→</span>
+                    </Link>
+                  ))}
+                </div>
+              );
+            }
+            return (
+              <Link
+                key={item.href}
+                href={item.href!}
+                onClick={() => setMenuOpen(false)}
+                style={{
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  padding: '18px 0', borderBottom: '1px solid #17243b',
+                  fontFamily: 'Libre Caslon Text, serif', fontSize: '22px',
+                  color: 'inherit', textDecoration: 'none',
+                }}
+              >
+                {item.label}
+                <span style={{ color: 'var(--snc-green-2)', fontSize: '18px' }}>→</span>
+              </Link>
+            );
+          })}
+
           <div style={{ marginTop: 28, display: 'flex', flexDirection: 'column', gap: 10 }}>
             <button
               onClick={() => { setMenuOpen(false); setValidationOpen(true); }}
@@ -117,12 +256,9 @@ export function SiteNav() {
                 justifyContent: 'center',
                 color: 'var(--snc-green-2)',
                 border: '1px solid rgba(0, 240, 160, 0.4)',
-                height: 44,
-                padding: '0 18px',
-                fontFamily: 'inherit',
-                fontSize: 13,
-                lineHeight: 1,
-                boxSizing: 'border-box',
+                height: 44, padding: '0 18px',
+                fontFamily: 'inherit', fontSize: 13,
+                lineHeight: 1, boxSizing: 'border-box',
               }}
             >
               Validar Relatório
@@ -132,12 +268,9 @@ export function SiteNav() {
               className="snc-btn snc-btn-ghost"
               style={{
                 justifyContent: 'center',
-                height: 44,
-                padding: '0 18px',
-                fontFamily: 'inherit',
-                fontSize: 13,
-                lineHeight: 1,
-                boxSizing: 'border-box',
+                height: 44, padding: '0 18px',
+                fontFamily: 'inherit', fontSize: 13,
+                lineHeight: 1, boxSizing: 'border-box',
               }}
             >
               Área Restrita

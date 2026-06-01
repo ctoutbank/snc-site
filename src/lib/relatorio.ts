@@ -9,9 +9,20 @@
  *   /relatorio/snc/[id8chars]?d=[base64]
  */
 
-// ─── Tipos de dataset suportados ──────────────────────────────────────────────
-
-export type DatasetTipo = "vip-car" | "veiculo" | "proprietario" | "credito" | "leilao";
+export type DatasetTipo =
+  | "vip-car"
+  | "veiculo"
+  | "proprietario"
+  | "credito"
+  | "leilao"
+  | "renajud"
+  | "gravame"
+  | "debitos"
+  | "estadual"
+  | "renainf"
+  | "historico-km"
+  | "crlve"
+  | "csv-completa";
 
 export interface RelatorioPayload {
   dataset: DatasetTipo;
@@ -124,24 +135,24 @@ export function gerarUrlRelatorio(
 
 // ─── Labels e metadados por dataset ──────────────────────────────────────────
 
-export const DATASET_META: Record<
-  DatasetTipo,
+const baseMeta: Record<
+  string,
   { titulo: string; subtitulo: string; fonte: string; cor: string }
 > = {
   "vip-car": {
-    titulo: "Relatório Completo do Veículo",
+    titulo: "Relatório Veicular Completo",
     subtitulo: "Identificação, proprietário atual, dados técnicos (motor, potência, cilindrada, carroceria), histórico de roubo/furto, indício de sinistro, infrações de trânsito (RENAINF), precificação FIPE com chassi e documento oficial SENATRAN/DENATRAN.",
     fonte: "DENATRAN / SENATRAN",
     cor: "#7B5EA7",
   },
   veiculo: {
-    titulo: "Relatório Completo do Veículo",
+    titulo: "Placa FIPE + Chassi",
     subtitulo: "Dados técnicos do veículo, tabela FIPE e chassi.",
     fonte: "DENATRAN / SENATRAN",
     cor: "#B8914A",
   },
   proprietario: {
-    titulo: "Relatório Completo do Veículo",
+    titulo: "Proprietário Atual",
     subtitulo: "Identificação do proprietário atual pela placa.",
     fonte: "DENATRAN / SENATRAN",
     cor: "#4A8AB8",
@@ -153,9 +164,62 @@ export const DATASET_META: Record<
     cor: "#2BA84A",
   },
   leilao: {
-    titulo: "Leilão com Score",
-    subtitulo: "Score de risco (pontuação A–E, aceitação, % sobre FIPE, vistoria), indício de sinistro, dados do veículo (marca/modelo, chassi, RENAVAM, cor, motor, câmbio, carroceria, categoria, quilometragem, eixos), histórico de leilões (data, leiloeiro, lote, comitente, pátio, condições e situação do chassi) e checklist de avarias.",
+    titulo: "Leilão Veicular + Score",
+    subtitulo: "Score de risco (pontuação A–E, aceitação, % sobre FIPE, vistoria), indício de sinistro, dados do veículo (marca/modelo, chassi, RENAVAM, cor, motor, câmbio, carroceria, categoria, quilometragem, eixos), histórico de leilões (data, leiloeiro, lote, comitente, pátio, condições e situação do chassi) and checklist de avarias.",
     fonte: "DENATRAN / SENATRAN",
     cor: "#D4A843",
   },
+  renajud: {
+    titulo: "Restrições RENAJUD",
+    subtitulo: "Identificação de restrições judiciais ativas registradas no sistema RENAJUD (órgão judicial, tribunal, número do processo e restrições).",
+    fonte: "SENATRAN / CNJ",
+    cor: "#5a6a7a",
+  },
+  gravame: {
+    titulo: "Restrições de Gravame",
+    subtitulo: "Consulta de gravame e restrição financeira de veículos, identificando agente financeiro, data de inclusão, número do contrato e situação.",
+    fonte: "SENATRAN / B3",
+    cor: "#D4A843",
+  },
+  debitos: {
+    titulo: "Extrato de Débitos",
+    subtitulo: "Consulta consolidada de débitos de veículos (IPVA, licenciamento, multas e restrições financeiras/administrativas ativas).",
+    fonte: "DENATRAN / DETRAN",
+    cor: "#D4A843",
+  },
+  estadual: {
+    titulo: "Base Estadual Detran",
+    subtitulo: "Dados cadastrais primários, restrições ativas (gravames judiciais e administrativos) e débitos locais diretamente da base do DETRAN do estado de registro do veículo (IPVA, licenciamento, multas estaduais).",
+    fonte: "DETRAN Estadual",
+    cor: "#D4A843",
+  },
+  renainf: {
+    titulo: "Multas Renainf",
+    subtitulo: "Consulta nacional de multas de trânsito registradas no Registro Nacional de Infrações de Trânsito (RENAINF).",
+    fonte: "SENATRAN / RENAINF",
+    cor: "#D4A843",
+  },
+  "historico-km": {
+    titulo: "Histórico de Quilometragem",
+    subtitulo: "Rastreamento da quilometragem registrada ao longo da vida útil do veículo, identificando inconsistências e possível adulteração de odômetro.",
+    fonte: "DENATRAN / DETRAN / Seguradoras",
+    cor: "#D4A843",
+  },
+  crlve: {
+    titulo: "Emissão de CRLV-e",
+    subtitulo: "Emissão e visualização do Certificado de Registro e Licenciamento de Veículo Digital oficial em formato PDF.",
+    fonte: "SENATRAN / DETRAN",
+    cor: "#2BA84A",
+  },
+  "csv-completa": {
+    titulo: "CSV Completa",
+    subtitulo: "Consulta veicular unificada: RENAINF (multas nacionais), RENAJUD (restrições judiciais), BIN (bloqueios administrativos) e dados do proprietário em uma única chamada.",
+    fonte: "SENATRAN / RENAINF / RENAJUD / BIN",
+    cor: "#D4A843",
+  },
 };
+
+export const DATASET_META = baseMeta as Record<
+  DatasetTipo,
+  { titulo: string; subtitulo: string; fonte: string; cor: string }
+>;

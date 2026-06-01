@@ -126,8 +126,8 @@ export function SuperscoreVisual() {
 
           {nodes.map((node, i) => {
             const radius = 160;
-            const x = 200 + radius * Math.cos((node.angle * Math.PI) / 180);
-            const y = 200 + radius * Math.sin((node.angle * Math.PI) / 180);
+            const x = parseFloat((200 + radius * Math.cos((node.angle * Math.PI) / 180)).toFixed(4));
+            const y = parseFloat((200 + radius * Math.sin((node.angle * Math.PI) / 180)).toFixed(4));
 
             return (
               <g key={`node-${i}`}>

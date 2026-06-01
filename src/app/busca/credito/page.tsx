@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { BuscaPanel } from "@/components/busca-panel";
+import { BackButton } from "@/components/back-button";
 
 export const metadata: Metadata = {
   title: "Consulta SCR Bacen + Score de Crédito — SNC",
@@ -13,6 +14,26 @@ export default function BuscaPage() {
   return (
     <div className="snc-root">
       <SiteNav />
+
+      {/* ── Barra de Navegação Secundária (Action Bar) ── */}
+      <div style={{
+        background: "#0A1628",
+        borderBottom: "1px solid rgba(255,255,255,0.1)"
+      }}>
+        <div style={{
+          background: "rgba(255,255,255,0.03)",
+          padding: "12px 28px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center"
+        }}>
+          <BackButton fallback="/busca" />
+          <div style={{ display: "flex", gap: 8 }}>
+            {/* Espaço para futuros botões */}
+          </div>
+        </div>
+      </div>
+
       <main>
         <section className="busca-main-section">
           <div className="busca-panel-inner">

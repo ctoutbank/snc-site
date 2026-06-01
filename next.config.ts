@@ -59,6 +59,11 @@ const nextConfig: NextConfig = {
         source: "/api/contact",
         destination: "/api/contact",
       },
+      // Mantém as rotas locais de API do APIBrasil intactas (não faz proxy para o backend)
+      {
+        source: "/api/apibrasil/:path*",
+        destination: "/api/apibrasil/:path*",
+      },
       // Faz proxy de TODAS as outras rotas da API para o outbank-one
       {
         source: "/api/:path*",

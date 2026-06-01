@@ -321,7 +321,7 @@ export default function BuscaCsvCompletaPanel() {
               onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(192,57,43,0.15)"; e.currentTarget.style.borderColor = "#c0392b"; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(192,57,43,0.08)"; e.currentTarget.style.borderColor = "rgba(192,57,43,0.25)"; }}
             >
-              Exemplo de Relatório (Com Restrições)
+              Exemplo de Relatório (Restrições + Multas)
             </button>
           </div>
         </div>

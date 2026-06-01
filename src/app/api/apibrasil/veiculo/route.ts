@@ -107,9 +107,44 @@ export async function GET(req: NextRequest) {
 
   try {
     const raw = await consultarPlacaFIPE(placa);
-    const { veiculo, fipe, historico } = mapearResultados(
+    let { veiculo, fipe, historico } = mapearResultados(
       raw as unknown as APIBrasilVeiculoRaw
     );
+
+    const isHomolog = process.env.APIBRASIL_HOMOLOG === "true";
+    if (isHomolog) {
+      veiculo = {
+        placa: placa.toUpperCase(),
+        marca: "VW",
+        modelo: "FOX 1.0 GII",
+        anoFabricacao: 2012,
+        anoModelo: 2013,
+        cor: "VERMELHA",
+        combustivel: "ALCOOL/GASOLINA",
+        categoria: "AUTOMÓVEL",
+        chassi: "9BWZZZ377VT004251",
+      };
+      fipe = [
+        {
+          codigoFipe: "005277-9",
+          modelo: "Fox 1.0 Mi Total Flex 8V 5d",
+          anoModelo: "2013",
+          combustivel: "Gasolina",
+          mesReferencia: "Maio de 2026",
+          valor: "R$ 32.800",
+          valorNum: 32800,
+          principal: true,
+        }
+      ];
+      historico = [
+        { mes: "05/2026", valor: 32800, valorFormatado: "R$ 32.800" },
+        { mes: "04/2026", valor: 32500, valorFormatado: "R$ 32.500" },
+        { mes: "03/2026", valor: 32900, valorFormatado: "R$ 32.900" },
+        { mes: "02/2026", valor: 33100, valorFormatado: "R$ 33.100" },
+        { mes: "01/2026", valor: 33400, valorFormatado: "R$ 33.400" },
+        { mes: "12/2025", valor: 33600, valorFormatado: "R$ 33.600" },
+      ];
+    }
 
     return NextResponse.json({ veiculo, fipe, historico, _raw: raw });
   } catch (err) {

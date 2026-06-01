@@ -104,7 +104,7 @@ export class APIBrasilError extends Error {
     public readonly statusCode: number,
     public readonly details?: Record<string, unknown>
   ) {
-    super(`[APIBrasil] ${message}`);
+    super(`[SNC] ${message}`);
     this.name = "APIBrasilError";
   }
 }
@@ -568,3 +568,896 @@ export async function consultarLeilaoScore(
     { tipo: "leilao-completo-score", placa: p, homolog }
   );
 }
+
+// ─────────────────────────────────────────────────────────
+// DATASET: Renajud
+// POST /api/v2/consulta/veiculos/credits  { tipo: "renajud" }
+// ─────────────────────────────────────────────────────────
+
+export interface RenajudPayload {
+  tipo: "renajud";
+  placa: string;
+  homolog: boolean;
+}
+
+export interface RenajudResponse {
+  status_code?: number;
+  error?: boolean;
+  message?: string;
+  homolog?: boolean;
+  data?: {
+    processo?: string;
+    orgao_judicial?: string;
+    tribunal?: string;
+    restricoes?: string[];
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+export interface RenajudConfig {
+  bearerToken?: string;
+  baseUrl?: string;
+  homolog?: boolean;
+  timeoutMs?: number;
+}
+
+/**
+ * Consulta restrições do RENAJUD para um veículo pela placa.
+ *
+ * @param placa   Placa do veículo (ex: ABC1234 ou ABC1D23)
+ * @param config  Configurações opcionais de injeção de dependência (token, base_url, homolog, timeout)
+ */
+export async function consultarRenajud(
+  placa: string,
+  config?: RenajudConfig
+): Promise<RenajudResponse> {
+  const p = normalizarPlaca(placa);
+  if (!validarPlaca(p)) {
+    throw new APIBrasilError(
+      `Placa inválida: "${placa}". Use o formato ABC1234 (antigo) ou ABC1D23 (Mercosul).`,
+      400
+    );
+  }
+
+  // Injeção de dependências e configuração
+  const homolog = config?.homolog ?? process.env.APIBRASIL_HOMOLOG === "true";
+  const baseUrl = config?.baseUrl ?? BASE_URL;
+  const timeoutMs = config?.timeoutMs ?? REQUEST_TIMEOUT_MS;
+
+  // Obter token
+  const token = config?.bearerToken ?? (await getToken());
+
+  // Executar a requisição
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(`${baseUrl}/api/v2/consulta/veiculos/credits`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        tipo: "renajud",
+        placa: p,
+        homolog,
+      } as RenajudPayload),
+      signal: controller.signal,
+    });
+
+    return await parseResponse<RenajudResponse>(res);
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new APIBrasilError(`Timeout de requisição após ${timeoutMs / 1000}s`, 408);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+// ─────────────────────────────────────────────────────────
+// DATASET: Gravame (Restrição Financeira)
+// POST /api/v2/consulta/veiculos/credits  { tipo: "gravame" }
+// ─────────────────────────────────────────────────────────
+
+export interface GravamePayload {
+  tipo: "gravame";
+  placa: string;
+  homolog: boolean;
+}
+
+export interface GravameResponse {
+  status_code?: number;
+  error?: boolean;
+  message?: string;
+  homolog?: boolean;
+  data?: {
+    placa?: string;
+    chassi?: string;
+    renavam?: string;
+    marca_modelo?: string;
+    ano_fabricacao?: string;
+    ano_modelo?: string;
+    cor_veiculo?: string;
+    combustivel?: string;
+    financiamento?: string;        // "SIM" ou "NÃO"
+    agente_financeiro?: string;    // Banco / Financiadora
+    data_inclusao?: string;        // Data de inclusão do Gravame
+    contrato_numero?: string;      // Número do contrato de financiamento
+    situacao?: string;             // Situação do Gravame (ex: "ATIVO", "BAIXADO")
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+/**
+ * Consulta gravame e restrição financeira de um veículo pela placa.
+ *
+ * Endpoint: POST /api/v2/consulta/veiculos/credits
+ * Payload:  { tipo: "gravame", placa, homolog }
+ *
+ * @param placa  Placa no formato antigo (ABC1234) ou Mercosul (ABC1D23)
+ */
+export async function consultarGravame(
+  placa: string
+): Promise<GravameResponse> {
+  const p = normalizarPlaca(placa);
+  if (!validarPlaca(p)) {
+    throw new APIBrasilError(
+      `Placa inválida: "${placa}". Use o formato ABC1234 (antigo) ou ABC1D23 (Mercosul).`,
+      400
+    );
+  }
+
+  const homolog = process.env.APIBRASIL_HOMOLOG === "true";
+
+  return apiFetch<GravamePayload, GravameResponse>(
+    "/api/v2/consulta/veiculos/credits",
+    "POST",
+    { tipo: "gravame", placa: p, homolog }
+  );
+}
+
+// ─────────────────────────────────────────────────────────
+// DATASET: Débitos V4
+// POST /api/v2/consulta/veiculos/credits  { tipo: "debitos-v4" }
+// ─────────────────────────────────────────────────────────
+
+export interface DebitosV4Payload {
+  tipo: "debitos-v4";
+  placa: string;
+  homolog: boolean;
+}
+
+export interface DebitoItem {
+  descricao?: string;
+  valor?: number | string;
+  dataVencimento?: string;
+  orgaoEmissor?: string;
+  tipoDebito?: string;
+  codigoInfracao?: string;
+  [key: string]: unknown;
+}
+
+export interface DebitosV4Dados {
+  placa?: string;
+  renavam?: string;
+  chassi?: string;
+  marcaModelo?: string;
+  anoFabricacao?: string | number;
+  anoModelo?: string | number;
+  combustivel?: string;
+  cor?: string;
+  multas?: DebitoItem[];
+  ipva?: DebitoItem[];
+  licenciamento?: DebitoItem[];
+  dpvat?: DebitoItem[];
+  outrosDebitos?: DebitoItem[];
+  totalMultas?: number | string;
+  totalIpva?: number | string;
+  totalLicenciamento?: number | string;
+  totalDpvat?: number | string;
+  totalGeral?: number | string;
+  [key: string]: unknown;
+}
+
+export interface DebitosV4Response {
+  status_code?: number;
+  error?: boolean;
+  message?: string;
+  homolog?: boolean;
+  data?: {
+    veiculo?: {
+      placa?: string;
+      renavam?: string;
+      chassi?: string;
+      marca_modelo?: string;
+      [key: string]: unknown;
+    };
+    debitos?: DebitosV4Dados;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+export interface DebitosV4Config {
+  bearerToken?: string;
+  baseUrl?: string;
+  homolog?: boolean;
+  timeoutMs?: number;
+}
+
+/**
+ * Consulta débitos (faturamento, IPVA, multas, licenciamento) do veículo (Débitos V4) pela placa.
+ *
+ * @param placa       Placa do veículo (ex: ABC1234 ou ABC1D23)
+ * @param config      Configurações opcionais de injeção de dependência (token, base_url, homolog, timeout)
+ */
+export async function consultarDebitosV4(
+  placa: string,
+  config?: DebitosV4Config
+): Promise<DebitosV4Response> {
+  const p = normalizarPlaca(placa);
+  if (!validarPlaca(p)) {
+    throw new APIBrasilError(
+      `Placa inválida: "${placa}". Use o formato ABC1234 (antigo) ou ABC1D23 (Mercosul).`,
+      400
+    );
+  }
+
+  // Injeção de dependências e configuração
+  const homolog = config?.homolog ?? process.env.APIBRASIL_HOMOLOG === "true";
+  const baseUrl = config?.baseUrl ?? BASE_URL;
+  const timeoutMs = config?.timeoutMs ?? REQUEST_TIMEOUT_MS;
+
+  // Obter token
+  const token = config?.bearerToken ?? (await getToken());
+
+  // Executar a requisição
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(`${baseUrl}/api/v2/consulta/veiculos/credits`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        tipo: "debitos-v4",
+        placa: p,
+        homolog,
+      } as DebitosV4Payload),
+      signal: controller.signal,
+    });
+
+    return await parseResponse<DebitosV4Response>(res);
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new APIBrasilError(`Timeout de requisição após ${timeoutMs / 1000}s`, 408);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+// ─────────────────────────────────────────────────────────
+// DATASET: Base Estadual
+// POST /api/v2/consulta/veiculos/credits  { tipo: "estadual" }
+// ─────────────────────────────────────────────────────────
+
+export interface EstadualPayload {
+  tipo: "estadual";
+  placa: string;
+  homolog: boolean;
+}
+
+export interface EstadualDebito {
+  descricao?: string;
+  valor?: number | string;
+  dataVencimento?: string;
+  orgaoEmissor?: string;
+  tipoDebito?: string;
+  [key: string]: unknown;
+}
+
+export interface EstadualRestricao {
+  tipo?: string;
+  descricao?: string;
+  [key: string]: unknown;
+}
+
+export interface EstadualDados {
+  placa?: string;
+  renavam?: string;
+  chassi?: string;
+  marcaModelo?: string;
+  anoFabricacao?: string | number;
+  anoModelo?: string | number;
+  combustivel?: string;
+  cor?: string;
+  uf?: string;
+  municipio?: string;
+  restricoes?: EstadualRestricao[];
+  multas?: EstadualDebito[];
+  ipva?: EstadualDebito[];
+  licenciamento?: EstadualDebito[];
+  outrosDebitos?: EstadualDebito[];
+  totalDebitos?: number | string;
+  [key: string]: unknown;
+}
+
+export interface EstadualResponse {
+  status_code?: number;
+  error?: boolean;
+  message?: string;
+  homolog?: boolean;
+  data?: {
+    veiculo?: {
+      placa?: string;
+      renavam?: string;
+      chassi?: string;
+      marca_modelo?: string;
+      uf?: string;
+      [key: string]: unknown;
+    };
+    estadual?: EstadualDados;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+export interface EstadualConfig {
+  bearerToken?: string;
+  baseUrl?: string;
+  homolog?: boolean;
+  timeoutMs?: number;
+}
+
+/**
+ * Consulta dados da Base Estadual (dados detalhados do DETRAN) do veículo pela placa.
+ *
+ * @param placa       Placa do veículo (ex: ABC1234 ou ABC1D23)
+ * @param config      Configurações opcionais de injeção de dependência (token, base_url, homolog, timeout)
+ */
+export async function consultarBaseEstadual(
+  placa: string,
+  config?: EstadualConfig
+): Promise<EstadualResponse> {
+  const p = normalizarPlaca(placa);
+  if (!validarPlaca(p)) {
+    throw new APIBrasilError(
+      `Placa inválida: "${placa}". Use o formato ABC1234 (antigo) ou ABC1D23 (Mercosul).`,
+      400
+    );
+  }
+
+  // Injeção de dependências e configuração
+  const homolog = config?.homolog ?? process.env.APIBRASIL_HOMOLOG === "true";
+  const baseUrl = config?.baseUrl ?? BASE_URL;
+  const timeoutMs = config?.timeoutMs ?? REQUEST_TIMEOUT_MS;
+
+  // Obter token
+  const token = config?.bearerToken ?? (await getToken());
+
+  // Executar a requisição com timeout explícito
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(`${baseUrl}/api/v2/consulta/veiculos/credits`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        tipo: "estadual",
+        placa: p,
+        homolog,
+      } as EstadualPayload),
+      signal: controller.signal,
+    });
+
+    return await parseResponse<EstadualResponse>(res);
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new APIBrasilError(`Timeout de requisição após ${timeoutMs / 1000}s`, 408);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+// ─── Multas (Renainf) ──────────────────────────────────────
+
+export interface RenainfPayload {
+  tipo: "renainf";
+  placa: string;
+  homolog?: boolean;
+}
+
+export interface RenainfInfracao {
+  autoInfra?: string;
+  codigoInfra?: string;
+  dataInfra?: string;
+  descricao?: string;
+  orgaoEmissor?: string;
+  valorOriginal?: string;
+  valorAnotado?: string;
+  situacao?: string;
+  localInfra?: string;
+  [key: string]: unknown;
+}
+
+export interface RenainfDados {
+  placa?: string;
+  chassi?: string;
+  renavam?: string;
+  marcaModelo?: string;
+  totalMultas?: number;
+  valorTotal?: string;
+  infracoes?: RenainfInfracao[];
+  [key: string]: unknown;
+}
+
+export interface RenainfResponse {
+  status_code?: number;
+  error?: boolean;
+  message?: string;
+  homolog?: boolean;
+  data?: {
+    veiculo?: {
+      placa?: string;
+      renavam?: string;
+      chassi?: string;
+      marca_modelo?: string;
+      uf?: string;
+      [key: string]: unknown;
+    };
+    renainf?: RenainfDados;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+export interface RenainfConfig {
+  bearerToken?: string;
+  baseUrl?: string;
+  homolog?: boolean;
+  timeoutMs?: number;
+}
+
+/**
+ * Consulta dados de Multas (Renainf) do veículo pela placa.
+ *
+ * @param placa       Placa do veículo (ex: ABC1234 ou ABC1D23)
+ * @param config      Configurações opcionais de injeção de dependência
+ */
+export async function consultarRenainf(
+  placa: string,
+  config?: RenainfConfig
+): Promise<RenainfResponse> {
+  const p = normalizarPlaca(placa);
+  if (!validarPlaca(p)) {
+    throw new APIBrasilError(
+      `Placa inválida: "${placa}". Use o formato ABC1234 (antigo) ou ABC1D23 (Mercosul).`,
+      400
+    );
+  }
+
+  const homolog = config?.homolog ?? process.env.APIBRASIL_HOMOLOG === "true";
+  const baseUrl = config?.baseUrl ?? BASE_URL;
+  const timeoutMs = config?.timeoutMs ?? REQUEST_TIMEOUT_MS;
+
+  const token = config?.bearerToken ?? (await getToken());
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(`${baseUrl}/api/v2/consulta/veiculos/credits`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        tipo: "renainf",
+        placa: p,
+        homolog,
+      } as RenainfPayload),
+      signal: controller.signal,
+    });
+
+    return await parseResponse<RenainfResponse>(res);
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new APIBrasilError(`Timeout de requisição após ${timeoutMs / 1000}s`, 408);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+// ─────────────────────────────────────────────────────────
+// DATASET: Histórico Km
+// POST /api/v2/consulta/veiculos/credits  { tipo: "historico-km" }
+// ─────────────────────────────────────────────────────────
+
+export interface HistoricoKmPayload {
+  tipo: "historico-km";
+  placa: string;
+  homolog: boolean;
+}
+
+export interface HistoricoKmRegistro {
+  data?: string;
+  km?: number | string;
+  fonte?: string;
+  estado?: string;
+}
+
+export interface HistoricoKmResponse {
+  status_code?: number;
+  error?: boolean;
+  message?: string;
+  homolog?: boolean;
+  data?: {
+    placa?: string;
+    chassi?: string;
+    renavam?: string;
+    marca_modelo?: string;
+    ano_fabricacao?: string;
+    ano_modelo?: string;
+    cor?: string;
+    combustivel?: string;
+    historico?: HistoricoKmRegistro[];
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+/**
+ * Consulta histórico de quilometragem de um veículo pela placa.
+ *
+ * Endpoint: POST /api/v2/consulta/veiculos/credits
+ * Payload:  { tipo: "historico-km", placa, homolog }
+ */
+export async function consultarHistoricoKm(
+  placa: string
+): Promise<HistoricoKmResponse> {
+  const p = normalizarPlaca(placa);
+  if (!validarPlaca(p)) {
+    throw new APIBrasilError(
+      `Placa inválida: "${placa}". Use o formato ABC1234 (antigo) ou ABC1D23 (Mercosul).`,
+      400
+    );
+  }
+
+  return apiFetch<HistoricoKmPayload, HistoricoKmResponse>(
+    "/api/v2/consulta/veiculos/credits",
+    "POST",
+    {
+      tipo: "historico-km",
+      placa: p,
+      homolog: process.env.APIBRASIL_HOMOLOG === "true",
+    }
+  );
+}
+
+// ─── Emissão de CRLV-e ──────────────────────────────────────
+
+export interface CrlvePayload {
+  tipo: "crlve";
+  placa: string;
+  uf: string;
+  homolog?: boolean;
+}
+
+export interface CrlveStatusRetorno {
+  codigo?: string;
+  descricao?: string;
+}
+
+export interface CrlveFile {
+  file_base64?: string;
+  mime_type?: string;
+}
+
+export interface CrlveDocumento {
+  chave_retorno?: string;
+  exercicio?: string;
+  existe_ocorrencia?: string;
+  observacoes?: string;
+  pdf_file?: CrlveFile;
+  image_file?: CrlveFile;
+  status_retorno?: CrlveStatusRetorno;
+}
+
+export interface CrlveVeiculo {
+  ano_fabricacao?: string;
+  ano_modelo?: string;
+  chassi?: string;
+  combustivel?: string;
+  cor_veiculo?: string;
+  crlv?: string;
+  data_atualizacao?: string;
+  marca_modelo?: string;
+  motor?: string;
+  municipio?: string;
+  placa?: string;
+  proprietario_documento?: string;
+  proprietario_nome?: string;
+  renavam?: string;
+  status_retorno?: CrlveStatusRetorno;
+  uf?: string;
+}
+
+export interface CrlveResponse {
+  status_code?: number;
+  error?: boolean;
+  message?: string;
+  homolog?: boolean;
+  data?: {
+    documentos?: {
+      crlv?: CrlveDocumento;
+    };
+    uf?: string;
+    veiculo?: CrlveVeiculo;
+  };
+  [key: string]: unknown;
+}
+
+export interface CrlveConfig {
+  bearerToken?: string;
+  baseUrl?: string;
+  homolog?: boolean;
+  timeoutMs?: number;
+}
+
+/**
+ * Consulta a emissão do CRLV-e de um veículo pela placa e UF.
+ *
+ * Endpoint: POST /api/v2/consulta/veiculos/credits
+ * Payload:  { tipo: "crlve", placa, uf, homolog }
+ */
+export async function consultarCrlve(
+  placa: string,
+  uf: string,
+  config?: CrlveConfig
+): Promise<CrlveResponse> {
+  const p = normalizarPlaca(placa);
+  if (!validarPlaca(p)) {
+    throw new APIBrasilError(
+      `Placa inválida: "${placa}". Use o formato ABC1234 (antigo) ou ABC1D23 (Mercosul).`,
+      400
+    );
+  }
+
+  const normalizedUf = uf.trim().toUpperCase();
+  if (normalizedUf.length !== 2) {
+    throw new APIBrasilError(
+      `UF inválida: "${uf}". Use a sigla de 2 letras (ex: SP, PR).`,
+      400
+    );
+  }
+
+  const homolog = config?.homolog ?? process.env.APIBRASIL_HOMOLOG === "true";
+  const baseUrl = config?.baseUrl ?? BASE_URL;
+  const timeoutMs = config?.timeoutMs ?? REQUEST_TIMEOUT_MS;
+
+  const token = config?.bearerToken ?? (await getToken());
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(`${baseUrl}/api/v2/consulta/veiculos/credits`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        tipo: "crlve",
+        placa: p,
+        uf: normalizedUf,
+        homolog,
+      } as CrlvePayload),
+      signal: controller.signal,
+    });
+
+    return await parseResponse<CrlveResponse>(res);
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new APIBrasilError(`Timeout de requisição após ${timeoutMs / 1000}s`, 408);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+// ─── CSV Completa (RENAINF + RENAJUD + BIN + Proprietário) ───────────────────
+
+export interface CsvCompletaPayload {
+  tipo: "csv-renainf-renajud-bin-proprietario";
+  placa: string;
+  homolog?: boolean;
+}
+
+// ─── Sub-tipos do response real da API ────────────────────────────────────────
+
+export interface CsvCompletaStatusRetorno {
+  codigo?: string;
+  descricao?: string;
+}
+
+export interface CsvCompletaProprietarioAtual {
+  placa?: string;
+  marca_modelo?: string;
+  chassi?: string;
+  renavam?: string;
+  ano_fabricacao?: string;
+  ano_modelo?: string;
+  combustivel?: string;
+  cor_veiculo?: string;
+  municipio?: string;
+  uf?: string;
+  motor?: string;
+  proprietario_nome?: string;
+  proprietario_documento?: string;
+  status_retorno?: CsvCompletaStatusRetorno;
+}
+
+export interface CsvCompletaBinNacional {
+  placa?: string;
+  marca_modelo?: string;
+  chassi?: string;
+  renavam?: string;
+  ano_fabricacao?: string;
+  ano_modelo?: string;
+  combustivel?: string;
+  cor_veiculo?: string;
+  municipio?: string;
+  uf?: string;
+  categoria_veiculo?: string;
+  especie_veiculo?: string;
+  tipo_veiculo?: string;
+  tipo_carroceria?: string;
+  potencia_veiculo?: string;
+  numero_eixos?: string;
+  quantidade_passageiros?: string;
+  procedencia?: string;
+  pbt?: string;
+  situacao?: string;
+  data_emissao_crlv?: string;
+  data_emissao_ultimo_crv?: string;
+  proprietario?: { nome?: string; documento?: string };
+  restricoes?: {
+    existe_restricao_geral?: string;
+    existe_restricao_renajud?: string;
+    existe_restricao_roubo_furto?: string;
+    mensagens_restricoes?: string[];
+    veiculo_baixado?: string;
+  };
+  status_retorno?: CsvCompletaStatusRetorno;
+}
+
+export interface CsvCompletaVeicular {
+  proprietario_atual_veiculo?: CsvCompletaProprietarioAtual;
+  bin_nacional?: CsvCompletaBinNacional;
+  alerta_indicio?: {
+    existe_ocorrencia?: string;
+    descricao_ocorrencia?: string;
+    status_retorno?: CsvCompletaStatusRetorno;
+  };
+  renainf?: {
+    qtd_ocorrencias?: string;
+    ocorrencias?: Record<string, unknown>[];
+    status_retorno?: CsvCompletaStatusRetorno;
+  };
+  renajud?: {
+    quantidade_ocorrencias?: string;
+    msg_alerta?: string;
+    status_retorno?: CsvCompletaStatusRetorno;
+  };
+  csv?: {
+    quantidade_ocorrencia?: string;
+    ocorrencias?: Record<string, unknown>[];
+    mensagem_observacao?: string;
+    status_retorno?: CsvCompletaStatusRetorno;
+  };
+  precificador?: {
+    ocorrencias?: {
+      ano_modelo?: string;
+      codigo?: string;
+      fabricante_modelo?: string;
+      informante?: string;
+      preco?: string;
+      vigencia?: string;
+    }[];
+    status_retorno?: CsvCompletaStatusRetorno;
+  };
+  recall?: {
+    quantidade_ocorrencias?: string;
+    status_retorno?: CsvCompletaStatusRetorno;
+  };
+}
+
+export interface CsvCompletaResponse {
+  status_code?: number;
+  error?: boolean;
+  message?: string;
+  homolog?: boolean;
+  data?: {
+    pdf?: string;
+    veicular?: CsvCompletaVeicular;
+  };
+}
+
+export interface CsvCompletaConfig {
+  bearerToken?: string;
+  baseUrl?: string;
+  homolog?: boolean;
+  timeoutMs?: number;
+}
+
+/**
+ * Consulta CSV Completa: veículo + RENAINF + RENAJUD + BIN + Proprietário.
+ * Endpoint: POST /api/v2/consulta/veiculos/credits
+ * Payload:  { tipo: "csv-renainf-renajud-bin-proprietario", placa, homolog }
+ */
+export async function consultarCsvCompleta(
+  placa: string,
+  config?: CsvCompletaConfig
+): Promise<CsvCompletaResponse> {
+  const p = normalizarPlaca(placa);
+  if (!validarPlaca(p)) {
+    throw new APIBrasilError(
+      `Placa inválida: "${placa}". Use o formato ABC1234 (antigo) ou ABC1D23 (Mercosul).`,
+      400
+    );
+  }
+
+  const homolog   = config?.homolog   ?? process.env.APIBRASIL_HOMOLOG === "true";
+  const baseUrl   = config?.baseUrl   ?? BASE_URL;
+  const timeoutMs = config?.timeoutMs ?? REQUEST_TIMEOUT_MS;
+  const token     = config?.bearerToken ?? (await getToken());
+
+  const controller = new AbortController();
+  const timeout    = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(`${baseUrl}/api/v2/consulta/veiculos/credits`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        tipo: "csv-renainf-renajud-bin-proprietario",
+        placa: p,
+        homolog,
+      } as CsvCompletaPayload),
+      signal: controller.signal,
+    });
+    return await parseResponse<CsvCompletaResponse>(res);
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new APIBrasilError(`Timeout de requisição após ${timeoutMs / 1000}s`, 408);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+

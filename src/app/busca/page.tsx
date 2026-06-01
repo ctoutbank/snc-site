@@ -28,63 +28,6 @@ const DATASETS = [
   },
   {
     id: "02",
-    titulo: "Placa FIPE + Chassi",
-    subtitulo: "Veículos · Placa",
-    descricao:
-      "Tabela FIPE atualizada, número do chassi, especificações técnicas e histórico de valorização do veículo.",
-    campos: ["Valor FIPE", "Código FIPE", "Chassi", "Histórico de Valores", "Marca / Modelo"],
-    status: "ativo" as const,
-    href: "/busca/veiculo",
-    cor: "var(--ds-02)",
-    corBg: "var(--ds-02-bg)",
-    corBorder: "var(--ds-02-border)",
-    fonte: "FIPE / DENATRAN",
-    tipo: "PLACA",
-  },
-  {
-    id: "03",
-    titulo: "Proprietário Atual",
-    subtitulo: "Veículos · Placa",
-    descricao: "Identifique o proprietário atual de qualquer veículo pela placa — nome, documento, município e restrições.",
-    campos: ["Nome", "CPF / CNPJ", "Município / UF", "Data Aquisição", "Restrições"],
-    status: "ativo" as const,
-    href: "/busca/proprietario",
-    cor: "var(--ds-03)",
-    corBg: "var(--ds-03-bg)",
-    corBorder: "var(--ds-03-border)",
-    fonte: "DENATRAN / SENATRAN",
-    tipo: "PLACA",
-  },
-  {
-    id: "04",
-    titulo: "Relatório VIP Car",
-    subtitulo: "Veículos · Placa",
-    descricao: "Relatório completo do veículo: identificação, proprietário atual, dados técnicos, histórico de roubo/furto, sinistro, infrações (RENAINF), precificação FIPE com chassi e documento oficial.",
-    campos: ["Proprietário", "Dados Técnicos", "Roubo/Furto", "Sinistro", "RENAINF", "FIPE", "PDF"],
-    status: "ativo" as const,
-    href: "/busca/vip-car",
-    cor: "var(--ds-04)",
-    corBg: "var(--ds-04-bg)",
-    corBorder: "var(--ds-04-border)",
-    fonte: "DENATRAN / SENATRAN",
-    tipo: "PLACA",
-  },
-  {
-    id: "05",
-    titulo: "Leilão com Score",
-    subtitulo: "Veículos · Placa",
-    descricao: "Score de risco (A–E), indício de sinistro, dados do veículo (marca, chassi, RENAVAM, motor, câmbio, km, eixos), histórico de leilões (leiloeiro, comitente, condições) e checklist de avarias.",
-    campos: ["Score", "Sinistro", "Dados Veículo", "Histórico", "Condições", "Checklist"],
-    status: "ativo" as const,
-    href: "/busca/leilao-score",
-    cor: "var(--ds-05)",
-    corBg: "var(--ds-05-bg)",
-    corBorder: "var(--ds-05-border)",
-    fonte: "DENATRAN / SENATRAN",
-    tipo: "PLACA",
-  },
-  {
-    id: "06",
     titulo: "Protestos · Negativações",
     subtitulo: "Crédito · CPF / CNPJ",
     descricao: "Consulta de protestos em cartório e negativações em bureaus de crédito.",
@@ -98,7 +41,7 @@ const DATASETS = [
     tipo: "CPF / CNPJ",
   },
   {
-    id: "07",
+    id: "03",
     titulo: "Processos Judiciais",
     subtitulo: "Jurídico · CPF / CNPJ",
     descricao: "Consulta de ações judiciais em tribunais federais e estaduais.",
@@ -122,48 +65,29 @@ export default function DatasetsHubPage() {
     <div className="snc-root">
       <SiteNav />
       <main>
-        {/* ── Hero ── */}
-        <section className="snc-hero snc-hero-geo" style={{ minHeight: "auto" }}>
-          <div className="snc-hero-inner" style={{ paddingBottom: 0 }}>
-            <div className="snc-hero-meta">
-              <div className="l">
-                <span>
-                  <span className="snc-mono" style={{ color: "var(--snc-brass)", fontSize: 10 }}>PLATAFORMA</span>
-                  &nbsp;SNC · DATASETS · CONSULTAS
-                </span>
-                <span>APIBrasil · Dados Oficiais</span>
-              </div>
-              <div className="snc-mono" style={{ fontSize: 10, color: "#3a4a5a" }}>
-                LGPD · ART. 7º III
-              </div>
-            </div>
+        {/* ── Main Section ── */}
+        <section style={{
+          background: "var(--snc-navy)",
+          borderTop: "1px solid #17243b",
+          padding: "60px 28px 80px",
+        }}>
+          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
 
-            <div style={{ maxWidth: 760, paddingBottom: 60 }}>
-              <div className="snc-mono" style={{ fontSize: 11, color: "var(--snc-brass)", letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 20 }}>
-                Consultas
+            <div className="busca-header-compact">
+              <div className="snc-mono sub-meta">
+                PLATAFORMA SNC · DATASETS · CONSULTAS · LGPD ART. 7º III
               </div>
-              <h1 style={{ fontFamily: "'Libre Caslon Text', serif", fontWeight: 400, fontSize: "clamp(48px, 7vw, 96px)", lineHeight: 0.95, letterSpacing: "-0.025em", color: "#fff", marginBottom: 24 }}>
-                Central de<br />
-                <span style={{ fontStyle: "italic", color: "#bcc4d1" }}>Datasets</span>
+              <h1 className="busca-title-compact">
+                Central de <span className="it">Datasets</span>
               </h1>
-              <p style={{ fontSize: 16, color: "#8a94a3", lineHeight: 1.6, maxWidth: 540 }}>
+              <p className="busca-desc-compact">
                 Consulte dados regulatórios, financeiros e patrimoniais de pessoas
                 físicas e jurídicas a partir de fontes oficiais e bureaus homologados.
               </p>
             </div>
-          </div>
-        </section>
-
-        {/* ── Grid de Datasets ── */}
-        <section style={{
-          background: "var(--snc-navy)",
-          borderTop: "1px solid #17243b",
-          padding: "0 28px 80px",
-        }}>
-          <div style={{ maxWidth: 1200, margin: "0 auto", paddingTop: 48 }}>
 
             {/* Stats bar */}
-            <div style={{
+            <div className="stats-grid" style={{
               display: "grid",
               gridTemplateColumns: "repeat(4, 1fr)",
               gap: 0,
@@ -175,9 +99,15 @@ export default function DatasetsHubPage() {
                 { num: String(total), label: "Total de Datasets" },
                 { num: "Real-time", label: "Atualização" },
                 { num: "LGPD", label: "Conformidade" },
-              ].map(({ num, label }) => (
-                <div key={label} style={{ padding: "20px 24px", borderRight: "1px solid rgba(255,255,255,0.06)" }}>
-                  <div style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 28, color: "var(--snc-brass)", lineHeight: 1, marginBottom: 6 }}>
+              ].map(({ num, label }, index) => (
+                <div key={label} style={{ padding: "20px 24px", borderRight: index === 3 ? "none" : "1px solid rgba(255,255,255,0.06)" }}>
+                  <div style={{
+                    fontFamily: "'Libre Caslon Text', serif",
+                    fontSize: 28,
+                    color: "var(--snc-brass)",
+                    lineHeight: 1,
+                    marginBottom: 6,
+                  }}>
                     {num}
                   </div>
                   <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#5a6a7a", letterSpacing: "0.16em", textTransform: "uppercase" }}>
@@ -188,7 +118,7 @@ export default function DatasetsHubPage() {
             </div>
 
             {/* Grade de cards */}
-            <div style={{
+            <div className="datasets-grid" style={{
               display: "grid",
               gridTemplateColumns: "repeat(3, 1fr)",
               gap: 2,
@@ -216,6 +146,79 @@ export default function DatasetsHubPage() {
         </section>
       </main>
       <SiteFooter />
+
+      <style>{`
+        .busca-header-compact {
+          margin-bottom: 36px;
+        }
+        .busca-header-compact .sub-meta {
+          font-size: 9px;
+          color: var(--snc-brass);
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+        }
+        .busca-title-compact {
+          font-family: 'Libre Caslon Text', serif;
+          font-weight: 400;
+          font-size: 32px;
+          color: #fff;
+          margin: 8px 0 12px;
+        }
+        .busca-title-compact .it {
+          font-style: italic;
+          color: #bcc4d1;
+        }
+        .busca-desc-compact {
+          font-size: 13px;
+          color: #8a94a3;
+          line-height: 1.6;
+          max-width: 720px;
+          margin: 0;
+        }
+        @media (max-width: 768px) {
+          .busca-title-compact { font-size: 28px; }
+          .busca-desc-compact { font-size: 12px; }
+        }
+        @media (max-width: 480px) {
+          .busca-title-compact { font-size: 24px; }
+        }
+
+        @media (max-width: 900px) {
+          .datasets-grid {
+            grid-template-columns: 1fr 1fr !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .stats-grid {
+            grid-template-columns: 1fr 1fr !important;
+          }
+          .stats-grid > div {
+            border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+          }
+          .stats-grid > div:nth-child(even) {
+            border-right: none !important;
+          }
+          .stats-grid > div:nth-child(3),
+          .stats-grid > div:nth-child(4) {
+            border-bottom: none !important;
+          }
+        }
+        @media (max-width: 600px) {
+          .datasets-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .stats-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .stats-grid > div {
+            border-right: none !important;
+            border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+          }
+          .stats-grid > div:last-child {
+            border-bottom: none !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

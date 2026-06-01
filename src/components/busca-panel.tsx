@@ -30,6 +30,10 @@ interface ConsultaResult {
   };
 }
 
+// ─── Cores Padrão AutoScore ──────────────────────────────────────────────────
+const COR_ACCENT = "#D4A843"; // Âmbar padrão AutoScore
+const COR_ACCENT_DIM = "rgba(212,168,67,0.2)";
+
 // ─── Formatação ───────────────────────────────────────────────────────────────
 function formatarDocumento(valor: string, tipo: TipoDoc): string {
   const digits = valor.replace(/\D/g, "");
@@ -66,7 +70,7 @@ function ScoreRing({ score }: { score?: number | null }) {
 
   const cor =
     val >= 700 ? "#2BA84A" :
-    val >= 500 ? "#B8914A" :
+    val >= 500 ? COR_ACCENT :
     val >= 300 ? "#e07b39" : "#c0392b";
 
   const label =
@@ -111,7 +115,7 @@ function ScoreRing({ score }: { score?: number | null }) {
 // ─── Linha de dado ────────────────────────────────────────────────────────────
 function DataRow({ label, value, destaque }: { label: string; value: string; destaque?: boolean }) {
   return (
-    <div style={{
+    <div className="snc-data-row" style={{
       display: "grid", gridTemplateColumns: "1fr auto",
       padding: "13px 0", borderBottom: "1px solid rgba(255,255,255,0.06)",
       gap: 16, alignItems: "center",
@@ -183,7 +187,7 @@ export function BuscaPanel() {
   return (
     <div>
       {/* ── Painel de busca ── */}
-      <div style={{
+      <div className="search-bar-wrapper" style={{
         background: "rgba(255,255,255,0.03)",
         border: "1px solid rgba(255,255,255,0.1)",
         padding: "32px 36px",
@@ -205,7 +209,7 @@ export function BuscaPanel() {
                 color: tipo === t ? "#fff" : "#5a6a7a",
                 background: "none",
                 border: "none",
-                borderBottom: tipo === t ? "2px solid #2BA84A" : "2px solid transparent",
+                borderBottom: tipo === t ? `2px solid ${COR_ACCENT}` : "2px solid transparent",
                 cursor: "pointer",
                 transition: "all 0.15s",
                 marginBottom: -1,
@@ -217,7 +221,7 @@ export function BuscaPanel() {
         </div>
 
         {/* Campo de entrada */}
-        <div style={{ display: "flex", gap: 12, alignItems: "stretch" }}>
+        <div className="search-bar-container" style={{ display: "flex", gap: 12, alignItems: "stretch" }}>
           <div style={{ flex: 1, position: "relative" }}>
             <div style={{
               position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)",
@@ -231,6 +235,7 @@ export function BuscaPanel() {
               id="busca-documento-input"
               type="text"
               inputMode="numeric"
+              autoComplete="off"
               value={valor}
               onChange={handleChange}
               onKeyDown={handleKeyDown}
@@ -246,8 +251,9 @@ export function BuscaPanel() {
                 padding: "18px 18px 18px 60px",
                 outline: "none",
                 transition: "border-color 0.15s",
+                WebkitBoxShadow: "0 0 0 1000px rgba(14,28,48,1) inset",
               }}
-              onFocus={(e) => (e.target.style.borderColor = "#2BA84A")}
+              onFocus={(e) => (e.target.style.borderColor = "#D4A843")}
               onBlur={(e) => (e.target.style.borderColor = "rgba(255,255,255,0.15)")}
             />
           </div>
@@ -257,8 +263,8 @@ export function BuscaPanel() {
             disabled={loading}
             style={{
               padding: "18px 36px",
-              background: loading ? "rgba(43,168,74,0.4)" : "#2BA84A",
-              color: "#06240e",
+              background: loading ? "rgba(212,168,67,0.4)" : "#D4A843",
+              color: "#0A1628",
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: 12,
               letterSpacing: "0.12em",
@@ -275,7 +281,7 @@ export function BuscaPanel() {
           >
             {loading ? (
               <>
-                <span style={{ display: "inline-block", width: 14, height: 14, border: "2px solid #06240e", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.7s linear infinite" }} />
+                <span style={{ display: "inline-block", width: 14, height: 14, border: "2px solid #0A1628", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.7s linear infinite" }} />
                 Consultando
               </>
             ) : "Consultar"}
@@ -298,8 +304,8 @@ export function BuscaPanel() {
         <div id="busca-resultado" style={{ animation: "fadeUp 0.4s ease" }}>
           {/* Header */}
           <div style={{ display: "flex", alignItems: "center", gap: 16, paddingBottom: 24, marginBottom: 28, borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
-            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#2BA84A", boxShadow: "0 0 0 3px rgba(43,168,74,0.2)" }} />
-            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#2BA84A", letterSpacing: "0.18em", textTransform: "uppercase" as const }}>
+            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#D4A843", boxShadow: "0 0 0 3px rgba(212,168,67,0.2)" }} />
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#D4A843", letterSpacing: "0.18em", textTransform: "uppercase" as const }}>
               Consulta concluída · Base {resultado.scr.databaseConsultada}
             </span>
             <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#3a4a5a", letterSpacing: "0.1em", marginLeft: "auto" }}>
@@ -307,10 +313,10 @@ export function BuscaPanel() {
             </span>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
+          <div className="snc-data-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
             {/* ── SCR Bacen ── */}
-            <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", padding: "36px 32px" }}>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.22em", textTransform: "uppercase" as const, marginBottom: 20 }}>
+            <div className="snc-bloco" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", padding: "36px 32px" }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: COR_ACCENT, letterSpacing: "0.22em", textTransform: "uppercase" as const, marginBottom: 20 }}>
                 SCR · Bacen
               </div>
               <h3 style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 28, fontWeight: 400, color: "#fff", marginBottom: 28, lineHeight: 1.1 }}>
@@ -330,7 +336,7 @@ export function BuscaPanel() {
               {/* Operações por modalidade */}
               {resultado.scr.operacoes && resultado.scr.operacoes.length > 0 && (
                 <div style={{ marginTop: 24 }}>
-                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.18em", textTransform: "uppercase" as const, marginBottom: 12 }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: COR_ACCENT, letterSpacing: "0.18em", textTransform: "uppercase" as const, marginBottom: 12 }}>
                     Operações por Modalidade
                   </div>
                   {resultado.scr.operacoes.slice(0, 8).map((op, i) => (
@@ -345,7 +351,7 @@ export function BuscaPanel() {
               {/* Crédito a vencer por prazo */}
               {resultado.scr.creditoAVencer && resultado.scr.creditoAVencer.length > 0 && (
                 <div style={{ marginTop: 20 }}>
-                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.18em", textTransform: "uppercase" as const, marginBottom: 12 }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: COR_ACCENT, letterSpacing: "0.18em", textTransform: "uppercase" as const, marginBottom: 12 }}>
                     A Vencer por Prazo
                   </div>
                   {resultado.scr.creditoAVencer.slice(0, 6).map((c, i) => (
@@ -359,8 +365,8 @@ export function BuscaPanel() {
             </div>
 
             {/* ── Score ── */}
-            <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", padding: "36px 32px" }}>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.22em", textTransform: "uppercase" as const, marginBottom: 20 }}>
+            <div className="snc-bloco" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", padding: "36px 32px" }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: COR_ACCENT, letterSpacing: "0.22em", textTransform: "uppercase" as const, marginBottom: 20 }}>
                 Score · Crédito
               </div>
               <h3 style={{ fontFamily: "'Libre Caslon Text', serif", fontSize: 28, fontWeight: 400, color: "#fff", marginBottom: 28, lineHeight: 1.1 }}>
@@ -376,12 +382,12 @@ export function BuscaPanel() {
 
               {/* Legenda das faixas */}
               <div style={{ marginTop: 28 }}>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#B8914A", letterSpacing: "0.18em", textTransform: "uppercase" as const, marginBottom: 14 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: COR_ACCENT, letterSpacing: "0.18em", textTransform: "uppercase" as const, marginBottom: 14 }}>
                   Referência de Faixas
                 </div>
                 {[
                   { faixa: "Excelente", range: "700–1000", cor: "#2BA84A" },
-                  { faixa: "Bom", range: "500–699", cor: "#B8914A" },
+                  { faixa: "Bom", range: "500–699", cor: COR_ACCENT },
                   { faixa: "Regular", range: "300–499", cor: "#e07b39" },
                   { faixa: "Baixo / Ruim", range: "0–299", cor: "#c0392b" },
                 ].map(({ faixa, range, cor }) => (
@@ -410,8 +416,8 @@ export function BuscaPanel() {
               style={{
                 padding: "14px 28px",
                 background: "transparent",
-                border: "1px solid rgba(200,162,90,0.5)",
-                color: "#c8a25a",
+                border: "1px solid rgba(212,168,67,0.5)",
+                color: "#D4A843",
                 fontFamily: "'JetBrains Mono', monospace",
                 fontSize: 11,
                 letterSpacing: "0.16em",
@@ -421,12 +427,12 @@ export function BuscaPanel() {
                 transition: "all 0.15s",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(200,162,90,0.08)";
-                e.currentTarget.style.borderColor = "#c8a25a";
+                e.currentTarget.style.background = "rgba(212,168,67,0.08)";
+                e.currentTarget.style.borderColor = "#D4A843";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.borderColor = "rgba(200,162,90,0.5)";
+                e.currentTarget.style.borderColor = "rgba(212,168,67,0.5)";
               }}
             >
               ⎙ Gerar Relatório
@@ -455,6 +461,51 @@ export function BuscaPanel() {
         @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 768px) {
           #busca-resultado > div:nth-child(2) { grid-template-columns: 1fr !important; }
+          .search-bar-wrapper {
+            padding: 20px 16px !important;
+          }
+          .search-bar-container {
+            flex-direction: column;
+          }
+          #busca-documento-input {
+            font-size: 18px !important;
+            padding: 16px 16px 16px 60px !important;
+            letter-spacing: 0.06em !important;
+          }
+          #busca-consultar-btn {
+            width: 100% !important;
+            justify-content: center !important;
+            padding: 16px !important;
+          }
+          /* Blocos mobile */
+          .snc-bloco {
+            padding: 18px 16px !important;
+          }
+          /* Grids de dados mobile */
+          .snc-data-grid {
+            grid-template-columns: 1fr !important;
+            gap: 0 !important;
+          }
+          /* Linhas de dados mobile */
+          .snc-data-row {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 4px !important;
+            padding: 10px 12px !important;
+          }
+          .snc-data-row span {
+            display: block !important;
+            width: 100% !important;
+          }
+          .snc-data-row span:first-child {
+            font-size: 8px !important;
+            color: #8a94a3 !important;
+          }
+          .snc-data-row span:last-child {
+            font-size: 12px !important;
+            text-align: left !important;
+          }
         }
       `}</style>
     </div>

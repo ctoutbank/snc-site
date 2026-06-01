@@ -65,6 +65,35 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Informe a placa do veículo." }, { status: 400 });
   }
 
+  const isHomolog = process.env.APIBRASIL_HOMOLOG === "true";
+
+  if (isHomolog) {
+    const cleanPlaca = placa.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    const isRob = cleanPlaca === "ROB0190";
+    
+    const proprietario = {
+      nome: isRob ? "JOÃO DA SILVA (ALERTA DE ROUBO)" : "JOÃO DA SILVA",
+      documento: "123.456.789-00",
+      placa: placa.toUpperCase(),
+      renavam: "00456789012",
+      municipio: "BELO HORIZONTE",
+      uf: "MG",
+      marcaModelo: "VW/FOX 1.0 GII",
+      anoFabricacao: "2012",
+      anoModelo: "2013",
+      cor: "VERMELHA",
+      combustivel: "ALCOOL/GASOLINA",
+      motor: "CCC178906",
+      chassi: "9BWZZZ377VT004251",
+      crlv: "00123456789",
+      dataAtualizacao: "15/03/2025",
+      statusCodigo: isRob ? "1" : "0",
+      statusDescricao: isRob ? "BLOQUEIO DE ROUBO/FURTO ATIVO" : "SEM RESTRIÇÃO",
+    };
+    
+    return NextResponse.json({ proprietario, pdf: null, _raw: { mock: true, placa } });
+  }
+
   try {
     const raw = await consultarProprietarioAtual(placa);
     const { proprietario, pdf } = mapearProprietario(
