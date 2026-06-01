@@ -180,6 +180,20 @@ const DATASETS = [
     fonte: "SENATRAN / DETRAN",
     tipo: "PLACA / UF",
   },
+  {
+    id: "13",
+    titulo: "Analítico Veicular",
+    subtitulo: "Veículos · Placa · Super-Consulta",
+    descricao: "Super-consulta consolidada: FIPE, proprietário atual, histórico de quilometragem, restrições judiciais (RENAJUD), multas (RENAINF), roubo/furto e recall.",
+    campos: ["FIPE", "Proprietário", "Histórico KM", "RENAJUD / RENAINF", "Roubo · Recall"],
+    status: "ativo" as const,
+    href: "/autoscore/analitico-veicular",
+    cor: "var(--ds-04)",
+    corBg: "var(--ds-04-bg)",
+    corBorder: "var(--ds-04-border)",
+    fonte: "DENATRAN / SENATRAN / FIPE / CNJ",
+    tipo: "PLACA",
+  },
 ] as const;
 
 // ─── Página Hub AutoScore ────────────────────────────────────────────────────────

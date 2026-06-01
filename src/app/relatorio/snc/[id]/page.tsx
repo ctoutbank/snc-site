@@ -397,6 +397,49 @@ function SumarioCard({ payload }: { payload: RelatorioPayload }) {
     );
   }
 
+  if (payload.dataset === 'analitico-veicular') {
+    const vei = (r.veiculo ?? {}) as Record<string, any>;
+    const prop = (r.proprietario ?? {}) as Record<string, any>;
+    const renajud = (r.renajud ?? {}) as Record<string, any>;
+    const rouboFurto = (r.rouboFurto ?? {}) as Record<string, any>;
+    const recall = (r.recall ?? {}) as Record<string, any>;
+    const histKm = (r.historicoKm ?? {}) as Record<string, any>;
+    const renainf = (r.renainf ?? {}) as Record<string, any>;
+
+    const placa = formatarPlacaExibicao(payload.documento);
+    const modelo = v(vei.marca_modelo || '—');
+    const renavam = v(vei.renavam);
+    const chassi = v(vei.chassi);
+    
+    const temAlerta = !!(
+      renajud.temRestricao ||
+      rouboFurto.temOcorrencia ||
+      recall.temRecall ||
+      histKm.anomalia ||
+      (renainf.totalMultas && renainf.totalMultas > 0)
+    );
+
+    return (
+      <div className="r-sl">
+        <div className="label">Veículo</div>
+        <div className="sname">{modelo.replace('/', ' - ')}</div>
+        <div className="sdoc" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 15, letterSpacing: '0.08em', marginTop: 4 }}>Placa: {placa}</div>
+        <div className="pfs" style={{ gridTemplateColumns: '1fr 1fr' }}>
+          <div><div className="l">RENAVAM</div><div className="v">{renavam}</div></div>
+          <div><div className="l">Chassi</div><div className="v">{chassi}</div></div>
+          <div><div className="l">Proprietário</div><div className="v">{v(prop.nome)}</div></div>
+          <div><div className="l">Ano Fab / Mod.</div><div className="v">{v(vei.ano_fabricacao)} / {v(vei.ano_modelo)}</div></div>
+          <div style={{ gridColumn: '1 / -1' }}>
+            <div className="l">Parecer Consolidado</div>
+            <div className="v" style={{ color: temAlerta ? '#ef4444' : '#2ba84a', fontWeight: 700 }}>
+              {temAlerta ? 'ALERTAS/RESTRIÇÕES ATIVAS' : 'VEÍCULO REGULAR — NADA CONSTA'}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // credito
   const scr = (r.scr ?? {}) as Record<string, unknown>;
   const score = (r.score ?? {}) as Record<string, unknown>;
@@ -2095,6 +2138,7 @@ function DadosDataset({ dataset, resultado }: { dataset: DatasetTipo; resultado:
   if (dataset === 'historico-km') return <DadosHistoricoKm r={resultado} />;
   if (dataset === 'crlve') return <DadosCrlve r={resultado} />;
   if (dataset === 'csv-completa') return <DadosCsvCompleta r={resultado} />;
+  if (dataset === 'analitico-veicular') return <DadosAnaliticoVeicular r={resultado} />;
   return null;
 }
 
@@ -2670,6 +2714,347 @@ function DadosCsvCompleta({ r }: { r: Record<string, unknown> }) {
   );
 }
 
+function DadosAnaliticoVeicular({ r }: { r: Record<string, unknown> }) {
+  const veiculo = (r.veiculo ?? {}) as Record<string, any>;
+  const proprietario = (r.proprietario ?? {}) as Record<string, any>;
+  const fipe = (r.fipe ?? {}) as Record<string, any>;
+  const historicoKm = (r.historicoKm ?? {}) as Record<string, any>;
+  const renajud = (r.renajud ?? {}) as Record<string, any>;
+  const renainf = (r.renainf ?? {}) as Record<string, any>;
+  const rouboFurto = (r.rouboFurto ?? {}) as Record<string, any>;
+  const recall = (r.recall ?? {}) as Record<string, any>;
+
+  const kmRegistros = (historicoKm.registros ?? []) as Record<string, any>[];
+  const multas = (renainf.multas ?? []) as Record<string, any>[];
+  const ocorrenciasRoubo = (rouboFurto.ocorrencias ?? []) as Record<string, any>[];
+  const ocorrenciasRecall = (recall.ocorrencias ?? []) as Record<string, any>[];
+
+  return (
+    <>
+      <div className="src-badge">APIBRASIL · CONSULTA ANALÍTICA VEICULAR</div>
+
+      {/* ── Identificação do Veículo ── */}
+      <div className="ds-block" style={{ marginTop: 8, marginBottom: 2 }}>
+        <div className="ds-hd"><span>IDENTIFICAÇÃO DO VEÍCULO</span></div>
+        
+        {/* Linha 1 */}
+        <div className="ds-row">
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">Marca/Modelo</div>
+            <div className="dv" style={{ whiteSpace: 'normal', lineHeight: 1.4 }}>{v(veiculo.marca_modelo).replace('/', ' - ')}</div>
+          </div>
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">Placa</div>
+            <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace" }}>{v(veiculo.placa)}</div>
+          </div>
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">Chassi</div>
+            <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", whiteSpace: 'normal', lineHeight: 1.4, wordBreak: 'break-all' }}>{v(veiculo.chassi)}</div>
+          </div>
+        </div>
+
+        {/* Linha 2 */}
+        <div className="ds-row">
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">RENAVAM</div>
+            <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace" }}>{v(veiculo.renavam)}</div>
+          </div>
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">Motor</div>
+            <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace" }}>{v(veiculo.motor)}</div>
+          </div>
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">Cor</div>
+            <div className="dv">{v(veiculo.cor)}</div>
+          </div>
+        </div>
+
+        {/* Linha 3 */}
+        <div className="ds-row">
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">Combustível</div>
+            <div className="dv">{v(veiculo.combustivel)}</div>
+          </div>
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">Ano Fab / Mod</div>
+            <div className="dv">{veiculo.ano_fabricacao && veiculo.ano_modelo ? `${veiculo.ano_fabricacao}/${veiculo.ano_modelo}` : '—'}</div>
+          </div>
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">Município / UF</div>
+            <div className="dv" style={{ whiteSpace: 'normal', lineHeight: 1.4 }}>{veiculo.municipio && veiculo.uf ? `${veiculo.municipio} - ${veiculo.uf}` : '—'}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Proprietário Atual ── */}
+      <div className="ds-block" style={{ marginBottom: 2 }}>
+        <div className="ds-hd"><span>PROPRIETÁRIO ATUAL</span></div>
+        <div className="ds-row">
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">Nome</div>
+            <div className="dv" style={{ fontWeight: 600, whiteSpace: 'normal', lineHeight: 1.4 }}>{v(proprietario.nome)}</div>
+          </div>
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">Documento (CPF/CNPJ)</div>
+            <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace" }}>{v(proprietario.documento)}</div>
+          </div>
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">Município / UF</div>
+            <div className="dv" style={{ whiteSpace: 'normal', lineHeight: 1.4 }}>{proprietario.municipio && proprietario.uf ? `${proprietario.municipio} - ${proprietario.uf}` : '—'}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Tabela FIPE ── */}
+      <div className="ds-block" style={{ marginBottom: 2 }}>
+        <div className="ds-hd"><span>TABELA FIPE</span></div>
+        
+        {/* Linha 1 */}
+        <div className="ds-row">
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">Código FIPE</div>
+            <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace" }}>{v(fipe.codigoFipe)}</div>
+          </div>
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">Modelo FIPE</div>
+            <div className="dv" style={{ whiteSpace: 'normal', lineHeight: 1.4 }}>{v(fipe.modelo)}</div>
+          </div>
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">Ano Modelo</div>
+            <div className="dv">{v(fipe.anoModelo)}</div>
+          </div>
+        </div>
+
+        {/* Linha 2 */}
+        <div className="ds-row">
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">Combustível</div>
+            <div className="dv">{v(fipe.combustivel)}</div>
+          </div>
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">Mês Referência</div>
+            <div className="dv">{v(fipe.mesReferencia)}</div>
+          </div>
+          <div className="ds-row-inner" style={{ flex: 1 }}>
+            <div className="dk">Valor FIPE</div>
+            <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 700, color: 'var(--greend)' }}>{v(fipe.valor)}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Histórico de Quilometragem ── */}
+      <div className="src-badge" style={{ marginTop: 12 }}>HISTÓRICO DE QUILOMETRAGEM</div>
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd">
+          <span>REGISTROS DE ODÔMETRO</span>
+          <span className="ds-hd-badge">{reg(kmRegistros.length)}</span>
+        </div>
+        {historicoKm.anomalia && (
+          <div style={{ padding: '8px 12px', background: 'rgba(239, 68, 68, 0.08)', borderLeft: '3px solid #ef4444', color: '#ef4444', fontSize: 12, margin: '8px 12px 12px' }}>
+            <strong>Alerta:</strong> {historicoKm.motivoAnomalia || "QUILOMETRAGEM REVERTIDA — POSSÍVEL ADULTERAÇÃO DE HODÔMETRO"}
+          </div>
+        )}
+        {kmRegistros.length > 0 ? (
+          <div className="tbl-wrap">
+            <table className="snc-tbl">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Quilometragem</th>
+                  <th>Fonte</th>
+                  <th>UF</th>
+                </tr>
+              </thead>
+              <tbody>
+                {kmRegistros.map((item, i) => (
+                  <tr key={i} style={{ background: '#ffffff' }}>
+                    <td className="mono">{v(item.data)}</td>
+                    <td className="bold mono">{item.km ? `${item.km} km` : '—'}</td>
+                    <td>{v(item.fonte)}</td>
+                    <td className="mono">{v(item.uf)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Quilometragem</div><div className="dv">Nenhum histórico registrado</div></div><span className="chip chip-green">NADA CONSTA</span></div>
+        )}
+      </div>
+
+      {/* ── Restrições RENAJUD ── */}
+      <div className="src-badge" style={{ marginTop: 12 }}>RESTRICÕES JUDICIAIS (RENAJUD)</div>
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd"><span>SITUAÇÃO RENAJUD</span></div>
+        {renajud.temRestricao ? (
+          <>
+            <div className="ds-row">
+              <div className="ds-row-inner" style={{ flex: 1 }}>
+                <div className="dk">Nº Processo</div>
+                <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace" }}>{v(renajud.processo)}</div>
+              </div>
+              <div className="ds-row-inner" style={{ flex: 1 }}>
+                <div className="dk">Órgão Judicial</div>
+                <div className="dv">{v(renajud.orgaoJudicial)}</div>
+              </div>
+              <div className="ds-row-inner" style={{ flex: 1 }}>
+                <div className="dk">Tribunal</div>
+                <div className="dv">{v(renajud.tribunal)}</div>
+              </div>
+              <span className="chip chip-red">RESTRIÇÃO ATIVA</span>
+            </div>
+            {renajud.restricoes?.map((r: string, i: number) => (
+              <div className="ds-row" key={i}>
+                <div className="ds-row-inner">
+                  <div className="dk">Restrição {i + 1}</div>
+                  <div className="dv" style={{ color: '#ef4444', fontWeight: 600 }}>{r}</div>
+                </div>
+              </div>
+            ))}
+          </>
+        ) : (
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Restrição Judicial</div><div className="dv">Nenhuma restrição de circulação, transferência ou penhora</div></div><span className="chip chip-green">NADA CONSTA</span></div>
+        )}
+      </div>
+
+      {/* ── Multas RENAINF ── */}
+      <div className="src-badge" style={{ marginTop: 12 }}>INFRAÇÕES DE TRÂNSITO (RENAINF)</div>
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd">
+          <span>MULTAS REGISTRADAS</span>
+          <span className="ds-hd-badge">{reg(renainf.totalMultas ?? multas.length)}</span>
+        </div>
+        {multas.length > 0 ? (
+          <>
+            <div className="ds-row">
+              <div className="ds-row-inner"><div className="dk">Valor Consolidado</div><div className="dv" style={{ color: '#ef4444', fontWeight: 700 }}>{v(renainf.valorTotal)}</div></div>
+              <span className="chip chip-red">DÉBITO ATIVO</span>
+            </div>
+            <div className="tbl-wrap">
+              <table className="snc-tbl">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Infração / Descrição</th>
+                    <th>Órgão</th>
+                    <th>Valor</th>
+                    <th>Situação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {multas.map((m, i) => (
+                    <tr key={i} style={{ background: '#ffffff' }}>
+                      <td className="mono">{v(m.data)}</td>
+                      <td className="bold">{v(m.descricao)}</td>
+                      <td>{v(m.orgao)}</td>
+                      <td className="mono bold">{v(m.valor)}</td>
+                      <td>
+                        <span className={`chip chip-${m.situacao === 'PENDENTE' ? 'red' : 'green'}`}>
+                          {v(m.situacao)}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        ) : (
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Multas de Trânsito</div><div className="dv">Nenhuma infração registrada no RENAINF</div></div><span className="chip chip-green">NADA CONSTA</span></div>
+        )}
+      </div>
+
+      {/* ── Roubo e Furto ── */}
+      <div className="src-badge" style={{ marginTop: 12 }}>INDÍCIO DE ROUBO / FURTO</div>
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd"><span>SITUAÇÃO DE ROUBO/FURTO</span></div>
+        {rouboFurto.temOcorrencia ? (
+          <>
+            <div className="ds-row">
+              <div className="ds-row-inner"><div className="dk">Ocorrência Ativa</div><div className="dv" style={{ color: '#ef4444', fontWeight: 700 }}>Ocorrência de Roubo ou Furto Registrada no Sistema</div></div>
+              <span className="chip chip-red">CONSTA RESTRICÃO</span>
+            </div>
+            <div className="tbl-wrap">
+              <table className="snc-tbl">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Nº B.O.</th>
+                    <th>Localidade</th>
+                    <th>Situação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ocorrenciasRoubo.map((o, i) => (
+                    <tr key={i} style={{ background: '#ffffff' }}>
+                      <td className="mono">{v(o.data)}</td>
+                      <td className="bold" style={{ color: '#ef4444' }}>{v(o.tipo)}</td>
+                      <td className="mono">{v(o.boletim)}</td>
+                      <td>{v(o.localidade)}</td>
+                      <td>
+                        <span className={`chip chip-${o.situacao === 'RECUPERADO' ? 'green' : 'red'}`}>
+                          {v(o.situacao)}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        ) : (
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Roubo / Furto</div><div className="dv">Nenhum registro ativo de roubo ou furto para este veículo</div></div><span className="chip chip-green">NADA CONSTA</span></div>
+        )}
+      </div>
+
+      {/* ── Recall ── */}
+      <div className="src-badge" style={{ marginTop: 12 }}>RECALLS DE FABRICANTE</div>
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd"><span>CAMPANHAS DE SEGURANÇA</span></div>
+        {recall.temRecall ? (
+          <>
+            <div className="ds-row">
+              <div className="ds-row-inner"><div className="dk">Recall Pendente</div><div className="dv" style={{ color: '#ef4444', fontWeight: 700 }}>Existe recall de segurança pendente de execução pelo proprietário</div></div>
+              <span className="chip chip-red">RECALL ATIVO</span>
+            </div>
+            <div className="tbl-wrap">
+              <table className="snc-tbl">
+                <thead>
+                  <tr>
+                    <th>Fabricante</th>
+                    <th>Modelo</th>
+                    <th>Campanha</th>
+                    <th>Defeito</th>
+                    <th>Situação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ocorrenciasRecall.map((c, i) => (
+                    <tr key={i} style={{ background: '#ffffff' }}>
+                      <td className="bold">{v(c.fabricante)}</td>
+                      <td>{v(c.modelo)}</td>
+                      <td className="mono">{v(c.campanha)}</td>
+                      <td style={{ color: '#ef4444' }}>{v(c.defeito)}</td>
+                      <td>
+                        <span className={`chip chip-${c.situacao === 'NÃO REPARADO' ? 'red' : 'green'}`}>
+                          {v(c.situacao)}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        ) : (
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Recall</div><div className="dv">Nenhuma campanha de recall pendente para este veículo</div></div><span className="chip chip-green">NADA CONSTA</span></div>
+        )}
+      </div>
+    </>
+  );
+}
+
 function DadosHistoricoKm({ r }: { r: Record<string, unknown> }) {
   const veiculo     = (r.veiculo     ?? {}) as Record<string, unknown>;
   const historicoKm = (r.historicoKm ?? {}) as Record<string, unknown>;
@@ -3084,8 +3469,9 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
     'renainf':      '/autoscore/renainf',
     'historico-km': '/autoscore/historico-km',
     'crlve':        '/autoscore/crlve',
-    'csv-completa': '/autoscore/csv-completa',
-    'credito':      '/busca/credito',
+    'csv-completa':       '/autoscore/csv-completa',
+    'analitico-veicular': '/autoscore/analitico-veicular',
+    'credito':            '/busca/credito',
   };
   const fallbackPath = datasetFallbackMap[payload?.dataset || ''] ?? '/autoscore';
 
@@ -3396,6 +3782,48 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
                               {temOcorrencia
                                 ? `${obs} · Foram encontradas pendências que podem impedir o licenciamento.`
                                 : 'Nada consta de restrição. Documento disponível para visualização e download em PDF.'}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    } else if (payload.dataset === 'analitico-veicular') {
+                      const renajud = (payload.resultado?.renajud ?? {}) as Record<string, any>;
+                      const rouboFurto = (payload.resultado?.rouboFurto ?? {}) as Record<string, any>;
+                      const recall = (payload.resultado?.recall ?? {}) as Record<string, any>;
+                      const histKm = (payload.resultado?.historicoKm ?? {}) as Record<string, any>;
+                      const renainf = (payload.resultado?.renainf ?? {}) as Record<string, any>;
+
+                      const alertas: string[] = [];
+                      if (renajud.temRestricao) alertas.push("RENAJUD");
+                      if (rouboFurto.temOcorrencia) alertas.push("ROUBO/FURTO");
+                      if (recall.temRecall) alertas.push("RECALL");
+                      if (histKm.anomalia) alertas.push("HODÔMETRO");
+                      if (renainf.totalMultas && renainf.totalMultas > 0) {
+                        alertas.push(`${renainf.totalMultas} MULTA${renainf.totalMultas > 1 ? "S" : ""}`);
+                      }
+
+                      const temRest = alertas.length > 0;
+
+                      return (
+                        <div className="r-vrd-result">
+                          <div className="r-seal" style={temRest ? { background: '#d32f2f' } : {}}>
+                            {temRest ? '✗' : '✓'}
+                          </div>
+                          <div className="r-vt">
+                            {temRest ? (
+                              <h3 style={{ color: '#d32f2f', lineHeight: 1.25 }}>
+                                ATENÇÃO: RESTRIÇÕES ATIVAS
+                                <><br /><span style={{ fontSize: '0.85em' }}>
+                                  {alertas.join(" · ")}
+                                </span></>
+                              </h3>
+                            ) : (
+                              <h3>VEÍCULO REGULAR — NADA CONSTA</h3>
+                            )}
+                            <p style={{ margin: 0 }}>
+                              {temRest
+                                ? 'Foram encontradas pendências nesta consulta — verifique os detalhes no relatório.'
+                                : 'Dados processados e disponíveis para análise. Nenhuma restrição ou irregularidade foi encontrada.'}
                             </p>
                           </div>
                         </div>
