@@ -63,31 +63,64 @@ function obterMarcaEModelo(marcaModelo: unknown) {
   return { marca: '—', modelo: marcaModelo.trim() };
 }
 
+function formatarSentenceCase(val: unknown): string {
+  if (typeof val !== 'string' || !val) return '—';
+  const clean = val.trim();
+  if (clean === '—' || clean === '') return '—';
+  
+  if (clean.length <= 4 && /^[A-Z\/]+$/.test(clean)) {
+    return clean;
+  }
+  
+  const lowered = clean.toLowerCase();
+  let formatted = lowered.charAt(0).toUpperCase() + lowered.slice(1);
+  
+  formatted = formatted
+    .replace(/\bcsv\b/gi, 'CSV')
+    .replace(/\bfipe\b/gi, 'FIPE')
+    .replace(/\bmg\b/gi, 'MG')
+    .replace(/\bsp\b/gi, 'SP')
+    .replace(/\brj\b/gi, 'RJ')
+    .replace(/\bpr\b/gi, 'PR')
+    .replace(/\bsc\b/gi, 'SC')
+    .replace(/\brs\b/gi, 'RS')
+    .replace(/\bdf\b/gi, 'DF')
+    .replace(/\bce\b/gi, 'CE')
+    .replace(/\bpe\b/gi, 'PE')
+    .replace(/\bba\b/gi, 'BA')
+    .replace(/\bgm\b/gi, 'GM')
+    .replace(/\bvw\b/gi, 'VW');
+
+  return formatted;
+}
+
 
 // ─── §01 Sumário — card esquerdo por dataset ──────────────────────────────────
 function SumarioCard({ payload }: { payload: RelatorioPayload }) {
   const r = payload.resultado;
 
-  if (payload.dataset === 'vip-car' || payload.dataset === 'veiculo' || payload.dataset === 'proprietario') {
-    // Para veiculo: dados em r.veiculo; para proprietario: dados em r.proprietario; para vip-car: em r.identificacao
+  if (payload.dataset === 'snc-autoscore' || payload.dataset === 'vip-car' || payload.dataset === 'veiculo' || payload.dataset === 'proprietario' || payload.dataset === 'agregados-basica' || payload.dataset === 'agregados-propria' || payload.dataset === 'agregados-chassi' || payload.dataset === 'veicular-agrupados') {
+    // Para veiculo: dados em r.veiculo; para proprietario: dados em r.proprietario; para vip-car/snc-autoscore: em r.identificacao
     const vei = (r.veiculo ?? {}) as Record<string, unknown>;
     const prop = (r.proprietario ?? {}) as Record<string, unknown>;
     const id = (r.identificacao ?? {}) as Record<string, unknown>;
     const dt = (r.dadosTecnicos ?? {}) as Record<string, unknown>;
     const placa = formatarPlacaExibicao(payload.documento);
 
-    // Modelo: vip-car usa id.marcaModelo, proprietario usa prop.marcaModelo, veiculo usa vei.marca + vei.modelo
+    // Modelo: vip-car usa id.marcaModelo, proprietario usa prop.marcaModelo, veiculo usa vei.marca + vei.modelo, agregados-basica/propria/chassi usa vei.marca_modelo
     const modelo = payload.dataset === 'veiculo'
       ? `${v(vei.marca)} ${v(vei.modelo)}`.trim()
-      : v(id.marcaModelo ?? prop.marcaModelo);
+      : payload.dataset === 'agregados-basica' || payload.dataset === 'agregados-propria' || payload.dataset === 'agregados-chassi' || payload.dataset === 'veicular-agrupados'
+        ? v(vei.marca_modelo)
+        : v(id.marcaModelo ?? prop.marcaModelo);
 
-    const anoFab = v(id.anoFabricacao ?? prop.anoFabricacao ?? vei.anoFabricacao);
-    const anoMod = v(id.anoModelo ?? prop.anoModelo ?? vei.anoModelo);
+    const anoFab = v(id.anoFabricacao ?? prop.anoFabricacao ?? vei.anoFabricacao ?? vei.ano_fabricacao);
+    const anoMod = v(id.anoModelo ?? prop.anoModelo ?? vei.anoModelo ?? vei.ano_modelo);
     const comb   = v(id.combustivel ?? prop.combustivel ?? vei.combustivel);
     // Cor: vip-car usa prop.cor ou dt.cor; proprietario usa prop.cor; veiculo usa vei.cor
     const cor    = v(id.cor ?? prop.cor ?? vei.cor ?? dt.cor);
     // Renavam: proprietario usa prop.renavam; veiculo não tem
-    const renavam = v(prop.renavam ?? id.renavam);
+    const renavam = v(prop.renavam ?? id.renavam ?? vei.renavam);
     const mun = (() => {
       const m = id.municipio ?? prop.municipio ?? vei.municipio;
       const u = id.uf ?? prop.uf ?? vei.uf;
@@ -95,16 +128,28 @@ function SumarioCard({ payload }: { payload: RelatorioPayload }) {
     })();
 
     return (
-      <div className="r-sl">
-        <div className="label">Veículo</div>
-        <div className="sname">{modelo.replace('/', ' - ')}</div>
-        <div className="sdoc" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 15, letterSpacing: '0.08em', marginTop: 4 }}>Placa: {placa}</div>
+      <div className="r-sl" style={{ paddingLeft: 0 }}>
+        {(() => {
+          let s = modelo.replace(/\//g, ' - ');
+          const prefixos: Record<string, string> = { 'GM': 'CHEVROLET', 'VW': 'VOLKSWAGEN', 'MMC': 'MITSUBISHI', 'MB': 'MERCEDES-BENZ', 'MBENZ': 'MERCEDES-BENZ', 'IMP': '', 'I': '' };
+          const partes = s.split(/\s*-\s*/);
+          if (partes.length >= 2) { const sigla = partes[0].trim().toUpperCase(); const resto = partes.slice(1).join(' - ').trim().toUpperCase(); const mc = prefixos[sigla]; if (mc !== undefined && (mc === '' || resto.startsWith(mc))) s = partes.slice(1).join(' - ').trim(); }
+          const palavras = s.trim().split(/\s+/);
+          const fabricante = palavras[0] || '';
+          const modeloNome = palavras.slice(1).join(' ') || '';
+          return (
+            <>
+              <div className="label" style={{ marginBottom: 4 }}>{fabricante}</div>
+              <div className="sname">{modeloNome || fabricante}</div>
+            </>
+          );
+        })()}
+        <div style={{ width: 60, height: 3, background: 'var(--brass)', marginTop: 10, marginBottom: 14 }} />
+        <div className="sdoc" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 15, letterSpacing: '0.08em' }}>{payload.dataset === 'agregados-chassi' ? `Chassi: ${payload.documento}` : `Placa: ${placa}`}</div>
         <div className="pfs" style={{ gridTemplateColumns: '1fr 1fr' }}>
-          <div><div className="l">Ano Fabricação</div><div className="v">{anoFab}</div></div>
-          <div><div className="l">Ano Modelo</div><div className="v">{anoMod}</div></div>
+          <div><div className="l">Ano Fab/Mod</div><div className="v">{anoFab}/{anoMod}</div></div>
           <div><div className="l">Combustível</div><div className="v">{comb}</div></div>
           <div><div className="l">Cor</div><div className="v">{cor}</div></div>
-          {renavam && renavam !== '—' && <div><div className="l">RENAVAM</div><div className="v">{renavam}</div></div>}
           {mun !== '—' && <div><div className="l">Município</div><div className="v">{mun}</div></div>}
         </div>
       </div>
@@ -287,10 +332,10 @@ function SumarioCard({ payload }: { payload: RelatorioPayload }) {
           <div><div className="l">Chassi</div><div className="v">{v(renainf.chassi || veiculo.chassi)}</div></div>
           <div style={{ gridColumn: '1 / -1' }}>
             <div className="l">Situação Renainf</div>
-            <div className="v" style={{ color: totalMultas > 0 ? '#ef4444' : '#2ba84a', fontWeight: 700 }}>
+            <div className="v" style={{ color: totalMultas > 0 ? '#ef4444' : '#2ba84a', fontWeight: 700, lineHeight: 1.25 }}>
               {totalMultas > 0
                 ? (totalMultas === 1 ? `CONSTA 1 MULTA (R$ ${valorTotal})` : `CONSTAM ${totalMultas} MULTAS (R$ ${valorTotal})`)
-                : 'VEÍCULO REGULAR — NADA CONSTA'}
+                : <>VEÍCULO REGULAR<br />NADA CONSTA</>}
             </div>
           </div>
         </div>
@@ -431,8 +476,8 @@ function SumarioCard({ payload }: { payload: RelatorioPayload }) {
           <div><div className="l">Ano Fab / Mod.</div><div className="v">{v(vei.ano_fabricacao)} / {v(vei.ano_modelo)}</div></div>
           <div style={{ gridColumn: '1 / -1' }}>
             <div className="l">Parecer Consolidado</div>
-            <div className="v" style={{ color: temAlerta ? '#ef4444' : '#2ba84a', fontWeight: 700 }}>
-              {temAlerta ? 'ALERTAS/RESTRIÇÕES ATIVAS' : 'VEÍCULO REGULAR — NADA CONSTA'}
+            <div className="v" style={{ color: temAlerta ? '#ef4444' : '#2ba84a', fontWeight: 700, lineHeight: 1.25 }}>
+              {temAlerta ? 'ALERTAS/RESTRIÇÕES ATIVAS' : <>VEÍCULO REGULAR<br />NADA CONSTA</>}
             </div>
           </div>
         </div>
@@ -599,7 +644,7 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
                       <tr style={{ background: bg, borderTop: '1px solid #c8bfa8' }}>
                         <td className="mono" style={{ paddingTop: 10 }}>{o.dataHora ?? '—'}</td>
                         <td className="mono" style={{ paddingTop: 10 }}>{o.codigo ?? '—'}</td>
-                        <td className="mono" style={{ paddingTop: 10 }}>{o.ait ?? '—'}</td>
+                        <td className="mono" style={{ paddingTop: 10 }}>{o.auto ?? o.ait ?? '—'}</td>
                         <td className="mono bold green" style={{ paddingTop: 10 }}>{o.valor ?? '—'}</td>
                         <td style={{ paddingTop: 10 }}><span className="chip chip-red">CONSTA</span></td>
                       </tr>
@@ -783,7 +828,7 @@ function DadosProprietario({ r }: { r: Record<string, unknown> }) {
         <div className="ds-hd"><span>DADOS DO VEÍCULO</span></div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0 }}>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Marca / Modelo</div><div className="dv" style={{ fontWeight: 600 }}>{v(p.marcaModelo).replace('/', ' - ')}</div></div></div>
-          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Placa</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700 }}>{v(p.placa)}</div></div></div>
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Placa</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>{v(p.placa)}</div></div></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">RENAVAM</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(p.renavam)}</div></div></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Ano Fabricação / Modelo</div><div className="dv">{v(p.anoFabricacao)} / {v(p.anoModelo)}</div></div></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Cor</div><div className="dv">{v(p.cor)}</div></div></div>
@@ -830,7 +875,8 @@ function DadosCredito({ r }: { r: Record<string, unknown> }) {
 
   return (
     <>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 2 }}>
+      <div className="src-badge">REGISTRO DE CRÉDITO E SCORE</div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, marginBottom: 2, marginTop: 8 }}>
         <div>
           <div className="ds-hd"><span>SCR BACEN · BANCO CENTRAL DO BRASIL</span></div>
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Crédito a Vencer</div><div className="dv">{v(scr.totalAVencer)}</div></div></div>
@@ -886,16 +932,39 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <div className="ds-hd"><span>SCORE DE LEILÃO</span></div>
           <div className="ds-row"><div style={{ display: 'flex', flex: 1, gap: 16 }}>
-            <div className="ds-row-inner" style={{ flex: 1 }}>
-              <div className="dk">Pontuação</div>
-              <div className="dv" style={{ fontSize: 28, fontFamily: "'Libre Caslon Text',serif", color: scoreCor(sc.pontuacao) }}>{v(sc.pontuacao)}</div>
+            <div className="ds-row-inner" style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', paddingLeft: 32 }}>
+              <div style={{ textAlign: 'left' }}>
+                <div className="dk">Pontuação</div>
+                <div className="dv" style={{ fontSize: 28, fontFamily: "'Libre Caslon Text',serif", color: scoreCor(sc.pontuacao) }}>{v(sc.pontuacao)}</div>
+              </div>
             </div>
-            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Aceitação</div><div className="dv">{v(sc.aceitacao)}%</div></div>
-            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">% Sobre FIPE</div><div className="dv">{v(sc.percentualSobreFipe)}%</div></div>
+            <div className="ds-row-inner" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+              <div style={{ textAlign: 'left' }}>
+                <div className="dk">Aceitação</div>
+                <div className="dv">{v(sc.aceitacao)}%</div>
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', paddingRight: 32 }}>
+              <div style={{ textAlign: 'left' }}>
+                <div className="dk">% Sobre FIPE</div>
+                <div className="dv">{v(sc.percentualSobreFipe)}%</div>
+              </div>
+            </div>
           </div></div>
           <div className="ds-row" style={{ flex: 1, alignItems: 'flex-start' }}><div style={{ display: 'flex', flex: 1, gap: 16 }}>
-            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Descrição</div><div className="dv">{v(sc.descricaoPontuacao)}</div></div>
-            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Exige Vistoria</div><div className="dv">{v(sc.exigeVistoriaEspecial)}</div></div>
+            <div className="ds-row-inner" style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', paddingLeft: 32 }}>
+              <div style={{ textAlign: 'left' }}>
+                <div className="dk">Descrição</div>
+                <div className="dv">{formatarSentenceCase(sc.descricaoPontuacao)}</div>
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+              <div style={{ textAlign: 'left' }}>
+                <div className="dk">Exige Vistoria</div>
+                <div className="dv">{formatarSentenceCase(sc.exigeVistoriaEspecial)}</div>
+              </div>
+            </div>
+            <div style={{ flex: 1 }} />
           </div></div>
         </div>
         {/* Sinistro */}
@@ -920,17 +989,17 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
                 {sin.existeOcorrencia ? '✕' : '✓'}
               </div>
               <div style={{
-                fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 700,
+                fontSize: 11, fontWeight: 700,
                 color: sin.existeOcorrencia ? '#c0392b' : '#2ba84a',
-                letterSpacing: '0.08em', textTransform: 'uppercase',
+                letterSpacing: '0.06em', textTransform: 'uppercase',
               }}>
                 {sin.existeOcorrencia ? 'CONSTA' : 'NADA CONSTA'}
               </div>
               {!!sin.descricao && (
                 <div style={{
-                  fontFamily: "'JetBrains Mono',monospace", fontSize: 9,
+                  fontSize: 10,
                   color: sin.existeOcorrencia ? '#7a2020' : '#1d5a2a',
-                  marginTop: 6, letterSpacing: '0.06em',
+                  marginTop: 6,
                 }}>
                   {v(sin.descricao)}
                 </div>
@@ -968,17 +1037,24 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
       {/* Ocorrências de Leilão */}
       <div className="src-badge">HISTÓRICO</div>
       <div className="ds-block" style={{ marginTop: 8 }}>
-        <div className="ds-hd"><span>OCORRÊNCIAS DE LEILÃO</span><span className="ds-hd-badge">{total === 1 ? '1 registro' : `${total} registros`}</span></div>
+        <div className="ds-hd"><span>OCORRÊNCIAS DE LEILÃO</span><span className="ds-hd-badge">{total === 1 ? '1 REGISTRO' : `${total} REGISTROS`}</span></div>
         {ocorrencias.length > 0 ? (
-          <div className="tbl-wrap" style={{ overflow: 'hidden' }}>
-            <table className="snc-tbl" style={{ width: '100%', wordBreak: 'break-word', borderCollapse: 'collapse' }}>
+          <div className="tbl-wrap">
+            <table className="snc-tbl" style={{ width: '100%', tableLayout: 'fixed', borderCollapse: 'collapse' }}>
+              <colgroup>
+                <col style={{ width: '12%' }} />
+                <col style={{ width: '23%' }} />
+                <col style={{ width: '10%' }} />
+                <col style={{ width: '35%' }} />
+                <col style={{ width: '20%' }} />
+              </colgroup>
               <thead>
                 <tr>
-                  <th>Data</th>
-                  <th>Leiloeiro</th>
-                  <th>Lote</th>
-                  <th>Comitente</th>
-                  <th>Pátio</th>
+                  <th style={{ whiteSpace: 'normal' }}>Data</th>
+                  <th style={{ whiteSpace: 'normal' }}>Leiloeiro</th>
+                  <th style={{ whiteSpace: 'normal' }}>Lote</th>
+                  <th style={{ whiteSpace: 'normal' }}>Comitente</th>
+                  <th style={{ whiteSpace: 'normal' }}>Pátio</th>
                 </tr>
               </thead>
               <tbody>
@@ -989,11 +1065,11 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
                     <Fragment key={i}>
                       {/* Linha 1: dados gerais */}
                       <tr style={{ background: bg, borderTop: '1px solid #c8bfa8' }}>
-                        <td className="mono" style={{ paddingTop: 10 }}>{v(o.dataLeilao)}</td>
-                        <td style={{ paddingTop: 10 }}>{v(o.leiloeiro)}</td>
-                        <td className="mono" style={{ paddingTop: 10 }}>{v(o.lote)}</td>
-                        <td style={{ paddingTop: 10 }}>{v(o.comitente)}</td>
-                        <td style={{ paddingTop: 10 }}>{v(o.patio)}</td>
+                        <td className="mono" style={{ paddingTop: 10, whiteSpace: 'nowrap' }}>{v(o.dataLeilao)}</td>
+                        <td style={{ paddingTop: 10, whiteSpace: 'normal', wordBreak: 'break-word' }}>{v(o.leiloeiro)}</td>
+                        <td className="mono" style={{ paddingTop: 10, whiteSpace: 'nowrap' }}>{v(o.lote)}</td>
+                        <td style={{ paddingTop: 10, whiteSpace: 'normal', wordBreak: 'break-word' }}>{v(o.comitente)}</td>
+                        <td style={{ paddingTop: 10, whiteSpace: 'normal', wordBreak: 'break-word' }}>{v(o.patio)}</td>
                       </tr>
                       {/* Linha 2: condições */}
                       <tr style={{
@@ -1001,33 +1077,46 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
                         fontSize: '0.82em',
                         borderBottom: '1px solid #c8bfa8',
                       }}>
-                        <td colSpan={5} style={{ padding: '4px 12px 10px', borderBottom: 'none' }}>
-                          <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <div style={{
-                              fontFamily: "'JetBrains Mono',monospace",
-                              fontWeight: 700,
-                              fontSize: 13,
-                              color: '#5a6a7a',
-                              width: 18,
-                              textAlign: 'center',
-                              marginRight: 6
-                            }}>
-                              {i + 1}
+                        <td colSpan={5} style={{ padding: '6px 12px 10px 24px', borderBottom: 'none' }}>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                              <div style={{
+                                fontFamily: "'JetBrains Mono',monospace",
+                                fontWeight: 700,
+                                fontSize: 13,
+                                color: '#5a6a7a',
+                                width: 18,
+                                textAlign: 'center',
+                                marginRight: 16
+                              }}>
+                                {i + 1}
+                              </div>
+                              <div style={{
+                                flex: 1,
+                                display: 'flex', flexDirection: 'column', gap: 4,
+                                paddingLeft: 8, borderLeft: '2px solid #5a6a7a',
+                                textAlign: 'left'
+                              }}>
+                                <span><strong style={{ color: '#5a6a7a' }}>Geral:</strong> {formatarSentenceCase(o.condicaoGeral)}</span>
+                                <span><strong style={{ color: '#5a6a7a' }}>Motor:</strong> {formatarSentenceCase(o.condicaoMotor)}</span>
+                                <span><strong style={{ color: '#5a6a7a' }}>Mecânica:</strong> {formatarSentenceCase(o.condicaoMecanica)}</span>
+                                <span><strong style={{ color: '#5a6a7a' }}>Câmbio:</strong> {formatarSentenceCase(o.condicaoCambio)}</span>
+                                <span><strong style={{ color: '#5a6a7a' }}>Chassi:</strong> {formatarSentenceCase(o.situacaoChassi)}</span>
+                              </div>
                             </div>
-                            <div style={{
-                              flex: 1,
-                              display: 'flex', gap: 14, flexWrap: 'wrap',
-                              paddingLeft: 8, borderLeft: '2px solid #5a6a7a',
-                            }}>
-                              <span><strong style={{ color: '#5a6a7a' }}>Geral:</strong> {v(o.condicaoGeral)}</span>
-                              <span><strong style={{ color: '#5a6a7a' }}>Motor:</strong> {v(o.condicaoMotor)}</span>
-                              <span><strong style={{ color: '#5a6a7a' }}>Mecânica:</strong> {v(o.condicaoMecanica)}</span>
-                              <span><strong style={{ color: '#5a6a7a' }}>Câmbio:</strong> {v(o.condicaoCambio)}</span>
-                              <span><strong style={{ color: '#5a6a7a' }}>Chassi:</strong> {v(o.situacaoChassi)}</span>
-                              {!!o.observacoes && String(o.observacoes) !== '—' && (
-                                <span><strong style={{ color: '#5a6a7a' }}>Obs:</strong> {v(o.observacoes)}</span>
-                              )}
-                            </div>
+                            {!!o.observacoes && String(o.observacoes) !== '—' && (
+                              <div style={{
+                                paddingLeft: 6,
+                                textAlign: 'left',
+                                marginTop: 6,
+                                borderTop: '1px dashed #d4cfc1',
+                                paddingTop: 6,
+                                whiteSpace: 'normal',
+                                wordBreak: 'break-word'
+                              }}>
+                                <span><strong style={{ color: '#5a6a7a' }}>Obs:</strong> {formatarSentenceCase(o.observacoes)}</span>
+                              </div>
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -1079,7 +1168,7 @@ function DadosLeilao({ r }: { r: Record<string, unknown> }) {
           <div style={{ marginTop: 8 }}>
             <div className="ds-hd" style={{ background: '#991b1b' }}>
               <span>HISTÓRICO DE SINISTROS</span>
-              <span className="ds-hd-badge" style={{ borderColor: 'rgba(255,255,255,0.3)' }}>
+              <span className="ds-hd-badge" style={{ color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)' }}>
                 {sinistros.length === 1 ? '1 registro' : `${sinistros.length} registros`}
               </span>
             </div>
@@ -1164,79 +1253,72 @@ function DadosRenajud({ r }: { r: Record<string, unknown> }) {
 
   return (
     <>
-      <div className="src-badge">CNJ / SENATRAN</div>
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 2, marginBottom: 2, marginTop: 8, alignItems: 'stretch' }}>
-        {/* Processo e Juízo */}
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div className="ds-hd"><span>PROCESSO & JUÍZO</span></div>
-          <div className="ds-row">
-            <div className="ds-row-inner" style={{ flex: 1 }}>
-              <div className="dk">Nº Processo</div>
-              <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(data.processo)}</div>
-            </div>
-          </div>
-          <div className="ds-row">
-            <div className="ds-row-inner" style={{ flex: 1 }}>
-              <div className="dk">Órgão Judicial</div>
-              <div className="dv">{v(data.orgao_judicial)}</div>
-            </div>
-          </div>
-          <div className="ds-row" style={{ flex: 1, alignItems: 'flex-start' }}>
-            <div className="ds-row-inner" style={{ flex: 1 }}>
-              <div className="dk">Tribunal</div>
-              <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(data.tribunal)}</div>
-            </div>
-          </div>
+      <div className="src-badge">CNJ / SENATRAN · RESTRIÇÕES JUDICIAIS</div>
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd">
+          <span>SITUAÇÃO RENAJUD</span>
+          {temRestricoes && <span className="ds-hd-badge">1 PROCESSO</span>}
         </div>
-
-        {/* Situação Jurídica */}
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div className="ds-hd" style={{
-            background: temRestricoes ? '#991b1b' : 'var(--navy)',
-          }}><span>SITUAÇÃO JURÍDICA</span></div>
-          <div style={{
-            flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
-            background: temRestricoes ? '#fdf0f0' : '#f0fdf4',
-            border: `1px solid ${temRestricoes ? '#e8b4b4' : '#b4e8c0'}`,
-            borderTop: 'none',
-            padding: '18px 20px', gap: 16,
-          }}>
-            <div style={{ textAlign: 'center', width: '100%' }}>
-              <div style={{
-                width: 44, height: 44, borderRadius: '50%', margin: '0 auto 8px',
-                background: temRestricoes ? '#c0392b' : '#2ba84a',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 20, color: '#fff',
-              }}>
-                {temRestricoes ? '✕' : '✓'}
-              </div>
-              <div style={{
-                fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 700,
-                color: temRestricoes ? '#c0392b' : '#2ba84a',
-                letterSpacing: '0.08em', textTransform: 'uppercase',
-              }}>
-                {restricoes.length === 1 ? 'CONSTA 1 RESTRIÇÃO' : restricoes.length > 1 ? `CONSTAM ${restricoes.length} RESTRIÇÕES` : 'NADA CONSTA'}
-              </div>
-              {temRestricoes && (
-                <div style={{ marginTop: 12, display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center' }}>
-                  {restricoes.map((res, i) => (
-                    <span key={i} className="chip" style={{
-                      background: 'rgba(192,57,43,0.12)',
-                      border: '1px solid rgba(192,57,43,0.25)',
-                      color: '#c0392b',
-                      fontSize: 9,
-                      fontWeight: 700,
-                      textTransform: 'uppercase',
-                      padding: '3px 8px',
-                    }}>
-                      {res}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
+        {temRestricoes ? (
+          <div className="tbl-wrap" style={{ overflow: 'hidden' }}>
+            <table className="snc-tbl" style={{ width: '100%', wordBreak: 'break-word', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th>Nº Processo</th>
+                  <th>Órgão Judicial</th>
+                  <th>Tribunal</th>
+                  <th>Situação</th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* Linha 1: dados gerais */}
+                <tr style={{ background: '#ffffff', borderTop: '1px solid #c8bfa8' }}>
+                  <td className="mono">{v(data.processo)}</td>
+                  <td className="bold">{v(data.orgao_judicial)}</td>
+                  <td>{v(data.tribunal)}</td>
+                  <td>
+                    <span className="chip chip-red">RESTRIÇÃO ATIVA</span>
+                  </td>
+                </tr>
+                {/* Linha 2: restrições detalhadas */}
+                <tr style={{
+                  background: '#ffffff',
+                  fontSize: '0.82em',
+                  borderBottom: '1px solid #c8bfa8',
+                }}>
+                  <td colSpan={4} style={{ padding: '4px 12px 10px', borderBottom: 'none' }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <div style={{
+                        fontFamily: "'JetBrains Mono',monospace",
+                        fontWeight: 700,
+                        fontSize: 13,
+                        color: '#c0392b',
+                        width: 18,
+                        textAlign: 'center',
+                        marginRight: 6
+                      }}>
+                        1
+                      </div>
+                      <div style={{
+                        flex: 1,
+                        display: 'flex', gap: 14, flexWrap: 'wrap',
+                        paddingLeft: 8, borderLeft: '2px solid #c0392b',
+                        textAlign: 'left'
+                      }}>
+                        <span>
+                          <strong style={{ color: '#c0392b' }}>Restrições Constatadas:</strong>{' '}
+                          {restricoes.length > 0 ? restricoes.join(" · ") : 'RESTRIÇÃO REGISTRADA'}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </div>
+        ) : (
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Restrição Judicial</div><div className="dv">Nenhuma restrição de circulação, transferência ou penhora</div></div><span className="chip chip-green">NADA CONSTA</span></div>
+        )}
       </div>
     </>
   );
@@ -1348,7 +1430,7 @@ function DadosDebitos({ r }: { r: Record<string, unknown> }) {
       {/* Tabela Resumo Financeiro */}
       <div className="src-badge" style={{ marginTop: 12 }}>RESUMO CONSOLIDADO POR CATEGORIA</div>
       <div className="ds-block" style={{ marginTop: 8 }}>
-        <div className="ds-hd"><span>RESUMO DE VALORES</span></div>
+        <div className="ds-hd"><span>RESUMO DE VALORES</span><span className="ds-hd-badge">{reg(5)}</span></div>
         <div className="tbl-wrap">
           <table className="snc-tbl">
             <thead>
@@ -1401,7 +1483,7 @@ function DadosDebitos({ r }: { r: Record<string, unknown> }) {
         <>
           <div className="src-badge" style={{ marginTop: 16 }}>DETALHAMENTO DE MULTAS DE TRÂNSITO</div>
           <div className="ds-block" style={{ marginTop: 8 }}>
-            <div className="ds-hd"><span>INFRAÇÕES CONSTATADAS</span><span className="ds-hd-badge">{multas.length === 1 ? '1 multa' : `${multas.length} multas`}</span></div>
+            <div className="ds-hd"><span>INFRAÇÕES CONSTATADAS</span><span className="ds-hd-badge">{multas.length === 1 ? '1 MULTA' : `${multas.length} MULTAS`}</span></div>
             <div className="tbl-wrap">
               <table className="snc-tbl">
                 <thead>
@@ -1443,7 +1525,7 @@ function DadosDebitos({ r }: { r: Record<string, unknown> }) {
         <>
           <div className="src-badge" style={{ marginTop: 16 }}>DETALHAMENTO DE IPVA EM ABERTO</div>
           <div className="ds-block" style={{ marginTop: 8 }}>
-            <div className="ds-hd"><span>EXERCÍCIOS / PARCELAS CONSTATADOS</span><span className="ds-hd-badge">{ipva.length === 1 ? '1 débito' : `${ipva.length} débitos`}</span></div>
+            <div className="ds-hd"><span>EXERCÍCIOS / PARCELAS CONSTATADOS</span><span className="ds-hd-badge">{ipva.length === 1 ? '1 DÉBITO' : `${ipva.length} DÉBITOS`}</span></div>
             <div className="tbl-wrap">
               <table className="snc-tbl">
                 <thead>
@@ -1481,7 +1563,7 @@ function DadosDebitos({ r }: { r: Record<string, unknown> }) {
         <>
           <div className="src-badge" style={{ marginTop: 16 }}>DETALHAMENTO DE TAXAS E SEGUROS</div>
           <div className="ds-block" style={{ marginTop: 8 }}>
-            <div className="ds-hd"><span>TAXAS DIVERSAS EM ABERTO</span><span className="ds-hd-badge">{(licenciamento.length + dpvat.length) === 1 ? '1 taxa' : `${licenciamento.length + dpvat.length} taxas`}</span></div>
+            <div className="ds-hd"><span>TAXAS DIVERSAS EM ABERTO</span><span className="ds-hd-badge">{(licenciamento.length + dpvat.length) === 1 ? '1 TAXA' : `${licenciamento.length + dpvat.length} TAXAS`}</span></div>
             <div className="tbl-wrap">
               <table className="snc-tbl">
                 <thead>
@@ -1804,7 +1886,12 @@ function DadosEstadual({ r }: { r: Record<string, unknown> }) {
 
           {/* Tabela resumo */}
           <div className="ds-block" style={{ marginTop: 8 }}>
-            <div className="ds-hd"><span>RESUMO POR CATEGORIA</span></div>
+            <div className="ds-hd">
+              <span>RESUMO POR CATEGORIA</span>
+              <span className="ds-hd-badge">
+                {reg((multas.length > 0 ? 1 : 0) + (ipva.length > 0 ? 1 : 0) + (licenciamento.length > 0 ? 1 : 0) + (outros.length > 0 ? 1 : 0))}
+              </span>
+            </div>
             <div className="tbl-wrap">
               <table className="snc-tbl">
                 <thead>
@@ -1866,7 +1953,7 @@ function DadosEstadual({ r }: { r: Record<string, unknown> }) {
             <div className="ds-block" style={{ marginTop: 8 }}>
               <div className="ds-hd">
                 <span>MULTAS ESTADUAIS</span>
-                <span className="ds-hd-badge">{multas.length === 1 ? '1 multa' : `${multas.length} multas`}</span>
+                <span className="ds-hd-badge">{multas.length === 1 ? '1 MULTA' : `${multas.length} MULTAS`}</span>
               </div>
               <div className="tbl-wrap">
                 <table className="snc-tbl">
@@ -1900,7 +1987,7 @@ function DadosEstadual({ r }: { r: Record<string, unknown> }) {
             <div className="ds-block" style={{ marginTop: 8 }}>
               <div className="ds-hd">
                 <span>IPVA ESTADUAL</span>
-                <span className="ds-hd-badge">{ipva.length === 1 ? '1 exercício' : `${ipva.length} exercícios`}</span>
+                <span className="ds-hd-badge">{ipva.length === 1 ? '1 EXERCÍCIO' : `${ipva.length} EXERCÍCIOS`}</span>
               </div>
               <div className="tbl-wrap">
                 <table className="snc-tbl">
@@ -1934,7 +2021,7 @@ function DadosEstadual({ r }: { r: Record<string, unknown> }) {
             <div className="ds-block" style={{ marginTop: 8 }}>
               <div className="ds-hd">
                 <span>LICENCIAMENTO / TAXAS</span>
-                <span className="ds-hd-badge">{licenciamento.length === 1 ? '1 taxa' : `${licenciamento.length} taxas`}</span>
+                <span className="ds-hd-badge">{licenciamento.length === 1 ? '1 TAXA' : `${licenciamento.length} TAXAS`}</span>
               </div>
               <div className="tbl-wrap">
                 <table className="snc-tbl">
@@ -2066,7 +2153,7 @@ function DadosRenainf({ r }: { r: Record<string, unknown> }) {
           <div className="ds-block" style={{ marginTop: 8 }}>
             <div className="ds-hd">
               <span>INFRAÇÕES CONSTATADAS</span>
-              <span className="ds-hd-badge">{infracoes.length === 1 ? '1 multa' : `${infracoes.length} multas`}</span>
+              <span className="ds-hd-badge">{infracoes.length === 1 ? '1 MULTA' : `${infracoes.length} MULTAS`}</span>
             </div>
             <div className="tbl-wrap">
               <table className="snc-tbl">
@@ -2101,6 +2188,27 @@ function DadosRenainf({ r }: { r: Record<string, unknown> }) {
                       <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono bold">{v(inf.valorOriginal)}</td>
                     </tr>
                   ))}
+                  {/* Linha do Valor Consolidado integrada sob as colunas corretas */}
+                  <tr style={{ background: 'rgba(200, 162, 90, 0.04)', fontWeight: 700 }}>
+                    <td colSpan={5} style={{ 
+                      textAlign: 'right', 
+                      fontFamily: "'JetBrains Mono',monospace", 
+                      fontSize: 9, 
+                      letterSpacing: '.06em', 
+                      textTransform: 'uppercase', 
+                      padding: '11px 14px',
+                      color: 'var(--ink2)',
+                      borderRight: '1px solid #c8bfa8'
+                    }}>
+                      Valor Consolidado
+                    </td>
+                    <td style={{ textAlign: 'center', padding: '11px 14px', borderRight: '1px solid #c8bfa8' }}>
+                      <span className="chip chip-red">DÉBITO ATIVO</span>
+                    </td>
+                    <td className="mono bold" style={{ color: '#ef4444', fontSize: 11, textAlign: 'right', padding: '11px 14px' }}>
+                      R$ {valorTotal}
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -2124,7 +2232,1209 @@ function DadosRenainf({ r }: { r: Record<string, unknown> }) {
   );
 }
 
+function formatarBRL(valor?: string | number): string {
+  if (valor === undefined || valor === null || valor === "") return "—";
+  const num = typeof valor === "string" ? parseFloat(valor.replace(",", ".")) : valor;
+  if (isNaN(num)) return String(valor);
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(num);
+}
+
+function DataRow({ label, value, isMono = false }: { label: string; value?: any; isMono?: boolean }) {
+  if (value === undefined || value === null || value === "" || value === "—") return null;
+  return (
+    <div className="ds-row">
+      <div className="ds-row-inner">
+        <div className="dk">{label}</div>
+        <div className="dv" style={isMono ? { fontFamily: "'JetBrains Mono',monospace", fontSize: 12 } : undefined}>
+          {value}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
+  const id = (r.identificacao ?? {}) as Record<string, unknown>;
+  const rf = (r.rouboFurto ?? {}) as Record<string, boolean>;
+  const dt = (r.dadosTecnicos ?? {}) as Record<string, unknown>;
+  const prop = (r.proprietario ?? {}) as Record<string, unknown>;
+  const restBin = (r.restricoesBin ?? {}) as {
+    existeRestricaoGeral?: boolean;
+    renajud?: boolean;
+    rouboFurto?: boolean;
+    alertaSinistro?: boolean;
+    veiculoBaixado?: boolean;
+    mensagens?: string[];
+  };
+  const prec = (r.precificador as Record<string, unknown>[]) ?? [];
+  const renainf = r.renainf as { total?: string | number; ocorrencias?: Record<string, string>[] } | null;
+  const leilao = r.leilao as Record<string, any> | null;
+  const debitos = r.debitos as Record<string, any> | null;
+  const km = r.historicoKm as Record<string, any> | null;
+  const recall = r.recall as Record<string, any> | null;
+  const pdf = r.pdf as string | null;
+  const gravame = r.gravame as Record<string, any> | null;
+  const renajudDetalhes = r.renajudDetalhes as Record<string, any> | null;
+  const historicoFipe = (r.historicoFipe ?? r.historico ?? []) as Record<string, unknown>[];
+
+  // Estilo visual para novos campos (púrpura) — temporário para revisão
+  const NF: React.CSSProperties = { color: '#7B5EA7' };
+  const NF_BG: React.CSSProperties = { color: '#7B5EA7', background: 'rgba(123,94,167,0.04)' };
+
+  const ocorrencias = renainf?.ocorrencias ?? [];
+  const totalRenainf = renainf?.total ?? ocorrencias.length;
+
+  const temRecall = recall && recall.ocorrencias && recall.ocorrencias.length > 0;
+  const temLeilao = leilao && leilao.historico && leilao.historico.length > 0;
+  const temSinistro = leilao && leilao.sinistro && leilao.sinistro.historico && leilao.sinistro.historico.length > 0;
+  const temDebitos = debitos && (debitos.multas?.length > 0 || debitos.ipva?.length > 0);
+  const temGravame = gravame && (gravame.financiamento === 'SIM' || gravame.situacao);
+  const temRenajudDetalhe = renajudDetalhes && renajudDetalhes.processo;
+  const temKm = km && km.registros && km.registros.length > 0;
+
+  // Limpa redundâncias de marca e abrevia sufixos de versão conforme padrão do mercado.
+  const abreviarMarca = (raw: string): string => {
+    let s = raw.replace(/\//g, ' - '); // normaliza separador
+    // Remove prefixos redundantes (sigla da montadora quando o nome completo já aparece)
+    const prefixos: Record<string, string> = {
+      'GM': 'CHEVROLET', 'VW': 'VOLKSWAGEN', 'MMC': 'MITSUBISHI',
+      'MB': 'MERCEDES-BENZ', 'MBENZ': 'MERCEDES-BENZ',
+      'IMP': '', 'I': '', // importado genérico
+    };
+    const partes = s.split(/\s*-\s*/);
+    if (partes.length >= 2) {
+      const sigla = partes[0].trim().toUpperCase();
+      const resto = partes.slice(1).join(' - ').trim().toUpperCase();
+      const marcaCompleta = prefixos[sigla];
+      if (marcaCompleta !== undefined && (marcaCompleta === '' || resto.startsWith(marcaCompleta))) {
+        s = partes.slice(1).join(' - ').trim();
+      }
+    }
+    // Abrevia sufixos de versão comuns
+    const sufixos: [RegExp, string][] = [
+      [/\bPREMIER\b/gi, 'PREM.'],
+      [/\bPLATINUM\b/gi, 'PLAT.'],
+      [/\bADVENTURE\b/gi, 'ADV.'],
+      [/\bAUTOMATIC[OA]?\b/gi, 'AUT.'],
+      [/\bAUTOM[AÁ]TICO\b/gi, 'AUT.'],
+      [/\bEXCLUSIVE\b/gi, 'EXCL.'],
+      [/\bHIGHLINE\b/gi, 'HL.'],
+      [/\bCOMFORTLINE\b/gi, 'CL.'],
+      [/\bTRENDLINE\b/gi, 'TL.'],
+      [/\bENDURANCE\b/gi, 'END.'],
+      [/\bFREEDOM\b/gi, 'FRDM.'],
+      [/\bLONGITUDE\b/gi, 'LONG.'],
+      [/\bLIMITED\b/gi, 'LTD.'],
+    ];
+    for (const [re, abrev] of sufixos) s = s.replace(re, abrev);
+    return s.trim();
+  };
+
+  // Cor do score de leilão por classe de risco (A baixo → E crítico). Mesma escala de DadosLeilao.
+  const corClasseLeilao = (label: unknown): string => {
+    const cls = String(label ?? '').match(/\(([A-E])\)/i)?.[1]?.toUpperCase();
+    if (cls === 'A') return '#22c55e';
+    if (cls === 'B') return '#84cc16';
+    if (cls === 'C') return '#eab308';
+    if (cls === 'D') return '#f97316';
+    if (cls === 'E') return '#ef4444';
+    return '#1e293b';
+  };
+
+  return (
+    <>
+      
+      {/* SEÇÃO 1: FICHA CADASTRAL */}
+      <div className="src-badge" style={{ marginTop: 8 }}>IDENTIFICAÇÃO CADASTRAL</div>
+      <div className="ds-block" style={{ marginTop: 8 }}>
+          <div className="ds-hd"><span>IDENTIFICAÇÃO CADASTRAL DO VEÍCULO (BIN)</span></div>
+          {/* Linha 1 — Identificação principal */}
+          <div className="ds-row">
+            <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+              <div className="ds-row-inner" style={{ flex: 1, overflow: 'hidden' }}><div className="dk">Marca/Modelo</div><div className="dv" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={v(id.marcaModelo)}>{abreviarMarca(v(id.marcaModelo))}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">CRLV Digital</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.crlv)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1, overflow: 'hidden' }}><div className="dk">Chassi</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={v(dt.chassi ?? id.chassi ?? prop.chassi)}>{v(dt.chassi ?? id.chassi ?? prop.chassi)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">RENAVAM</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(prop.renavam)}</div></div>
+            </div>
+          </div>
+          {/* Linha 2 — Registro técnico */}
+          <div className="ds-row">
+            <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Ano Fab/Mod</div><div className="dv">{v(id.anoFabricacao)}/{v(id.anoModelo)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Cor Cadastrada</div><div className="dv">{v(dt.cor ?? prop.cor)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Combustível</div><div className="dv">{v(id.combustivel)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Motor</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>{v(dt.motor ?? prop.motor)}</div></div>
+            </div>
+          </div>
+          {/* Linha 3 — Classificação */}
+          <div className="ds-row">
+            <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Categoria</div><div className="dv">{v(id.categoria)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Espécie/Tipo</div><div className="dv">{v(dt.especie)}/{v(dt.tipo)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Carroceria</div><div className="dv">{v(dt.carroceria)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Cap. Passageiros</div><div className="dv">{v(dt.capacidadePassageiros)}</div></div>
+            </div>
+          </div>
+          {/* Linha 4 — Localização + Procedência + Specs técnicas */}
+          <div className="ds-row">
+            <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Município/UF</div><div className="dv">{v(id.municipio)}/{v(id.uf)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Procedência</div><div className="dv">{v(dt.procedencia)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Potência</div><div className="dv">{v(dt.potencia)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Cilindradas (C.C.)</div><div className="dv">{v(dt.cilindrada)}</div></div>
+            </div>
+          </div>
+          {/* Linha 5 — Specs adicionais + Datas */}
+          <div className="ds-row">
+            <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Qtd. Eixos</div><div className="dv">{v(dt.eixos)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">PBT (Peso Bruto Total)</div><div className="dv">{v(dt.pbt)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Data Emissão CRLV</div><div className="dv">{v(dt.dataEmissaoCrlv ?? prop.dataAtualizacao)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Data Último CRV</div><div className="dv">{v(dt.dataUltimoCrv)}</div></div>
+            </div>
+          </div>
+      </div>
+
+      {/* HISTÓRICO ROUBO/FURTO — cards */}
+      <div className="src-badge" style={{ marginTop: 8 }}>HISTÓRICO DE ROUBO / FURTO</div>
+      <div className="ds-block" style={{ marginTop: 8, border: '1px solid #c8bfa8' }}>
+        <div className="ds-hd" style={{ background: (rf.declaracao || rf.recuperacao || rf.devolucao) ? '#c0392b' : 'var(--navy)' }}>
+          <span>HISTÓRICO ROUBO/FURTO</span>
+          {(rf.declaracao || rf.recuperacao || rf.devolucao) && (
+            <span className="ds-hd-badge" style={{ color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)' }}>
+              {[rf.declaracao, rf.recuperacao, rf.devolucao].filter(Boolean).length} {[rf.declaracao, rf.recuperacao, rf.devolucao].filter(Boolean).length === 1 ? 'REGISTRO' : 'REGISTROS'}
+            </span>
+          )}
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, padding: '12px 14px', background: '#faf8f3' }}>
+          {[
+            { label: 'Declaração de Roubo', exists: rf.declaracao, textOn: 'CONSTA', textOff: 'NADA CONSTA' },
+            { label: 'Devolução Registrada', exists: rf.devolucao, textOn: 'CONSTA', textOff: 'NADA CONSTA' },
+            { label: 'Recuperação Registrada', exists: rf.recuperacao, textOn: 'CONSTA', textOff: 'NADA CONSTA' },
+          ].map((item, idx) => {
+            const hasAlert = !!item.exists;
+            const bgCor = hasAlert ? 'rgba(239, 68, 68, 0.08)' : '#ffffff';
+            const borderCor = hasAlert ? '#ef4444' : '#d4cfc1';
+            return (
+              <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', background: bgCor, border: `1px solid ${borderCor}` }}>
+                <span className="dk" style={{ margin: 0, fontFamily: "'JetBrains Mono',monospace", fontSize: '10px' }}>{item.label}</span>
+                <span className={`chip chip-${hasAlert ? 'red' : 'green'}`} style={{ marginLeft: 12 }}>
+                  {hasAlert ? item.textOn : item.textOff}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* PROPRIETÁRIO ATUAL */}
+      <div className="src-badge" style={{ marginTop: 8 }}>PROPRIETÁRIO ATUAL</div>
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd"><span>PROPRIETÁRIO ATUAL DO VEÍCULO</span></div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1.5 }}><div className="dk">Nome do Proprietário</div><div className="dv bold">{v(prop.nome)}</div></div>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Documento</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace" }}>{v(prop.documento)}</div></div>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Município/UF</div><div className="dv">{v(prop.municipio)}/{v(prop.uf)}</div></div>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Status Cadastral</div><div className="dv">{v(prop.statusDescricao)}</div></div>
+            <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Data de Atualização</div><div className="dv">{v(prop.dataAtualizacao)}</div></div>
+          </div>
+        </div>
+      </div>
+
+      {/* HISTÓRICO DE PROPRIETÁRIOS ANTERIORES (Agregados Propria) */}
+      {(() => {
+        const mascararNome = (nome: string): string => {
+          const partes = String(nome ?? '').trim().split(/\s+/);
+          if (partes.length <= 1) return nome;
+          return [
+            partes[0],
+            ...partes.slice(1).map((p) => p.charAt(0) + '*'.repeat(Math.max(p.length - 1, 2))),
+          ].join(' ');
+        };
+        const lista = Array.isArray(r.historicoProprietarios)
+          ? (r.historicoProprietarios as Record<string, string>[])
+          : [];
+        return (
+          <>
+            <div className="src-badge" style={{ marginTop: 8 }}>HISTÓRICO DE PROPRIETÁRIOS ANTERIORES</div>
+            <div className="ds-block" style={{ marginTop: 8 }}>
+              <div className="ds-hd">
+                <span>TRANSFERÊNCIAS DE PROPRIEDADE</span>
+                {lista.length > 0 && (
+                  <span className="ds-hd-badge">{lista.length} {lista.length === 1 ? 'REGISTRO' : 'REGISTROS'}</span>
+                )}
+              </div>
+              {lista.length === 0 ? (
+                <div className="ds-row">
+                  <div className="ds-row-inner">
+                    <div className="dk">Proprietários Anteriores</div>
+                    <div className="dv" style={{ color: '#2ba84a', fontWeight: 600 }}>
+                      Nenhum proprietário anterior identificado na base federal
+                    </div>
+                  </div>
+                  <span className="chip chip-green">NADA CONSTA</span>
+                </div>
+              ) : (
+                <div className="tbl-wrap">
+                  <table className="snc-tbl">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th style={{ textAlign: 'left' }}>Nome / Razão Social</th>
+                        <th>Documento</th>
+                        <th>Município / UF</th>
+                        <th>Data Atualiz.</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {lista.map((p, i) => (
+                        <tr key={i} style={{ background: '#ffffff' }}>
+                          <td className="mono">{i + 1}</td>
+                          <td className="bold" style={{ textAlign: 'left', whiteSpace: 'normal' }}>{mascararNome(v(p.nome))}</td>
+                          <td className="mono">{v(p.documento)}</td>
+                          <td>{p.municipio && p.uf ? `${p.municipio} / ${p.uf}` : v(p.municipio)}</td>
+                          <td className="mono">{v(p.dataAtualizacao)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </>
+        );
+      })()}
+
+      {/* SEÇÃO 2: RESTRIÇÕES CADASTRAIS */}
+
+      <div className="src-badge" style={{ marginTop: 8 }}>RESTRIÇÕES E IMPEDIMENTOS</div>
+      <div className="ds-block" style={{ marginTop: 8, border: '1px solid #c8bfa8' }}>
+        <div className="ds-hd" style={{ background: restBin.existeRestricaoGeral ? '#c0392b' : 'var(--navy)' }}>
+          <span>RESTRIÇÕES CADASTRAIS GERAIS (BIN / CNJ)</span>
+          {restBin.existeRestricaoGeral && (() => {
+            const count = [restBin.existeRestricaoGeral, restBin.alertaSinistro, restBin.renajud, restBin.veiculoBaixado, restBin.rouboFurto].filter(Boolean).length;
+            return <span className="ds-hd-badge" style={{ color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)' }}>{count} {count === 1 ? 'RESTRIÇÃO' : 'RESTRIÇÕES'}</span>;
+          })()}
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, padding: '12px 14px', background: '#faf8f3' }}>
+          {[
+            { label: 'Restrição Geral BIN', exists: restBin.existeRestricaoGeral, textOn: 'CONSTA', textOff: 'NADA CONSTA' },
+            { label: 'Alerta de Sinistro', exists: restBin.alertaSinistro, textOn: 'CONSTA', textOff: 'NADA CONSTA' },
+            { label: 'Processo RENAJUD', exists: restBin.renajud, textOn: 'CONSTA', textOff: 'NADA CONSTA' },
+            { label: 'Veículo Baixado/Descartado', exists: restBin.veiculoBaixado, textOn: 'CONSTA BAIXA', textOff: 'NADA CONSTA' },
+            { label: 'Restrição Roubo/Furto (BIN)', exists: restBin.rouboFurto, textOn: 'CONSTA', textOff: 'NADA CONSTA' },
+          ].map((item, idx) => {
+            const hasAlert = !!item.exists;
+            const bgCor = hasAlert ? 'rgba(239, 68, 68, 0.08)' : '#ffffff';
+            const borderCor = hasAlert ? '#ef4444' : '#d4cfc1';
+            return (
+              <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', background: bgCor, border: `1px solid ${borderCor}` }}>
+                <span className="dk" style={{ margin: 0, fontFamily: "'JetBrains Mono',monospace", fontSize: '10px' }}>{item.label}</span>
+                <span className={`chip chip-${hasAlert ? 'red' : 'green'}`} style={{ marginLeft: 12 }}>
+                  {hasAlert ? item.textOn : item.textOff}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+        {restBin.mensagens && (restBin.mensagens as string[]).length > 0 && (
+          <div style={{ padding: '8px 14px 12px', borderTop: '1px dashed #d4cfc1', background: '#ffffff' }}>
+            <div className="dk" style={{ marginBottom: 6, color: '#991b1b', fontWeight: 700 }}>Mensagens de Restrição Adicionais:</div>
+            {(restBin.mensagens as string[]).map((msg, i) => (
+              <div key={i} style={{ padding: '6px 10px', background: 'rgba(239, 68, 68, 0.08)', borderLeft: '3px solid #ef4444', color: '#991b1b', fontWeight: 700, marginBottom: 4, fontFamily: "'JetBrains Mono',monospace", fontSize: 9, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                {msg}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* SEÇÃO 2B: DETALHAMENTO JUDICIAL RENAJUD */}
+      {temRenajudDetalhe && renajudDetalhes && (
+        <>
+          <div className="src-badge" style={{ marginTop: 8 }}>RESTRIÇÕES JUDICIAIS (RENAJUD)</div>
+          <div className="ds-block" style={{ marginTop: 8, border: '1px solid #c8bfa8' }}>
+            <div className="ds-hd" style={{ background: '#c0392b' }}>
+              <span>DETALHAMENTO JUDICIAL — RENAJUD</span>
+              <span className="ds-hd-badge" style={{ color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)' }}>1 REGISTRO</span>
+            </div>
+            <div className="tbl-wrap">
+              <table className="snc-tbl">
+                <thead>
+                  <tr>
+                    <th>Nº Processo</th>
+                    <th>Órgão Judicial</th>
+                    <th>Tribunal</th>
+                    <th>Restrições Aplicadas</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="mono">{v(renajudDetalhes.processo)}</td>
+                    <td>{v(renajudDetalhes.orgaoJudicial)}</td>
+                    <td className="mono">{v(renajudDetalhes.tribunal)}</td>
+                    <td className="bold">{Array.isArray(renajudDetalhes.restricoes) && renajudDetalhes.restricoes.length > 0 ? renajudDetalhes.restricoes.join(' · ') : '—'}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* SEÇÃO 2C: RESTRIÇÃO FINANCEIRA / GRAVAME */}
+      {temGravame && gravame && (
+        <>
+          <div className="src-badge" style={{ marginTop: 8 }}>GRAVAME FINANCEIRO</div>
+          <div className="ds-block" style={{ marginTop: 8, border: '1px solid #c8bfa8' }}>
+            <div className="ds-hd" style={{ background: gravame?.financiamento === 'SIM' || gravame?.situacao === 'ATIVO' ? '#c0392b' : 'var(--navy)' }}>
+              <span>RESTRIÇÃO FINANCEIRA / GRAVAME</span>
+              <span className="ds-hd-badge">1 REGISTRO</span>
+            </div>
+            <div className="tbl-wrap">
+              <table className="snc-tbl">
+                <thead>
+                  <tr>
+                    <th>Financiamento</th>
+                    <th>Situação</th>
+                    <th>Instituição Credora</th>
+                    <th>Nº Contrato</th>
+                    <th>Data Inclusão</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="bold">{v(gravame.financiamento)}</td>
+                    <td>{v(gravame.situacao)}</td>
+                    <td>{v(gravame.agenteFinanceiro)}</td>
+                    <td className="mono">{v(gravame.contratoNumero)}</td>
+                    <td className="mono">{v(gravame.dataInclusao)}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* SEÇÃO 2D: HISTÓRICO DE SINISTROS */}
+      {temSinistro && leilao?.sinistro && (
+        <>
+          <div className="src-badge" style={{ marginTop: 8 }}>SINISTRO VEICULAR</div>
+          <div className="ds-block" style={{ marginTop: 8, border: '1px solid #c8bfa8' }}>
+            <div className="ds-hd" style={{ background: leilao.sinistro.existeOcorrencia ? '#c0392b' : 'var(--navy)' }}>
+              <span>HISTÓRICO DE SINISTROS</span>
+              <span className="ds-hd-badge" style={leilao.sinistro.existeOcorrencia ? { color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)' } : {}}>
+                {(leilao.sinistro.historico as any[]).length === 1 ? '1 REGISTRO' : `${(leilao.sinistro.historico as any[]).length} REGISTROS`}
+              </span>
+            </div>
+            <div className="tbl-wrap" style={{ background: '#ffffff' }}>
+              <table className="snc-tbl" style={{ width: '100%', wordBreak: 'break-word', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Seguradora</th>
+                    <th>Valor</th>
+                    <th>Situação</th>
+                    <th>Descrição</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(leilao.sinistro.historico as any[]).map((s: any, i: number) => (
+                    <Fragment key={i}>
+                      <tr style={{ background: '#ffffff', borderTop: '1px solid #c8bfa8' }}>
+                        <td className="mono">{v(s.data)}</td>
+                        <td style={{ color: '#991b1b', fontWeight: 600 }}>{v(s.tipo)}</td>
+                        <td style={{ maxWidth: 160, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={s.seguradora}>{v(s.seguradora)}</td>
+                        <td className="mono">{v(s.valor)}</td>
+                        <td>
+                          <span style={{ padding: '2px 8px', fontSize: 9, letterSpacing: '0.06em', background: 'rgba(153,27,27,0.08)', color: '#991b1b', border: '1px solid rgba(153,27,27,0.2)' }}>
+                            {v(s.situacao)}
+                          </span>
+                        </td>
+                        <td style={{ fontSize: 10, color: '#3a4252' }}>{v(s.descricao)}</td>
+                      </tr>
+                    </Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* SEÇÃO 3: FINANCEIRO DETRAN */}
+      {temDebitos && debitos && (
+        <>
+          <div className="src-badge" style={{ marginTop: 8 }}>DÉBITOS ESTADUAIS</div>
+          <div className="ds-block" style={{ marginTop: 8, border: '1px solid #c8bfa8' }}>
+            {/* REGRA DE ANOMALIA: débitos só aparecem quando temDebitos === true
+               (multas.length > 0 || ipva.length > 0). Portanto o ds-hd
+               é SEMPRE vermelho aqui — a existência já é a anomalia. */}
+            <div className="ds-hd" style={{ background: '#c0392b' }}>
+              <span>DÉBITOS ATIVOS DO DETRAN ESTADUAL</span>
+              <span className="ds-hd-badge" style={{ color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)' }}>
+                {((debitos.multas?.length || 0) + (debitos.ipva?.length || 0) + (debitos.licenciamento?.length || 0) + (debitos.dpvat?.length || 0) + (debitos.outrosDebitos?.length || 0))} {((debitos.multas?.length || 0) + (debitos.ipva?.length || 0) + (debitos.licenciamento?.length || 0) + (debitos.dpvat?.length || 0) + (debitos.outrosDebitos?.length || 0)) === 1 ? 'REGISTRO' : 'REGISTROS'}
+              </span>
+            </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 0, borderBottom: '1px solid #d4cfc1', background: '#ffffff' }}>
+            {[
+              { val: debitos.totalMultas, label: 'Multas Locais' },
+              { val: debitos.totalIpva, label: 'IPVA' },
+              { val: debitos.totalLicenciamento, label: 'Licenciamento' },
+              { val: debitos.totalDpvat, label: 'DPVAT' },
+              { val: debitos.totalOutros, label: 'Outros Débitos' },
+              { val: debitos.totalGeral, label: 'Valor Consolidado', gold: true }
+            ].map((d, idx, arr) => {
+              const isZero = /^0*$/.test(String(d.val ?? '').replace(/\D/g, ''));
+              const fontColor = (d.gold || !isZero) ? '#ef4444' : '#000000';
+              return (
+                <div key={idx} style={{ padding: '12px 14px', textAlign: 'center', borderRight: idx === arr.length - 1 ? 'none' : '1px solid #d4cfc1' }}>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700, color: fontColor }}>{d.val ?? '—'}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 8, color: '#5a6a7a', textTransform: 'uppercase', marginTop: 4 }}>{d.label}</div>
+                </div>
+              );
+            })}
+          </div>
+
+          {debitos.multas && debitos.multas.length > 0 && (
+            <div style={{ padding: '12px 14px', background: '#f3efe5' }}>
+              <div className="dk" style={{ marginBottom: 8 }}>Multas Locais Detalhadas:</div>
+              <div className="tbl-wrap">
+                <table className="snc-tbl">
+                  <thead>
+                    <tr>
+                      <th style={{ textAlign: 'center' }}>Vencimento</th>
+                      <th style={{ textAlign: 'center' }}>Infração</th>
+                      <th style={{ textAlign: 'center' }}>Valor</th>
+                      <th style={{ textAlign: 'center' }}>Situação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {debitos.multas.map((m: any, i: number) => {
+                      const paga = m.situacao === 'PAGO';
+                      return (
+                        <tr key={i} style={{ background: '#ffffff' }}>
+                          <td className="mono" style={{ whiteSpace: 'nowrap', padding: '10px 14px' }}>
+                            {m.dataVencimento ?? '—'}
+                          </td>
+                          <td style={{ whiteSpace: 'normal', wordBreak: 'break-word', padding: '10px 14px' }}>
+                            <div className="bold">{m.descricao ?? '—'}</div>
+                            <div style={{ fontSize: '9px', color: '#5a6a7a', marginTop: 3, fontFamily: "'JetBrains Mono',monospace" }}>
+                              <strong>Órgão Emissor:</strong> {m.orgaoEmissor ?? '—'}
+                              {m.codigoInfracao && <span style={{ marginLeft: 8 }}> | <strong>Cód:</strong> {m.codigoInfracao}</span>}
+                            </div>
+                          </td>
+                          <td className="mono bold red" style={{ whiteSpace: 'nowrap', padding: '10px 14px' }}>
+                            {m.valor ?? '—'}
+                          </td>
+                          <td style={{ textAlign: 'center', padding: '10px 14px' }}>
+                            <span className={`chip chip-${paga ? 'green' : 'red'}`}>{m.situacao || 'EM ABERTO'}</span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {debitos.ipva && debitos.ipva.length > 0 && (
+            <div style={{ padding: '12px 14px', borderTop: '1px dashed #d4cfc1', background: '#f3efe5' }}>
+              <div className="dk" style={{ marginBottom: 8 }}>IPVA por Exercício / Parcela:</div>
+              <div className="tbl-wrap">
+                <table className="snc-tbl">
+                  <thead>
+                    <tr>
+                      <th style={{ textAlign: 'center' }}>Exercício</th>
+                      <th style={{ textAlign: 'center' }}>Parcela</th>
+                      <th style={{ textAlign: 'center' }}>Vencimento</th>
+                      <th style={{ textAlign: 'center' }}>Valor</th>
+                      <th style={{ textAlign: 'center' }}>Situação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {debitos.ipva.map((ip: any, i: number) => {
+                      const paga = ip.situacao === 'PAGO';
+                      return (
+                        <tr key={i} style={{ background: '#ffffff' }}>
+                          <td className="bold" style={{ textAlign: 'center', padding: '10px 14px' }}>{ip.exercicio ?? '—'}</td>
+                          <td className="mono" style={{ textAlign: 'center', padding: '10px 14px' }}>{ip.parcela ?? '—'}</td>
+                          <td className="mono" style={{ textAlign: 'center', padding: '10px 14px' }}>{ip.dataVencimento ?? '—'}</td>
+                          <td className="mono bold red" style={{ textAlign: 'center', whiteSpace: 'nowrap', padding: '10px 14px' }}>
+                            {ip.valor ?? '—'}
+                          </td>
+                          <td style={{ textAlign: 'center', padding: '10px 14px' }}>
+                            <span className={`chip chip-${paga ? 'green' : 'red'}`}>{ip.situacao || 'EM ABERTO'}</span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {debitos.licenciamento && debitos.licenciamento.length > 0 && (
+            <div style={{ padding: '12px 14px', borderTop: '1px dashed #d4cfc1', background: '#f3efe5' }}>
+              <div className="dk" style={{ marginBottom: 8 }}>Licenciamento Detalhado:</div>
+              <div className="tbl-wrap">
+                <table className="snc-tbl">
+                  <thead>
+                    <tr>
+                      <th style={{ textAlign: 'center' }}>Exercício</th>
+                      <th style={{ textAlign: 'center' }}>Vencimento</th>
+                      <th style={{ textAlign: 'center' }}>Valor</th>
+                      <th style={{ textAlign: 'center' }}>Situação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {debitos.licenciamento.map((l: any, i: number) => {
+                      const paga = l.situacao === 'PAGO';
+                      return (
+                        <tr key={i} style={{ background: '#ffffff' }}>
+                          <td className="bold" style={{ textAlign: 'center', padding: '10px 14px' }}>{l.exercicio ?? '—'}</td>
+                          <td className="mono" style={{ textAlign: 'center', padding: '10px 14px' }}>{l.dataVencimento ?? '—'}</td>
+                          <td className="mono bold red" style={{ textAlign: 'center', whiteSpace: 'nowrap', padding: '10px 14px' }}>{l.valor ?? '—'}</td>
+                          <td style={{ textAlign: 'center', padding: '10px 14px' }}><span className={`chip chip-${paga ? 'green' : 'red'}`}>{l.situacao || 'EM ABERTO'}</span></td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {debitos.dpvat && debitos.dpvat.length > 0 && (
+            <div style={{ padding: '12px 14px', borderTop: '1px dashed #d4cfc1', background: '#f3efe5' }}>
+              <div className="dk" style={{ marginBottom: 8 }}>Seguro DPVAT Detalhado:</div>
+              <div className="tbl-wrap">
+                <table className="snc-tbl">
+                  <thead>
+                    <tr>
+                      <th style={{ textAlign: 'center' }}>Exercício</th>
+                      <th style={{ textAlign: 'center' }}>Vencimento</th>
+                      <th style={{ textAlign: 'center' }}>Valor</th>
+                      <th style={{ textAlign: 'center' }}>Situação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {debitos.dpvat.map((d: any, i: number) => {
+                      const paga = d.situacao === 'PAGO';
+                      return (
+                        <tr key={i} style={{ background: '#ffffff' }}>
+                          <td className="bold" style={{ textAlign: 'center', padding: '10px 14px' }}>{d.exercicio ?? '—'}</td>
+                          <td className="mono" style={{ textAlign: 'center', padding: '10px 14px' }}>{d.dataVencimento ?? '—'}</td>
+                          <td className="mono bold red" style={{ textAlign: 'center', whiteSpace: 'nowrap', padding: '10px 14px' }}>{d.valor ?? '—'}</td>
+                          <td style={{ textAlign: 'center', padding: '10px 14px' }}><span className={`chip chip-${paga ? 'green' : 'red'}`}>{d.situacao || 'EM ABERTO'}</span></td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {debitos.outrosDebitos && debitos.outrosDebitos.length > 0 && (
+            <div style={{ padding: '12px 14px', borderTop: '1px dashed #d4cfc1', background: '#f3efe5' }}>
+              <div className="dk" style={{ marginBottom: 8 }}>Outros Débitos Detalhados:</div>
+              <div className="tbl-wrap">
+                <table className="snc-tbl">
+                  <thead>
+                    <tr>
+                      <th>Vencimento</th>
+                      <th>Descrição</th>
+                      <th>Valor</th>
+                      <th>Situação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {debitos.outrosDebitos.map((od: any, i: number) => {
+                      const paga = od.situacao === 'PAGO';
+                      return (
+                        <tr key={i} style={{ background: '#ffffff' }}>
+                          <td className="mono" style={{ whiteSpace: 'nowrap', padding: '10px 14px' }}>{od.dataVencimento ?? '—'}</td>
+                          <td style={{ whiteSpace: 'normal', wordBreak: 'break-word', padding: '10px 14px' }}>
+                            <div className="bold">{od.descricao ?? '—'}</div>
+                            {od.orgaoEmissor && (
+                              <div style={{ fontSize: '9px', color: '#5a6a7a', marginTop: 3, fontFamily: "'JetBrains Mono',monospace" }}>
+                                <strong>Órgão Emissor:</strong> {od.orgaoEmissor}
+                              </div>
+                            )}
+                          </td>
+                          <td className="mono bold red" style={{ whiteSpace: 'nowrap', padding: '10px 14px' }}>{od.valor ?? '—'}</td>
+                          <td style={{ textAlign: 'center', padding: '10px 14px' }}>
+                            <span className={`chip chip-${paga ? 'green' : 'red'}`}>{od.situacao || 'EM ABERTO'}</span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+        </>
+      )}
+
+      {/* SEÇÃO 4: HODÔMETRO & HISTÓRICO DE KM */}
+      {temKm && km && (
+        <>
+          <div className="src-badge" style={{ marginTop: 8 }}>HISTÓRICO DE QUILOMETRAGEM</div>
+          <div className="ds-block" style={{ marginTop: 8, border: '1px solid #c8bfa8' }}>
+            {/* REGRA DE ANOMALIA: hodômetro fica vermelho apenas quando
+               km.anomalia === true (regressão de KM detectada = possível adulteração).
+               Sem anomalia o ds-hd permanece azul-escuro padrão. */}
+            <div className="ds-hd" style={{ background: km.anomalia ? '#c0392b' : 'var(--navy)' }}>
+              <span>HISTÓRICO CRONOLÓGICO DE QUILOMETRAGEM (HODÔMETRO)</span>
+              <span className="ds-hd-badge" style={km.anomalia ? { color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)' } : {}}>
+                {reg(km.totalRegistros)}
+              </span>
+            </div>
+          <div className="tbl-wrap">
+            <table className="snc-tbl">
+              <thead>
+                <tr>
+                  <th>Data Registro</th>
+                  <th>Quilometragem Indicada</th>
+                  <th>Fonte Informadora</th>
+                  <th>Estado (UF)</th>
+                  <th>Consistência</th>
+                </tr>
+              </thead>
+              <tbody>
+                {km.registros.map((item: any, i: number) => {
+                  const prevKm = i < km.registros.length - 1 ? km.registros[i + 1]?.km : null;
+                  const isAnomaly = prevKm !== null && Number(item.km) < Number(prevKm);
+                  return (
+                    <tr key={i} style={{ background: isAnomaly ? 'rgba(239, 68, 68, 0.04)' : '#ffffff' }}>
+                      <td className="mono">{item.data}</td>
+                      <td className="mono bold">{Number(item.km).toLocaleString('pt-BR')} KM</td>
+                      <td className="bold">{item.fonte}</td>
+                      <td className="mono">{item.estado}</td>
+                      <td style={{ textAlign: 'center' }}>
+                        <span className={`chip chip-${isAnomaly ? 'red' : 'green'}`}>
+                          {isAnomaly ? 'REGRESSÃO' : 'OK'}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <div style={{ padding: '8px 14px', display: 'flex', gap: 16, alignItems: 'center', borderTop: '1px solid #d4cfc1', background: '#ffffff' }}>
+            <span className="dk">Alerta de Inconsistência de Hodômetro:</span>
+            <span className={`chip chip-${km.anomalia ? 'red' : 'green'}`}>{km.anomalia ? 'CONSTA ANOMALIA' : 'NADA CONSTA'}</span>
+            {km.motivoAnomalia && (
+              <span className="dk" style={{ marginLeft: 8 }}>Motivo: <strong>{km.motivoAnomalia}</strong></span>
+            )}
+          </div>
+          {km.anomalia && (
+            <div style={{ padding: '10px 14px', background: 'rgba(239, 68, 68, 0.06)', borderTop: '1px solid #ef4444', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 16 }}>⚠️</span>
+              <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 10, fontWeight: 700, color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                ALERTA CRÍTICO: POSSÍVEL ADULTERAÇÃO DE HODÔMETRO DETECTADA — REGRESSÃO DE KM IDENTIFICADA NO HISTÓRICO
+              </span>
+            </div>
+          )}
+        </div>
+        </>
+      )}
+
+      {/* SEÇÃO 5: PRECIFICAÇÃO FIPE + EVOLUÇÃO HISTÓRICA */}
+      {prec.length > 0 && (
+        <>
+          <div className="src-badge" style={{ marginTop: 8 }}>PRECIFICADOR FIPE</div>
+          <div className="ds-block" style={{ marginTop: 8, border: '1px solid #c8bfa8' }}>
+            <div className="ds-hd">
+              <span>TABELA DE PRECIFICAÇÃO MERCADOLÓGICA (FIPE)</span>
+              {historicoFipe.length > 0 && (
+                <span className="ds-hd-badge">{historicoFipe.length} MESES DE HISTÓRICO</span>
+              )}
+            </div>
+
+            {/* Tabela principal — campos originais */}
+            <div className="tbl-wrap">
+              <table className="snc-tbl">
+                <thead>
+                  <tr>
+                    <th>Código FIPE</th>
+                    <th>Fabricante/Modelo</th>
+                    <th>Ano Modelo</th>
+                    <th>Informante</th>
+                    <th>Preço Médio</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {prec.map((item, i) => (
+                    <tr key={i} style={{ background: '#ffffff' }}>
+                      <td className="mono">{v(item.codigo)}</td>
+                      <td className="bold" style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>{v(item.fabricanteModelo)}</td>
+                      <td className="mono">{v(item.anoModelo)}</td>
+                      <td className="mono">FIPE</td>
+                      <td className="mono bold">{v(item.preco)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Sub-seção interna: evolução mensal — padrão Débitos */}
+            {historicoFipe.length > 0 && (() => {
+              const linha1 = historicoFipe.slice(0, 6);
+              const linha2 = historicoFipe.slice(6, 12);
+              const renderCelula = (h: Record<string, unknown>, i: number, total: number) => (
+                <div key={i} style={{ flex: '1 1 0', padding: '10px 12px', borderRight: i < total - 1 ? '1px solid #d4cfc1' : 'none', textAlign: 'center', minWidth: 0 }}>
+                  <div style={{ fontSize: 9, color: '#8a7a5a', letterSpacing: '0.06em', marginBottom: 3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{v(h.mes)}</div>
+                  <div style={{ fontSize: 11, color: 'var(--ink)' }}>{v((h.valorFormatado ?? h.valor) as string)}</div>
+                </div>
+              );
+              return (
+                <div style={{ padding: '12px 14px', borderTop: '1px dashed #d4cfc1', background: '#f3efe5' }}>
+                  <div className="dk" style={{ marginBottom: 8 }}>Evolução de preço mensal:</div>
+                  <div style={{ display: 'flex', background: '#ffffff', border: '1px solid #d4cfc1' }}>
+                    {linha1.map((h, i) => renderCelula(h, i, linha1.length))}
+                  </div>
+                  {linha2.length > 0 && (
+                    <div style={{ display: 'flex', background: '#f9f7f3', border: '1px solid #d4cfc1', borderTop: 'none' }}>
+                      {linha2.map((h, i) => renderCelula(h, i, linha2.length))}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+          </div>
+        </>
+      )}
+
+      {/* SEÇÃO 6: INFRAÇÕES DE TRÂNSITO (RENAINF) */}
+      <div className="src-badge" style={{ marginTop: 8 }}>INFRAÇÕES NACIONAIS (RENAINF)</div>
+      <div className="ds-block" style={{ marginTop: 8, border: '1px solid #c8bfa8' }}>
+        <div className="ds-hd" style={{ background: Number(totalRenainf) > 0 ? '#c0392b' : 'var(--navy)' }}>
+          <span>INFRAÇÕES DE TRÂNSITO NACIONAIS (RENAINF)</span>
+          <span className="ds-hd-badge" style={Number(totalRenainf) > 0 ? { color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)' } : {}}>
+            {Number(totalRenainf)} {Number(totalRenainf) === 1 ? 'OCORRÊNCIA' : 'OCORRÊNCIAS'}
+          </span>
+        </div>
+        {ocorrencias.length > 0 ? (
+          <div className="tbl-wrap">
+            <table className="snc-tbl">
+              <thead>
+                <tr>
+                  <th>Data / Hora</th>
+                  <th>Infração</th>
+                  <th>Local & Órgão</th>
+                  <th>Valor</th>
+                  <th>Situação</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ocorrencias.map((o, i) => {
+                  const paga = o.situacao === 'PAGO';
+                  const anotadoDifere = !!o.valorAnotado && o.valorAnotado !== '—' && o.valorAnotado !== o.valor;
+                  return (
+                    <tr key={i} style={{ background: '#ffffff' }}>
+                      <td className="mono" style={{ whiteSpace: 'nowrap', padding: '10px 14px' }}>
+                        {o.dataHora ?? '—'}
+                      </td>
+                      <td style={{ whiteSpace: 'normal', wordBreak: 'break-word', padding: '10px 14px' }}>
+                        <div className="bold">{o.descricao ?? '—'}</div>
+                        <div style={{ fontSize: '9px', color: '#5a6a7a', marginTop: 3, fontFamily: "'JetBrains Mono',monospace" }}>
+                          Cód: {o.codigo ?? '—'} | AIT: {o.auto ?? '—'}
+                        </div>
+                      </td>
+                      <td style={{ whiteSpace: 'normal', wordBreak: 'break-word', padding: '10px 14px' }}>
+                        <div>{o.local || '—'}</div>
+                        <div style={{ fontSize: '9px', color: '#5a6a7a', marginTop: 3, fontFamily: "'JetBrains Mono',monospace" }}>
+                          <strong>Autuador:</strong> {o.orgao ?? '—'}
+                        </div>
+                      </td>
+                      <td className="mono bold red" style={{ whiteSpace: 'nowrap', padding: '10px 14px' }}>
+                        {o.valor ?? '—'}
+                        {anotadoDifere && (
+                          <div style={{ fontSize: 9, fontWeight: 400, color: '#5a6a7a', marginTop: 2 }}>Anotado {o.valorAnotado}</div>
+                        )}
+                      </td>
+                      <td style={{ textAlign: 'center', padding: '10px 14px' }}>
+                        <span className={`chip chip-${paga ? 'green' : 'red'}`}>{o.situacao || 'EM ABERTO'}</span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="ds-row" style={{ borderTop: 'none' }}><div className="ds-row-inner"><div className="dk">Resultado</div><div className="dv">Nenhuma infração registrada no sistema federal RENAINF.</div></div><span className="chip chip-green">NADA CONSTA</span></div>
+        )}
+      </div>
+
+
+      {/* SEÇÃO 7: LEILÃO UNIFICADO */}
+      {leilao && (() => {
+        const sc = {
+          pontuacao: leilao.score ?? '—',
+          descricaoPontuacao: leilao.scoreLabel ?? '—',
+          aceitacao: leilao.aceitacao ?? '—',
+          percentualSobreFipe: leilao.percentualSobreFipe ?? '—',
+          exigeVistoriaEspecial: leilao.exigeVistoriaEspecial ?? '—'
+        };
+
+        const sin = {
+          existeOcorrencia: !!leilao.sinistro?.existeOcorrencia,
+          descricao: leilao.sinistro?.historico?.[0]?.descricao ?? (leilao.sinistro?.existeOcorrencia ? "Sinistro registrado no histórico" : "")
+        };
+
+        const dv = {
+          marcaModelo: id.marcaModelo ?? dt.modelo ?? '—',
+          cor: dt.cor ?? '—',
+          chassi: dt.chassi ?? '—',
+          motor: dt.motor ?? '—',
+          cambio: leilao.dadosVeiculo?.cambio ?? dt.cambio ?? '—',
+          combustivel: id.combustivel ?? dt.combustivel ?? '—',
+          carroceria: dt.carroceria ?? '—',
+          categoria: id.categoria ?? '—',
+          kilometragem: leilao.dadosVeiculo?.kilometragem ?? '—',
+          qtdEixos: leilao.dadosVeiculo?.qtdEixos ?? dt.eixos ?? '—',
+          eixoTraseiro: leilao.dadosVeiculo?.eixoTraseiro ?? '—',
+          renavam: prop.renavam ?? id.renavam ?? '—'
+        };
+
+        const ocorrencias = (leilao.historico ?? []).map((o: any) => ({
+          dataLeilao: o.data ?? o.dataLeilao ?? '—',
+          leiloeiro: o.leiloeiro ?? '—',
+          lote: o.lote ?? '—',
+          comitente: o.comitente ?? '—',
+          patio: o.patio ?? '—',
+          condicaoGeral: o.condicaoGeral ?? '—',
+          condicaoMotor: o.condicaoMotor ?? '—',
+          condicaoMecanica: o.condicaoMecanica ?? '—',
+          condicaoCambio: o.condicaoCambio ?? '—',
+          situacaoChassi: o.situacaoChassi ?? '—',
+          observacoes: o.observacoes ?? '—',
+          imagens: o.imagens ?? []
+        }));
+        const total = leilao.totalLeiloes ?? ocorrencias.length;
+
+        const cl = leilao.checklist ? {
+          frente: leilao.checklist.frente ?? '—',
+          traseira: leilao.checklist.traseira ?? '—',
+          teto: leilao.checklist.teto ?? '—',
+          lateralDireita: leilao.checklist.lateralDireita ?? leilao.checklist.laterais ?? '—',
+          lateralEsquerda: leilao.checklist.lateralEsquerda ?? leilao.checklist.laterais ?? '—',
+          interior: leilao.checklist.interior ?? '—',
+          airbags: leilao.checklist.airbags ?? '—',
+          localQueimado: leilao.checklist.localQueimado ?? '—',
+          rodasFaltantes: leilao.checklist.rodasFaltantes ?? '—',
+          observacoes: leilao.checklist.observacoes ?? '—'
+        } : null;
+
+        const sinistros = (leilao.sinistro?.historico ?? []) as Record<string, unknown>[];
+
+        const scoreCor = (): string => {
+          const cls = String(leilao.scoreLabel ?? '').match(/\(([A-E])\)/i)?.[1]?.toUpperCase();
+          if (cls === 'A') return '#22c55e';
+          if (cls === 'B') return '#84cc16';
+          if (cls === 'C') return '#eab308';
+          if (cls === 'D') return '#f97316';
+          return '#ef4444';
+        };
+
+        return (
+          <>
+            <div className="src-badge" style={{ marginTop: 8 }}>LEILÃO VEICULAR + SCORE</div>
+            <div className="ds-block" style={{ marginTop: 8, border: '1px solid #c8bfa8' }}>
+
+              {/* Cabeçalho */}
+              <div className="ds-hd" style={{ background: (ocorrencias.length > 0 || sin.existeOcorrencia) ? '#c0392b' : 'var(--navy)' }}>
+                <span>LEILÃO VEICULAR — SCORE E HISTÓRICO</span>
+                <span className="ds-hd-badge" style={(ocorrencias.length > 0 || sin.existeOcorrencia) ? { color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)' } : {}}>{total === 1 ? '1 REGISTRO' : `${total} REGISTROS`}</span>
+              </div>
+
+              {/* Faixa de resumo — mesma tipografia dos cards de Débitos */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr', gap: 0, borderBottom: '1px solid #d4cfc1', background: '#ffffff' }}>
+
+                {/* Pontuação */}
+                <div style={{ height: 72, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', borderRight: '1px solid #d4cfc1' }}>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 22, fontWeight: 700, color: scoreCor(), lineHeight: 1 }}>
+                    {String(leilao.scoreLabel ?? '').match(/\(([A-E])\)/i)?.[1]?.toUpperCase() ?? '—'}
+                  </div>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 8, color: '#5a6a7a', textTransform: 'uppercase', marginTop: 4 }}>Pontuação</div>
+                </div>
+
+                {/* Aceitação */}
+                <div style={{ height: 72, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', borderRight: '1px solid #d4cfc1' }}>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700, color: '#0a0e16' }}>{v(sc.aceitacao)}%</div>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 8, color: '#5a6a7a', textTransform: 'uppercase', marginTop: 4 }}>Aceitação</div>
+                </div>
+
+                {/* % Sobre FIPE */}
+                <div style={{ height: 72, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', borderRight: '1px solid #d4cfc1' }}>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700, color: '#0a0e16' }}>{v(sc.percentualSobreFipe)}%</div>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 8, color: '#5a6a7a', textTransform: 'uppercase', marginTop: 4 }}>% Sobre FIPE</div>
+                </div>
+
+                {/* Vistoria Especial */}
+                <div style={{ height: 72, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', borderRight: '1px solid #d4cfc1' }}>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700, color: '#0a0e16' }}>{formatarSentenceCase(sc.exigeVistoriaEspecial)}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 8, color: '#5a6a7a', textTransform: 'uppercase', marginTop: 4 }}>Vistoria Especial</div>
+                </div>
+
+                {/* Indício de Sinistro */}
+                <div style={{
+                  height: 72, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center',
+                  background: sin.existeOcorrencia ? 'rgba(192,57,43,0.06)' : 'rgba(43,168,74,0.06)',
+                  borderLeft: `3px solid ${sin.existeOcorrencia ? '#c0392b' : '#2ba84a'}`,
+                }}>
+                  <div style={{
+                    width: 28, height: 28, borderRadius: '50%', margin: '0 auto 6px',
+                    background: sin.existeOcorrencia ? '#c0392b' : '#2ba84a',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 13, color: '#fff', fontWeight: 700,
+                  }}>
+                    {sin.existeOcorrencia ? '✕' : '✓'}
+                  </div>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 10, fontWeight: 700, color: sin.existeOcorrencia ? '#c0392b' : '#2ba84a', textTransform: 'uppercase' }}>
+                    {sin.existeOcorrencia ? 'CONSTA' : 'NADA CONSTA'}
+                  </div>
+                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 8, color: '#5a6a7a', textTransform: 'uppercase', marginTop: 4 }}>Indício de Sinistro</div>
+                </div>
+
+              </div>
+
+              {/* Legenda do score */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, padding: '8px 14px', background: '#faf8f3', borderBottom: '1px solid #e8e2d6' }}>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 8, color: '#8a94a3', textTransform: 'uppercase', letterSpacing: '0.1em', marginRight: 4 }}>Score:</span>
+                {([
+                  { letra: 'A', cor: '#22c55e', label: 'Baixo risco' },
+                  { letra: 'B', cor: '#84cc16', label: 'Moderado' },
+                  { letra: 'C', cor: '#eab308', label: 'Médio' },
+                  { letra: 'D', cor: '#f97316', label: 'Alto risco' },
+                  { letra: 'E', cor: '#ef4444', label: 'Crítico' },
+                ] as { letra: string; cor: string; label: string }[]).map(({ letra, cor, label }) => (
+                  <div key={letra} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                    <div style={{ width: 12, height: 12, background: cor, borderRadius: 2, flexShrink: 0 }} />
+                    <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 9, color: '#5a6a7a' }}>
+                      <span style={{ color: cor, fontWeight: 700 }}>{letra}</span>
+                      {' — '}{label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Sub-seção 1: Ocorrências de Leilão */}
+              <div style={{ padding: '12px 14px', borderTop: '1px dashed #d4cfc1', background: '#f3efe5' }}>
+                <div className="dk" style={{ marginBottom: 8 }}>
+                  Ocorrências de leilão:
+                </div>
+                {ocorrencias.length > 0 ? (
+                  <div className="tbl-wrap" style={{ background: '#ffffff' }}>
+                    <table className="snc-tbl" style={{ width: '100%', tableLayout: 'fixed', borderCollapse: 'collapse' }}>
+                      <colgroup>
+                        <col style={{ width: '12%' }} />
+                        <col style={{ width: '23%' }} />
+                        <col style={{ width: '10%' }} />
+                        <col style={{ width: '35%' }} />
+                        <col style={{ width: '20%' }} />
+                      </colgroup>
+                      <thead>
+                        <tr>
+                          <th style={{ whiteSpace: 'normal' }}>Data</th>
+                          <th style={{ whiteSpace: 'normal' }}>Leiloeiro</th>
+                          <th style={{ whiteSpace: 'normal' }}>Lote</th>
+                          <th style={{ whiteSpace: 'normal' }}>Comitente</th>
+                          <th style={{ whiteSpace: 'normal' }}>Pátio</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {ocorrencias.map((o: any, i: number) => {
+                          const isLast = i === ocorrencias.length - 1;
+                          return (
+                            <Fragment key={i}>
+                              <tr style={{ background: '#ffffff', borderTop: '1px solid #c8bfa8' }}>
+                                <td className="mono" style={{ paddingTop: 10, whiteSpace: 'nowrap' }}>{v(o.dataLeilao)}</td>
+                                <td style={{ paddingTop: 10, whiteSpace: 'normal', wordBreak: 'break-word' }}>{v(o.leiloeiro)}</td>
+                                <td className="mono" style={{ paddingTop: 10, whiteSpace: 'nowrap' }}>{v(o.lote)}</td>
+                                <td style={{ paddingTop: 10, whiteSpace: 'normal', wordBreak: 'break-word' }}>{v(o.comitente)}</td>
+                                <td style={{ paddingTop: 10, whiteSpace: 'normal', wordBreak: 'break-word' }}>{v(o.patio)}</td>
+                              </tr>
+                              <tr style={{ background: '#ffffff', fontSize: '0.82em', borderBottom: '1px solid #c8bfa8' }}>
+                                <td colSpan={5} style={{ padding: '6px 12px 10px 24px', borderBottom: 'none' }}>
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 13, color: '#5a6a7a', width: 18, textAlign: 'center', marginRight: 16 }}>{i + 1}</div>
+                                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4, paddingLeft: 8, borderLeft: '2px solid #5a6a7a', textAlign: 'left' }}>
+                                        <span><strong style={{ color: '#5a6a7a' }}>Geral:</strong> {formatarSentenceCase(o.condicaoGeral)}</span>
+                                        <span><strong style={{ color: '#5a6a7a' }}>Motor:</strong> {formatarSentenceCase(o.condicaoMotor)}</span>
+                                        <span><strong style={{ color: '#5a6a7a' }}>Mecânica:</strong> {formatarSentenceCase(o.condicaoMecanica)}</span>
+                                        <span><strong style={{ color: '#5a6a7a' }}>Câmbio:</strong> {formatarSentenceCase(o.condicaoCambio)}</span>
+                                        <span><strong style={{ color: '#5a6a7a' }}>Chassi:</strong> {formatarSentenceCase(o.situacaoChassi)}</span>
+                                      </div>
+                                    </div>
+                                    {!!o.observacoes && String(o.observacoes) !== '—' && (
+                                      <div style={{ paddingLeft: 6, textAlign: 'left', marginTop: 6, borderTop: '1px dashed #d4cfc1', paddingTop: 6, whiteSpace: 'normal', wordBreak: 'break-word' }}>
+                                        <span><strong style={{ color: '#5a6a7a' }}>Obs:</strong> {formatarSentenceCase(o.observacoes)}</span>
+                                      </div>
+                                    )}
+                                  </div>
+                                </td>
+                              </tr>
+                              {!isLast && (
+                                <tr><td colSpan={5} style={{ padding: 0, height: 8, background: '#f4f1ea', border: 'none' }} /></tr>
+                              )}
+                            </Fragment>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div style={{ background: '#ffffff', border: '1px solid #d4cfc1', padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span className="dk">Resultado</span>
+                    <span className="chip chip-green">NADA CONSTA</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Sub-seção 2: Checklist de Avarias */}
+              {!!cl && (
+                <div style={{ padding: '12px 14px', borderTop: '1px dashed #d4cfc1', background: '#f3efe5' }}>
+                  <div className="dk" style={{ marginBottom: 8 }}>Checklist de avarias:</div>
+                  <div style={{ background: '#ffffff', border: '1px solid #d4cfc1' }}>
+                    <div className="ds-row" style={{ background: '#ffffff' }}><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+                      <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Frente</div><div className="dv">{v(cl.frente)}</div></div>
+                      <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Traseira</div><div className="dv">{v(cl.traseira)}</div></div>
+                      <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Teto</div><div className="dv">{v(cl.teto)}</div></div>
+                    </div></div>
+                    <div className="ds-row" style={{ background: '#ffffff' }}><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+                      <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Lateral Direita</div><div className="dv">{v(cl.lateralDireita)}</div></div>
+                      <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Lateral Esquerda</div><div className="dv">{v(cl.lateralEsquerda)}</div></div>
+                      <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Interior</div><div className="dv">{v(cl.interior)}</div></div>
+                    </div></div>
+                    <div className="ds-row" style={{ background: '#ffffff' }}><div style={{ display: 'flex', flex: 1, gap: 16 }}>
+                      <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Airbags</div><div className="dv">{v(cl.airbags)}</div></div>
+                      <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Local Queimado</div><div className="dv">{v(cl.localQueimado)}</div></div>
+                      <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Rodas Faltantes</div><div className="dv">{v(cl.rodasFaltantes)}</div></div>
+                    </div></div>
+                    <div className="ds-row" style={{ background: '#ffffff' }}><div className="ds-row-inner"><div className="dk">Observações</div><div className="dv">{v(cl.observacoes)}</div></div></div>
+                  </div>
+                </div>
+              )}
+
+            </div>
+          </>
+        );
+      })()}
+
+      {/* RECALL — logo após o leilão */}
+      <div className="src-badge" style={{ marginTop: 8 }}>RECALLS DE FABRICANTE</div>
+      <div className="ds-block" style={{ marginTop: 8, border: '1px solid #c8bfa8' }}>
+        <div className="ds-hd" style={{ background: recall && recall.ocorrencias?.some((o: any) => o.situacao === 'NÃO ATENDIDO') ? '#c0392b' : 'var(--navy)' }}>
+          <span>ALERTAS DE RECALL DE FABRICANTE</span>
+          {recall && recall.ocorrencias?.length > 0 && (
+            <span className="ds-hd-badge" style={recall.ocorrencias.some((o: any) => o.situacao === 'NÃO ATENDIDO') ? { color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)' } : {}}>
+              {recall.ocorrencias.length} {recall.ocorrencias.length === 1 ? 'REGISTRO' : 'REGISTROS'}
+            </span>
+          )}
+        </div>
+        {recall && recall.ocorrencias?.length > 0 ? (
+          <div className="tbl-wrap">
+            <table className="snc-tbl">
+              <thead>
+                <tr>
+                  <th>Fabricante</th>
+                  <th>Campanha</th>
+                  <th>Defeito Identificado</th>
+                  <th>Situação</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recall.ocorrencias.map((rec: any, idx: number) => (
+                  <tr key={idx}>
+                    <td className="bold">{v(rec.fabricante)}</td>
+                    <td>{v(rec.campanha)}</td>
+                    <td>{v(rec.defeito)}</td>
+                    <td><span className={`chip chip-${rec.situacao === 'NÃO ATENDIDO' ? 'red' : 'green'}`}>{v(rec.situacao)}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="ds-row">
+            <div className="ds-row-inner">
+              <div className="dk">Recall</div>
+              <div className="dv" style={{ color: '#2ba84a', fontWeight: 600 }}>Nenhuma campanha de recall pendente para este veículo</div>
+            </div>
+            <span className="chip chip-green">NADA CONSTA</span>
+          </div>
+        )}
+      </div>
+
+
+      {/* TABELA DE DOWNLOADS */}
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd"><span>DOCUMENTOS PARA DOWNLOAD</span></div>
+        <div className="tbl-wrap">
+          <table className="snc-tbl" style={{ borderCollapse: 'collapse', width: '100%' }}>
+            <thead>
+              <tr>
+                <th style={{ textAlign: 'left', width: 40 }}>#</th>
+                <th style={{ textAlign: 'left' }}>Documento</th>
+                <th>Fonte</th>
+                <th>Natureza</th>
+                <th>Situação</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* CRLV-e */}
+              <tr style={{ background: '#ffffff', borderBottom: 'none' }}>
+                <td style={{ textAlign: 'center', fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 13, color: '#5a6a7a', verticalAlign: 'top', paddingTop: 12 }}>1</td>
+                <td className="bold" style={{ textAlign: 'left' }}>
+                  CRLV-e Digital Oficial
+                  <span style={{ display: 'inline-block', marginLeft: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 8, padding: '1px 5px', border: '1px solid rgba(212,168,67,0.5)', color: '#8a6a1a', letterSpacing: '0.06em', verticalAlign: 'middle' }}>ICP-BRASIL</span>
+                </td>
+                <td>SENATRAN / DETRAN</td>
+                <td><span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 9, padding: '2px 6px', border: '1px solid #b8b0a0', color: 'var(--ink2)', letterSpacing: '0.06em' }}>OFICIAL</span></td>
+                <td><span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 9, padding: '2px 6px', border: '1px solid #2BA84A', color: 'var(--greend)', letterSpacing: '0.06em', background: 'rgba(43,168,74,0.1)' }}>DISPONÍVEL</span></td>
+                <td>
+                  <a
+                    href={`/api/crlve?placa=${(r as any).identificacao?.placa ?? ''}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ display: 'inline-block', fontFamily: "'JetBrains Mono',monospace", fontSize: 9, padding: '3px 10px', border: '1px solid #D4A843', color: '#D4A843', letterSpacing: '0.06em', textDecoration: 'none', fontWeight: 700 }}
+                  >
+                    ↓ Baixar PDF
+                  </a>
+                </td>
+              </tr>
+              <tr style={{ background: '#fafaf8', borderBottom: '2px solid #d4cfc1' }}>
+                <td style={{ borderTop: 'none', background: '#f4f1ea' }} />
+                <td colSpan={5} style={{ padding: '6px 14px 12px', borderTop: 'none' }}>
+                  <div style={{ paddingLeft: 8, borderLeft: '2px solid #b8b0a0', fontSize: 10, color: 'var(--ink)', lineHeight: 1.8, whiteSpace: 'normal', wordBreak: 'break-word' }}>
+                    Documento oficial com validade jurídica, emitido diretamente pelo SENATRAN em conjunto com o DETRAN do estado de origem. Comprova que o veículo está devidamente registrado e licenciado para o exercício vigente. É aceito em cartório, exigido em financiamentos e transferências de propriedade. Possui assinatura digital no padrão ICP-Brasil.
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
+  );
+}
+
 function DadosDataset({ dataset, resultado }: { dataset: DatasetTipo; resultado: Record<string, unknown> }) {
+  if (dataset === 'snc-autoscore') return <DadosSncAutoScore r={resultado} />;
   if (dataset === 'vip-car') return <DadosVipCar r={resultado} />;
   if (dataset === 'veiculo') return <DadosVeiculo r={resultado} />;
   if (dataset === 'proprietario') return <DadosProprietario r={resultado} />;
@@ -2139,7 +3449,530 @@ function DadosDataset({ dataset, resultado }: { dataset: DatasetTipo; resultado:
   if (dataset === 'crlve') return <DadosCrlve r={resultado} />;
   if (dataset === 'csv-completa') return <DadosCsvCompleta r={resultado} />;
   if (dataset === 'analitico-veicular') return <DadosAnaliticoVeicular r={resultado} />;
+  if (dataset === 'agregados-basica') return <DadosAgregadosBasica r={resultado} />;
+  if (dataset === 'agregados-propria') return <DadosAgregadosPropria r={resultado} />;
+  if (dataset === 'agregados-chassi') return <DadosAgregadosChassi r={resultado} />;
+  if (dataset === 'veicular-agrupados') return <DadosVeicularAgrupados r={resultado} />;
   return null;
+}
+
+function DadosAgregadosPropria({ r }: { r: Record<string, unknown> }) {
+  const vei = (r.veiculo || r || {}) as Record<string, unknown>;
+  const placaRaw = String(vei.placa ?? '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const placaFormatada = placaRaw.length === 7 ? `${placaRaw.slice(0, 3)}-${placaRaw.slice(3)}` : (vei.placa ? String(vei.placa) : '—');
+  return (
+    <>
+      <div className="src-badge">DENATRAN / SENATRAN · BASE PROPRIETÁRIA</div>
+
+      {/* FICHA CADASTRAL DO VEÍCULO */}
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd"><span>FICHA CADASTRAL DO VEÍCULO</span></div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Placa</div>
+              <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
+                {placaFormatada}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Marca / Modelo</div>
+              <div className="dv">
+                {v(vei.marca_modelo ?? vei.marcaModelo).replace('/', ' - ')}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Cor</div>
+              <div className="dv">{v(vei.cor)}</div>
+            </div>
+          </div>
+        </div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Ano Fabricação</div>
+              <div className="dv">{v(vei.ano_fabricacao ?? vei.anoFabricacao)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Ano Modelo</div>
+              <div className="dv">{v(vei.ano_modelo ?? vei.anoModelo)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Combustível</div>
+              <div className="dv">{v(vei.combustivel)}</div>
+            </div>
+          </div>
+        </div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Município / UF</div>
+              <div className="dv">{vei.municipio ? `${vei.municipio}${vei.uf ? ` / ${vei.uf}` : ''}` : '—'}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }} />
+            <div className="ds-row-inner" style={{ flex: 1 }} />
+          </div>
+        </div>
+      </div>
+
+      {/* AGREGADOS & NÚMEROS DE CHASSI */}
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd"><span>AGREGADOS & NÚMEROS DE CHASSI</span></div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Chassi</div>
+              <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+                {v(vei.chassi)}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">RENAVAM</div>
+              <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+                {v(vei.renavam)}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Número do Motor</div>
+              <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+                {v(vei.motor)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function DadosAgregadosChassi({ r }: { r: Record<string, unknown> }) {
+  const vei = (r.veiculo || r || {}) as Record<string, unknown>;
+  const chassiVal = String(vei.chassi ?? '').toUpperCase();
+  const placaRaw = String(vei.placa ?? '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const placaFormatada = placaRaw.length === 7 ? `${placaRaw.slice(0, 3)}-${placaRaw.slice(3)}` : (vei.placa ? String(vei.placa) : '—');
+  return (
+    <>
+      <div className="src-badge">DENATRAN / SENATRAN · DECODIFICADOR CHASSI</div>
+
+      {/* FICHA CADASTRAL DO VEÍCULO */}
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd"><span>FICHA CADASTRAL DO VEÍCULO</span></div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Marca / Modelo</div>
+              <div className="dv">
+                {v(vei.marca_modelo ?? vei.marcaModelo).replace('/', ' - ')}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Cor</div>
+              <div className="dv">{v(vei.cor)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Combustível</div>
+              <div className="dv">{v(vei.combustivel)}</div>
+            </div>
+          </div>
+        </div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Ano Fabricação</div>
+              <div className="dv">{v(vei.ano_fabricacao ?? vei.anoFabricacao)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Ano Modelo</div>
+              <div className="dv">{v(vei.ano_modelo ?? vei.anoModelo)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Placa Vinculada</div>
+              <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
+                {placaFormatada}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Espécie</div>
+              <div className="dv">{v(vei.especie)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Tipo</div>
+              <div className="dv">{v(vei.tipo)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Carroceria</div>
+              <div className="dv">{v(vei.carroceria)}</div>
+            </div>
+          </div>
+        </div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Potência</div>
+              <div className="dv">{v(vei.potencia)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Cilindrada</div>
+              <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+                {v(vei.cilindrada)}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Capacidade Passageiros</div>
+              <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+                {v(vei.capacidade_passageiros)}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Município / UF</div>
+              <div className="dv">{vei.municipio ? `${vei.municipio}${vei.uf ? ` / ${vei.uf}` : ''}` : '—'}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Procedência</div>
+              <div className="dv">{v(vei.procedencia)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }} />
+          </div>
+        </div>
+      </div>
+
+      {/* AGREGADOS & NÚMEROS DE CHASSI */}
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd"><span>AGREGADOS & NÚMEROS DE CHASSI</span></div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Chassi</div>
+              <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+                {chassiVal || '—'}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">RENAVAM</div>
+              <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+                {v(vei.renavam)}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Número do Motor</div>
+              <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+                {v(vei.motor)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function DadosVeicularAgrupados({ r }: { r: Record<string, unknown> }) {
+  const vei = (r.veiculo || r || {}) as Record<string, unknown>;
+  const fipe = (r.fipe || {}) as Record<string, unknown>;
+  const prop = (r.proprietario || {}) as Record<string, unknown>;
+  const placaRaw = String(vei.placa ?? '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const placaFormatada = placaRaw.length === 7 ? `${placaRaw.slice(0, 3)}-${placaRaw.slice(3)}` : (vei.placa ? String(vei.placa) : '—');
+  return (
+    <>
+      <div className="src-badge">DENATRAN / SENATRAN / FIPE · VEICULAR AGRUPADOS</div>
+
+      {/* FICHA CADASTRAL DO VEÍCULO */}
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd"><span>FICHA CADASTRAL DO VEÍCULO</span></div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Marca / Modelo</div>
+              <div className="dv">
+                {v(vei.marca_modelo ?? vei.marcaModelo).replace('/', ' - ')}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Cor</div>
+              <div className="dv">{v(vei.cor)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Combustível</div>
+              <div className="dv">{v(vei.combustivel)}</div>
+            </div>
+          </div>
+        </div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Ano Fabricação</div>
+              <div className="dv">{v(vei.ano_fabricacao ?? vei.anoFabricacao)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Ano Modelo</div>
+              <div className="dv">{v(vei.ano_modelo ?? vei.anoModelo)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Placa Vinculada</div>
+              <div className="dv">
+                {placaFormatada}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Espécie</div>
+              <div className="dv">{v(vei.especie)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Tipo</div>
+              <div className="dv">{v(vei.tipo)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Carroceria</div>
+              <div className="dv">{v(vei.carroceria)}</div>
+            </div>
+          </div>
+        </div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Potência</div>
+              <div className="dv">{v(vei.potencia)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Cilindrada</div>
+              <div className="dv">
+                {v(vei.cilindrada)}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Capacidade Passageiros</div>
+              <div className="dv">
+                {v(vei.capacidade_passageiros)}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Município / UF</div>
+              <div className="dv">{vei.municipio ? `${vei.municipio}${vei.uf ? ` / ${vei.uf}` : ''}` : '—'}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Procedência</div>
+              <div className="dv">{v(vei.procedencia)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Situação</div>
+              <div className="dv">{v(vei.situacao)}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* AGREGADOS & NÚMEROS DE CHASSI */}
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd"><span>AGREGADOS & NÚMEROS DE CHASSI</span></div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Chassi</div>
+              <div className="dv">
+                {v(vei.chassi)}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">RENAVAM</div>
+              <div className="dv">
+                {v(vei.renavam)}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Número do Motor</div>
+              <div className="dv">
+                {v(vei.motor)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* PROPRIETÁRIO ATUAL */}
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd"><span>PROPRIETÁRIO ATUAL</span></div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Nome</div>
+              <div className="dv">{v(prop.nome)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Documento</div>
+              <div className="dv">
+                {v(prop.documento)}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Tipo Documento</div>
+              <div className="dv">{v(prop.tipo_documento)}</div>
+            </div>
+          </div>
+        </div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Município / UF</div>
+              <div className="dv">{prop.municipio ? `${prop.municipio}${prop.uf ? ` / ${prop.uf}` : ''}` : '—'}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Data Atualização</div>
+              <div className="dv">
+                {v(prop.data_atualizacao)}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }} />
+          </div>
+        </div>
+      </div>
+
+      {/* TABELA FIPE */}
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd"><span>TABELA FIPE</span></div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Código FIPE</div>
+              <div className="dv">
+                {v(fipe.codigo_fipe)}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Marca</div>
+              <div className="dv">{v(fipe.marca)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Modelo</div>
+              <div className="dv">{v(fipe.modelo)}</div>
+            </div>
+          </div>
+        </div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Ano Modelo</div>
+              <div className="dv">{v(fipe.ano_modelo)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Valor FIPE</div>
+              <div className="dv">
+                {v(fipe.valor)}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Referência</div>
+              <div className="dv">{v(fipe.referencia)}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function DadosAgregadosBasica({ r }: { r: Record<string, unknown> }) {
+  const vei = (r.veiculo || r || {}) as Record<string, unknown>;
+  const placaRaw = String(vei.placa ?? '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const placaFormatada = placaRaw.length === 7 ? `${placaRaw.slice(0, 3)}-${placaRaw.slice(3)}` : (vei.placa ? String(vei.placa) : '—');
+  return (
+    <>
+      <div className="src-badge">DENATRAN / SENATRAN</div>
+
+      {/* FICHA CADASTRAL DO VEÍCULO */}
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd"><span>FICHA CADASTRAL DO VEÍCULO</span></div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Placa</div>
+              <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13 }}>
+                {placaFormatada}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Marca / Modelo</div>
+              <div className="dv">
+                {v(vei.marca_modelo ?? vei.marcaModelo).replace('/', ' - ')}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Cor</div>
+              <div className="dv">{v(vei.cor)}</div>
+            </div>
+          </div>
+        </div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Ano Fabricação</div>
+              <div className="dv">{v(vei.ano_fabricacao ?? vei.anoFabricacao)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Ano Modelo</div>
+              <div className="dv">{v(vei.ano_modelo ?? vei.anoModelo)}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Combustível</div>
+              <div className="dv">{v(vei.combustivel)}</div>
+            </div>
+          </div>
+        </div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Município / UF</div>
+              <div className="dv">{vei.municipio ? `${vei.municipio}${vei.uf ? ` / ${vei.uf}` : ''}` : '—'}</div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }} />
+            <div className="ds-row-inner" style={{ flex: 1 }} />
+          </div>
+        </div>
+      </div>
+
+      {/* AGREGADOS & NÚMEROS DE CHASSI */}
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd"><span>AGREGADOS & NÚMEROS DE CHASSI</span></div>
+        <div className="ds-row">
+          <div style={{ display: 'flex', flex: 1, gap: 16 }}>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Chassi</div>
+              <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+                {v(vei.chassi)}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">RENAVAM</div>
+              <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+                {v(vei.renavam)}
+              </div>
+            </div>
+            <div className="ds-row-inner" style={{ flex: 1 }}>
+              <div className="dk">Número do Motor</div>
+              <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12 }}>
+                {v(vei.motor)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
 
 function DadosCrlve({ r }: { r: Record<string, unknown> }) {
@@ -2530,7 +4363,7 @@ function DadosCsvCompleta({ r }: { r: Record<string, unknown> }) {
       <div className="ds-block" style={{ marginTop: 2 }}>
         <div className="ds-hd" style={{ background: temMultas ? '#c0392b' : 'var(--navy)' }}>
           <span>RENAINF — MULTAS DE TRÂNSITO</span>
-          {temMultas && <span className="ds-hd-badge">{renainf.qtd_ocorrencias} multa(s)</span>}
+          {temMultas && <span className="ds-hd-badge" style={{ color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)' }}>{Number(renainf.qtd_ocorrencias) === 1 ? '1 MULTA' : `${renainf.qtd_ocorrencias} MULTAS`}</span>}
         </div>
         {!temMultas ? (
           <div className="ds-row">
@@ -2576,6 +4409,31 @@ function DadosCsvCompleta({ r }: { r: Record<string, unknown> }) {
                     </td>
                   </tr>
                 ))}
+                {/* Linha do Valor Consolidado integrada sob as colunas corretas */}
+                <tr style={{ background: 'rgba(200, 162, 90, 0.04)', fontWeight: 700 }}>
+                  <td colSpan={5} style={{ 
+                    textAlign: 'right', 
+                    fontFamily: "'JetBrains Mono',monospace", 
+                    fontSize: 9, 
+                    letterSpacing: '.06em', 
+                    textTransform: 'uppercase', 
+                    padding: '11px 14px',
+                    color: 'var(--ink2)',
+                    borderRight: '1px solid #c8bfa8'
+                  }}>
+                    Valor Consolidado
+                  </td>
+                  <td style={{ textAlign: 'center', padding: '11px 14px', borderRight: '1px solid #c8bfa8' }}>
+                    <span className="chip chip-red">DÉBITO ATIVO</span>
+                  </td>
+                  <td className="mono bold" style={{ color: '#ef4444', fontSize: 11, textAlign: 'right', padding: '11px 14px' }}>
+                    {infracoes.reduce((acc, inf) => {
+                      const valStr = String(inf.valor_multa ?? '0').replace(/[^0-9,.-]/g, '').replace(',', '.');
+                      const valNum = parseFloat(valStr);
+                      return acc + (isNaN(valNum) ? 0 : valNum);
+                    }, 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -2586,7 +4444,7 @@ function DadosCsvCompleta({ r }: { r: Record<string, unknown> }) {
       <div className="ds-block" style={{ marginTop: 2 }}>
         <div className="ds-hd" style={{ background: temRenajud ? '#c0392b' : 'var(--navy)' }}>
           <span>RENAJUD — RESTRIÇÕES JUDICIAIS</span>
-          {temRenajud && <span className="ds-hd-badge">{renajud.quantidade_ocorrencias} restrição(ões)</span>}
+          {temRenajud && <span className="ds-hd-badge" style={{ color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)' }}>{renajud.quantidade_ocorrencias} restrição(ões)</span>}
         </div>
         <div className="ds-row">
           <div className="ds-row-inner">
@@ -2611,7 +4469,7 @@ function DadosCsvCompleta({ r }: { r: Record<string, unknown> }) {
       <div className="ds-block" style={{ marginTop: 2 }}>
         <div className="ds-hd" style={{ background: temCsv ? '#c0392b' : 'var(--navy)' }}>
           <span>CSV / BIN — OCORRÊNCIAS NACIONAIS</span>
-          {temCsv && <span className="ds-hd-badge">{csv.quantidade_ocorrencia} ocorrência(s)</span>}
+          {temCsv && <span className="ds-hd-badge" style={{ color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)' }}>{Number(csv.quantidade_ocorrencia) === 1 ? '1 OCORRÊNCIA' : `${csv.quantidade_ocorrencia} OCORRÊNCIAS`}</span>}
         </div>
         {!temCsv ? (
           <div className="ds-row">
@@ -2731,7 +4589,7 @@ function DadosAnaliticoVeicular({ r }: { r: Record<string, unknown> }) {
 
   return (
     <>
-      <div className="src-badge">APIBRASIL · CONSULTA ANALÍTICA VEICULAR</div>
+      <div className="src-badge">BASE FEDERAL · CONSULTA ANALÍTICA VEICULAR</div>
 
       {/* ── Identificação do Veículo ── */}
       <div className="ds-block" style={{ marginTop: 8, marginBottom: 2 }}>
@@ -2849,71 +4707,185 @@ function DadosAnaliticoVeicular({ r }: { r: Record<string, unknown> }) {
           <span>REGISTROS DE ODÔMETRO</span>
           <span className="ds-hd-badge">{reg(kmRegistros.length)}</span>
         </div>
-        {historicoKm.anomalia && (
-          <div style={{ padding: '8px 12px', background: 'rgba(239, 68, 68, 0.08)', borderLeft: '3px solid #ef4444', color: '#ef4444', fontSize: 12, margin: '8px 12px 12px' }}>
-            <strong>Alerta:</strong> {historicoKm.motivoAnomalia || "QUILOMETRAGEM REVERTIDA — POSSÍVEL ADULTERAÇÃO DE HODÔMETRO"}
-          </div>
-        )}
         {kmRegistros.length > 0 ? (
-          <div className="tbl-wrap">
-            <table className="snc-tbl">
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Quilometragem</th>
-                  <th>Fonte</th>
-                  <th>UF</th>
-                </tr>
-              </thead>
-              <tbody>
-                {kmRegistros.map((item, i) => (
-                  <tr key={i} style={{ background: '#ffffff' }}>
-                    <td className="mono">{v(item.data)}</td>
-                    <td className="bold mono">{item.km ? `${item.km} km` : '—'}</td>
-                    <td>{v(item.fonte)}</td>
-                    <td className="mono">{v(item.uf)}</td>
+          <>
+            <div className="tbl-wrap">
+              <table className="snc-tbl">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Quilometragem</th>
+                    <th>Fonte</th>
+                    <th>UF</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {kmRegistros.map((item, i) => {
+                    const parseKm = (s: any) => Number(String(s ?? '').replace(/[^0-9]/g, ''));
+                    const kmAtual = parseKm(item.km);
+                    const kmProx = i + 1 < kmRegistros.length ? parseKm(kmRegistros[i + 1].km) : 0;
+                    const isAnomaly = i + 1 < kmRegistros.length && kmAtual < kmProx;
+                    
+                    return (
+                      <tr key={i} style={{ background: '#ffffff' }}>
+                        <td className="mono">{v(item.data)}</td>
+                        <td className="bold mono" style={isAnomaly ? { color: '#c0392b', fontWeight: 700 } : {}}>
+                          {item.km ? `${item.km} km` : '—'}{isAnomaly ? ' ⚠' : ''}
+                        </td>
+                        <td style={isAnomaly ? { color: '#c0392b', fontWeight: 600 } : {}}>{v(item.fonte)}</td>
+                        <td className="mono" style={isAnomaly ? { color: '#c0392b' } : {}}>{v(item.uf)}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            {historicoKm.anomalia && (
+              <div className="ds-row">
+                <div className="ds-row-inner">
+                  <div className="dk">Alerta de Anomalia</div>
+                  <div className="dv" style={{ color: '#ef4444', fontWeight: 700 }}>
+                    {historicoKm.motivoAnomalia || "QUILOMETRAGEM REVERTIDA — POSSÍVEL ADULTERAÇÃO DE HODÔMETRO"}
+                  </div>
+                </div>
+                <span className="chip chip-red">ANOMALIA</span>
+              </div>
+            )}
+          </>
         ) : (
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Quilometragem</div><div className="dv">Nenhum histórico registrado</div></div><span className="chip chip-green">NADA CONSTA</span></div>
         )}
       </div>
 
       {/* ── Restrições RENAJUD ── */}
-      <div className="src-badge" style={{ marginTop: 12 }}>RESTRICÕES JUDICIAIS (RENAJUD)</div>
+      <div className="src-badge" style={{ marginTop: 12 }}>RESTRIÇÕES JUDICIAIS (RENAJUD)</div>
       <div className="ds-block" style={{ marginTop: 8 }}>
-        <div className="ds-hd"><span>SITUAÇÃO RENAJUD</span></div>
+        <div className="ds-hd">
+          <span>SITUAÇÃO RENAJUD</span>
+          {renajud.temRestricao && <span className="ds-hd-badge">1 PROCESSO</span>}
+        </div>
         {renajud.temRestricao ? (
-          <>
-            <div className="ds-row">
-              <div className="ds-row-inner" style={{ flex: 1 }}>
-                <div className="dk">Nº Processo</div>
-                <div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace" }}>{v(renajud.processo)}</div>
-              </div>
-              <div className="ds-row-inner" style={{ flex: 1 }}>
-                <div className="dk">Órgão Judicial</div>
-                <div className="dv">{v(renajud.orgaoJudicial)}</div>
-              </div>
-              <div className="ds-row-inner" style={{ flex: 1 }}>
-                <div className="dk">Tribunal</div>
-                <div className="dv">{v(renajud.tribunal)}</div>
-              </div>
-              <span className="chip chip-red">RESTRIÇÃO ATIVA</span>
-            </div>
-            {renajud.restricoes?.map((r: string, i: number) => (
-              <div className="ds-row" key={i}>
-                <div className="ds-row-inner">
-                  <div className="dk">Restrição {i + 1}</div>
-                  <div className="dv" style={{ color: '#ef4444', fontWeight: 600 }}>{r}</div>
-                </div>
-              </div>
-            ))}
-          </>
+          <div className="tbl-wrap" style={{ overflow: 'hidden' }}>
+            <table className="snc-tbl" style={{ width: '100%', wordBreak: 'break-word', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th>Nº Processo</th>
+                  <th>Órgão Judicial</th>
+                  <th>Tribunal</th>
+                  <th>Situação</th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* Linha 1: dados gerais */}
+                <tr style={{ background: '#ffffff', borderTop: '1px solid #c8bfa8' }}>
+                  <td className="mono">{v(renajud.processo)}</td>
+                  <td className="bold">{v(renajud.orgaoJudicial)}</td>
+                  <td>{v(renajud.tribunal)}</td>
+                  <td>
+                    <span className="chip chip-red">RESTRIÇÃO ATIVA</span>
+                  </td>
+                </tr>
+                {/* Linha 2: restrições detalhadas */}
+                <tr style={{
+                  background: '#ffffff',
+                  fontSize: '0.82em',
+                  borderBottom: '1px solid #c8bfa8',
+                }}>
+                  <td colSpan={4} style={{ padding: '4px 12px 10px', borderBottom: 'none' }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <div style={{
+                        fontFamily: "'JetBrains Mono',monospace",
+                        fontWeight: 700,
+                        fontSize: 13,
+                        color: '#c0392b',
+                        width: 18,
+                        textAlign: 'center',
+                        marginRight: 6
+                      }}>
+                        1
+                      </div>
+                      <div style={{
+                        flex: 1,
+                        display: 'flex', gap: 14, flexWrap: 'wrap',
+                        paddingLeft: 8, borderLeft: '2px solid #c0392b',
+                        textAlign: 'left'
+                      }}>
+                        <span>
+                          <strong style={{ color: '#c0392b' }}>Restrições Constatadas:</strong>{' '}
+                          {renajud.restricoes && renajud.restricoes.length > 0
+                            ? renajud.restricoes.join(" · ")
+                            : 'RESTRIÇÃO REGISTRADA'}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         ) : (
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Restrição Judicial</div><div className="dv">Nenhuma restrição de circulação, transferência ou penhora</div></div><span className="chip chip-green">NADA CONSTA</span></div>
+        )}
+      </div>
+
+      {/* ── Roubo e Furto ── */}
+      <div className="src-badge" style={{ marginTop: 12 }}>INDÍCIO DE ROUBO / FURTO</div>
+      <div className="ds-block" style={{ marginTop: 8 }}>
+        <div className="ds-hd">
+          <span>SITUAÇÃO DE ROUBO/FURTO</span>
+          {rouboFurto.temOcorrencia && (
+            <span className="ds-hd-badge">
+              {ocorrenciasRoubo.length === 1 ? '1 OCORRÊNCIA' : `${ocorrenciasRoubo.length} OCORRÊNCIAS`}
+            </span>
+          )}
+        </div>
+        {rouboFurto.temOcorrencia ? (
+          <div className="tbl-wrap">
+            <table className="snc-tbl">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Tipo</th>
+                  <th>Nº B.O.</th>
+                  <th>Localidade</th>
+                  <th>Situação</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ocorrenciasRoubo.map((o, i) => (
+                  <tr key={i} style={{ background: '#ffffff' }}>
+                    <td className="mono">{v(o.data)}</td>
+                    <td className="bold">{v(o.tipo)}</td>
+                    <td className="mono">{v(o.boletim)}</td>
+                    <td>{v(o.localidade)}</td>
+                    <td>
+                      <span className={`chip chip-${o.situacao === 'RECUPERADO' ? 'green' : 'red'}`}>
+                        {v(o.situacao)}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+                {/* Linha de Alerta de Roubo/Furto integrada ao final da tabela para centralização perfeita */}
+                <tr style={{ background: '#ffffff', borderTop: '1px solid #c8bfa8' }}>
+                  <td colSpan={4} style={{ padding: '12px 14px', textAlign: 'left', borderRight: '1px solid #c8bfa8' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 9, color: 'var(--ink2)', letterSpacing: '.06em', textTransform: 'uppercase' }}>
+                        Ocorrência Ativa
+                      </div>
+                      <div style={{ color: '#ef4444', fontWeight: 700, fontSize: 13, whiteSpace: 'normal', lineHeight: 1.4 }}>
+                        Ocorrência de Roubo ou Furto Registrada no Sistema
+                      </div>
+                    </div>
+                  </td>
+                  <td style={{ padding: '12px 14px', verticalAlign: 'middle', textAlign: 'center' }}>
+                    <span className="chip chip-red">CONSTA RESTRIÇÃO</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Roubo / Furto</div><div className="dv">Nenhum registro ativo de roubo ou furto para este veículo</div></div><span className="chip chip-green">NADA CONSTA</span></div>
         )}
       </div>
 
@@ -2926,10 +4898,6 @@ function DadosAnaliticoVeicular({ r }: { r: Record<string, unknown> }) {
         </div>
         {multas.length > 0 ? (
           <>
-            <div className="ds-row">
-              <div className="ds-row-inner"><div className="dk">Valor Consolidado</div><div className="dv" style={{ color: '#ef4444', fontWeight: 700 }}>{v(renainf.valorTotal)}</div></div>
-              <span className="chip chip-red">DÉBITO ATIVO</span>
-            </div>
             <div className="tbl-wrap">
               <table className="snc-tbl">
                 <thead>
@@ -2955,6 +4923,26 @@ function DadosAnaliticoVeicular({ r }: { r: Record<string, unknown> }) {
                       </td>
                     </tr>
                   ))}
+                  {/* Linha do Valor Consolidado integrada sob as colunas corretas */}
+                  <tr style={{ background: 'rgba(200, 162, 90, 0.04)', fontWeight: 700 }}>
+                    <td colSpan={3} style={{ 
+                      textAlign: 'right', 
+                      fontFamily: "'JetBrains Mono',monospace", 
+                      fontSize: 9, 
+                      letterSpacing: '.06em', 
+                      textTransform: 'uppercase', 
+                      padding: '11px 14px',
+                      color: 'var(--ink2)'
+                    }}>
+                      Valor Consolidado
+                    </td>
+                    <td className="mono bold" style={{ color: '#ef4444', fontSize: 11, textAlign: 'center' }}>
+                      {v(renainf.valorTotal)}
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      <span className="chip chip-red">DÉBITO ATIVO</span>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -2964,89 +4952,62 @@ function DadosAnaliticoVeicular({ r }: { r: Record<string, unknown> }) {
         )}
       </div>
 
-      {/* ── Roubo e Furto ── */}
-      <div className="src-badge" style={{ marginTop: 12 }}>INDÍCIO DE ROUBO / FURTO</div>
-      <div className="ds-block" style={{ marginTop: 8 }}>
-        <div className="ds-hd"><span>SITUAÇÃO DE ROUBO/FURTO</span></div>
-        {rouboFurto.temOcorrencia ? (
-          <>
-            <div className="ds-row">
-              <div className="ds-row-inner"><div className="dk">Ocorrência Ativa</div><div className="dv" style={{ color: '#ef4444', fontWeight: 700 }}>Ocorrência de Roubo ou Furto Registrada no Sistema</div></div>
-              <span className="chip chip-red">CONSTA RESTRICÃO</span>
-            </div>
-            <div className="tbl-wrap">
-              <table className="snc-tbl">
-                <thead>
-                  <tr>
-                    <th>Data</th>
-                    <th>Tipo</th>
-                    <th>Nº B.O.</th>
-                    <th>Localidade</th>
-                    <th>Situação</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ocorrenciasRoubo.map((o, i) => (
-                    <tr key={i} style={{ background: '#ffffff' }}>
-                      <td className="mono">{v(o.data)}</td>
-                      <td className="bold" style={{ color: '#ef4444' }}>{v(o.tipo)}</td>
-                      <td className="mono">{v(o.boletim)}</td>
-                      <td>{v(o.localidade)}</td>
-                      <td>
-                        <span className={`chip chip-${o.situacao === 'RECUPERADO' ? 'green' : 'red'}`}>
-                          {v(o.situacao)}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </>
-        ) : (
-          <div className="ds-row"><div className="ds-row-inner"><div className="dk">Roubo / Furto</div><div className="dv">Nenhum registro ativo de roubo ou furto para este veículo</div></div><span className="chip chip-green">NADA CONSTA</span></div>
-        )}
-      </div>
-
       {/* ── Recall ── */}
       <div className="src-badge" style={{ marginTop: 12 }}>RECALLS DE FABRICANTE</div>
       <div className="ds-block" style={{ marginTop: 8 }}>
-        <div className="ds-hd"><span>CAMPANHAS DE SEGURANÇA</span></div>
+        <div className="ds-hd">
+          <span>CAMPANHAS DE SEGURANÇA</span>
+          {recall.temRecall && (
+            <span className="ds-hd-badge">
+              {ocorrenciasRecall.length === 1 ? '1 CAMPANHA' : `${ocorrenciasRecall.length} CAMPANHAS`}
+            </span>
+          )}
+        </div>
         {recall.temRecall ? (
-          <>
-            <div className="ds-row">
-              <div className="ds-row-inner"><div className="dk">Recall Pendente</div><div className="dv" style={{ color: '#ef4444', fontWeight: 700 }}>Existe recall de segurança pendente de execução pelo proprietário</div></div>
-              <span className="chip chip-red">RECALL ATIVO</span>
-            </div>
-            <div className="tbl-wrap">
-              <table className="snc-tbl">
-                <thead>
-                  <tr>
-                    <th>Fabricante</th>
-                    <th>Modelo</th>
-                    <th>Campanha</th>
-                    <th>Defeito</th>
-                    <th>Situação</th>
+          <div className="tbl-wrap">
+            <table className="snc-tbl">
+              <thead>
+                <tr>
+                  <th>Fabricante</th>
+                  <th>Modelo</th>
+                  <th>Campanha</th>
+                  <th>Defeito</th>
+                  <th>Situação</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ocorrenciasRecall.map((c, i) => (
+                  <tr key={i} style={{ background: '#ffffff' }}>
+                    <td className="bold">{v(c.fabricante)}</td>
+                    <td>{v(c.modelo)}</td>
+                    <td className="mono">{v(c.campanha)}</td>
+                    <td>{v(c.defeito)}</td>
+                    <td>
+                      <span className={`chip chip-${c.situacao === 'NÃO REPARADO' ? 'red' : 'green'}`}>
+                        {v(c.situacao)}
+                      </span>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {ocorrenciasRecall.map((c, i) => (
-                    <tr key={i} style={{ background: '#ffffff' }}>
-                      <td className="bold">{v(c.fabricante)}</td>
-                      <td>{v(c.modelo)}</td>
-                      <td className="mono">{v(c.campanha)}</td>
-                      <td style={{ color: '#ef4444' }}>{v(c.defeito)}</td>
-                      <td>
-                        <span className={`chip chip-${c.situacao === 'NÃO REPARADO' ? 'red' : 'green'}`}>
-                          {v(c.situacao)}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </>
+                ))}
+                {/* Linha de Alerta de Recall integrada ao final da tabela para centralização perfeita */}
+                <tr style={{ background: '#ffffff', borderTop: '1px solid #c8bfa8' }}>
+                  <td colSpan={4} style={{ padding: '12px 14px', textAlign: 'left', borderRight: '1px solid #c8bfa8' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                      <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 9, color: 'var(--ink2)', letterSpacing: '.06em', textTransform: 'uppercase' }}>
+                        Recall/Campanha Pendente
+                      </div>
+                      <div style={{ color: '#ef4444', fontWeight: 700, fontSize: 13, whiteSpace: 'normal', lineHeight: 1.4 }}>
+                        Existe recall de segurança pendente de execução pelo proprietário
+                      </div>
+                    </div>
+                  </td>
+                  <td style={{ padding: '12px 14px', verticalAlign: 'middle', textAlign: 'center' }}>
+                    <span className="chip chip-red">RECALL ATIVO</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         ) : (
           <div className="ds-row"><div className="ds-row-inner"><div className="dk">Recall</div><div className="dv">Nenhuma campanha de recall pendente para este veículo</div></div><span className="chip chip-green">NADA CONSTA</span></div>
         )}
@@ -3108,8 +5069,13 @@ function DadosHistoricoKm({ r }: { r: Record<string, unknown> }) {
       {/* Histórico de Km */}
       <div className="ds-block" style={{ marginTop: 2 }}>
         <div className="ds-hd" style={{ background: anomalia ? '#c0392b' : 'var(--navy)' }}>
-          <span>HISTÓRICO DE QUILOMETRAGEM — {total} REGISTRO(S)</span>
-          {anomalia && <span className="chip chip-red" style={{ marginLeft: 12 }}>ANOMALIA</span>}
+          <span>HISTÓRICO DE QUILOMETRAGEM</span>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            {anomalia && <span className="chip chip-red">ANOMALIA</span>}
+            <span className="ds-hd-badge" style={{ color: anomalia ? 'rgba(255,255,255,0.9)' : undefined, borderColor: anomalia ? 'rgba(255,255,255,0.3)' : undefined, background: anomalia ? 'rgba(255,255,255,0.1)' : undefined }}>
+              {reg(total)}
+            </span>
+          </div>
         </div>
 
         <div className="tbl-wrap">
@@ -3169,7 +5135,7 @@ function DadosHistoricoKm({ r }: { r: Record<string, unknown> }) {
         </div>
 
         {anomalia && (
-          <div style={{ padding: '10px 16px', background: 'rgba(192,57,43,0.06)', borderTop: '2px solid #c0392b', color: '#c0392b', fontFamily: "'JetBrains Mono',monospace", fontSize: 10, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+          <div style={{ padding: '10px 16px', background: 'rgba(192,57,43,0.06)', borderTop: '2px solid #c0392b', color: '#c0392b', fontFamily: "'JetBrains Mono',monospace", fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
             ⚠ Quilometragem decrescente detectada — possível adulteração de hodômetro.
           </div>
         )}
@@ -3242,20 +5208,25 @@ const CSS = `
   .ds-hd{background:var(--navy);color:#fff;font-size:9px;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
   .ds-row{padding:11px 16px;display:flex;justify-content:space-between;align-items:center;background:#ffffff;border:1px solid #d4cfc1;border-top:none;gap:16px}
   .ds-row-inner{flex:1;min-width:0}
-  .ds-row .dk{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;white-space:nowrap}
+  .dk{font-family:'JetBrains Mono',monospace;font-size:9px;color:#000;letter-spacing:.06em;text-transform:uppercase}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .ds-row .dk{font-family:'JetBrains Mono',monospace;font-size:9px;color:#000;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;white-space:nowrap}
   .ds-row .dv{font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:400;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .src-badge{display:inline-flex;align-items:center;padding:5px 12px;border:1px solid #b8b0a0;color:var(--ink2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;background:var(--paper);margin:16px 0 0}
-  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #c8bfa8;border-top:none}
+  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #c8bfa8}
   .snc-tbl{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
-  .snc-tbl th{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.08em;text-transform:uppercase;padding:9px 14px;background:rgba(200,162,90,0.08);border-bottom:1px solid #c8bfa8;border-right:1px solid #c8bfa8;text-align:center;white-space:nowrap}
+  .snc-tbl tr{background:#ffffff}
+  .snc-tbl th{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.08em;text-transform:uppercase;padding:9px 14px;background:rgba(200,162,90,0.08);border-bottom:1px solid #c8bfa8;border-right:1px solid #c8bfa8;text-align:center !important;white-space:nowrap}
   .snc-tbl th:last-child{border-right:none}
-  .snc-tbl td{padding:11px 14px;border-bottom:1px solid #c8bfa8;border-right:1px solid #c8bfa8;color:var(--ink);text-align:center;vertical-align:middle;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:400}
+  .snc-tbl td{padding:11px 14px;border-bottom:1px solid #c8bfa8;border-right:1px solid #c8bfa8;color:#000000;text-align:center;vertical-align:middle;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:400}
   .snc-tbl td:last-child{border-right:none}
   .snc-tbl tr:last-child td{border-bottom:none}
   .snc-tbl td.mono{font-family:'JetBrains Mono',monospace;font-size:11px}
   .snc-tbl td.bold{font-size:11px}
-  .snc-tbl td.green{color:var(--greend);font-family:'JetBrains Mono',monospace;font-size:11px}
-  .chip{font-size:9px;padding:3px 8px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-weight:700;white-space:nowrap;letter-spacing:.04em}
+  .snc-tbl td.green, .green{color:var(--greend) !important}
+  .snc-tbl td.red, .red{color:#ef4444 !important}
+  .chip{display:inline-flex;align-items:center;justify-content:center;font-size:9px;padding:3px 8px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-weight:700;white-space:nowrap;letter-spacing:.04em;line-height:1}
+  .ds-hd-badge{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border:1px solid var(--brass);color:var(--brass);background:rgba(200,162,90,.12);white-space:nowrap;display:inline-flex;align-items:center;justify-content:center}
   .chip-brass{background:rgba(200,162,90,.12);color:#a07a30;border:1px solid rgba(200,162,90,.3)}
   .chip-green{background:rgba(43,168,74,.1);color:var(--greend);border:1px solid rgba(43,168,74,.3)}
   .chip-red{background:rgba(192,57,43,.1);color:#c0392b;border:1px solid rgba(192,57,43,.3)}
@@ -3472,6 +5443,10 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
     'csv-completa':       '/autoscore/csv-completa',
     'analitico-veicular': '/autoscore/analitico-veicular',
     'credito':            '/busca/credito',
+    'agregados-basica':   '/autoscore/agregados-basica',
+    'agregados-propria':  '/autoscore/agregados-propria',
+    'agregados-chassi':   '/autoscore/agregados-chassi',
+    'veicular-agrupados': '/autoscore/veicular-agrupados',
   };
   const fallbackPath = datasetFallbackMap[payload?.dataset || ''] ?? '/autoscore';
 
@@ -3483,12 +5458,10 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
       <style>{CSS}</style>
       {constarRoubo && (
         <style>{`
-          .ds-hd { background: #b91c1c !important; }
           .r-sig { background: #3b0808 !important; border-top-color: #ff2c36 !important; }
           .r-sig .right { border-left-color: #5c1818 !important; }
           .r-foot { background: #210404 !important; color: #8c5050 !important; }
           .r-vrd::before { background: #ff2c36 !important; }
-          .r-vrd-stamp { color: #ff2c36 !important; }
         `}</style>
       )}
 
@@ -3553,11 +5526,11 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
                 </div>
               )}
               <h1>
-                {meta?.titulo ?? 'Relatório'}
+                {payload?.dataset === 'snc-autoscore' ? 'Relatório Veicular Consolidado' : (meta?.titulo ?? 'Relatório')}
                 <br />
                 <span style={{ color: '#fff' }}>SNC AutoScore</span>
-                <span className="it" style={{ color: '#9aa3b2' }}>{' — Placa: '}</span>
-                <span style={{ color: 'var(--brass)' }}>{formatarPlacaExibicao(payload?.documento)}</span>
+                <span className="it" style={{ color: '#9aa3b2' }}>{payload?.dataset === 'agregados-chassi' ? ' — Chassi: ' : ' — Placa: '}</span>
+                <span style={{ color: 'var(--brass)' }}>{payload?.dataset === 'agregados-chassi' ? payload?.documento : formatarPlacaExibicao(payload?.documento)}</span>
               </h1>
               <div className="lede">{meta?.subtitulo ?? 'Documento gerado a partir de fontes oficiais.'}</div>
             </div>
@@ -3566,7 +5539,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
 
         {/* META STRIP */}
         <div className="r-ms">
-          {payload?.dataset !== 'leilao' && payload?.dataset !== 'renajud' && payload?.dataset !== 'crlve' && payload?.dataset !== 'csv-completa' && (
+          {payload?.dataset !== 'leilao' && payload?.dataset !== 'renajud' && payload?.dataset !== 'crlve' && payload?.dataset !== 'csv-completa' && payload?.dataset !== 'agregados-basica' && payload?.dataset !== 'agregados-propria' && payload?.dataset !== 'agregados-chassi' && payload?.dataset !== 'veicular-agrupados' && (
             <>
               <div><div className="l">Proprietário Atual</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.nome as string ?? payload?.documento ?? '—'}</div></div>
               <div><div className="l">CPF/CNPJ</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.documento as string ?? '—'}</div></div>
@@ -3574,6 +5547,71 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
               <div><div className="l">Atualiz. no DENATRAN</div><div className="v">{(payload?.resultado?.proprietario as Record<string, unknown>)?.dataAtualizacao as string ?? '—'}</div></div>
             </>
           )}
+          {payload?.dataset === 'agregados-basica' && (() => {
+            const vei = (payload?.resultado?.veiculo ?? {}) as Record<string, any>;
+            const nomeProp = '—';
+            const docProp = '—';
+            const munUf = vei.municipio ? `${vei.municipio}-${vei.uf || ''}` : '—';
+            const dataAt = '—';
+
+            return (
+              <>
+                <div><div className="l">Proprietário Atual</div><div className="v">{nomeProp}</div></div>
+                <div><div className="l">CPF/CNPJ</div><div className="v">{docProp}</div></div>
+                <div><div className="l">Município/UF</div><div className="v">{munUf}</div></div>
+                <div><div className="l">Atualiz. no DENATRAN</div><div className="v">{dataAt}</div></div>
+              </>
+            );
+          })()}
+          {payload?.dataset === 'agregados-propria' && (() => {
+            const vei = (payload?.resultado?.veiculo ?? {}) as Record<string, any>;
+            const nomeProp = '—';
+            const docProp = '—';
+            const munUf = vei.municipio ? `${vei.municipio}-${vei.uf || ''}` : '—';
+            const dataAt = '—';
+
+            return (
+              <>
+                <div><div className="l">Proprietário Atual</div><div className="v">{nomeProp}</div></div>
+                <div><div className="l">CPF/CNPJ</div><div className="v">{docProp}</div></div>
+                <div><div className="l">Município/UF</div><div className="v">{munUf}</div></div>
+                <div><div className="l">Atualiz. no DENATRAN</div><div className="v">{dataAt}</div></div>
+              </>
+            );
+          })()}
+          {payload?.dataset === 'agregados-chassi' && (() => {
+            const vei = (payload?.resultado?.veiculo ?? {}) as Record<string, any>;
+            const nomeProp = '—';
+            const docProp = '—';
+            const munUf = vei.municipio ? `${vei.municipio}-${vei.uf || ''}` : '—';
+            const dataAt = '—';
+
+            return (
+              <>
+                <div><div className="l">Proprietário Atual</div><div className="v">{nomeProp}</div></div>
+                <div><div className="l">CPF/CNPJ</div><div className="v">{docProp}</div></div>
+                <div><div className="l">Município/UF</div><div className="v">{munUf}</div></div>
+                <div><div className="l">Atualiz. no DENATRAN</div><div className="v">{dataAt}</div></div>
+              </>
+            );
+          })()}
+          {payload?.dataset === 'veicular-agrupados' && (() => {
+            const prop = (payload?.resultado?.proprietario ?? {}) as Record<string, any>;
+            const vei = (payload?.resultado?.veiculo ?? {}) as Record<string, any>;
+            const nomeProp = prop.nome || '—';
+            const docProp = prop.documento || '—';
+            const munUf = (prop.municipio || vei.municipio) ? `${prop.municipio || vei.municipio}-${prop.uf || vei.uf || ''}` : '—';
+            const dataAt = prop.data_atualizacao || '—';
+
+            return (
+              <>
+                <div><div className="l">Proprietário Atual</div><div className="v">{nomeProp}</div></div>
+                <div><div className="l">CPF/CNPJ</div><div className="v">{docProp}</div></div>
+                <div><div className="l">Município/UF</div><div className="v">{munUf}</div></div>
+                <div><div className="l">Atualiz. no DENATRAN</div><div className="v">{dataAt}</div></div>
+              </>
+            );
+          })()}
           {payload?.dataset === 'crlve' && (() => {
             const vei = (payload?.resultado?.veiculo ?? {}) as Record<string, any>;
             const nomeProp = vei.proprietario_nome || '—';
@@ -3721,7 +5759,10 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
                                 <><br /><span style={{ fontSize: '0.85em' }}>RENAINF (R$ {valorTotal})</span></>
                               </h3>
                             ) : (
-                              <h3 style={{ lineHeight: 1.25 }}>VEÍCULO REGULAR<br />(NADA CONSTA)</h3>
+                              <h3 style={{ lineHeight: 1.25 }}>
+                                VEÍCULO REGULAR<br />
+                                NADA CONSTA
+                              </h3>
                             )}
                             <p style={{ margin: 0 }}>
                               {temMultas
@@ -3811,14 +5852,30 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
                           </div>
                           <div className="r-vt">
                             {temRest ? (
-                              <h3 style={{ color: '#d32f2f', lineHeight: 1.25 }}>
-                                ATENÇÃO: RESTRIÇÕES ATIVAS
-                                <><br /><span style={{ fontSize: '0.85em' }}>
-                                  {alertas.join(" · ")}
-                                </span></>
-                              </h3>
+                              <>
+                                <h3 style={{ color: '#d32f2f', lineHeight: 1.2 }}>
+                                  ATENÇÃO:<br />
+                                  RESTRIÇÕES ATIVAS
+                                </h3>
+                                <div style={{ 
+                                  display: 'flex', 
+                                  flexWrap: 'wrap', 
+                                  gap: '6px', 
+                                  marginTop: '6px', 
+                                  marginBottom: '6px' 
+                                }}>
+                                  {alertas.map((alerta, idx) => (
+                                    <span key={idx} className="chip chip-red" style={{ fontSize: '9px', padding: '3px 8px' }}>
+                                      {alerta}
+                                    </span>
+                                  ))}
+                                </div>
+                              </>
                             ) : (
-                              <h3>VEÍCULO REGULAR — NADA CONSTA</h3>
+                              <h3 style={{ lineHeight: 1.25 }}>
+                                VEÍCULO REGULAR<br />
+                                NADA CONSTA
+                              </h3>
                             )}
                             <p style={{ margin: 0 }}>
                               {temRest

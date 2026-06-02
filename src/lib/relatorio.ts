@@ -10,6 +10,7 @@
  */
 
 export type DatasetTipo =
+  | "snc-autoscore"
   | "vip-car"
   | "veiculo"
   | "proprietario"
@@ -22,7 +23,12 @@ export type DatasetTipo =
   | "renainf"
   | "historico-km"
   | "crlve"
-  | "csv-completa";
+  | "csv-completa"
+  | "analitico-veicular"
+  | "agregados-basica"
+  | "agregados-propria"
+  | "agregados-chassi"
+  | "veicular-agrupados";
 
 export interface RelatorioPayload {
   dataset: DatasetTipo;
@@ -68,7 +74,15 @@ export function gerarProtocolo(id: string, data?: Date): string {
  * Usa btoa() nativo (browser + Node), convertendo para URL-safe manualmente.
  */
 export function serializarDados(payload: RelatorioPayload): string {
-  const json = JSON.stringify(payload);
+  // Cria uma cópia rasa do payload e do resultado para evitar efeitos colaterais
+  const payloadCopy = {
+    ...payload,
+    resultado: payload.resultado ? { ...payload.resultado } : {}
+  };
+  // Remove _raw para evitar estouro do limite de tamanho da URL (Bug A)
+  delete payloadCopy.resultado._raw;
+
+  const json = JSON.stringify(payloadCopy);
   // btoa é suportado em browser e Node 16+
   const b64 = btoa(unescape(encodeURIComponent(json)));
   // Converte para URL-safe: + → -, / → _, remove =
@@ -139,6 +153,12 @@ const baseMeta: Record<
   string,
   { titulo: string; subtitulo: string; fonte: string; cor: string }
 > = {
+  "snc-autoscore": {
+    titulo: "SNC AutoScore",
+    subtitulo: "Relatório veicular completo com BIN cadastral, proprietário atual, histórico de proprietários, restrições judiciais, gravames CNJ, registros de roubo e furto, débitos DETRAN (IPVA, multas e licenciamento), débitos federais, infrações RENAINF, histórico de quilometragem, detecção de fraude em hodômetro, registros de leilão com score de risco A–E, indício de sinistro, alertas de recall e precificação FIPE.",
+    fonte: "SNC / B3 / SENATRAN / DETRAN / CNJ",
+    cor: "#D4A843",
+  },
   "vip-car": {
     titulo: "Relatório Veicular Completo",
     subtitulo: "Identificação, proprietário atual, dados técnicos (motor, potência, cilindrada, carroceria), histórico de roubo/furto, indício de sinistro, infrações de trânsito (RENAINF), precificação FIPE com chassi e documento oficial SENATRAN/DENATRAN.",
@@ -215,6 +235,36 @@ const baseMeta: Record<
     titulo: "CSV Completa",
     subtitulo: "Consulta veicular unificada: RENAINF (multas nacionais), RENAJUD (restrições judiciais), BIN (bloqueios administrativos) e dados do proprietário em uma única chamada.",
     fonte: "SENATRAN / RENAINF / RENAJUD / BIN",
+    cor: "#D4A843",
+  },
+  "analitico-veicular": {
+    titulo: "Analítico Veicular",
+    subtitulo: "Super-consulta consolidada: FIPE, proprietário atual, histórico de quilometragem, restrições judiciais (RENAJUD), multas (RENAINF), roubo/furto e recall — tudo em uma única chamada.",
+    fonte: "DENATRAN / SENATRAN / FIPE / CNJ",
+    cor: "#7B5EA7",
+  },
+  "agregados-basica": {
+    titulo: "Agregados Básica",
+    subtitulo: "Ficha cadastral primária e identificadores estruturais de motor, chassi e renavam diretamente da base nacional.",
+    fonte: "DENATRAN / SENATRAN",
+    cor: "#D4A843",
+  },
+  "agregados-propria": {
+    titulo: "Agregados Própria",
+    subtitulo: "Ficha cadastral primária e identificadores estruturais de base proprietária em uma única consulta rápida.",
+    fonte: "DENATRAN / SENATRAN",
+    cor: "#D4A843",
+  },
+  "agregados-chassi": {
+    titulo: "Decodificador de Chassi",
+    subtitulo: "Decodificação do chassi com dados cadastrais completos: marca, modelo, ano, placa vinculada, renavam, motor, dados técnicos (espécie, tipo, carroceria, potência, cilindrada) e procedência.",
+    fonte: "DENATRAN / SENATRAN",
+    cor: "#D4A843",
+  },
+  "veicular-agrupados": {
+    titulo: "Veicular Agrupados",
+    subtitulo: "Consulta veicular completa com dados agrupados: ficha cadastral, agregados/chassi, proprietário atual e tabela FIPE — tudo em uma única busca.",
+    fonte: "DENATRAN / SENATRAN / FIPE",
     cor: "#D4A843",
   },
 };

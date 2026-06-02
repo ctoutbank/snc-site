@@ -1023,3 +1023,123 @@ export const CSV_COMPLETA_MOCK_RESTRICTED = {
     },
   },
 };
+
+// ─── 14. ANALÍTICO VEICULAR ───────────────────────────────────────────────────
+// Super-dataset: FIPE + Proprietário + Histórico KM + RENAJUD + RENAINF + Roubo/Furto + Recall
+
+const _veiculoBase = {
+  placa: "XXX-0000",
+  marca_modelo: "VW/FOX 1.0 GII",
+  ano_fabricacao: "2012",
+  ano_modelo: "2013",
+  cor: "VERMELHA",
+  combustivel: "ALCOOL/GASOLINA",
+  chassi: "9BWZZZ377VT000000",
+  renavam: "00456789012",
+  motor: "CCC178906",
+  municipio: "CURITIBA",
+  uf: "PR",
+};
+
+export const ANALITICO_VEICULAR_MOCK_CLEAN = {
+  veiculo: { ..._veiculoBase },
+  proprietario: {
+    nome: "JOÃO DA SILVA",
+    documento: "123.456.789-00",
+    municipio: "CURITIBA",
+    uf: "PR",
+  },
+  fipe: {
+    codigoFipe: "005277-9",
+    modelo: "Fox 1.0 Mi Total Flex 8V 5d",
+    anoModelo: "2013",
+    combustivel: "Gasolina",
+    mesReferencia: "Maio de 2026",
+    valor: "R$ 32.800",
+  },
+  historicoKm: {
+    registros: [
+      { data: "15/03/2025", km: "98.450", fonte: "DETRAN-PR", uf: "PR" },
+      { data: "10/01/2024", km: "89.200", fonte: "SEGURADORA", uf: "PR" },
+      { data: "22/07/2023", km: "75.100", fonte: "DETRAN-PR", uf: "PR" },
+    ],
+    anomalia: false,
+  },
+  renajud: {
+    temRestricao: false,
+    restricoes: [],
+    processo: null,
+    orgaoJudicial: null,
+    tribunal: null,
+  },
+  renainf: {
+    totalMultas: 0,
+    valorTotal: "R$ 0,00",
+    multas: [],
+  },
+  rouboFurto: {
+    temOcorrencia: false,
+    ocorrencias: [],
+  },
+  recall: {
+    temRecall: false,
+    ocorrencias: [],
+  },
+  _status: "clean",
+};
+
+export const ANALITICO_VEICULAR_MOCK_RESTRICTED = {
+  veiculo: { ..._veiculoBase, placa: "XXX-1111" },
+  proprietario: {
+    nome: "MARIA OLIVEIRA SANTOS",
+    documento: "987.654.321-00",
+    municipio: "SÃO PAULO",
+    uf: "SP",
+  },
+  fipe: {
+    codigoFipe: "005277-9",
+    modelo: "Fox 1.0 Mi Total Flex 8V 5d",
+    anoModelo: "2013",
+    combustivel: "Gasolina",
+    mesReferencia: "Maio de 2026",
+    valor: "R$ 32.800",
+  },
+  historicoKm: {
+    registros: [
+      { data: "15/03/2025", km: "45.000", fonte: "DETRAN-SP", uf: "SP" },
+      { data: "10/01/2024", km: "89.200", fonte: "SEGURADORA", uf: "SP" },
+      { data: "22/07/2023", km: "75.100", fonte: "DETRAN-SP", uf: "SP" },
+    ],
+    anomalia: true,
+    motivoAnomalia: "QUILOMETRAGEM REVERTIDA — POSSÍVEL ADULTERAÇÃO DE HODÔMETRO",
+  },
+  renajud: {
+    temRestricao: true,
+    restricoes: ["RESTRIÇÃO JUDICIAL RENAJUD — CIRCULAÇÃO ATIVA"],
+    processo: "0012345-67.2024.8.26.0100",
+    orgaoJudicial: "2ª VARA CÍVEL — FÓRUM CENTRAL",
+    tribunal: "TJSP",
+  },
+  renainf: {
+    totalMultas: 3,
+    valorTotal: "R$ 1.234,56",
+    multas: [
+      { data: "10/02/2025", descricao: "AVANÇO DE SINAL VERMELHO", valor: "R$ 293,47", orgao: "DETRAN-SP", situacao: "PENDENTE" },
+      { data: "15/11/2024", descricao: "EXCESSO DE VELOCIDADE (50% ACIMA)", valor: "R$ 880,41", orgao: "PRF", situacao: "PENDENTE" },
+      { data: "03/08/2024", descricao: "ESTACIONAR EM LOCAL PROIBIDO", valor: "R$ 60,68", orgao: "DETRAN-SP", situacao: "PAGA" },
+    ],
+  },
+  rouboFurto: {
+    temOcorrencia: true,
+    ocorrencias: [
+      { data: "12/06/2023", tipo: "FURTO", boletim: "BO 2023/123456", localidade: "SÃO PAULO - SP", situacao: "RECUPERADO" },
+    ],
+  },
+  recall: {
+    temRecall: true,
+    ocorrencias: [
+      { fabricante: "VOLKSWAGEN", modelo: "FOX", campanha: "RC-2024-001", defeito: "DEFEITO NO AIRBAG FRONTAL", situacao: "NÃO REPARADO" },
+    ],
+  },
+  _status: "restricted",
+};

@@ -1461,3 +1461,617 @@ export async function consultarCsvCompleta(
   }
 }
 
+// ─────────────────────────────────────────────────────────
+// DATASET: Analítico Veicular
+// POST /api/v2/consulta/veiculos/credits  { tipo: "analitico-veicular" }
+// Super-dataset: FIPE + Proprietário + Histórico KM + RENAJUD + RENAINF + Roubo/Furto + Recall
+// ─────────────────────────────────────────────────────────
+
+/** Configurações de sub-consultas do Analítico Veicular */
+export interface AnaliticoVeicularExtra {
+  fipe?: boolean;
+  "proprietario-atual"?: boolean;
+  "historico-km"?: boolean;
+  renajud?: boolean;
+  renainf?: boolean;
+  "roubo-furto"?: boolean;
+  recall?: boolean;
+}
+
+/** Configurações de whitelabel para o PDF gerado pela API */
+export interface AnaliticoVeicularWhitelabel {
+  empresa?: string;
+  logo?: string;
+  "font-size"?: string;
+  "font-color"?: string;
+  "header-color"?: string;
+  "font-header-color"?: string;
+}
+
+/** Payload para consulta do Analítico Veicular */
+export interface AnaliticoVeicularPayload {
+  tipo: "analitico-veicular";
+  placa: string;
+  homolog: boolean;
+  extra: AnaliticoVeicularExtra;
+  whitelabel?: AnaliticoVeicularWhitelabel;
+}
+
+/**
+ * Resposta do Analítico Veicular — estrutura provisória.
+ * Campos exatos confirmados após primeiro teste em homolog
+ * inspecionando _raw no DevTools Network.
+ */
+export interface AnaliticoVeicularResponse {
+  status_code?: number;
+  error?: boolean;
+  message?: string;
+  homolog?: boolean;
+  data?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+export interface AnaliticoVeicularConfig {
+  bearerToken?: string;
+  baseUrl?: string;
+  homolog?: boolean;
+  timeoutMs?: number;
+  extra?: AnaliticoVeicularExtra;
+  whitelabel?: AnaliticoVeicularWhitelabel;
+}
+
+/**
+ * Consulta o Analítico Veicular de um veículo pela placa.
+ *
+ * Este é um super-dataset que agrega FIPE, Proprietário Atual,
+ * Histórico de KM, RENAJUD, RENAINF, Roubo/Furto e Recall
+ * em uma única chamada.
+ *
+ * Endpoint: POST /api/v2/consulta/veiculos/credits
+ * Payload:  { tipo: "analitico-veicular", placa, homolog, extra, whitelabel }
+ *
+ * PROTOCOLO: Rodar em homolog primeiro. Só mudar para produção
+ * após autorização explícita do usuário (Denison).
+ *
+ * @param placa   Placa no formato antigo (ABC1234) ou Mercosul (ABC1D23)
+ * @param config  Configurações opcionais (token, base_url, homolog, timeout, extra, whitelabel)
+ */
+export async function consultarAnaliticoVeicular(
+  placa: string,
+  config?: AnaliticoVeicularConfig
+): Promise<AnaliticoVeicularResponse> {
+  const p = normalizarPlaca(placa);
+  if (!validarPlaca(p)) {
+    throw new APIBrasilError(
+      `Placa inválida: "${placa}". Use o formato ABC1234 (antigo) ou ABC1D23 (Mercosul).`,
+      400
+    );
+  }
+
+  const homolog   = config?.homolog   ?? process.env.APIBRASIL_HOMOLOG === "true";
+  const baseUrl   = config?.baseUrl   ?? BASE_URL;
+  const timeoutMs = config?.timeoutMs ?? REQUEST_TIMEOUT_MS;
+  const token     = config?.bearerToken ?? (await getToken());
+
+  const extra: AnaliticoVeicularExtra = config?.extra ?? {
+    fipe: true,
+    "proprietario-atual": true,
+    "historico-km": true,
+    renajud: true,
+    renainf: true,
+    "roubo-furto": true,
+    recall: true,
+  };
+
+  const whitelabel: AnaliticoVeicularWhitelabel = config?.whitelabel ?? {
+    empresa: "SNC - Sistema Nacional de Conformidade",
+    logo: "",
+    "font-size": "14px",
+    "font-color": "#0F172A",
+    "header-color": "#000000",
+    "font-header-color": "#FFFFFF",
+  };
+
+  const controller = new AbortController();
+  const timeout    = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(`${baseUrl}/api/v2/consulta/veiculos/credits`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        tipo: "analitico-veicular",
+        placa: p,
+        homolog,
+        extra,
+        whitelabel,
+      } as AnaliticoVeicularPayload),
+      signal: controller.signal,
+    });
+    return await parseResponse<AnaliticoVeicularResponse>(res);
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new APIBrasilError(`Timeout de requisição após ${timeoutMs / 1000}s`, 408);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────
+// DATASET: Agregados Basica
+// POST /api/v2/consulta/veiculos/credits  { tipo: "agregados-basica" }
+// ─────────────────────────────────────────────────────────
+
+export interface AgregadosBasicaPayload {
+  tipo: "agregados-basica";
+  placa: string;
+  homolog: boolean;
+}
+
+export interface AgregadosBasicaVeiculo {
+  placa?: string;
+  chassi?: string;
+  renavam?: string;
+  motor?: string;
+  marca_modelo?: string;
+  ano_fabricacao?: string | number;
+  ano_modelo?: string | number;
+  cor?: string;
+  combustivel?: string;
+  municipio?: string;
+  uf?: string;
+  [key: string]: unknown;
+}
+
+export interface AgregadosBasicaResponse {
+  status_code?: number;
+  error?: boolean;
+  message?: string;
+  homolog?: boolean;
+  data?: {
+    veiculo?: AgregadosBasicaVeiculo;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+export interface AgregadosBasicaConfig {
+  bearerToken?: string;
+  baseUrl?: string;
+  homolog?: boolean;
+  timeoutMs?: number;
+}
+
+/**
+ * Consulta dados agregados básicos (dados cadastrais consolidados) de um veículo pela placa.
+ *
+ * Endpoint: POST /api/v2/consulta/veiculos/credits
+ * Payload:  { tipo: "agregados-basica", placa, homolog }
+ *
+ * @param placa   Placa no formato antigo (ABC1234) ou Mercosul (ABC1D23)
+ * @param config  Configurações opcionais (token, base_url, homolog, timeout)
+ */
+export async function consultarAgregadosBasica(
+  placa: string,
+  config?: AgregadosBasicaConfig
+): Promise<AgregadosBasicaResponse> {
+  const p = normalizarPlaca(placa);
+  if (!validarPlaca(p)) {
+    throw new APIBrasilError(
+      `Placa inválida: "${placa}". Use o formato ABC1234 (antigo) ou ABC1D23 (Mercosul).`,
+      400
+    );
+  }
+
+  const homolog   = config?.homolog   ?? process.env.APIBRASIL_HOMOLOG === "true";
+  const baseUrl   = config?.baseUrl   ?? BASE_URL;
+  const timeoutMs = config?.timeoutMs ?? REQUEST_TIMEOUT_MS;
+  const token     = config?.bearerToken ?? (await getToken());
+
+  const controller = new AbortController();
+  const timeout    = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(`${baseUrl}/api/v2/consulta/veiculos/credits`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        tipo: "agregados-basica",
+        placa: p,
+        homolog,
+      } as AgregadosBasicaPayload),
+      signal: controller.signal,
+    });
+    return await parseResponse<AgregadosBasicaResponse>(res);
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new APIBrasilError(`Timeout de requisição após ${timeoutMs / 1000}s`, 408);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────
+// DATASET: Agregados Propria
+// POST /api/v2/consulta/veiculos/credits  { tipo: "agregados-propria" }
+// ─────────────────────────────────────────────────────────
+
+export interface AgregadosPropriaPayload {
+  tipo: "agregados-propria";
+  placa: string;
+  homolog: boolean;
+}
+
+export interface AgregadosPropriaVeiculo {
+  placa?: string;
+  chassi?: string;
+  renavam?: string;
+  motor?: string;
+  marca_modelo?: string;
+  ano_fabricacao?: string | number;
+  ano_modelo?: string | number;
+  cor?: string;
+  combustivel?: string;
+  municipio?: string;
+  uf?: string;
+  [key: string]: unknown;
+}
+
+export interface AgregadosPropriaResponse {
+  status_code?: number;
+  error?: boolean;
+  message?: string;
+  homolog?: boolean;
+  data?: {
+    veiculo?: AgregadosPropriaVeiculo;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+export interface AgregadosPropriaConfig {
+  bearerToken?: string;
+  baseUrl?: string;
+  homolog?: boolean;
+  timeoutMs?: number;
+}
+
+/**
+ * Consulta dados agregados proprietários (dados cadastrais de base proprietária) de um veículo pela placa.
+ *
+ * Endpoint: POST /api/v2/consulta/veiculos/credits
+ * Payload:  { tipo: "agregados-propria", placa, homolog }
+ *
+ * @param placa   Placa no formato antigo (ABC1234) ou Mercosul (ABC1D23)
+ * @param config  Configurações opcionais (token, base_url, homolog, timeout)
+ */
+export async function consultarAgregadosPropria(
+  placa: string,
+  config?: AgregadosPropriaConfig
+): Promise<AgregadosPropriaResponse> {
+  const p = normalizarPlaca(placa);
+  if (!validarPlaca(p)) {
+    throw new APIBrasilError(
+      `Placa inválida: "${placa}". Use o formato ABC1234 (antigo) ou ABC1D23 (Mercosul).`,
+      400
+    );
+  }
+
+  const homolog   = config?.homolog   ?? process.env.APIBRASIL_HOMOLOG === "true";
+  const baseUrl   = config?.baseUrl   ?? BASE_URL;
+  const timeoutMs = config?.timeoutMs ?? REQUEST_TIMEOUT_MS;
+  const token     = config?.bearerToken ?? (await getToken());
+
+  const controller = new AbortController();
+  const timeout    = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(`${baseUrl}/api/v2/consulta/veiculos/credits`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        tipo: "agregados-propria",
+        placa: p,
+        homolog,
+      } as AgregadosPropriaPayload),
+      signal: controller.signal,
+    });
+    return await parseResponse<AgregadosPropriaResponse>(res);
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new APIBrasilError(`Timeout de requisição após ${timeoutMs / 1000}s`, 408);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────
+// DATASET: Decodificador Chassi (Agregados Chassi)
+// POST /api/v2/consulta/veiculos/credits  { tipo: "agregados-chassi" }
+// ─────────────────────────────────────────────────────────
+
+export interface AgregadosChassiPayload {
+  tipo: "agregados-chassi";
+  chassi: string;
+  homolog: boolean;
+}
+
+export interface AgregadosChassiVeiculo {
+  placa?: string;
+  chassi?: string;
+  renavam?: string;
+  motor?: string;
+  marca_modelo?: string;
+  ano_fabricacao?: string | number;
+  ano_modelo?: string | number;
+  cor?: string;
+  combustivel?: string;
+  municipio?: string;
+  uf?: string;
+  especie?: string;
+  tipo?: string;
+  carroceria?: string;
+  potencia?: string;
+  cilindrada?: string;
+  capacidade_passageiros?: string | number;
+  procedencia?: string;
+  [key: string]: unknown;
+}
+
+export interface AgregadosChassiResponse {
+  status_code?: number;
+  error?: boolean;
+  message?: string;
+  homolog?: boolean;
+  data?: {
+    veiculo?: AgregadosChassiVeiculo;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+export interface AgregadosChassiConfig {
+  bearerToken?: string;
+  baseUrl?: string;
+  homolog?: boolean;
+  timeoutMs?: number;
+}
+
+// ─── Validação de Chassi ─────────────────────────────────
+
+const CHASSI_REGEX = /^[A-HJ-NPR-Z0-9]{17}$/;
+
+export function normalizarChassi(chassi: string): string {
+  return chassi.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g, "");
+}
+
+export function validarChassi(chassi: string): boolean {
+  return CHASSI_REGEX.test(normalizarChassi(chassi));
+}
+
+/**
+ * Consulta dados agregados de um veículo pelo chassi (Decodificador de Chassi).
+ *
+ * Endpoint: POST /api/v2/consulta/veiculos/credits
+ * Payload:  { tipo: "agregados-chassi", chassi, homolog }
+ *
+ * PROTOCOLO: Rodar em homolog primeiro. Só mudar para produção
+ * após autorização explícita do usuário (Denison).
+ *
+ * @param chassi  Chassi de 17 caracteres alfanuméricos (sem I, O, Q)
+ * @param config  Configurações opcionais (token, base_url, homolog, timeout)
+ */
+export async function consultarAgregadosChassi(
+  chassi: string,
+  config?: AgregadosChassiConfig
+): Promise<AgregadosChassiResponse> {
+  const c = normalizarChassi(chassi);
+  if (!validarChassi(c)) {
+    throw new APIBrasilError(
+      `Chassi inválido: "${chassi}". Deve ter 17 caracteres alfanuméricos (sem I, O, Q).`,
+      400
+    );
+  }
+
+  const homolog   = config?.homolog   ?? process.env.APIBRASIL_HOMOLOG === "true";
+  const baseUrl   = config?.baseUrl   ?? BASE_URL;
+  const timeoutMs = config?.timeoutMs ?? REQUEST_TIMEOUT_MS;
+  const token     = config?.bearerToken ?? (await getToken());
+
+  const controller = new AbortController();
+  const timeout    = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(`${baseUrl}/api/v2/consulta/veiculos/credits`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        tipo: "agregados-chassi",
+        chassi: c,
+        homolog,
+      } as AgregadosChassiPayload),
+      signal: controller.signal,
+    });
+    return await parseResponse<AgregadosChassiResponse>(res);
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new APIBrasilError(`Timeout de requisição após ${timeoutMs / 1000}s`, 408);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────
+// DATASET: Veicular Agrupados
+// POST /api/v2/consulta/veiculos/credits  { tipo: "veicular-agrupados" }
+// Retorna dados agrupados de múltiplos sub-datasets em 1 chamada.
+// ─────────────────────────────────────────────────────────
+
+export interface VeicularAgrupadosMap {
+  "agregados-propria"?: boolean;
+  "fipe"?: boolean;
+  "proprietario-atual"?: boolean;
+  [key: string]: boolean | undefined;
+}
+
+export interface VeicularAgrupadosPayload {
+  tipo: "veicular-agrupados";
+  placa: string;
+  agrupados: VeicularAgrupadosMap;
+  homolog: boolean;
+}
+
+export interface VeicularAgrupadosFipe {
+  codigo_fipe?: string;
+  marca?: string;
+  modelo?: string;
+  ano_modelo?: string;
+  combustivel?: string;
+  valor?: string;
+  referencia?: string;
+  [key: string]: unknown;
+}
+
+export interface VeicularAgrupadosProprietario {
+  nome?: string;
+  documento?: string;
+  tipo_documento?: string;
+  municipio?: string;
+  uf?: string;
+  data_atualizacao?: string;
+  [key: string]: unknown;
+}
+
+export interface VeicularAgrupadosVeiculo {
+  placa?: string;
+  chassi?: string;
+  renavam?: string;
+  motor?: string;
+  marca_modelo?: string;
+  ano_fabricacao?: string | number;
+  ano_modelo?: string | number;
+  cor?: string;
+  combustivel?: string;
+  municipio?: string;
+  uf?: string;
+  especie?: string;
+  tipo?: string;
+  carroceria?: string;
+  potencia?: string;
+  cilindrada?: string;
+  capacidade_passageiros?: string | number;
+  procedencia?: string;
+  situacao?: string;
+  [key: string]: unknown;
+}
+
+export interface VeicularAgrupadosResponse {
+  status_code?: number;
+  error?: boolean;
+  message?: string;
+  homolog?: boolean;
+  data?: {
+    veiculo?: VeicularAgrupadosVeiculo;
+    fipe?: VeicularAgrupadosFipe;
+    proprietario?: VeicularAgrupadosProprietario;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+export interface VeicularAgrupadosConfig {
+  bearerToken?: string;
+  baseUrl?: string;
+  homolog?: boolean;
+  timeoutMs?: number;
+  agrupados?: VeicularAgrupadosMap;
+}
+
+/**
+ * Consulta veicular agrupada — retorna dados de múltiplos sub-datasets
+ * (agregados-propria, fipe, proprietário) em uma única chamada.
+ *
+ * Endpoint: POST /api/v2/consulta/veiculos/credits
+ * Payload:  { tipo: "veicular-agrupados", placa, agrupados: {...}, homolog }
+ *
+ * PROTOCOLO: Rodar em homolog primeiro. Só mudar para produção
+ * após autorização explícita do usuário (Denison).
+ *
+ * @param placa     Placa do veículo (7 caracteres)
+ * @param config    Configurações opcionais
+ */
+export async function consultarVeicularAgrupados(
+  placa: string,
+  config?: VeicularAgrupadosConfig
+): Promise<VeicularAgrupadosResponse> {
+  const p = normalizarPlaca(placa);
+  if (!validarPlaca(p)) {
+    throw new APIBrasilError(
+      `Placa inválida: "${placa}". Formato esperado: ABC1234 ou ABC1D23.`,
+      400
+    );
+  }
+
+  const homolog   = config?.homolog   ?? process.env.APIBRASIL_HOMOLOG === "true";
+  const baseUrl   = config?.baseUrl   ?? BASE_URL;
+  const timeoutMs = config?.timeoutMs ?? REQUEST_TIMEOUT_MS;
+  const token     = config?.bearerToken ?? (await getToken());
+
+  const agrupados: VeicularAgrupadosMap = config?.agrupados ?? {
+    "agregados-propria": true,
+    "fipe": true,
+    "proprietario-atual": true,
+  };
+
+  const controller = new AbortController();
+  const timeout    = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(`${baseUrl}/api/v2/consulta/veiculos/credits`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        tipo: "veicular-agrupados",
+        placa: p,
+        agrupados,
+        homolog,
+      } as VeicularAgrupadosPayload),
+      signal: controller.signal,
+    });
+    return await parseResponse<VeicularAgrupadosResponse>(res);
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new APIBrasilError(`Timeout de requisição após ${timeoutMs / 1000}s`, 408);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
