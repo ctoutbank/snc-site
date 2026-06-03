@@ -171,6 +171,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   .r-title h1{font-size:26px}
   .r-ms{flex-wrap:wrap}
   .r-ms>div{flex:1 1 30%;border-bottom:1px solid #1a2742}
+  .r-ms>div:first-child{flex:1 1 100%}
   .r-summary{grid-template-columns:1fr;gap:20px}
   .r-sig{grid-template-columns:1fr;gap:20px}
   .r-sig .right{border-left:none;border-top:1px solid var(--rule);padding:20px 0 0;display:flex;flex-direction:column;align-items:center;text-align:center;width:100%}
@@ -200,7 +201,8 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   .debitos-strip{grid-template-columns:repeat(2,1fr)}
   .leilao-strip{grid-template-columns:repeat(2,1fr)}
   .fipe-cell{flex:0 0 50%}
-  .r-ms>div{flex:1 1 50%}
+  .r-ms{flex-direction:column}
+  .r-ms>div{flex:1 1 100%;border-right:none}
   .badge-card{flex-direction:column;align-items:flex-start;gap:4px}
   .badge-card .chip{margin-left:0!important}
 }
@@ -222,9 +224,9 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
     <span class="ref" style="opacity:.6">Versão Digital · Autenticada</span>
   </div>
   <div class="right">
-    <button type="button" class="r-btn" onclick="history.back()">← Voltar</button>
+    <button type="button" class="r-btn" onclick="location.href='/exemplos'">← Voltar</button>
     <button type="button" class="r-btn" onclick="navigator.clipboard.writeText(location.href).then(()=>{this.textContent='✓ Copiado';setTimeout(()=>{this.textContent='Copiar link'},2000)})">Copiar link</button>
-    <button type="button" class="r-btn primary" onclick="window.print()">⎙ Baixar PDF</button>
+    <button type="button" class="r-btn primary" onclick="alert('Disponível apenas no relatório oficial.')" style="opacity:0.5;cursor:not-allowed">⎙ Baixar PDF</button>
   </div>
 </div>
 
@@ -254,8 +256,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
       <h1>
         Relatório Veicular Consolidado<br/>
         <span style="color:#fff">SNC AutoScore</span>
-        <span class="it"> — Placa: </span>
-        <span style="color:var(--brass)">SNC2026</span>
+        <span style="white-space:nowrap"><span class="it"> — Placa: </span><span style="color:var(--brass)">SNC2026</span></span>
       </h1>
       <div class="lede">Documento gerado automaticamente a partir de 10 datasets integrados (BIN Nacional, FIPE, Leilão Score, Débitos, Histórico KM, Gravame, RENAJUD, Proprietário, CRLV-e e Recall).</div>
     </div>
