@@ -6002,7 +6002,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
             <div className="r-sig">
               <div className="left">
                 <div className="lbl">§ Validade jurídica &amp; autenticação</div>
-                <p>Este documento é gerado de forma automatizada pelo Sistema Nacional de Conformidade — SNC, mediante consulta autorizada e finalidade declarada conforme LGPD (Lei 13.709/2018, art. 7º, V) e Resolução BACEN nº 4.893/2021. Toda informação aqui consolidada é rastreável à fonte primária.</p>
+                <p>Este documento é emitido de forma automatizada pelo Sistema Nacional de Conformidade — SNC, plataforma de inteligência documental que agrega, padroniza e unifica registros provenientes de bases de dados públicas e privadas, mediante requisição autorizada com finalidade declarada. O tratamento dos dados observa a Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018, art. 7º, incisos II, V e X; art. 11, II, &quot;d&quot;; art. 18), o Marco Civil da Internet (Lei nº 12.965/2014, art. 7º) e a Resolução BACEN nº 4.893/2021. Toda informação consolidada é rastreável à fonte primária e apresentada sem alteração de conteúdo.</p>
                 <p>O parecer tem validade de 30 dias corridos a partir da data de emissão. Protocolo: <strong>{protocolo}</strong>.</p>
               </div>
               <div className="right">

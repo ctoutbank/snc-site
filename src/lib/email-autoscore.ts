@@ -342,7 +342,7 @@ export function gerarHtmlEmailAutoScore(
 
       <!-- ── Legal ── -->
       <tr><td style="background:${C.cream};border-top:1px solid ${C.line};padding:20px 40px;font-size:11px;color:${C.ink2};line-height:1.6;">
-        <p style="margin:0;"><strong style="color:${C.ink2};">§ Validade jurídica.</strong> Documento gerado de forma automatizada pelo Sistema Nacional de Conformidade — SNC, mediante consulta autorizada e finalidade declarada conforme LGPD (Lei 13.709/2018, art. 7º, X). O Auto Score consolida registros públicos e privados de procedência veicular (identificação, débitos, gravame, leilão/sinistro, hodômetro e CRLV-e), rastreáveis à fonte primária.</p>
+        <p style="margin:0;"><strong style="color:${C.ink2};">§ Validade jurídica.</strong> Documento emitido de forma automatizada pelo Sistema Nacional de Conformidade — SNC, plataforma de inteligência documental que agrega, padroniza e unifica registros provenientes de bases de dados públicas e privadas, mediante requisição autorizada com finalidade declarada. O tratamento dos dados observa a LGPD (Lei nº 13.709/2018, art. 7º, II, V e X; art. 11, II, "d"; art. 18), o Marco Civil da Internet (Lei nº 12.965/2014, art. 7º) e a Resolução BACEN nº 4.893/2021. Toda informação consolidada é rastreável à fonte primária e apresentada sem alteração de conteúdo.</p>
         <p style="margin:8px 0 0;"><strong style="color:${C.ink2};">Confidencialidade.</strong> Este e-mail destina-se exclusivamente ao(s) destinatário(s) acima. Caso o tenha recebido por engano, notifique o remetente e exclua a mensagem.</p>
       </td></tr>
 
