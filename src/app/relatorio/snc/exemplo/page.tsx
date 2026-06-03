@@ -82,9 +82,7 @@ export default function RelatorioExemploPage() {
         .chip{font-size:9px;padding:3px 8px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-weight:700;white-space:nowrap}
         .chip-brass{background:rgba(200,162,90,.12);color:#a07a30;border:1px solid rgba(200,162,90,.3)}
         .chip-green{background:rgba(43,168,74,.1);color:var(--greend);border:1px solid rgba(43,168,74,.3)}
-        .r-sig{background:var(--navy);color:#fff;padding:36px 56px;display:grid;grid-template-columns:1fr 260px;gap:40px;align-items:start;border-top:6px solid var(--green);position:relative;overflow:hidden}
-        .r-sig::before{content:"";position:absolute;inset:0;background:url('/guilloche-sig.svg') center/cover no-repeat;opacity:1;pointer-events:none;z-index:0}
-        .r-sig>*{position:relative;z-index:1}
+        .r-sig{background:var(--navy);color:#fff;padding:36px 56px;display:grid;grid-template-columns:1fr 260px;gap:40px;align-items:start;border-top:6px solid var(--green)}
         .r-sig .left .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brass);letter-spacing:.16em;text-transform:uppercase;margin-bottom:12px}
         .r-sig .left p{font-size:12px;color:#bcc4d1;line-height:1.65;margin-bottom:8px;max-width:480px}
         .r-sig .right{text-align:left;border-left:1px solid #1a2742;padding-left:28px}
