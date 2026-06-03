@@ -2590,30 +2590,13 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
           <div className="ds-block" style={{ marginTop: 8, border: '1px solid #c8bfa8' }}>
             <div className="ds-hd" style={{ background: gravame?.financiamento === 'SIM' || gravame?.situacao === 'ATIVO' ? '#c0392b' : 'var(--navy)' }}>
               <span>RESTRIÇÃO FINANCEIRA / GRAVAME</span>
-              <span className="ds-hd-badge">1 REGISTRO</span>
+              <span className="ds-hd-badge" style={gravame?.financiamento === 'SIM' || gravame?.situacao === 'ATIVO' ? { color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)' } : {}}>{gravame?.financiamento === 'SIM' || gravame?.situacao === 'ATIVO' ? '1 REGISTRO' : 'NADA CONSTA'}</span>
             </div>
-            <div className="tbl-wrap">
-              <table className="snc-tbl">
-                <thead>
-                  <tr>
-                    <th>Financiamento</th>
-                    <th>Situação</th>
-                    <th>Instituição Credora</th>
-                    <th>Nº Contrato</th>
-                    <th>Data Inclusão</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="bold">{v(gravame.financiamento)}</td>
-                    <td>{v(gravame.situacao)}</td>
-                    <td>{v(gravame.agenteFinanceiro)}</td>
-                    <td className="mono">{v(gravame.contratoNumero)}</td>
-                    <td className="mono">{v(gravame.dataInclusao)}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <div className="ds-row"><div className="ds-row-inline" style={{ display: 'flex', flex: 1, gap: 16, alignItems: 'center' }}>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Situação</div><div className="dv bold">{v(gravame.situacao) === '—' ? 'SEM GRAVAME' : v(gravame.situacao)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Financiamento</div><div className="dv">{v(gravame.financiamento)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Status</div><div className="dv"><span className={`chip chip-${gravame?.financiamento === 'SIM' || gravame?.situacao === 'ATIVO' ? 'red' : 'green'}`}>{gravame?.financiamento === 'SIM' || gravame?.situacao === 'ATIVO' ? 'CONSTA' : 'NADA CONSTA'}</span></div></div>
+            </div></div>
           </div>
         </>
       )}
