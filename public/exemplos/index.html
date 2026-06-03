@@ -261,9 +261,36 @@ body{
   .ds-grid{grid-template-columns:1fr}
 }
 
+/* Pillars row */
+.pillars{padding:0;margin-top:-1px}
+.pillars-row{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+  border:1px solid var(--line2);
+}
+.pillar{
+  padding:24px 28px;display:flex;gap:16px;align-items:flex-start;
+  border-right:1px solid var(--line2);
+}
+.pillar:last-child{border-right:none}
+.pillar-icon{
+  font-family:'Libre Caslon Text',serif;font-size:22px;
+  color:var(--brass);flex-shrink:0;line-height:1;margin-top:2px;
+  opacity:.6;
+}
+.pillar-title{
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:6px;
+}
+.pillar-desc{font-size:11.5px;line-height:1.55;color:var(--ink3)}
+@media(max-width:720px){
+  .pillars-row{grid-template-columns:1fr}
+  .pillar{border-right:none;border-bottom:1px solid var(--line2)}
+  .pillar:last-child{border-bottom:none}
+}
+
 /* Explainer section */
 .explainer{padding:56px 0}
-.exp-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:start}
+.exp-block{max-width:720px}
 .exp-kicker{
   font-family:'JetBrains Mono',monospace;font-size:10px;
   letter-spacing:.2em;text-transform:uppercase;color:var(--brass);
@@ -277,21 +304,14 @@ body{
   font-size:13.5px;line-height:1.75;color:var(--ink3);margin-bottom:12px;
 }
 .explainer p strong{color:#ddd}
-.exp-side{display:flex;flex-direction:column;gap:12px}
-.exp-card{
-  background:rgba(14,29,54,.6);border:1px solid var(--line2);
-  padding:18px 20px;display:flex;gap:14px;align-items:flex-start;
-  transition:border-color .3s;
+.exp-sources{
+  display:flex;flex-wrap:wrap;gap:6px;margin-top:20px;
 }
-.exp-card:hover{border-color:var(--brass)}
-.exp-card-icon{font-size:20px;flex-shrink:0;margin-top:2px}
-.exp-card-title{
-  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;
-  letter-spacing:.08em;text-transform:uppercase;color:#fff;margin-bottom:6px;
-}
-.exp-card-desc{font-size:12px;line-height:1.6;color:var(--ink3)}
-@media(max-width:720px){
-  .exp-grid{grid-template-columns:1fr}
+.exp-sources span{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  padding:4px 10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--brass);border:1px solid rgba(200,162,90,.2);
+  background:rgba(200,162,90,.04);
 }
 </style>
 </head>
@@ -315,13 +335,35 @@ body{
     </div>
 
     <h1>Relatórios & E-mails<br/><span class="accent">para consulta veicular</span></h1>
-    <p class="lede">Conheça os modelos de entrega do SNC AutoScore — relatórios completos e notificações por e-mail com dados integrados de 10 datasets nacionais.</p>
+    <p class="lede">Conheça os modelos de entrega do SNC AutoScore — relatórios completos e notificações por e-mail com informações consolidadas de fontes oficiais nacionais.</p>
+  </div>
+</section>
 
-    <div class="stats">
-      <div><div class="num">4</div><div class="lbl">Modelos</div></div>
-      <div><div class="num">10</div><div class="lbl">Datasets</div></div>
-      <div><div class="num">15</div><div class="lbl">Painéis</div></div>
-      <div><div class="num">3</div><div class="lbl">Breakpoints</div></div>
+<!-- ═══════════════════ PILARES ═══════════════════ -->
+<section class="pillars">
+  <div class="container">
+    <div class="pillars-row">
+      <div class="pillar">
+        <div class="pillar-icon">§</div>
+        <div>
+          <div class="pillar-title">Consolidação</div>
+          <div class="pillar-desc">Informações cruzadas e consolidadas em um relatório único — sem consultas avulsas ou fragmentadas.</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">◈</div>
+        <div>
+          <div class="pillar-title">Transparência</div>
+          <div class="pillar-desc">Cada campo exibido indica a fonte oficial. O parceiro e o cliente final sabem de onde vem cada dado.</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">→</div>
+        <div>
+          <div class="pillar-title">Decisão em segundos</div>
+          <div class="pillar-desc">Score automatizado, parecer consolidado e alertas visuais para decisão imediata.</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -331,31 +373,15 @@ body{
 <!-- ═══════════════════ TEXTO EXPLICATIVO ═══════════════════ -->
 <section class="explainer">
   <div class="container">
-    <div class="exp-grid">
-      <div class="exp-main">
-        <div class="exp-kicker">§ Sobre este portfólio</div>
-        <h2 class="exp-title">Transparência total<br/>na entrega de dados</h2>
-        <p>O SNC AutoScore consolida, em uma única consulta, informações de <strong>10 datasets nacionais oficiais</strong> — BIN Nacional, FIPE, Leilão Score, Débitos DETRAN, Histórico de Quilometragem, Gravame Financeiro, RENAJUD, Proprietário, CRLV-e e Recall. Cada dado exibido é rastreável à sua fonte primária.</p>
-        <p>Os modelos abaixo demonstram exatamente <strong>como os dados são apresentados ao cliente final</strong>: sem interpretações subjetivas, sem informações ocultas. Nosso objetivo é entregar ao parceiro e ao consumidor um nível de <strong>clareza e profundidade que gera confiança</strong> na decisão de compra, venda ou financiamento veicular.</p>
-        <p style="color:var(--brass);font-style:italic;margin-top:8px">Todos os exemplos utilizam dados fictícios em conformidade com a LGPD.</p>
+    <div class="exp-block">
+      <div class="exp-kicker">§ Sobre este portfólio</div>
+      <h2 class="exp-title">Transparência total<br/>na entrega de dados</h2>
+      <p>O SNC AutoScore consolida, em uma única consulta, informações de <strong>fontes oficiais nacionais</strong> — BIN Nacional, FIPE, Leilão Score, Débitos DETRAN, Histórico de Quilometragem, Gravame Financeiro, RENAJUD, Proprietário, CRLV-e e Recall. Cada dado exibido é rastreável à sua fonte primária.</p>
+      <p>Os modelos abaixo demonstram exatamente <strong>como os dados são apresentados ao cliente final</strong>: sem interpretações subjetivas, sem informações ocultas. Nosso objetivo é entregar ao parceiro e ao consumidor um nível de <strong>clareza e profundidade que gera confiança</strong> na decisão de compra, venda ou financiamento veicular.</p>
+      <div class="exp-sources">
+        <span>DENATRAN</span><span>DETRAN</span><span>SENATRAN</span><span>FIPE</span><span>B3</span><span>CNJ</span><span>RENAJUD</span><span>RENAINF</span><span>SEGURADORAS</span>
       </div>
-      <div class="exp-side">
-        <div class="exp-card">
-          <div class="exp-card-icon">🔍</div>
-          <div class="exp-card-title">Consolidação</div>
-          <div class="exp-card-desc">10 datasets cruzados e consolidados em um relatório único — sem consultas avulsas ou fragmentadas.</div>
-        </div>
-        <div class="exp-card">
-          <div class="exp-card-icon">🛡️</div>
-          <div class="exp-card-title">Transparência</div>
-          <div class="exp-card-desc">Cada campo exibido indica a fonte oficial. O parceiro e o cliente final sabem exatamente de onde vem cada informação.</div>
-        </div>
-        <div class="exp-card">
-          <div class="exp-card-icon">⚡</div>
-          <div class="exp-card-title">Decisão em segundos</div>
-          <div class="exp-card-desc">Score automatizado, parecer consolidado e alertas visuais para tomada de decisão imediata — sem margem para dúvida.</div>
-        </div>
-      </div>
+      <p style="color:var(--brass);font-style:italic;margin-top:16px">Todos os exemplos utilizam dados fictícios em conformidade com a LGPD.</p>
     </div>
   </div>
 </section>
