@@ -35,10 +35,12 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Informe a placa do veículo." }, { status: 400 });
   }
 
+  const cleanPlaca = placa.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const isMockPlate = cleanPlaca === "XXX0000" || cleanPlaca === "SNC2026" || cleanPlaca === "SNC1990";
+
   // Intercepta em Homologação/Exemplo imediatamente
-  if (isHomolog) {
-    const cleanPlaca = placa.toUpperCase().replace(/[^A-Z0-9]/g, "");
-    const isClean = cleanPlaca === "SNC2026";
+  if (isHomolog || isMockPlate) {
+    const isClean = cleanPlaca === "SNC2026" || cleanPlaca === "XXX0000";
     
     const renajud = isClean
       ? {

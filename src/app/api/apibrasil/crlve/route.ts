@@ -20,8 +20,10 @@ export async function POST(req: Request) {
       );
     }
 
-    if (homolog) {
-      const p = placa.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    const p = placa.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    const isMockPlate = p === "XXX0000" || p === "SNC2026" || p === "SNC1990";
+
+    if (homolog || isMockPlate) {
       if (p === "XXX0000" || p === "SNC2026") return NextResponse.json(CRLV_MOCK_CLEAN);
       return NextResponse.json(CRLV_MOCK_RESTRICTED);
     }

@@ -315,9 +315,10 @@ export async function GET(req: NextRequest) {
   }
 
   const isHomolog = process.env.APIBRASIL_HOMOLOG === "true";
+  const isMockPlate = cleanPlaca === "XXX0000" || cleanPlaca === "SNC2026" || cleanPlaca === "SNC1990";
 
-  // ─── Mocks para Homologação ──────────────────────────────────────────────────
-  if (isHomolog) {
+  // ─── Mocks para Homologação ou Placas de Simulação ───────────────────────────
+  if (isHomolog || isMockPlate) {
     const isClean = cleanPlaca === "XXX0000" || cleanPlaca === "SNC2026";
     
     const mockData = {
