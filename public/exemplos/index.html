@@ -264,7 +264,7 @@ body{
 /* Pillars row */
 .pillars{padding:0;margin-top:-1px}
 .pillars-row{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
   border:1px solid var(--line2);
 }
 .pillar{
@@ -282,7 +282,20 @@ body{
   letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:6px;
 }
 .pillar-desc{font-size:11.5px;line-height:1.55;color:var(--ink3)}
-@media(max-width:720px){
+.pillar-sources{
+  display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;
+}
+.pillar-sources span{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  letter-spacing:.06em;color:var(--brass);opacity:.8;
+}
+.pillar-sources .src-dot{color:#3a4a5a}
+@media(max-width:900px){
+  .pillars-row{grid-template-columns:repeat(2,1fr)}
+  .pillar:nth-child(2){border-right:none}
+  .pillar:nth-child(1),.pillar:nth-child(2){border-bottom:1px solid var(--line2)}
+}
+@media(max-width:520px){
   .pillars-row{grid-template-columns:1fr}
   .pillar{border-right:none;border-bottom:1px solid var(--line2)}
   .pillar:last-child{border-bottom:none}
@@ -364,6 +377,21 @@ body{
           <div class="pillar-desc">Score automatizado, parecer consolidado e alertas visuais para decisão imediata.</div>
         </div>
       </div>
+      <div class="pillar">
+        <div class="pillar-icon">⬡</div>
+        <div>
+          <div class="pillar-title">Fontes Oficiais</div>
+          <div class="pillar-sources">
+            <span>DENATRAN</span><span class="src-dot">·</span>
+            <span>DETRAN</span><span class="src-dot">·</span>
+            <span>SENATRAN</span><span class="src-dot">·</span>
+            <span>FIPE</span><span class="src-dot">·</span>
+            <span>RENAJUD</span><span class="src-dot">·</span>
+            <span>RENAINF</span><span class="src-dot">·</span>
+            <span>CNJ</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -378,10 +406,7 @@ body{
       <h2 class="exp-title">Transparência total<br/>na entrega de dados</h2>
       <p>O SNC AutoScore consolida, em uma única consulta, informações de <strong>fontes oficiais nacionais</strong> — BIN Nacional, FIPE, Leilão Score, Débitos DETRAN, Histórico de Quilometragem, Gravame Financeiro, RENAJUD, Proprietário, CRLV-e e Recall. Cada dado exibido é rastreável à sua fonte primária.</p>
       <p>Os modelos abaixo demonstram exatamente <strong>como os dados são apresentados ao cliente final</strong>: sem interpretações subjetivas, sem informações ocultas. Nosso objetivo é entregar ao parceiro e ao consumidor um nível de <strong>clareza e profundidade que gera confiança</strong> na decisão de compra, venda ou financiamento veicular.</p>
-      <div class="exp-sources">
-        <span>DENATRAN</span><span>DETRAN</span><span>SENATRAN</span><span>FIPE</span><span>B3</span><span>CNJ</span><span>RENAJUD</span><span>RENAINF</span><span>SEGURADORAS</span>
-      </div>
-      <p style="color:var(--brass);font-style:italic;margin-top:16px">Todos os exemplos utilizam dados fictícios em conformidade com a LGPD.</p>
+      <p style="color:var(--brass);font-style:italic;margin-top:16px">Todos os exemplos abaixo utilizam dados fictícios em conformidade com a LGPD.</p>
     </div>
   </div>
 </section>
