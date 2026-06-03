@@ -5225,7 +5225,7 @@ const CSS = `
   .r-sig .left .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brass);letter-spacing:.16em;text-transform:uppercase;margin-bottom:12px}
   .r-sig .left p{font-size:12px;color:#bcc4d1;line-height:1.65;margin-bottom:8px;max-width:480px}
   .r-sig .right{text-align:left;border-left:1px solid #1a2742;padding-left:28px}
-  .r-sig-seal{width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+  .r-sig-seal{width:76px;height:76px;border:1.5px solid var(--brass);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
   .r-sig .right .lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--brass);letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px}
   .r-sig .right .nm{font-family:'Libre Caslon Text',serif;font-size:15px;color:#fff;line-height:1.3}
   .r-sig .right .role{font-size:10px;color:#8a94a3;margin-top:3px}
@@ -6006,7 +6006,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
                 <p>O parecer tem validade de 30 dias corridos a partir da data de emissão. Protocolo: <strong>{protocolo}</strong>.</p>
               </div>
               <div className="right">
-                <div className="r-sig-seal"><img src="/snc-seal.svg" alt="SNC" style={{ height: 72, width: 72 }} /></div>
+                <div className="r-sig-seal"><img src="/snc-shield.png" alt="SNC" style={{ height: 38, width: 'auto', opacity: 0.85 }} /></div>
                 <div className="lbl">Emitente</div>
                 <div className="nm">SNC</div>
                 <div className="role">Sistema Nacional de Conformidade · SNC</div>
