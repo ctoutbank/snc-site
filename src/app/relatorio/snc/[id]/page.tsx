@@ -2597,6 +2597,13 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
               <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Financiamento</div><div className="dv">{v(gravame.financiamento)}</div></div>
               <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Status</div><div className="dv"><span className={`chip chip-${gravame?.financiamento === 'SIM' || gravame?.situacao === 'ATIVO' ? 'red' : 'green'}`}>{gravame?.financiamento === 'SIM' || gravame?.situacao === 'ATIVO' ? 'CONSTA' : 'NADA CONSTA'}</span></div></div>
             </div></div>
+            {(gravame?.financiamento === 'SIM' || gravame?.situacao === 'ATIVO') && (
+              <div className="ds-row"><div className="ds-row-inline" style={{ display: 'flex', flex: 1, gap: 16, alignItems: 'center' }}>
+                <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Instituição Credora</div><div className="dv">{v(gravame.agenteFinanceiro)}</div></div>
+                <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Nº Contrato</div><div className="dv mono">{v(gravame.contratoNumero)}</div></div>
+                <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Data Inclusão</div><div className="dv mono">{v(gravame.dataInclusao)}</div></div>
+              </div></div>
+            )}
           </div>
         </>
       )}
