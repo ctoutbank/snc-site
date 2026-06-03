@@ -2,9 +2,9 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
-<link rel="icon" href="/snc-shield.png" type="image/png"/>
-<link rel="shortcut icon" href="/snc-shield.png"/>
-<link rel="apple-touch-icon" href="/snc-shield.png"/>
+<link rel="icon" href="/favicon-snc.png" type="image/png"/>
+<link rel="shortcut icon" href="/favicon-snc.png"/>
+<link rel="apple-touch-icon" href="/favicon-snc.png"/>
 <meta property="og:image" content="https://snc.consolle.one/snc-shield.png"/>
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="SNC — Sistema Nacional de Conformidade"/>
@@ -271,6 +271,41 @@ body{
   .stats>div{flex:1 1 100%}
   .stats>div{border-right:none}
   .card-preview{height:100px}
+  .exp-grid{gap:28px}
+  .exp-title{font-size:22px}
+}
+
+/* Explainer section */
+.explainer{padding:56px 0}
+.exp-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:start}
+.exp-kicker{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--brass);
+  margin-bottom:16px;
+}
+.exp-title{
+  font-family:'Libre Caslon Text',serif;font-size:30px;font-weight:400;
+  line-height:1.15;letter-spacing:-.01em;color:#fff;margin-bottom:20px;
+}
+.explainer p{
+  font-size:13.5px;line-height:1.75;color:var(--ink3);margin-bottom:12px;
+}
+.explainer p strong{color:#ddd}
+.exp-side{display:flex;flex-direction:column;gap:12px}
+.exp-card{
+  background:rgba(14,29,54,.6);border:1px solid var(--line2);
+  padding:18px 20px;display:flex;gap:14px;align-items:flex-start;
+  transition:border-color .3s;
+}
+.exp-card:hover{border-color:var(--brass)}
+.exp-card-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+.exp-card-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;color:#fff;margin-bottom:6px;
+}
+.exp-card-desc{font-size:12px;line-height:1.6;color:var(--ink3)}
+@media(max-width:720px){
+  .exp-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -301,6 +336,40 @@ body{
       <div><div class="num">10</div><div class="lbl">Datasets</div></div>
       <div><div class="num">15</div><div class="lbl">Painéis</div></div>
       <div><div class="num">3</div><div class="lbl">Breakpoints</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════ TEXTO EXPLICATIVO ═══════════════════ -->
+<section class="explainer">
+  <div class="container">
+    <div class="exp-grid">
+      <div class="exp-main">
+        <div class="exp-kicker">§ Sobre este portfólio</div>
+        <h2 class="exp-title">Transparência total<br/>na entrega de dados</h2>
+        <p>O SNC AutoScore consolida, em uma única consulta, informações de <strong>10 datasets nacionais oficiais</strong> — BIN Nacional, FIPE, Leilão Score, Débitos DETRAN, Histórico de Quilometragem, Gravame Financeiro, RENAJUD, Proprietário, CRLV-e e Recall. Cada dado exibido é rastreável à sua fonte primária.</p>
+        <p>Os modelos abaixo demonstram exatamente <strong>como os dados são apresentados ao cliente final</strong>: sem interpretações subjetivas, sem informações ocultas. Nosso objetivo é entregar ao parceiro e ao consumidor um nível de <strong>clareza e profundidade que gera confiança</strong> na decisão de compra, venda ou financiamento veicular.</p>
+        <p style="color:var(--brass);font-style:italic;margin-top:8px">Todos os exemplos utilizam dados fictícios em conformidade com a LGPD.</p>
+      </div>
+      <div class="exp-side">
+        <div class="exp-card">
+          <div class="exp-card-icon">🔍</div>
+          <div class="exp-card-title">Consolidação</div>
+          <div class="exp-card-desc">10 datasets cruzados e consolidados em um relatório único — sem consultas avulsas ou fragmentadas.</div>
+        </div>
+        <div class="exp-card">
+          <div class="exp-card-icon">🛡️</div>
+          <div class="exp-card-title">Transparência</div>
+          <div class="exp-card-desc">Cada campo exibido indica a fonte oficial. O parceiro e o cliente final sabem exatamente de onde vem cada informação.</div>
+        </div>
+        <div class="exp-card">
+          <div class="exp-card-icon">⚡</div>
+          <div class="exp-card-title">Decisão em segundos</div>
+          <div class="exp-card-desc">Score automatizado, parecer consolidado e alertas visuais para tomada de decisão imediata — sem margem para dúvida.</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>

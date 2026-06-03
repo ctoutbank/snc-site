@@ -36,10 +36,10 @@ export const metadata: Metadata = {
   ],
   icons: {
     icon: [
-      { url: '/snc-shield.png', type: 'image/png', sizes: '512x512' },
+      { url: '/favicon-snc.png', type: 'image/png', sizes: '192x192' },
     ],
-    shortcut: '/snc-shield.png',
-    apple: '/snc-shield.png',
+    shortcut: '/favicon-snc.png',
+    apple: '/favicon-snc.png',
   },
   openGraph: {
     type: 'website',
