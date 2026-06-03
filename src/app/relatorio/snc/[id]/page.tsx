@@ -5252,8 +5252,9 @@ const CSS = `
     .r-title{grid-template-columns:1fr;gap:10px}
     .r-kicker{writing-mode:horizontal-tb;transform:none}
     .r-title h1{font-size:26px}
-    .r-ms{flex-wrap:wrap}
-    .r-ms>div{flex:1 1 30%;border-bottom:1px solid #1a2742}
+    .r-ms{display:grid!important;grid-template-columns:1fr 1fr;gap:0}
+    .r-ms>div{border-right:none;border-bottom:1px solid #1a2742}
+    .r-ms>div:last-child:nth-child(odd){grid-column:1/-1;text-align:center}
     .r-summary{grid-template-columns:1fr;gap:20px}
     .r-sig{grid-template-columns:1fr;gap:20px}
     .r-sig .right{border-left:none;border-top:1px solid #1a2742;padding:20px 0 0;display:flex !important;flex-direction:column !important;align-items:center !important;text-align:center !important;width:100% !important}
@@ -5337,6 +5338,13 @@ const CSS = `
       border-left: 2px solid #c8a25a !important;
       gap: 8px !important;
     }
+    .ds-row>div.ds-row-inline{flex-direction:row!important;flex-wrap:nowrap!important;gap:16px!important}
+    .ds-row>div.ds-row-inline>.ds-row-inner{padding:0!important;border-bottom:none!important;flex:1;min-width:0}
+  }
+  @media(max-width:520px){
+    .r-ms{display:grid!important;grid-template-columns:1fr 1fr;gap:0}
+    .r-ms>div{border-right:none;border-bottom:1px solid #1a2742}
+    .r-ms>div:last-child:nth-child(odd){grid-column:1/-1;text-align:center}
   }
   @media print{
     @page{size:A4;margin:1.2cm 1cm 1.8cm 1cm}
