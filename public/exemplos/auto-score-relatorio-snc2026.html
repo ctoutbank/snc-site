@@ -185,13 +185,16 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   .badge-card{flex-direction:row!important;align-items:center!important;justify-content:space-between}
   .badge-card .chip{margin-left:auto!important;flex-shrink:0}
   .debitos-strip{grid-template-columns:repeat(3,1fr)}
+  .debitos-strip>div{border-bottom:1px solid #ece7d8}
   .leilao-strip{grid-template-columns:repeat(2,1fr);gap:0}
-  .leilao-strip>div{height:auto;min-height:60px;padding:10px 6px}
+  .leilao-strip>div{height:auto;min-height:60px;padding:10px 6px;border-bottom:1px solid #ece7d8}
   .leilao-strip>div:nth-child(5){grid-column:1/-1;border-top:1px solid #d4cfc1}
   .leilao-strip>div:nth-child(3),.leilao-strip>div:nth-child(4){border-top:1px solid #d4cfc1}
-  .ds-row>div[style*="display: flex"],.ds-row>div[style*="display:flex"]{flex-direction:column!important;gap:10px!important}
+  .ds-row>div[style*="display: flex"],.ds-row>div[style*="display:flex"]{flex-direction:column!important;gap:0!important}
+  .ds-row-inner{padding:10px 0;border-bottom:1px solid #ece7d8}
+  .ds-row-inner:last-child{border-bottom:none}
   .fipe-row{flex-wrap:wrap}
-  .fipe-cell{flex:0 0 33%}
+  .fipe-cell{flex:0 0 33%;border-bottom:1px solid #ece7d8}
   .dv{white-space:normal!important}
   .dk{white-space:normal}
   .score-legend{display:grid;grid-template-columns:auto repeat(3,auto);gap:6px 12px;justify-content:start}
