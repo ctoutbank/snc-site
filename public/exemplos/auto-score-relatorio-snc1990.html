@@ -104,6 +104,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
 /* Tables */
 .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #c8bfa8}
 .snc-tbl{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
+.snc-tbl.snc-tbl-auto{table-layout:auto}
 .snc-tbl tr{background:#ffffff}
 .snc-tbl th{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.08em;text-transform:uppercase;padding:9px 14px;background:rgba(200,162,90,0.08);border-bottom:1px solid #c8bfa8;border-right:1px solid #c8bfa8;text-align:center;white-space:normal;word-break:break-word}
 .snc-tbl th:last-child{border-right:none}
@@ -506,7 +507,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
     <div style="padding:12px 14px;background:#f3efe5">
       <div class="dk" style="margin-bottom:8px">Multas Locais Detalhadas:</div>
       <div class="tbl-wrap">
-        <table class="snc-tbl">
+        <table class="snc-tbl snc-tbl-auto">
           <thead><tr><th style="text-align:center">Vencimento</th><th style="text-align:center">Infração</th><th style="text-align:center">Valor</th><th style="text-align:center">Situação</th></tr></thead>
           <tbody>
             <tr><td class="mono" style="white-space:nowrap;padding:10px 14px" data-label="Vencimento">20/02/2024</td><td style="white-space:normal;word-break:break-word;padding:10px 14px" data-label="Infração"><div>TRANSITAR EM VELOCIDADE SUPERIOR À MÁXIMA PERMITIDA EM ATÉ 20%</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace"><strong>Órgão Emissor:</strong> DPRF <span style="margin-left:8px"> | <strong>Cód:</strong> 74550</span></div></td><td class="mono red" style="white-space:nowrap;padding:10px 14px" data-label="Valor">R$ 130,16</td><td style="text-align:center;padding:10px 14px" data-label="Situação"><span class="chip chip-red">EM ABERTO</span></td></tr>
@@ -520,7 +521,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
     <div style="padding:12px 14px;border-top:1px dashed #d4cfc1;background:#f3efe5">
       <div class="dk" style="margin-bottom:8px">IPVA por Exercício / Parcela:</div>
       <div class="tbl-wrap">
-        <table class="snc-tbl">
+        <table class="snc-tbl snc-tbl-auto">
           <thead><tr><th style="text-align:center">Exercício</th><th style="text-align:center">Parcela</th><th style="text-align:center">Vencimento</th><th style="text-align:center">Valor</th><th style="text-align:center">Situação</th></tr></thead>
           <tbody>
             <tr><td style="text-align:center;padding:10px 14px" data-label="Exercício">2026</td><td class="mono" style="text-align:center;padding:10px 14px" data-label="Parcela">ÚNICA</td><td class="mono" style="text-align:center;padding:10px 14px" data-label="Vencimento">15/03/2026</td><td class="mono red" style="text-align:center;white-space:nowrap;padding:10px 14px" data-label="Valor">R$ 2.689,20</td><td style="text-align:center;padding:10px 14px" data-label="Situação"><span class="chip chip-red">EM ABERTO</span></td></tr>
@@ -533,7 +534,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
     <div style="padding:12px 14px;border-top:1px dashed #d4cfc1;background:#f3efe5">
       <div class="dk" style="margin-bottom:8px">Licenciamento Detalhado:</div>
       <div class="tbl-wrap">
-        <table class="snc-tbl">
+        <table class="snc-tbl snc-tbl-auto">
           <thead><tr><th style="text-align:center">Exercício</th><th style="text-align:center">Vencimento</th><th style="text-align:center">Valor</th><th style="text-align:center">Situação</th></tr></thead>
           <tbody>
             <tr><td style="text-align:center;padding:10px 14px" data-label="Exercício">2025</td><td class="mono" style="text-align:center;padding:10px 14px" data-label="Vencimento">30/04/2025</td><td class="mono red" style="text-align:center;white-space:nowrap;padding:10px 14px" data-label="Valor">R$ 262,71</td><td style="text-align:center;padding:10px 14px" data-label="Situação"><span class="chip chip-red">EM ABERTO</span></td></tr>
@@ -546,7 +547,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
     <div style="padding:12px 14px;border-top:1px dashed #d4cfc1;background:#f3efe5">
       <div class="dk" style="margin-bottom:8px">Outros Débitos Detalhados:</div>
       <div class="tbl-wrap">
-        <table class="snc-tbl">
+        <table class="snc-tbl snc-tbl-auto">
           <thead><tr><th>Vencimento</th><th>Descrição</th><th>Valor</th><th>Situação</th></tr></thead>
           <tbody>
             <tr><td class="mono" style="white-space:nowrap;padding:10px 14px" data-label="Vencimento">10/11/2024</td><td style="white-space:normal;word-break:break-word;padding:10px 14px" data-label="Descrição"><div>TAXA DE VISTORIA CAUTELAR</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace"><strong>Órgão Emissor:</strong> DETRAN/MG</div></td><td class="mono red" style="white-space:nowrap;padding:10px 14px" data-label="Valor">R$ 198,30</td><td style="text-align:center;padding:10px 14px" data-label="Situação"><span class="chip chip-red">EM ABERTO</span></td></tr>
@@ -621,7 +622,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <div class="ds-block" style="margin-top:8px;border:1px solid #c8bfa8">
     <div class="ds-hd" style="background:#c0392b"><span>INFRAÇÕES DE TRÂNSITO<span class="hd-full"> NACIONAIS</span> (RENAINF)</span><span class="ds-hd-badge" style="color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1)">2 OCORRÊNCIAS</span></div>
     <div class="tbl-wrap">
-      <table class="snc-tbl">
+      <table class="snc-tbl snc-tbl-auto">
         <thead><tr><th>Data / Hora</th><th>Infração</th><th>Local &amp; Órgão</th><th>Valor</th><th>Situação</th></tr></thead>
         <tbody>
           <tr><td class="mono" style="white-space:nowrap;padding:10px 14px" data-label="Data / Hora">12/12/2023 14:30</td><td style="white-space:normal;word-break:break-word;padding:10px 14px" data-label="Infração"><div>TRANSITAR EM VELOCIDADE SUPERIOR À MÁXIMA PERMITIDA EM ATÉ 20%</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace">Cód: 74550 | AIT: A10892736</div></td><td style="white-space:normal;word-break:break-word;padding:10px 14px" data-label="Local"><div>BR 381 KM 480 - CONTAGEM MG</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace"><strong>Autuador:</strong> DPRF - BRASÍLIA/DF</div></td><td class="mono" style="white-space:nowrap;padding:10px 14px;color:#c0392b" data-label="Valor">R$ 130,16</td><td style="text-align:center;padding:10px 14px" data-label="Situação"><span class="chip chip-green">PAGO</span></td></tr>

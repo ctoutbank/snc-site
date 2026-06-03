@@ -1485,7 +1485,7 @@ function DadosDebitos({ r }: { r: Record<string, unknown> }) {
           <div className="ds-block" style={{ marginTop: 8 }}>
             <div className="ds-hd"><span>INFRAÇÕES CONSTATADAS</span><span className="ds-hd-badge">{multas.length === 1 ? '1 MULTA' : `${multas.length} MULTAS`}</span></div>
             <div className="tbl-wrap">
-              <table className="snc-tbl">
+              <table className="snc-tbl snc-tbl-auto">
                 <thead>
                   <tr>
                     <th>#</th>
@@ -1527,7 +1527,7 @@ function DadosDebitos({ r }: { r: Record<string, unknown> }) {
           <div className="ds-block" style={{ marginTop: 8 }}>
             <div className="ds-hd"><span>EXERCÍCIOS / PARCELAS CONSTATADOS</span><span className="ds-hd-badge">{ipva.length === 1 ? '1 DÉBITO' : `${ipva.length} DÉBITOS`}</span></div>
             <div className="tbl-wrap">
-              <table className="snc-tbl">
+              <table className="snc-tbl snc-tbl-auto">
                 <thead>
                   <tr>
                     <th>#</th>
@@ -1565,7 +1565,7 @@ function DadosDebitos({ r }: { r: Record<string, unknown> }) {
           <div className="ds-block" style={{ marginTop: 8 }}>
             <div className="ds-hd"><span>TAXAS DIVERSAS EM ABERTO</span><span className="ds-hd-badge">{(licenciamento.length + dpvat.length) === 1 ? '1 TAXA' : `${licenciamento.length + dpvat.length} TAXAS`}</span></div>
             <div className="tbl-wrap">
-              <table className="snc-tbl">
+              <table className="snc-tbl snc-tbl-auto">
                 <thead>
                   <tr>
                     <th>#</th>
@@ -1956,7 +1956,7 @@ function DadosEstadual({ r }: { r: Record<string, unknown> }) {
                 <span className="ds-hd-badge">{multas.length === 1 ? '1 MULTA' : `${multas.length} MULTAS`}</span>
               </div>
               <div className="tbl-wrap">
-                <table className="snc-tbl">
+                <table className="snc-tbl snc-tbl-auto">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -1990,7 +1990,7 @@ function DadosEstadual({ r }: { r: Record<string, unknown> }) {
                 <span className="ds-hd-badge">{ipva.length === 1 ? '1 EXERCÍCIO' : `${ipva.length} EXERCÍCIOS`}</span>
               </div>
               <div className="tbl-wrap">
-                <table className="snc-tbl">
+                <table className="snc-tbl snc-tbl-auto">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -2024,7 +2024,7 @@ function DadosEstadual({ r }: { r: Record<string, unknown> }) {
                 <span className="ds-hd-badge">{licenciamento.length === 1 ? '1 TAXA' : `${licenciamento.length} TAXAS`}</span>
               </div>
               <div className="tbl-wrap">
-                <table className="snc-tbl">
+                <table className="snc-tbl snc-tbl-auto">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -2156,7 +2156,7 @@ function DadosRenainf({ r }: { r: Record<string, unknown> }) {
               <span className="ds-hd-badge">{infracoes.length === 1 ? '1 MULTA' : `${infracoes.length} MULTAS`}</span>
             </div>
             <div className="tbl-wrap">
-              <table className="snc-tbl">
+              <table className="snc-tbl snc-tbl-auto">
                 <thead>
                   <tr>
                     <th>#</th>
@@ -2693,7 +2693,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
             <div style={{ padding: '12px 14px', background: '#f3efe5' }}>
               <div className="dk" style={{ marginBottom: 8 }}>Multas Locais Detalhadas:</div>
               <div className="tbl-wrap">
-                <table className="snc-tbl">
+                <table className="snc-tbl snc-tbl-auto">
                   <thead>
                     <tr>
                       <th style={{ textAlign: 'center' }}>Vencimento</th>
@@ -2736,7 +2736,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
             <div style={{ padding: '12px 14px', borderTop: '1px dashed #d4cfc1', background: '#f3efe5' }}>
               <div className="dk" style={{ marginBottom: 8 }}>IPVA por Exercício / Parcela:</div>
               <div className="tbl-wrap">
-                <table className="snc-tbl">
+                <table className="snc-tbl snc-tbl-auto">
                   <thead>
                     <tr>
                       <th style={{ textAlign: 'center' }}>Exercício</th>
@@ -2773,7 +2773,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
             <div style={{ padding: '12px 14px', borderTop: '1px dashed #d4cfc1', background: '#f3efe5' }}>
               <div className="dk" style={{ marginBottom: 8 }}>Licenciamento Detalhado:</div>
               <div className="tbl-wrap">
-                <table className="snc-tbl">
+                <table className="snc-tbl snc-tbl-auto">
                   <thead>
                     <tr>
                       <th style={{ textAlign: 'center' }}>Exercício</th>
@@ -2804,7 +2804,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
             <div style={{ padding: '12px 14px', borderTop: '1px dashed #d4cfc1', background: '#f3efe5' }}>
               <div className="dk" style={{ marginBottom: 8 }}>Seguro DPVAT Detalhado:</div>
               <div className="tbl-wrap">
-                <table className="snc-tbl">
+                <table className="snc-tbl snc-tbl-auto">
                   <thead>
                     <tr>
                       <th style={{ textAlign: 'center' }}>Exercício</th>
@@ -2835,7 +2835,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
             <div style={{ padding: '12px 14px', borderTop: '1px dashed #d4cfc1', background: '#f3efe5' }}>
               <div className="dk" style={{ marginBottom: 8 }}>Outros Débitos Detalhados:</div>
               <div className="tbl-wrap">
-                <table className="snc-tbl">
+                <table className="snc-tbl snc-tbl-auto">
                   <thead>
                     <tr>
                       <th>Vencimento</th>
@@ -5205,6 +5205,7 @@ const CSS = `
   .src-badge{display:inline-flex;align-items:center;padding:5px 12px;border:1px solid #b8b0a0;color:var(--ink2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;background:var(--paper);margin:16px 0 0}
   .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #c8bfa8}
   .snc-tbl{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
+  .snc-tbl.snc-tbl-auto{table-layout:auto}
   .snc-tbl tr{background:#ffffff}
   .snc-tbl th{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink2);letter-spacing:.08em;text-transform:uppercase;padding:9px 14px;background:rgba(200,162,90,0.08);border-bottom:1px solid #c8bfa8;border-right:1px solid #c8bfa8;text-align:center !important;white-space:normal;word-break:break-word}
   .snc-tbl th:last-child{border-right:none}
