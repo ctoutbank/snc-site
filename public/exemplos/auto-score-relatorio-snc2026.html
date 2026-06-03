@@ -94,7 +94,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
 .ds-row{padding:11px 16px;display:flex;justify-content:space-between;align-items:center;background:#ffffff;border:1px solid #d4cfc1;border-top:none;gap:16px}
 .ds-row-inner{flex:1;min-width:0}
 .dk{font-family:'JetBrains Mono',monospace;font-size:9px;color:#000;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;white-space:nowrap}
-.dv{font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:400;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dv{font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:400;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;word-break:break-word;overflow-wrap:break-word}
 .mono{font-family:'JetBrains Mono',monospace}
 .bold{font-weight:600}
 .src-badge{display:inline-flex;align-items:center;padding:5px 12px;border:1px solid #b8b0a0;color:var(--ink2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;background:var(--paper);margin:16px 0 0}
@@ -159,6 +159,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
 .score-legend .sl-box{width:12px;height:12px;border-radius:2px;flex-shrink:0}
 
 /* Responsive */
+.dv{word-break:break-word;overflow-wrap:break-word}
 @media(max-width:720px){
   .r-page{margin:8px;width:auto}
   .r-head,.r-sec,.r-sig,.r-foot{padding-left:20px;padding-right:20px}
@@ -185,6 +186,10 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   .ds-row>div[style*="display: flex"],.ds-row>div[style*="display:flex"]{flex-direction:column!important;gap:10px!important}
   .fipe-row{flex-wrap:wrap}
   .fipe-cell{flex:0 0 33%}
+  .dv{white-space:normal!important}
+  .dk{white-space:normal}
+  .score-legend{flex-wrap:wrap;justify-content:flex-start;gap:8px 12px}
+  .ds-hd{white-space:normal;flex-wrap:wrap;gap:6px}
 }
 @media(max-width:520px){
   .r-page{margin:0}
@@ -194,10 +199,17 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   .r-sl .sname{font-size:20px}
   .debitos-strip{grid-template-columns:repeat(2,1fr)}
   .leilao-strip{grid-template-columns:repeat(2,1fr)}
+  .fipe-cell{flex:0 0 50%}
+  .r-ms>div{flex:1 1 50%}
+  .badge-card{flex-direction:column;align-items:flex-start;gap:4px}
+  .badge-card .chip{margin-left:0!important}
 }
 @media(max-width:380px){
   .r-title h1{font-size:18px}
   .r-sl .sname{font-size:18px}
+  .r-ms{flex-direction:column}
+  .r-ms>div{flex:1 1 100%;border-right:none}
+  .fipe-cell{flex:0 0 100%}
 }
 </style>
 </head>
@@ -614,7 +626,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
     <p>Toda informação consolidada é rastreável à fonte primária. Reprodução não autorizada é vedada nos termos da LGPD.</p>
   </div>
   <div class="right">
-    <div class="r-sig-seal">SNC<br/>MMXXVI</div>
+    <div class="r-sig-seal">SNC<br/>2026</div>
     <div class="lbl">Emissão automatizada</div>
     <div class="nm">Sistema Nacional de Conformidade</div>
     <div class="role">Auto Score · Relatório Veicular Consolidado</div>
@@ -627,7 +639,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
 
 <!-- FOOTER -->
 <div class="r-foot">
-  <span>SNC · MMXXVI · Documento Nº 2026.0603-1043</span>
+  <span>SNC · 2026 · Documento Nº 2026.0603-1043</span>
   <span>03 JUN 2026 · 10:43:20 BRT</span>
 </div>
 
