@@ -602,7 +602,7 @@ function DadosVipCar({ r }: { r: Record<string, unknown> }) {
                   {prec.map((item, i) => (
                     <tr key={i} style={{ background: '#ffffff' }}>
                       <td className="mono">{v(item.codigo)}</td>
-                      <td className="bold">{v(item.fabricanteModelo)}</td>
+                      <td>{v(item.fabricanteModelo)}</td>
                       <td className="mono">{v(item.anoModelo)}</td>
                       <td className="mono">FIPE</td>
                       <td className="green">{v(item.preco)}</td>
@@ -768,7 +768,7 @@ function DadosVeiculo({ r }: { r: Record<string, unknown> }) {
                 {fipe.map((item, i) => (
                   <tr key={i} style={{ background: item.principal ? 'rgba(15,26,36,0.04)' : '#ffffff' }}>
                     <td className="mono" style={{ color: '#5a6a7a' }}>{v(item.codigoFipe)}</td>
-                    <td className="bold">{v(vei.marca)} {v(item.anoModelo)}</td>
+                    <td>{v(vei.marca)} {v(item.anoModelo)}</td>
                     <td className="mono">{v(item.anoModelo)}</td>
                     <td>{v(item.combustivel)}</td>
                     <td className="mono">{v(item.mesReferencia)}</td>
@@ -1274,7 +1274,7 @@ function DadosRenajud({ r }: { r: Record<string, unknown> }) {
                 {/* Linha 1: dados gerais */}
                 <tr style={{ background: '#ffffff', borderTop: '1px solid #c8bfa8' }}>
                   <td className="mono">{v(data.processo)}</td>
-                  <td className="bold">{v(data.orgao_judicial)}</td>
+                  <td>{v(data.orgao_judicial)}</td>
                   <td>{v(data.tribunal)}</td>
                   <td>
                     <span className="chip chip-red">RESTRIÇÃO ATIVA</span>
@@ -1442,36 +1442,36 @@ function DadosDebitos({ r }: { r: Record<string, unknown> }) {
             </thead>
             <tbody>
               <tr style={{ background: '#ffffff' }}>
-                <td style={{ textAlign: 'left' }} className="bold">Multas de Trânsito</td>
+                <td style={{ textAlign: 'left' }}>Multas de Trânsito</td>
                 <td>{multas.length}</td>
-                <td style={{ textAlign: 'right', color: multas.length > 0 ? '#c0392b' : 'inherit' }} className="mono bold">{totalMultas}</td>
+                <td style={{ textAlign: 'right', color: multas.length > 0 ? '#c0392b' : 'inherit' }} className="mono">{totalMultas}</td>
               </tr>
               <tr style={{ background: '#ffffff' }}>
-                <td style={{ textAlign: 'left' }} className="bold">IPVA (Imposto sobre Propriedade)</td>
+                <td style={{ textAlign: 'left' }}>IPVA (Imposto sobre Propriedade)</td>
                 <td>{ipva.length}</td>
-                <td style={{ textAlign: 'right', color: ipva.length > 0 ? '#c0392b' : 'inherit' }} className="mono bold">{totalIpva}</td>
+                <td style={{ textAlign: 'right', color: ipva.length > 0 ? '#c0392b' : 'inherit' }} className="mono">{totalIpva}</td>
               </tr>
               <tr style={{ background: '#ffffff' }}>
-                <td style={{ textAlign: 'left' }} className="bold">Taxa de Licenciamento Anual</td>
+                <td style={{ textAlign: 'left' }}>Taxa de Licenciamento Anual</td>
                 <td>{licenciamento.length}</td>
-                <td style={{ textAlign: 'right', color: licenciamento.length > 0 ? '#c0392b' : 'inherit' }} className="mono bold">{totalLicenciamento}</td>
+                <td style={{ textAlign: 'right', color: licenciamento.length > 0 ? '#c0392b' : 'inherit' }} className="mono">{totalLicenciamento}</td>
               </tr>
               <tr style={{ background: '#ffffff' }}>
-                <td style={{ textAlign: 'left' }} className="bold">Seguro DPVAT</td>
+                <td style={{ textAlign: 'left' }}>Seguro DPVAT</td>
                 <td>{dpvat.length}</td>
-                <td style={{ textAlign: 'right', color: dpvat.length > 0 ? '#c0392b' : 'inherit' }} className="mono bold">{totalDpvat}</td>
+                <td style={{ textAlign: 'right', color: dpvat.length > 0 ? '#c0392b' : 'inherit' }} className="mono">{totalDpvat}</td>
               </tr>
               {outros.length > 0 && (
                 <tr style={{ background: '#ffffff' }}>
-                  <td style={{ textAlign: 'left' }} className="bold">Outros Débitos / Taxas Administrativas</td>
+                  <td style={{ textAlign: 'left' }}>Outros Débitos / Taxas Administrativas</td>
                   <td>{outros.length}</td>
-                  <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono bold">{debitos.totalOutros ? String(debitos.totalOutros) : '—'}</td>
+                  <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono">{debitos.totalOutros ? String(debitos.totalOutros) : '—'}</td>
                 </tr>
               )}
               <tr style={{ background: '#fcfaf6', fontWeight: 700 }}>
-                <td style={{ textAlign: 'left', color: 'var(--ink)' }} className="bold">TOTAL GERAL ACUMULADO</td>
+                <td style={{ textAlign: 'left', color: 'var(--ink)' }}>TOTAL GERAL ACUMULADO</td>
                 <td>{multas.length + ipva.length + licenciamento.length + dpvat.length + outros.length}</td>
-                <td style={{ textAlign: 'right', color: temDebitos ? '#c0392b' : 'var(--green)' }} className="mono bold">{totalGeral}</td>
+                <td style={{ textAlign: 'right', color: temDebitos ? '#c0392b' : 'var(--green)' }} className="mono">{totalGeral}</td>
               </tr>
             </tbody>
           </table>
@@ -1501,7 +1501,7 @@ function DadosDebitos({ r }: { r: Record<string, unknown> }) {
                   {multas.map((m, idx) => (
                     <tr key={idx} style={{ background: '#ffffff' }}>
                       <td className="mono">{idx + 1}</td>
-                      <td style={{ textAlign: 'left', whiteSpace: 'normal', minWidth: 220 }} className="bold">{v(m.descricao)}</td>
+                      <td style={{ textAlign: 'left', whiteSpace: 'normal', minWidth: 220 }}>{v(m.descricao)}</td>
                       <td className="mono">{v(m.codigoInfracao || m.codigo)}</td>
                       <td className="mono">{v(m.dataVencimento || m.vencimento)}</td>
                       <td>{v(m.orgaoEmissor || m.orgao)}</td>
@@ -1510,7 +1510,7 @@ function DadosDebitos({ r }: { r: Record<string, unknown> }) {
                           {v(m.situacao || 'EM ABERTO')}
                         </span>
                       </td>
-                      <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono bold">{v(m.valor)}</td>
+                      <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono">{v(m.valor)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -1541,14 +1541,14 @@ function DadosDebitos({ r }: { r: Record<string, unknown> }) {
                   {ipva.map((i, idx) => (
                     <tr key={idx} style={{ background: '#ffffff' }}>
                       <td className="mono">{idx + 1}</td>
-                      <td style={{ textAlign: 'left' }} className="bold">IPVA {v(i.exercicio || i.descricao)} ({v(i.parcela || 'COTA ÚNICA')})</td>
+                      <td style={{ textAlign: 'left' }}>IPVA {v(i.exercicio || i.descricao)} ({v(i.parcela || 'COTA ÚNICA')})</td>
                       <td className="mono">{v(i.dataVencimento || i.vencimento)}</td>
                       <td>
                         <span className="chip chip-red" style={{ fontSize: 9, fontWeight: 700, padding: '2px 6px' }}>
                           {v(i.situacao || 'EM ABERTO')}
                         </span>
                       </td>
-                      <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono bold">{v(i.valor)}</td>
+                      <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono">{v(i.valor)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -1579,27 +1579,27 @@ function DadosDebitos({ r }: { r: Record<string, unknown> }) {
                   {licenciamento.map((l, idx) => (
                     <tr key={`lic-${idx}`} style={{ background: '#ffffff' }}>
                       <td className="mono">{idx + 1}</td>
-                      <td style={{ textAlign: 'left' }} className="bold">Taxa de Licenciamento Anual (Exercício {v(l.exercicio || l.descricao)})</td>
+                      <td style={{ textAlign: 'left' }}>Taxa de Licenciamento Anual (Exercício {v(l.exercicio || l.descricao)})</td>
                       <td className="mono">{v(l.dataVencimento || l.vencimento)}</td>
                       <td>
                         <span className="chip chip-red" style={{ fontSize: 9, fontWeight: 700, padding: '2px 6px' }}>
                           {v(l.situacao || 'VENCIDO')}
                         </span>
                       </td>
-                      <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono bold">{v(l.valor)}</td>
+                      <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono">{v(l.valor)}</td>
                     </tr>
                   ))}
                   {dpvat.map((d, idx) => (
                     <tr key={`dpv-${idx}`} style={{ background: '#ffffff' }}>
                       <td className="mono">{licenciamento.length + idx + 1}</td>
-                      <td style={{ textAlign: 'left' }} className="bold">Seguro Obrigatório DPVAT (Exercício {v(d.exercicio || d.descricao)})</td>
+                      <td style={{ textAlign: 'left' }}>Seguro Obrigatório DPVAT (Exercício {v(d.exercicio || d.descricao)})</td>
                       <td className="mono">{v(d.dataVencimento || d.vencimento)}</td>
                       <td>
                         <span className="chip chip-red" style={{ fontSize: 9, fontWeight: 700, padding: '2px 6px' }}>
                           {v(d.situacao || 'VENCIDO')}
                         </span>
                       </td>
-                      <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono bold">{v(d.valor)}</td>
+                      <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono">{v(d.valor)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -1904,9 +1904,9 @@ function DadosEstadual({ r }: { r: Record<string, unknown> }) {
                 <tbody>
                   {multas.length > 0 && (
                     <tr style={{ background: '#ffffff' }}>
-                      <td style={{ textAlign: 'left' }} className="bold">Multas Estaduais</td>
+                      <td style={{ textAlign: 'left' }}>Multas Estaduais</td>
                       <td>{multas.length}</td>
-                      <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono bold">
+                      <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono">
                         {multas.reduce((a, m) => {
                           const n = parseFloat(String(m.valor ?? '0').replace(/[^0-9,.-]/g, '').replace(',', '.'));
                           return a + (isNaN(n) ? 0 : n);
@@ -1916,9 +1916,9 @@ function DadosEstadual({ r }: { r: Record<string, unknown> }) {
                   )}
                   {ipva.length > 0 && (
                     <tr style={{ background: '#ffffff' }}>
-                      <td style={{ textAlign: 'left' }} className="bold">IPVA Estadual</td>
+                      <td style={{ textAlign: 'left' }}>IPVA Estadual</td>
                       <td>{ipva.length}</td>
-                      <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono bold">
+                      <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono">
                         {ipva.reduce((a, m) => {
                           const n = parseFloat(String(m.valor ?? '0').replace(/[^0-9,.-]/g, '').replace(',', '.'));
                           return a + (isNaN(n) ? 0 : n);
@@ -1928,9 +1928,9 @@ function DadosEstadual({ r }: { r: Record<string, unknown> }) {
                   )}
                   {licenciamento.length > 0 && (
                     <tr style={{ background: '#ffffff' }}>
-                      <td style={{ textAlign: 'left' }} className="bold">Licenciamento / Taxas</td>
+                      <td style={{ textAlign: 'left' }}>Licenciamento / Taxas</td>
                       <td>{licenciamento.length}</td>
-                      <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono bold">
+                      <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono">
                         {licenciamento.reduce((a, m) => {
                           const n = parseFloat(String(m.valor ?? '0').replace(/[^0-9,.-]/g, '').replace(',', '.'));
                           return a + (isNaN(n) ? 0 : n);
@@ -1939,9 +1939,9 @@ function DadosEstadual({ r }: { r: Record<string, unknown> }) {
                     </tr>
                   )}
                   <tr style={{ background: '#fcfaf6', fontWeight: 700 }}>
-                    <td style={{ textAlign: 'left', color: 'var(--ink)' }} className="bold">TOTAL GERAL</td>
+                    <td style={{ textAlign: 'left', color: 'var(--ink)' }}>TOTAL GERAL</td>
                     <td>{multas.length + ipva.length + licenciamento.length + outros.length}</td>
-                    <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono bold">{totalDebitos}</td>
+                    <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono">{totalDebitos}</td>
                   </tr>
                 </tbody>
               </table>
@@ -1970,10 +1970,10 @@ function DadosEstadual({ r }: { r: Record<string, unknown> }) {
                     {multas.map((m, idx) => (
                       <tr key={idx} style={{ background: '#ffffff' }}>
                         <td className="mono">{idx + 1}</td>
-                        <td style={{ textAlign: 'left', whiteSpace: 'normal', minWidth: 200 }} className="bold">{v(m.descricao)}</td>
+                        <td style={{ textAlign: 'left', whiteSpace: 'normal', minWidth: 200 }}>{v(m.descricao)}</td>
                         <td>{v(m.orgaoEmissor)}</td>
                         <td className="mono">{v(m.dataVencimento)}</td>
-                        <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono bold">{v(m.valor)}</td>
+                        <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono">{v(m.valor)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -2004,10 +2004,10 @@ function DadosEstadual({ r }: { r: Record<string, unknown> }) {
                     {ipva.map((i, idx) => (
                       <tr key={idx} style={{ background: '#ffffff' }}>
                         <td className="mono">{idx + 1}</td>
-                        <td style={{ textAlign: 'left' }} className="bold">{v(i.descricao)}</td>
+                        <td style={{ textAlign: 'left' }}>{v(i.descricao)}</td>
                         <td>{v(i.orgaoEmissor)}</td>
                         <td className="mono">{v(i.dataVencimento)}</td>
-                        <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono bold">{v(i.valor)}</td>
+                        <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono">{v(i.valor)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -2038,10 +2038,10 @@ function DadosEstadual({ r }: { r: Record<string, unknown> }) {
                     {licenciamento.map((l, idx) => (
                       <tr key={idx} style={{ background: '#ffffff' }}>
                         <td className="mono">{idx + 1}</td>
-                        <td style={{ textAlign: 'left' }} className="bold">{v(l.descricao)}</td>
+                        <td style={{ textAlign: 'left' }}>{v(l.descricao)}</td>
                         <td>{v(l.orgaoEmissor)}</td>
                         <td className="mono">{v(l.dataVencimento)}</td>
-                        <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono bold">{v(l.valor)}</td>
+                        <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono">{v(l.valor)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -2173,7 +2173,7 @@ function DadosRenainf({ r }: { r: Record<string, unknown> }) {
                     <tr key={idx} style={{ background: '#ffffff' }}>
                       <td className="mono">{idx + 1}</td>
                       <td style={{ textAlign: 'left', whiteSpace: 'normal', minWidth: 200 }}>
-                        <div className="bold">{v(inf.autoInfra)}</div>
+                        <div>{v(inf.autoInfra)}</div>
                         <div style={{ fontSize: 11, color: '#475569', marginTop: 4 }}>{v(inf.descricao)}</div>
                         <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 4 }}>Local: {v(inf.localInfra)}</div>
                       </td>
@@ -2185,7 +2185,7 @@ function DadosRenainf({ r }: { r: Record<string, unknown> }) {
                           {v(inf.situacao || 'EM ABERTO')}
                         </span>
                       </td>
-                      <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono bold">{v(inf.valorOriginal)}</td>
+                      <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono">{v(inf.valorOriginal)}</td>
                     </tr>
                   ))}
                   {/* Linha do Valor Consolidado integrada sob as colunas corretas */}
@@ -2205,7 +2205,7 @@ function DadosRenainf({ r }: { r: Record<string, unknown> }) {
                     <td style={{ textAlign: 'center', padding: '11px 14px', borderRight: '1px solid #c8bfa8' }}>
                       <span className="chip chip-red">DÉBITO ATIVO</span>
                     </td>
-                    <td className="mono bold" style={{ color: '#ef4444', fontSize: 11, textAlign: 'right', padding: '11px 14px' }}>
+                    <td className="mono" style={{ color: '#ef4444', fontSize: 11, textAlign: 'right', padding: '11px 14px' }}>
                       R$ {valorTotal}
                     </td>
                   </tr>
@@ -2433,7 +2433,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
         <div className="ds-hd"><span>PROPRIETÁRIO ATUAL DO VEÍCULO</span></div>
         <div className="ds-row">
           <div style={{ display: 'flex', flex: 1, gap: 16 }}>
-            <div className="ds-row-inner" style={{ flex: 1.5 }}><div className="dk">Nome do Proprietário</div><div className="dv bold">{v(prop.nome)}</div></div>
+            <div className="ds-row-inner" style={{ flex: 1.5 }}><div className="dk">Nome do Proprietário</div><div className="dv">{v(prop.nome)}</div></div>
             <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Documento</div><div className="dv" style={{ fontFamily: "'JetBrains Mono',monospace" }}>{v(prop.documento)}</div></div>
             <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Município/UF</div><div className="dv">{v(prop.municipio)}/{v(prop.uf)}</div></div>
             <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Status Cadastral</div><div className="dv">{v(prop.statusDescricao)}</div></div>
@@ -2491,7 +2491,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
                       {lista.map((p, i) => (
                         <tr key={i} style={{ background: '#ffffff' }}>
                           <td className="mono">{i + 1}</td>
-                          <td className="bold" style={{ textAlign: 'left', whiteSpace: 'normal' }}>{mascararNome(v(p.nome))}</td>
+                          <td style={{ textAlign: 'left', whiteSpace: 'normal' }}>{mascararNome(v(p.nome))}</td>
                           <td className="mono">{v(p.documento)}</td>
                           <td>{p.municipio && p.uf ? `${p.municipio} / ${p.uf}` : v(p.municipio)}</td>
                           <td className="mono">{v(p.dataAtualizacao)}</td>
@@ -2574,7 +2574,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
                     <td className="mono">{v(renajudDetalhes.processo)}</td>
                     <td>{v(renajudDetalhes.orgaoJudicial)}</td>
                     <td className="mono">{v(renajudDetalhes.tribunal)}</td>
-                    <td className="bold">{Array.isArray(renajudDetalhes.restricoes) && renajudDetalhes.restricoes.length > 0 ? renajudDetalhes.restricoes.join(' · ') : '—'}</td>
+                    <td>{Array.isArray(renajudDetalhes.restricoes) && renajudDetalhes.restricoes.length > 0 ? renajudDetalhes.restricoes.join(' · ') : '—'}</td>
                   </tr>
                 </tbody>
               </table>
@@ -2593,7 +2593,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
               <span className="ds-hd-badge" style={gravame?.financiamento === 'SIM' || gravame?.situacao === 'ATIVO' ? { color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)' } : {}}>{gravame?.financiamento === 'SIM' || gravame?.situacao === 'ATIVO' ? '1 REGISTRO' : 'NADA CONSTA'}</span>
             </div>
             <div className="ds-row"><div className="ds-row-inline" style={{ display: 'flex', flex: 1, gap: 16, alignItems: 'center' }}>
-              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Situação</div><div className="dv bold">{v(gravame.situacao) === '—' ? 'SEM GRAVAME' : v(gravame.situacao)}</div></div>
+              <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Situação</div><div className="dv">{v(gravame.situacao) === '—' ? 'SEM GRAVAME' : v(gravame.situacao)}</div></div>
               <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Financiamento</div><div className="dv">{v(gravame.financiamento)}</div></div>
               <div className="ds-row-inner" style={{ flex: 1 }}><div className="dk">Status</div><div className="dv"><span className={`chip chip-${gravame?.financiamento === 'SIM' || gravame?.situacao === 'ATIVO' ? 'red' : 'green'}`}>{gravame?.financiamento === 'SIM' || gravame?.situacao === 'ATIVO' ? 'CONSTA' : 'NADA CONSTA'}</span></div></div>
             </div></div>
@@ -2711,7 +2711,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
                             {m.dataVencimento ?? '—'}
                           </td>
                           <td style={{ whiteSpace: 'normal', wordBreak: 'break-word', padding: '10px 14px' }}>
-                            <div className="bold">{m.descricao ?? '—'}</div>
+                            <div>{m.descricao ?? '—'}</div>
                             <div style={{ fontSize: '9px', color: '#5a6a7a', marginTop: 3, fontFamily: "'JetBrains Mono',monospace" }}>
                               <strong>Órgão Emissor:</strong> {m.orgaoEmissor ?? '—'}
                               {m.codigoInfracao && <span style={{ marginLeft: 8 }}> | <strong>Cód:</strong> {m.codigoInfracao}</span>}
@@ -2751,7 +2751,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
                       const paga = ip.situacao === 'PAGO';
                       return (
                         <tr key={i} style={{ background: '#ffffff' }}>
-                          <td className="bold" style={{ textAlign: 'center', padding: '10px 14px' }}>{ip.exercicio ?? '—'}</td>
+                          <td style={{ textAlign: 'center', padding: '10px 14px' }}>{ip.exercicio ?? '—'}</td>
                           <td className="mono" style={{ textAlign: 'center', padding: '10px 14px' }}>{ip.parcela ?? '—'}</td>
                           <td className="mono" style={{ textAlign: 'center', padding: '10px 14px' }}>{ip.dataVencimento ?? '—'}</td>
                           <td className="mono bold red" style={{ textAlign: 'center', whiteSpace: 'nowrap', padding: '10px 14px' }}>
@@ -2787,7 +2787,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
                       const paga = l.situacao === 'PAGO';
                       return (
                         <tr key={i} style={{ background: '#ffffff' }}>
-                          <td className="bold" style={{ textAlign: 'center', padding: '10px 14px' }}>{l.exercicio ?? '—'}</td>
+                          <td style={{ textAlign: 'center', padding: '10px 14px' }}>{l.exercicio ?? '—'}</td>
                           <td className="mono" style={{ textAlign: 'center', padding: '10px 14px' }}>{l.dataVencimento ?? '—'}</td>
                           <td className="mono bold red" style={{ textAlign: 'center', whiteSpace: 'nowrap', padding: '10px 14px' }}>{l.valor ?? '—'}</td>
                           <td style={{ textAlign: 'center', padding: '10px 14px' }}><span className={`chip chip-${paga ? 'green' : 'red'}`}>{l.situacao || 'EM ABERTO'}</span></td>
@@ -2818,7 +2818,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
                       const paga = d.situacao === 'PAGO';
                       return (
                         <tr key={i} style={{ background: '#ffffff' }}>
-                          <td className="bold" style={{ textAlign: 'center', padding: '10px 14px' }}>{d.exercicio ?? '—'}</td>
+                          <td style={{ textAlign: 'center', padding: '10px 14px' }}>{d.exercicio ?? '—'}</td>
                           <td className="mono" style={{ textAlign: 'center', padding: '10px 14px' }}>{d.dataVencimento ?? '—'}</td>
                           <td className="mono bold red" style={{ textAlign: 'center', whiteSpace: 'nowrap', padding: '10px 14px' }}>{d.valor ?? '—'}</td>
                           <td style={{ textAlign: 'center', padding: '10px 14px' }}><span className={`chip chip-${paga ? 'green' : 'red'}`}>{d.situacao || 'EM ABERTO'}</span></td>
@@ -2851,7 +2851,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
                         <tr key={i} style={{ background: '#ffffff' }}>
                           <td className="mono" style={{ whiteSpace: 'nowrap', padding: '10px 14px' }}>{od.dataVencimento ?? '—'}</td>
                           <td style={{ whiteSpace: 'normal', wordBreak: 'break-word', padding: '10px 14px' }}>
-                            <div className="bold">{od.descricao ?? '—'}</div>
+                            <div>{od.descricao ?? '—'}</div>
                             {od.orgaoEmissor && (
                               <div style={{ fontSize: '9px', color: '#5a6a7a', marginTop: 3, fontFamily: "'JetBrains Mono',monospace" }}>
                                 <strong>Órgão Emissor:</strong> {od.orgaoEmissor}
@@ -2906,8 +2906,8 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
                   return (
                     <tr key={i} style={{ background: isAnomaly ? 'rgba(239, 68, 68, 0.04)' : '#ffffff' }}>
                       <td className="mono">{item.data}</td>
-                      <td className="mono bold">{Number(item.km).toLocaleString('pt-BR')} KM</td>
-                      <td className="bold">{item.fonte}</td>
+                      <td className="mono">{Number(item.km).toLocaleString('pt-BR')} KM</td>
+                      <td>{item.fonte}</td>
                       <td className="mono">{item.estado}</td>
                       <td style={{ textAlign: 'center' }}>
                         <span className={`chip chip-${isAnomaly ? 'red' : 'green'}`}>
@@ -2967,10 +2967,10 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
                   {prec.map((item, i) => (
                     <tr key={i} style={{ background: '#ffffff' }}>
                       <td className="mono">{v(item.codigo)}</td>
-                      <td className="bold" style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>{v(item.fabricanteModelo)}</td>
+                      <td style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>{v(item.fabricanteModelo)}</td>
                       <td className="mono">{v(item.anoModelo)}</td>
                       <td className="mono">FIPE</td>
-                      <td className="mono bold">{v(item.preco)}</td>
+                      <td className="mono">{v(item.preco)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -3036,7 +3036,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
                         {o.dataHora ?? '—'}
                       </td>
                       <td style={{ whiteSpace: 'normal', wordBreak: 'break-word', padding: '10px 14px' }}>
-                        <div className="bold">{o.descricao ?? '—'}</div>
+                        <div>{o.descricao ?? '—'}</div>
                         <div style={{ fontSize: '9px', color: '#5a6a7a', marginTop: 3, fontFamily: "'JetBrains Mono',monospace" }}>
                           Cód: {o.codigo ?? '—'} | AIT: {o.auto ?? '—'}
                         </div>
@@ -3349,7 +3349,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
               <tbody>
                 {recall.ocorrencias.map((rec: any, idx: number) => (
                   <tr key={idx}>
-                    <td className="bold">{v(rec.fabricante)}</td>
+                    <td>{v(rec.fabricante)}</td>
                     <td>{v(rec.campanha)}</td>
                     <td>{v(rec.defeito)}</td>
                     <td><span className={`chip chip-${rec.situacao === 'NÃO ATENDIDO' ? 'red' : 'green'}`}>{v(rec.situacao)}</span></td>
@@ -3389,7 +3389,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
               {/* CRLV-e */}
               <tr style={{ background: '#ffffff', borderBottom: 'none' }}>
                 <td style={{ textAlign: 'center', fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, fontSize: 13, color: '#5a6a7a', verticalAlign: 'top', paddingTop: 12 }}>1</td>
-                <td className="bold" style={{ textAlign: 'left' }}>
+                <td style={{ textAlign: 'left' }}>
                   CRLV-e Digital Oficial
                   <span style={{ display: 'inline-block', marginLeft: 6, fontFamily: "'JetBrains Mono',monospace", fontSize: 8, padding: '1px 5px', border: '1px solid rgba(212,168,67,0.5)', color: '#8a6a1a', letterSpacing: '0.06em', verticalAlign: 'middle' }}>ICP-BRASIL</span>
                 </td>
@@ -4382,7 +4382,7 @@ function DadosCsvCompleta({ r }: { r: Record<string, unknown> }) {
                   <tr key={idx} style={{ background: '#ffffff' }}>
                     <td className="mono">{idx + 1}</td>
                     <td style={{ textAlign: 'left', whiteSpace: 'normal', minWidth: 200 }}>
-                      <div className="bold">{v(inf.numero_auto_infracao)}</div>
+                      <div>{v(inf.numero_auto_infracao)}</div>
                       <div style={{ fontSize: 11, color: '#475569', marginTop: 4 }}>{v(inf.descricao_infracao)}</div>
                       <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 4 }}>Local: {v(inf.local_infracao)}</div>
                     </td>
@@ -4394,7 +4394,7 @@ function DadosCsvCompleta({ r }: { r: Record<string, unknown> }) {
                         {v(inf.situacao || 'EM ABERTO')}
                       </span>
                     </td>
-                    <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono bold">
+                    <td style={{ textAlign: 'right', color: '#c0392b' }} className="mono">
                       {inf.valor_multa ? `R$ ${inf.valor_multa}` : '—'}
                     </td>
                   </tr>
@@ -4416,7 +4416,7 @@ function DadosCsvCompleta({ r }: { r: Record<string, unknown> }) {
                   <td style={{ textAlign: 'center', padding: '11px 14px', borderRight: '1px solid #c8bfa8' }}>
                     <span className="chip chip-red">DÉBITO ATIVO</span>
                   </td>
-                  <td className="mono bold" style={{ color: '#ef4444', fontSize: 11, textAlign: 'right', padding: '11px 14px' }}>
+                  <td className="mono" style={{ color: '#ef4444', fontSize: 11, textAlign: 'right', padding: '11px 14px' }}>
                     {infracoes.reduce((acc, inf) => {
                       const valStr = String(inf.valor_multa ?? '0').replace(/[^0-9,.-]/g, '').replace(',', '.');
                       const valNum = parseFloat(valStr);
@@ -4769,7 +4769,7 @@ function DadosAnaliticoVeicular({ r }: { r: Record<string, unknown> }) {
                 {/* Linha 1: dados gerais */}
                 <tr style={{ background: '#ffffff', borderTop: '1px solid #c8bfa8' }}>
                   <td className="mono">{v(renajud.processo)}</td>
-                  <td className="bold">{v(renajud.orgaoJudicial)}</td>
+                  <td>{v(renajud.orgaoJudicial)}</td>
                   <td>{v(renajud.tribunal)}</td>
                   <td>
                     <span className="chip chip-red">RESTRIÇÃO ATIVA</span>
@@ -4845,7 +4845,7 @@ function DadosAnaliticoVeicular({ r }: { r: Record<string, unknown> }) {
                 {ocorrenciasRoubo.map((o, i) => (
                   <tr key={i} style={{ background: '#ffffff' }}>
                     <td className="mono">{v(o.data)}</td>
-                    <td className="bold">{v(o.tipo)}</td>
+                    <td>{v(o.tipo)}</td>
                     <td className="mono">{v(o.boletim)}</td>
                     <td>{v(o.localidade)}</td>
                     <td>
@@ -4903,9 +4903,9 @@ function DadosAnaliticoVeicular({ r }: { r: Record<string, unknown> }) {
                   {multas.map((m, i) => (
                     <tr key={i} style={{ background: '#ffffff' }}>
                       <td className="mono">{v(m.data)}</td>
-                      <td className="bold">{v(m.descricao)}</td>
+                      <td>{v(m.descricao)}</td>
                       <td>{v(m.orgao)}</td>
-                      <td className="mono bold">{v(m.valor)}</td>
+                      <td className="mono">{v(m.valor)}</td>
                       <td>
                         <span className={`chip chip-${m.situacao === 'PENDENTE' ? 'red' : 'green'}`}>
                           {v(m.situacao)}
@@ -4926,7 +4926,7 @@ function DadosAnaliticoVeicular({ r }: { r: Record<string, unknown> }) {
                     }}>
                       Valor Consolidado
                     </td>
-                    <td className="mono bold" style={{ color: '#ef4444', fontSize: 11, textAlign: 'center' }}>
+                    <td className="mono" style={{ color: '#ef4444', fontSize: 11, textAlign: 'center' }}>
                       {v(renainf.valorTotal)}
                     </td>
                     <td style={{ textAlign: 'center' }}>
@@ -4968,7 +4968,7 @@ function DadosAnaliticoVeicular({ r }: { r: Record<string, unknown> }) {
               <tbody>
                 {ocorrenciasRecall.map((c, i) => (
                   <tr key={i} style={{ background: '#ffffff' }}>
-                    <td className="bold">{v(c.fabricante)}</td>
+                    <td>{v(c.fabricante)}</td>
                     <td>{v(c.modelo)}</td>
                     <td className="mono">{v(c.campanha)}</td>
                     <td>{v(c.defeito)}</td>
@@ -5110,8 +5110,8 @@ function DadosHistoricoKm({ r }: { r: Record<string, unknown> }) {
               })}
               {/* Rodapé de totais */}
               <tr style={{ background: '#fcfaf6', fontWeight: 700 }}>
-                <td colSpan={2} style={{ textAlign: 'left', color: 'var(--ink)' }} className="bold">TOTAL DE REGISTROS</td>
-                <td style={{ textAlign: 'right' }} className="mono bold">{total}</td>
+                <td colSpan={2} style={{ textAlign: 'left', color: 'var(--ink)' }}>TOTAL DE REGISTROS</td>
+                <td style={{ textAlign: 'right' }} className="mono">{total}</td>
                 <td colSpan={2} />
                 <td>
                   {anomalia
