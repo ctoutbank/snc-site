@@ -92,6 +92,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
 /* Data blocks */
 .ds-block{margin-bottom:2px}
 .ds-hd{background:var(--navy);color:#fff;font-size:9px;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.hd-full{display:inline}
 .ds-row{padding:11px 16px;display:flex;justify-content:space-between;align-items:center;background:#ffffff;border:1px solid #d4cfc1;border-top:none;gap:16px}
 .ds-row-inner{flex:1;min-width:0}
 .dk{font-family:'JetBrains Mono',monospace;font-size:9px;color:#000;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;white-space:nowrap}
@@ -167,7 +168,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   .r-head,.r-sec,.r-sig,.r-foot{padding-left:20px;padding-right:20px}
   .r-head{padding-top:24px;padding-bottom:20px}
   .r-head-top{flex-direction:column;gap:14px;align-items:flex-start}
-  .r-did{text-align:left;margin-left:64px}.r-did .num{font-size:16px}
+  .r-did{text-align:left;margin-left:80px}.r-did .num{font-size:16px}
   .r-title{grid-template-columns:1fr;gap:10px}
   .r-kicker{writing-mode:horizontal-tb;transform:none}
   .r-title h1{font-size:26px}
@@ -198,6 +199,12 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   .score-legend{display:grid;grid-template-columns:auto repeat(3,auto);gap:6px 12px;justify-content:start}
   .score-legend>span:first-child{grid-column:1;grid-row:1/3;align-self:center}
   .ds-hd{white-space:normal;flex-wrap:wrap;gap:6px}
+  .hd-full{display:none}
+  .snc-tbl,.snc-tbl thead,.snc-tbl tbody,.snc-tbl tr,.snc-tbl th,.snc-tbl td{display:block}
+  .snc-tbl thead{display:none}
+  .snc-tbl tr{border-bottom:1px solid #d4cfc1;padding:10px 14px;display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}
+  .snc-tbl td{padding:4px 0;text-align:left!important;border:none}
+  .snc-tbl td::before{content:attr(data-label);display:block;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:#8a94a3;margin-bottom:1px}
 }
 @media(max-width:520px){
   .r-page{margin:0}
@@ -262,9 +269,9 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
       <h1>
         Relatório Veicular Consolidado<br/>
         <span style="color:#fff">SNC AutoScore</span>
-        <span style="white-space:nowrap"><span class="it"> — Placa: </span><span style="color:var(--brass)">SNC1990</span></span>
+        <span style="white-space:nowrap"><span class="it"> – Placa: </span><span style="color:var(--brass)">SNC1990</span></span>
       </h1>
-      <div class="lede">Documento gerado automaticamente a partir de 10 datasets integrados (BIN Nacional, FIPE, Leilão Score, Débitos, Histórico KM, Gravame, RENAJUD, Proprietário, CRLV-e e Recall).</div>
+      <div class="lede">Documento gerado automaticamente a partir de 10 fontes integradas (BIN Nacional, FIPE, Leilão Score, Débitos, Histórico KM, Gravame, RENAJUD, Proprietário, CRLV-e e Recall).</div>
     </div>
   </div>
 </header>
@@ -331,7 +338,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <!-- ──── IDENTIFICAÇÃO CADASTRAL ──── -->
   <div class="src-badge" style="margin-top:8px">IDENTIFICAÇÃO CADASTRAL</div>
   <div class="ds-block" style="margin-top:8px">
-    <div class="ds-hd"><span>IDENTIFICAÇÃO CADASTRAL DO VEÍCULO (BIN)</span></div>
+    <div class="ds-hd"><span>IDENTIFICAÇÃO <span class="hd-full">CADASTRAL </span>DO VEÍCULO (BIN)</span></div>
     <div class="ds-row"><div style="display:flex;flex:1;gap:16px">
       <div class="ds-row-inner" style="flex:1"><div class="dk">Marca/Modelo</div><div class="dv">CHEVROLET TRACKER PREM.</div></div>
       <div class="ds-row-inner" style="flex:1"><div class="dk">CRLV Digital</div><div class="dv" style="font-family:'JetBrains Mono',monospace;font-size:12px">00984738493</div></div>
@@ -378,7 +385,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <!-- ──── PROPRIETÁRIO ATUAL ──── -->
   <div class="src-badge" style="margin-top:8px">PROPRIETÁRIO ATUAL</div>
   <div class="ds-block" style="margin-top:8px">
-    <div class="ds-hd"><span>PROPRIETÁRIO ATUAL DO VEÍCULO</span></div>
+    <div class="ds-hd"><span>PROPRIETÁRIO<span class="hd-full"> ATUAL DO VEÍCULO</span></span></div>
     <div class="ds-row"><div style="display:flex;flex:1;gap:16px">
       <div class="ds-row-inner" style="flex:1.5"><div class="dk">Nome do Proprietário</div><div class="dv bold">ANA O******* D* M*******</div></div>
       <div class="ds-row-inner" style="flex:1"><div class="dk">Documento</div><div class="dv" style="font-family:'JetBrains Mono',monospace">098.***.***-11</div></div>
@@ -396,9 +403,9 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
       <table class="snc-tbl">
         <thead><tr><th>#</th><th style="text-align:left">Nome / Razão Social</th><th>Documento</th><th>Município / UF</th><th>Data Atualiz.</th></tr></thead>
         <tbody>
-          <tr><td class="mono">1</td><td class="bold" style="text-align:left">CARLOS A******* S****</td><td class="mono">045.***.***-89</td><td>CONTAGEM / MG</td><td class="mono">10/03/2018</td></tr>
-          <tr><td class="mono">2</td><td class="bold" style="text-align:left">DISTRIBUIDORA J* L***</td><td class="mono">12.***.***/ 0001-44</td><td>BELO HORIZONTE / MG</td><td class="mono">22/07/2019</td></tr>
-          <tr><td class="mono">3</td><td class="bold" style="text-align:left">PAULO H******* F*******</td><td class="mono">078.***.***-12</td><td>BELO HORIZONTE / MG</td><td class="mono">15/09/2021</td></tr>
+          <tr><td class="mono" data-label="#">1</td><td class="bold" style="text-align:left" data-label="Nome">CARLOS A******* S****</td><td class="mono" data-label="Documento">045.***.***-89</td><td data-label="Município">CONTAGEM / MG</td><td class="mono" data-label="Data">10/03/2018</td></tr>
+          <tr><td class="mono" data-label="#">2</td><td class="bold" style="text-align:left" data-label="Nome">DISTRIBUIDORA J* L***</td><td class="mono" data-label="Documento">12.***.***/ 0001-44</td><td data-label="Município">BELO HORIZONTE / MG</td><td class="mono" data-label="Data">22/07/2019</td></tr>
+          <tr><td class="mono" data-label="#">3</td><td class="bold" style="text-align:left" data-label="Nome">PAULO H******* F*******</td><td class="mono" data-label="Documento">078.***.***-12</td><td data-label="Município">BELO HORIZONTE / MG</td><td class="mono" data-label="Data">15/09/2021</td></tr>
         </tbody>
       </table>
     </div>
@@ -407,7 +414,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <!-- ──── RESTRIÇÕES BIN ──── -->
   <div class="src-badge" style="margin-top:8px">RESTRIÇÕES E IMPEDIMENTOS</div>
   <div class="ds-block" style="margin-top:8px;border:1px solid #c8bfa8">
-    <div class="ds-hd" style="background:#c0392b"><span>RESTRIÇÕES CADASTRAIS GERAIS (BIN / CNJ)</span><span class="ds-hd-badge" style="color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1)">3 RESTRIÇÕES</span></div>
+    <div class="ds-hd" style="background:#c0392b"><span>RESTRIÇÕES <span class="hd-full">CADASTRAIS GERAIS </span>(BIN / CNJ)</span><span class="ds-hd-badge" style="color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1)">3 RESTRIÇÕES</span></div>
     <div class="badge-grid">
       <div class="badge-card alert"><span class="bk dk" style="margin:0">Restrição Geral BIN</span><span class="chip chip-red" style="margin-left:12px">CONSTA</span></div>
       <div class="badge-card alert"><span class="bk dk" style="margin:0">Alerta de Sinistro</span><span class="chip chip-red" style="margin-left:12px">CONSTA</span></div>
@@ -430,7 +437,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
       <table class="snc-tbl">
         <thead><tr><th>Nº Processo</th><th>Órgão Judicial</th><th>Tribunal</th><th>Restrições Aplicadas</th></tr></thead>
         <tbody>
-          <tr><td class="mono">0012345-67.2023.8.13.0024</td><td>VARA CÍVEL DE BELO HORIZONTE</td><td class="mono">TJMG</td><td class="bold">APREENSÃO · TRANSFERÊNCIA</td></tr>
+          <tr><td class="mono" data-label="Nº Processo">0012345-67.2023.8.13.0024</td><td data-label="Órgão">VARA CÍVEL DE BELO HORIZONTE</td><td class="mono" data-label="Tribunal">TJMG</td><td class="bold" data-label="Restrições">APREENSÃO · TRANSFERÊNCIA</td></tr>
         </tbody>
       </table>
     </div>
@@ -444,7 +451,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
       <table class="snc-tbl">
         <thead><tr><th>Financiamento</th><th>Situação</th><th>Instituição Credora</th><th>Nº Contrato</th><th>Data Inclusão</th></tr></thead>
         <tbody>
-          <tr><td class="bold">SIM</td><td>ATIVO</td><td>BANCO BRADESCO S.A.</td><td class="mono">202100483726</td><td class="mono">15/09/2021</td></tr>
+          <tr><td class="bold" data-label="Financiamento">SIM</td><td data-label="Situação">ATIVO</td><td data-label="Instituição">BANCO BRADESCO S.A.</td><td class="mono" data-label="Contrato">202100483726</td><td class="mono" data-label="Data">15/09/2021</td></tr>
         </tbody>
       </table>
     </div>
@@ -458,7 +465,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
       <table class="snc-tbl" style="width:100%;word-break:break-word">
         <thead><tr style="background:rgba(153,27,27,.08)"><th>Data</th><th>Tipo</th><th>Seguradora</th><th>Valor</th><th>Situação</th><th>Descrição</th></tr></thead>
         <tbody>
-          <tr style="border-top:1px solid #c8bfa8"><td class="mono">15/06/2022</td><td style="color:#991b1b;font-weight:600">COLISÃO</td><td>SULAMÉRICA</td><td class="mono">R$ 58.000,00</td><td><span style="padding:2px 8px;font-size:9px;letter-spacing:.06em;background:rgba(153,27,27,.08);color:#991b1b;border:1px solid rgba(153,27,27,.2)">INDENIZAÇÃO INTEGRAL</span></td><td style="font-size:10px;color:#3a4252">MÉDIA MONTA CONSTATADA POR PERÍCIA</td></tr>
+          <tr style="border-top:1px solid #c8bfa8"><td class="mono" data-label="Data">15/06/2022</td><td style="color:#991b1b;font-weight:600" data-label="Tipo">COLISÃO</td><td data-label="Seguradora">SULAMÉRICA</td><td class="mono" data-label="Valor">R$ 58.000,00</td><td data-label="Situação"><span style="padding:2px 8px;font-size:9px;letter-spacing:.06em;background:rgba(153,27,27,.08);color:#991b1b;border:1px solid rgba(153,27,27,.2)">INDENIZAÇÃO INTEGRAL</span></td><td style="font-size:10px;color:#3a4252" data-label="Descrição">MÉDIA MONTA CONSTATADA POR PERÍCIA</td></tr>
         </tbody>
       </table>
     </div>
@@ -467,7 +474,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <!-- ──── DÉBITOS ──── -->
   <div class="src-badge" style="margin-top:8px">DÉBITOS ESTADUAIS</div>
   <div class="ds-block" style="margin-top:8px;border:1px solid #c8bfa8">
-    <div class="ds-hd" style="background:#c0392b"><span>DÉBITOS ATIVOS DO DETRAN ESTADUAL</span><span class="ds-hd-badge" style="color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1)">6 REGISTROS</span></div>
+    <div class="ds-hd" style="background:#c0392b"><span>DÉBITOS <span class="hd-full">ATIVOS DO </span>DETRAN<span class="hd-full"> ESTADUAL</span></span><span class="ds-hd-badge" style="color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1)">6 REGISTROS</span></div>
     <div class="debitos-strip">
       <div><div class="dval red">R$ 423,63</div><div class="dlbl">Multas Locais</div></div>
       <div><div class="dval red">R$ 2.689,20</div><div class="dlbl">IPVA</div></div>
@@ -484,8 +491,8 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
         <table class="snc-tbl">
           <thead><tr><th style="text-align:center">Vencimento</th><th style="text-align:center">Infração</th><th style="text-align:center">Valor</th><th style="text-align:center">Situação</th></tr></thead>
           <tbody>
-            <tr><td class="mono" style="white-space:nowrap;padding:10px 14px">20/02/2024</td><td style="white-space:normal;word-break:break-word;padding:10px 14px"><div class="bold">TRANSITAR EM VELOCIDADE SUPERIOR À MÁXIMA PERMITIDA EM ATÉ 20%</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace"><strong>Órgão Emissor:</strong> DPRF <span style="margin-left:8px"> | <strong>Cód:</strong> 74550</span></div></td><td class="mono bold red" style="white-space:nowrap;padding:10px 14px">R$ 130,16</td><td style="text-align:center;padding:10px 14px"><span class="chip chip-red">EM ABERTO</span></td></tr>
-            <tr><td class="mono" style="white-space:nowrap;padding:10px 14px">15/10/2024</td><td style="white-space:normal;word-break:break-word;padding:10px 14px"><div class="bold">DIRIGIR VEÍCULO MANUSEANDO TELEFONE CELULAR</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace"><strong>Órgão Emissor:</strong> DETRAN/MG <span style="margin-left:8px"> | <strong>Cód:</strong> 76332</span></div></td><td class="mono bold red" style="white-space:nowrap;padding:10px 14px">R$ 293,47</td><td style="text-align:center;padding:10px 14px"><span class="chip chip-red">EM ABERTO</span></td></tr>
+            <tr><td class="mono" style="white-space:nowrap;padding:10px 14px" data-label="Vencimento">20/02/2024</td><td style="white-space:normal;word-break:break-word;padding:10px 14px" data-label="Infração"><div class="bold">TRANSITAR EM VELOCIDADE SUPERIOR À MÁXIMA PERMITIDA EM ATÉ 20%</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace"><strong>Órgão Emissor:</strong> DPRF <span style="margin-left:8px"> | <strong>Cód:</strong> 74550</span></div></td><td class="mono bold red" style="white-space:nowrap;padding:10px 14px" data-label="Valor">R$ 130,16</td><td style="text-align:center;padding:10px 14px" data-label="Situação"><span class="chip chip-red">EM ABERTO</span></td></tr>
+            <tr><td class="mono" style="white-space:nowrap;padding:10px 14px" data-label="Vencimento">15/10/2024</td><td style="white-space:normal;word-break:break-word;padding:10px 14px" data-label="Infração"><div class="bold">DIRIGIR VEÍCULO MANUSEANDO TELEFONE CELULAR</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace"><strong>Órgão Emissor:</strong> DETRAN/MG <span style="margin-left:8px"> | <strong>Cód:</strong> 76332</span></div></td><td class="mono bold red" style="white-space:nowrap;padding:10px 14px" data-label="Valor">R$ 293,47</td><td style="text-align:center;padding:10px 14px" data-label="Situação"><span class="chip chip-red">EM ABERTO</span></td></tr>
           </tbody>
         </table>
       </div>
@@ -498,7 +505,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
         <table class="snc-tbl">
           <thead><tr><th style="text-align:center">Exercício</th><th style="text-align:center">Parcela</th><th style="text-align:center">Vencimento</th><th style="text-align:center">Valor</th><th style="text-align:center">Situação</th></tr></thead>
           <tbody>
-            <tr><td class="bold" style="text-align:center;padding:10px 14px">2026</td><td class="mono" style="text-align:center;padding:10px 14px">ÚNICA</td><td class="mono" style="text-align:center;padding:10px 14px">15/03/2026</td><td class="mono bold red" style="text-align:center;white-space:nowrap;padding:10px 14px">R$ 2.689,20</td><td style="text-align:center;padding:10px 14px"><span class="chip chip-red">EM ABERTO</span></td></tr>
+            <tr><td class="bold" style="text-align:center;padding:10px 14px" data-label="Exercício">2026</td><td class="mono" style="text-align:center;padding:10px 14px" data-label="Parcela">ÚNICA</td><td class="mono" style="text-align:center;padding:10px 14px" data-label="Vencimento">15/03/2026</td><td class="mono bold red" style="text-align:center;white-space:nowrap;padding:10px 14px" data-label="Valor">R$ 2.689,20</td><td style="text-align:center;padding:10px 14px" data-label="Situação"><span class="chip chip-red">EM ABERTO</span></td></tr>
           </tbody>
         </table>
       </div>
@@ -511,7 +518,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
         <table class="snc-tbl">
           <thead><tr><th style="text-align:center">Exercício</th><th style="text-align:center">Vencimento</th><th style="text-align:center">Valor</th><th style="text-align:center">Situação</th></tr></thead>
           <tbody>
-            <tr><td class="bold" style="text-align:center;padding:10px 14px">2025</td><td class="mono" style="text-align:center;padding:10px 14px">30/04/2025</td><td class="mono bold red" style="text-align:center;white-space:nowrap;padding:10px 14px">R$ 262,71</td><td style="text-align:center;padding:10px 14px"><span class="chip chip-red">EM ABERTO</span></td></tr>
+            <tr><td class="bold" style="text-align:center;padding:10px 14px" data-label="Exercício">2025</td><td class="mono" style="text-align:center;padding:10px 14px" data-label="Vencimento">30/04/2025</td><td class="mono bold red" style="text-align:center;white-space:nowrap;padding:10px 14px" data-label="Valor">R$ 262,71</td><td style="text-align:center;padding:10px 14px" data-label="Situação"><span class="chip chip-red">EM ABERTO</span></td></tr>
           </tbody>
         </table>
       </div>
@@ -524,8 +531,8 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
         <table class="snc-tbl">
           <thead><tr><th>Vencimento</th><th>Descrição</th><th>Valor</th><th>Situação</th></tr></thead>
           <tbody>
-            <tr><td class="mono" style="white-space:nowrap;padding:10px 14px">10/11/2024</td><td style="white-space:normal;word-break:break-word;padding:10px 14px"><div class="bold">TAXA DE VISTORIA CAUTELAR</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace"><strong>Órgão Emissor:</strong> DETRAN/MG</div></td><td class="mono bold red" style="white-space:nowrap;padding:10px 14px">R$ 198,30</td><td style="text-align:center;padding:10px 14px"><span class="chip chip-red">EM ABERTO</span></td></tr>
-            <tr><td class="mono" style="white-space:nowrap;padding:10px 14px">05/01/2025</td><td style="white-space:normal;word-break:break-word;padding:10px 14px"><div class="bold">DIÁRIAS DE PÁTIO — REMOÇÃO ADMINISTRATIVA</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace"><strong>Órgão Emissor:</strong> DETRAN/MG</div></td><td class="mono bold red" style="white-space:nowrap;padding:10px 14px">R$ 360,00</td><td style="text-align:center;padding:10px 14px"><span class="chip chip-red">EM ABERTO</span></td></tr>
+            <tr><td class="mono" style="white-space:nowrap;padding:10px 14px" data-label="Vencimento">10/11/2024</td><td style="white-space:normal;word-break:break-word;padding:10px 14px" data-label="Descrição"><div class="bold">TAXA DE VISTORIA CAUTELAR</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace"><strong>Órgão Emissor:</strong> DETRAN/MG</div></td><td class="mono bold red" style="white-space:nowrap;padding:10px 14px" data-label="Valor">R$ 198,30</td><td style="text-align:center;padding:10px 14px" data-label="Situação"><span class="chip chip-red">EM ABERTO</span></td></tr>
+            <tr><td class="mono" style="white-space:nowrap;padding:10px 14px" data-label="Vencimento">05/01/2025</td><td style="white-space:normal;word-break:break-word;padding:10px 14px" data-label="Descrição"><div class="bold">DIÁRIAS DE PÁTIO — REMOÇÃO ADMINISTRATIVA</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace"><strong>Órgão Emissor:</strong> DETRAN/MG</div></td><td class="mono bold red" style="white-space:nowrap;padding:10px 14px" data-label="Valor">R$ 360,00</td><td style="text-align:center;padding:10px 14px" data-label="Situação"><span class="chip chip-red">EM ABERTO</span></td></tr>
           </tbody>
         </table>
       </div>
@@ -535,15 +542,15 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <!-- ──── HISTÓRICO KM ──── -->
   <div class="src-badge" style="margin-top:8px">HISTÓRICO DE QUILOMETRAGEM</div>
   <div class="ds-block" style="margin-top:8px;border:1px solid #c8bfa8">
-    <div class="ds-hd" style="background:#c0392b"><span>HISTÓRICO CRONOLÓGICO DE QUILOMETRAGEM (HODÔMETRO)</span><span class="ds-hd-badge" style="color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1)">4 REGISTROS</span></div>
+    <div class="ds-hd" style="background:#c0392b"><span>HISTÓRICO <span class="hd-full">CRONOLÓGICO </span>DE QUILOMETRAGEM<span class="hd-full"> (HODÔMETRO)</span></span><span class="ds-hd-badge" style="color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1)">4 REGISTROS</span></div>
     <div class="tbl-wrap">
       <table class="snc-tbl">
         <thead><tr><th>Data Registro</th><th>Quilometragem Indicada</th><th>Fonte Informadora</th><th>Estado (UF)</th><th>Consistência</th></tr></thead>
         <tbody>
-          <tr><td class="mono">15/03/2025</td><td class="mono bold">42.000 KM</td><td class="bold">DETRAN (CRLV-e)</td><td class="mono">MG</td><td style="text-align:center"><span class="chip chip-green">OK</span></td></tr>
-          <tr style="background:rgba(239,68,68,.04)"><td class="mono">10/01/2024</td><td class="mono bold">15.200 KM</td><td class="bold">VISTORIA CAUTELAR</td><td class="mono">MG</td><td style="text-align:center"><span class="chip chip-red">REGRESSÃO</span></td></tr>
-          <tr><td class="mono">08/11/2022</td><td class="mono bold">18.000 KM</td><td class="bold">SEGURADORA</td><td class="mono">MG</td><td style="text-align:center"><span class="chip chip-green">OK</span></td></tr>
-          <tr><td class="mono">22/10/2022</td><td class="mono bold">12.500 KM</td><td class="bold">LEILÃO</td><td class="mono">MG</td><td style="text-align:center"><span class="chip chip-green">OK</span></td></tr>
+          <tr><td class="mono" data-label="Data">15/03/2025</td><td class="mono bold" data-label="Quilometragem">42.000 KM</td><td class="bold" data-label="Fonte">DETRAN (CRLV-e)</td><td class="mono" data-label="UF">MG</td><td style="text-align:center" data-label="Status"><span class="chip chip-green">OK</span></td></tr>
+          <tr style="background:rgba(239,68,68,.04)"><td class="mono" data-label="Data">10/01/2024</td><td class="mono bold" data-label="Quilometragem">15.200 KM</td><td class="bold" data-label="Fonte">VISTORIA CAUTELAR</td><td class="mono" data-label="UF">MG</td><td style="text-align:center" data-label="Status"><span class="chip chip-red">REGRESSÃO</span></td></tr>
+          <tr><td class="mono" data-label="Data">08/11/2022</td><td class="mono bold" data-label="Quilometragem">18.000 KM</td><td class="bold" data-label="Fonte">SEGURADORA</td><td class="mono" data-label="UF">MG</td><td style="text-align:center" data-label="Status"><span class="chip chip-green">OK</span></td></tr>
+          <tr><td class="mono" data-label="Data">22/10/2022</td><td class="mono bold" data-label="Quilometragem">12.500 KM</td><td class="bold" data-label="Fonte">LEILÃO</td><td class="mono" data-label="UF">MG</td><td style="text-align:center" data-label="Status"><span class="chip chip-green">OK</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -561,12 +568,12 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <!-- ──── PRECIFICADOR FIPE ──── -->
   <div class="src-badge" style="margin-top:8px">PRECIFICADOR FIPE</div>
   <div class="ds-block" style="margin-top:8px;border:1px solid #c8bfa8">
-    <div class="ds-hd"><span>TABELA DE PRECIFICAÇÃO MERCADOLÓGICA (FIPE)</span><span class="ds-hd-badge">12 MESES DE HISTÓRICO</span></div>
+    <div class="ds-hd"><span>TABELA DE PRECIFICAÇÃO<span class="hd-full"> MERCADOLÓGICA</span> (FIPE)</span><span class="ds-hd-badge">12 MESES DE HISTÓRICO</span></div>
     <div class="tbl-wrap">
       <table class="snc-tbl">
         <thead><tr><th>Código FIPE</th><th>Fabricante/Modelo</th><th>Ano Modelo</th><th>Informante</th><th>Preço Médio</th></tr></thead>
         <tbody>
-          <tr><td class="mono">005278-7</td><td class="bold" style="white-space:normal;word-break:break-word">Tracker Premier 1.4 Turbo</td><td class="mono">2021</td><td class="mono">FIPE</td><td class="mono bold">R$ 119.500,00</td></tr>
+          <tr><td class="mono" data-label="Código FIPE">005278-7</td><td class="bold" style="white-space:normal;word-break:break-word" data-label="Modelo">Tracker Premier 1.4 Turbo</td><td class="mono" data-label="Ano">2021</td><td class="mono" data-label="Informante">FIPE</td><td class="mono bold" data-label="Preço FIPE">R$ 119.500,00</td></tr>
         </tbody>
       </table>
     </div>
@@ -594,13 +601,13 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <!-- ──── RENAINF ──── -->
   <div class="src-badge" style="margin-top:8px">INFRAÇÕES NACIONAIS (RENAINF)</div>
   <div class="ds-block" style="margin-top:8px;border:1px solid #c8bfa8">
-    <div class="ds-hd" style="background:#c0392b"><span>INFRAÇÕES DE TRÂNSITO NACIONAIS (RENAINF)</span><span class="ds-hd-badge" style="color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1)">2 OCORRÊNCIAS</span></div>
+    <div class="ds-hd" style="background:#c0392b"><span>INFRAÇÕES DE TRÂNSITO<span class="hd-full"> NACIONAIS</span> (RENAINF)</span><span class="ds-hd-badge" style="color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1)">2 OCORRÊNCIAS</span></div>
     <div class="tbl-wrap">
       <table class="snc-tbl">
         <thead><tr><th>Data / Hora</th><th>Infração</th><th>Local &amp; Órgão</th><th>Valor</th><th>Situação</th></tr></thead>
         <tbody>
-          <tr><td class="mono" style="white-space:nowrap;padding:10px 14px">12/12/2023 14:30</td><td style="white-space:normal;word-break:break-word;padding:10px 14px"><div class="bold">TRANSITAR EM VELOCIDADE SUPERIOR À MÁXIMA PERMITIDA EM ATÉ 20%</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace">Cód: 74550 | AIT: A10892736</div></td><td style="white-space:normal;word-break:break-word;padding:10px 14px"><div>BR 381 KM 480 - CONTAGEM MG</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace"><strong>Autuador:</strong> DPRF - BRASÍLIA/DF</div></td><td class="mono bold" style="white-space:nowrap;padding:10px 14px;color:#c0392b">R$ 130,16</td><td style="text-align:center;padding:10px 14px"><span class="chip chip-green">PAGO</span></td></tr>
-          <tr><td class="mono" style="white-space:nowrap;padding:10px 14px">03/08/2024 09:15</td><td style="white-space:normal;word-break:break-word;padding:10px 14px"><div class="bold">DIRIGIR VEÍCULO MANUSEANDO TELEFONE CELULAR</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace">Cód: 76332 | AIT: B28938746</div></td><td style="white-space:normal;word-break:break-word;padding:10px 14px"><div>AV AFONSO PENA 1500 - BELO HORIZONTE MG</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace"><strong>Autuador:</strong> DETRAN/MG - BELO HORIZONTE</div></td><td class="mono bold red" style="white-space:nowrap;padding:10px 14px">R$ 293,47</td><td style="text-align:center;padding:10px 14px"><span class="chip chip-red">EM ABERTO</span></td></tr>
+          <tr><td class="mono" style="white-space:nowrap;padding:10px 14px" data-label="Data / Hora">12/12/2023 14:30</td><td style="white-space:normal;word-break:break-word;padding:10px 14px" data-label="Infração"><div class="bold">TRANSITAR EM VELOCIDADE SUPERIOR À MÁXIMA PERMITIDA EM ATÉ 20%</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace">Cód: 74550 | AIT: A10892736</div></td><td style="white-space:normal;word-break:break-word;padding:10px 14px" data-label="Local"><div>BR 381 KM 480 - CONTAGEM MG</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace"><strong>Autuador:</strong> DPRF - BRASÍLIA/DF</div></td><td class="mono bold" style="white-space:nowrap;padding:10px 14px;color:#c0392b" data-label="Valor">R$ 130,16</td><td style="text-align:center;padding:10px 14px" data-label="Situação"><span class="chip chip-green">PAGO</span></td></tr>
+          <tr><td class="mono" style="white-space:nowrap;padding:10px 14px" data-label="Data / Hora">03/08/2024 09:15</td><td style="white-space:normal;word-break:break-word;padding:10px 14px" data-label="Infração"><div class="bold">DIRIGIR VEÍCULO MANUSEANDO TELEFONE CELULAR</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace">Cód: 76332 | AIT: B28938746</div></td><td style="white-space:normal;word-break:break-word;padding:10px 14px" data-label="Local"><div>AV AFONSO PENA 1500 - BELO HORIZONTE MG</div><div style="font-size:9px;color:#5a6a7a;margin-top:3px;font-family:'JetBrains Mono',monospace"><strong>Autuador:</strong> DETRAN/MG - BELO HORIZONTE</div></td><td class="mono bold red" style="white-space:nowrap;padding:10px 14px" data-label="Valor">R$ 293,47</td><td style="text-align:center;padding:10px 14px" data-label="Situação"><span class="chip chip-red">EM ABERTO</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -609,7 +616,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <!-- ──── LEILÃO ──── -->
   <div class="src-badge" style="margin-top:8px">LEILÃO VEICULAR + SCORE</div>
   <div class="ds-block" style="margin-top:8px;border:1px solid #c8bfa8">
-    <div class="ds-hd" style="background:#c0392b"><span>LEILÃO VEICULAR — SCORE E HISTÓRICO</span><span class="ds-hd-badge" style="color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1)">1 REGISTRO</span></div>
+    <div class="ds-hd" style="background:#c0392b"><span>LEILÃO VEICULAR<span class="hd-full"> — SCORE E HISTÓRICO</span></span><span class="ds-hd-badge" style="color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1)">1 REGISTRO</span></div>
 
     <!-- Score strip -->
     <div class="leilao-strip">
@@ -642,7 +649,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
           <colgroup><col style="width:12%"/><col style="width:23%"/><col style="width:10%"/><col style="width:35%"/><col style="width:20%"/></colgroup>
           <thead><tr><th style="white-space:normal">Data</th><th style="white-space:normal">Leiloeiro</th><th style="white-space:normal">Lote</th><th style="white-space:normal">Comitente</th><th style="white-space:normal">Pátio</th></tr></thead>
           <tbody>
-            <tr style="border-top:1px solid #c8bfa8"><td class="mono" style="padding-top:10px;white-space:nowrap">27/09/2022</td><td style="padding-top:10px;white-space:normal;word-break:break-word">BETA LEILÕES S/A</td><td class="mono" style="padding-top:10px;white-space:nowrap">512</td><td style="padding-top:10px;white-space:normal;word-break:break-word">SULAMÉRICA COMPANHIA NACIONAL DE SEGUROS</td><td style="padding-top:10px;white-space:normal;word-break:break-word">CONTAGEM - MG</td></tr>
+            <tr style="border-top:1px solid #c8bfa8"><td class="mono" style="padding-top:10px;white-space:nowrap" data-label="Data">27/09/2022</td><td style="padding-top:10px;white-space:normal;word-break:break-word" data-label="Leiloeiro">BETA LEILÕES S/A</td><td class="mono" style="padding-top:10px;white-space:nowrap" data-label="Lote">512</td><td style="padding-top:10px;white-space:normal;word-break:break-word" data-label="Comitente">SULAMÉRICA COMPANHIA NACIONAL DE SEGUROS</td><td style="padding-top:10px;white-space:normal;word-break:break-word" data-label="Pátio">CONTAGEM - MG</td></tr>
             <tr style="font-size:.82em;border-bottom:1px solid #c8bfa8"><td colspan="5" style="padding:6px 12px 10px 24px;border-bottom:none">
               <div style="display:flex;flex-direction:column;gap:6px">
                 <div style="display:flex;align-items:center">
@@ -692,12 +699,12 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <!-- ──── RECALL ──── -->
   <div class="src-badge" style="margin-top:8px">RECALLS DE FABRICANTE</div>
   <div class="ds-block" style="margin-top:8px;border:1px solid #c8bfa8">
-    <div class="ds-hd" style="background:#c0392b"><span>ALERTAS DE RECALL DE FABRICANTE</span><span class="ds-hd-badge" style="color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1)">1 REGISTRO</span></div>
+    <div class="ds-hd" style="background:#c0392b"><span>ALERTAS DE RECALL<span class="hd-full"> DE FABRICANTE</span></span><span class="ds-hd-badge" style="color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1)">1 REGISTRO</span></div>
     <div class="tbl-wrap">
       <table class="snc-tbl">
         <thead><tr><th>Fabricante</th><th>Campanha</th><th>Defeito Identificado</th><th>Situação</th></tr></thead>
         <tbody>
-          <tr><td class="bold">GM DO BRASIL</td><td>RECALL SENSOR DE IMPACTO</td><td>SINAL INCORRETO DO SENSOR DE IMPACTO DO AIRBAG LATERAL</td><td><span class="chip chip-red">NÃO ATENDIDO</span></td></tr>
+          <tr><td class="bold" data-label="Fabricante">GM DO BRASIL</td><td data-label="Campanha">RECALL SENSOR DE IMPACTO</td><td data-label="Defeito">SINAL INCORRETO DO SENSOR DE IMPACTO DO AIRBAG LATERAL</td><td data-label="Situação"><span class="chip chip-red">NÃO ATENDIDO</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -721,7 +728,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
 <div class="r-sig">
   <div class="left">
     <div class="lbl">§ Validade jurídica &amp; autenticação</div>
-    <p>Este documento é gerado de forma automatizada pelo Sistema Nacional de Conformidade — SNC, mediante consulta autorizada e finalidade declarada conforme LGPD (Lei 13.709/2018, art. 7º, X). O Auto Score é calculado com base na análise de 10 datasets integrados (BIN Nacional, FIPE, Leilão Score, Débitos DETRAN, Histórico KM, Gravame SNG, RENAJUD, Proprietário, CRLV-e e Recall), cruzando registros do SENATRAN, DETRAN, CNJ e B3.</p>
+    <p>Este documento é gerado de forma automatizada pelo Sistema Nacional de Conformidade — SNC, mediante consulta autorizada e finalidade declarada conforme LGPD (Lei 13.709/2018, art. 7º, X). O Auto Score é calculado com base na análise de 10 fontes integradas (BIN Nacional, FIPE, Leilão Score, Débitos DETRAN, Histórico KM, Gravame SNG, RENAJUD, Proprietário, CRLV-e e Recall), cruzando registros do SENATRAN, DETRAN, CNJ e B3.</p>
     <p>Toda informação consolidada é rastreável à fonte primária. Reprodução não autorizada é vedada nos termos da LGPD.</p>
   </div>
   <div class="right">
