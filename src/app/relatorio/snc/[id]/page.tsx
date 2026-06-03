@@ -5531,7 +5531,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
                 <span className="it" style={{ color: '#9aa3b2' }}>{payload?.dataset === 'agregados-chassi' ? ' — Chassi: ' : ' — Placa: '}</span>
                 <span style={{ color: 'var(--brass)' }}>{payload?.dataset === 'agregados-chassi' ? payload?.documento : formatarPlacaExibicao(payload?.documento)}</span>
               </h1>
-              <div className="lede">{meta?.subtitulo ?? 'Documento gerado a partir de fontes oficiais.'}</div>
+              <div className="lede">{meta?.subtitulo ?? 'Relatório veicular completo com BIN cadastral, proprietário atual, histórico de proprietários, restrições judiciais, gravames CNJ, registros de roubo e furto, débitos DETRAN (IPVA, multas e licenciamento), débitos federais, infrações RENAINF, histórico de quilometragem, detecção de fraude em hodômetro, registros de leilão com score de risco A\u2013E, indício de sinistro, alertas de recall e precificação FIPE.'}</div>
             </div>
           </div>
         </header>
@@ -6006,7 +6006,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
                 <p>O parecer tem validade de 30 dias corridos a partir da data de emissão. Protocolo: <strong>{protocolo}</strong>.</p>
               </div>
               <div className="right">
-                <div className="r-sig-seal">SNC<br />VALIDADO<br />2026</div>
+                <div className="r-sig-seal"><img src="/snc-shield.png" alt="SNC" style={{ height: 38, width: 'auto', opacity: 0.85 }} /></div>
                 <div className="lbl">Emitente</div>
                 <div className="nm">SNC</div>
                 <div className="role">Sistema Nacional de Conformidade · SNC</div>
