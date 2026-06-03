@@ -118,123 +118,112 @@ body{
 .section-title{font-family:'Libre Caslon Text',serif;font-size:32px;font-weight:400;letter-spacing:-.01em;line-height:1.15}
 .section-desc{font-size:14px;color:#6b7a8e;margin-top:10px;max-width:500px;line-height:1.6}
 
-/* ═══ Cards Grid ═══ */
-.cards{display:grid;grid-template-columns:repeat(2, 1fr);gap:16px}
+/* ═══ DatasetCard-style Grid ═══ */
+.ds-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px}
 
-.card{
-  position:relative;
-  background:rgba(14,29,54,.6);
-  border:1px solid var(--line2);
-  overflow:hidden;
-  transition:all .35s cubic-bezier(.4,0,.2,1);
-  animation:fadeUp .6s ease both;
+.ds-card{
+  border-top:3px solid #17243b;
+  background:rgba(10,22,40,.45);
+  border-right:1px solid rgba(255,255,255,.05);
+  border-bottom:1px solid rgba(255,255,255,.05);
+  border-left:1px solid rgba(255,255,255,.05);
+  padding:28px 28px 24px;
+  display:flex;flex-direction:column;
+  text-decoration:none;color:#fff;
+  transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
   cursor:pointer;
-  text-decoration:none;
-  color:#fff;
-  display:flex;flex-direction:column;
+  animation:fadeUp .6s ease both;
 }
-.card:hover{
+.ds-card:hover{
+  transform:translateY(-3px);
   border-color:var(--brass);
-  transform:translateY(-4px);
-  box-shadow:0 20px 60px rgba(0,0,0,.3), 0 0 0 1px rgba(200,162,90,.15);
+  border-top-color:var(--brass);
+  box-shadow:0 8px 32px rgba(212,168,67,.15);
 }
-.card:hover .card-glow{opacity:1}
-
-.card-glow{
-  position:absolute;top:0;left:0;right:0;height:120px;
-  background:linear-gradient(180deg, rgba(200,162,90,.06) 0%, transparent 100%);
-  opacity:0;transition:opacity .35s;pointer-events:none;
+.ds-card-red:hover{
+  border-color:var(--red);
+  border-top-color:var(--red);
+  box-shadow:0 8px 32px rgba(156,42,42,.2);
 }
 
-/* Card preview bar */
-.card-preview{
-  height:130px;
-  background:var(--navy);
-  border-bottom:1px solid var(--line2);
-  display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
+/* Top: number + status */
+.ds-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
+.ds-num{
+  font-family:'Libre Caslon Text',serif;font-size:48px;
+  line-height:1;font-weight:400;color:#5a6a7a;
+  transition:color .18s;
 }
-.card-preview .mockup{
-  width:85%;height:85%;
-  border:1px solid var(--line2);
-  background:rgba(10,22,40,.5);
-  display:flex;flex-direction:column;
-  overflow:hidden;
-  transition:transform .35s;
+.ds-card:hover .ds-num{color:var(--brass)}
+.ds-card-red:hover .ds-num{color:var(--red)}
+.ds-status-box{
+  padding:4px 10px;display:flex;align-items:center;gap:6px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.02);
 }
-.card:hover .card-preview .mockup{transform:scale(1.02)}
-
-/* Mini mockup lines */
-.mock-header{height:18px;background:var(--navy3);border-bottom:1px solid var(--line)}
-.mock-header.red{background:#3b0808;border-bottom:1px solid #5c1818}
-.mock-header.green{background:var(--navy3);border-bottom:2px solid var(--green)}
-.mock-body{flex:1;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
-.mock-line{height:3px;border-radius:1px;background:rgba(200,162,90,.12)}
-.mock-line.w60{width:60%}
-.mock-line.w80{width:80%}
-.mock-line.w40{width:40%}
-.mock-line.w70{width:70%}
-.mock-line.brass{background:rgba(200,162,90,.25)}
-.mock-line.green-l{background:rgba(43,168,74,.2)}
-.mock-line.red-l{background:rgba(192,57,43,.2)}
-.mock-block{height:20px;background:rgba(200,162,90,.06);border:1px solid rgba(200,162,90,.08);margin-top:2px}
-.mock-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;margin-top:4px}
-.mock-grid>div{height:14px;background:rgba(200,162,90,.06);border:1px solid rgba(200,162,90,.08)}
-
-/* Card type badge */
-.card-type{
-  position:absolute;top:8px;right:8px;z-index:2;
-  font-family:'JetBrains Mono',monospace;font-size:8px;
-  letter-spacing:.14em;text-transform:uppercase;
-  padding:3px 8px;
-}
-.card-type.email{background:rgba(43,168,74,.15);color:var(--green);border:1px solid rgba(43,168,74,.3)}
-.card-type.report{background:rgba(200,162,90,.12);color:var(--brass);border:1px solid rgba(200,162,90,.3)}
-
-/* Card body */
-.card-body{padding:16px 20px;flex:1;display:flex;flex-direction:column}
-.card-vehicle{
+.ds-status-dot{width:5px;height:5px;border-radius:50%;background:#5a6a7a;transition:all .18s}
+.ds-status-dot.green{background:var(--green)}
+.ds-status-dot.red{background:var(--red)}
+.ds-card:hover .ds-status-dot{background:var(--brass);box-shadow:0 0 0 3px rgba(212,168,67,.2)}
+.ds-card-red:hover .ds-status-dot{background:var(--red);box-shadow:0 0 0 3px rgba(156,42,42,.2)}
+.ds-status-text{
   font-family:'JetBrains Mono',monospace;font-size:9px;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);
-  margin-bottom:6px;
+  letter-spacing:.18em;text-transform:uppercase;color:#7a8a9a;
+  transition:color .18s;
 }
-.card-title{
-  font-family:'Libre Caslon Text',serif;font-size:18px;font-weight:400;
-  line-height:1.25;margin-bottom:10px;
-}
-.card-desc{font-size:12px;color:#6b7a8e;line-height:1.55;flex:1}
+.ds-card:hover .ds-status-text{color:var(--brass)}
+.ds-card-red:hover .ds-status-text{color:var(--red)}
 
-/* Card footer */
-.card-footer{
-  padding:10px 20px;
-  border-top:1px solid var(--line2);
-  display:flex;justify-content:space-between;align-items:center;
+/* Title + Sub */
+.ds-title{
+  font-family:'Libre Caslon Text',serif;font-size:22px;font-weight:400;
+  line-height:1.2;margin:0;color:#fff;
 }
-.card-meta{display:flex;gap:16px}
-.card-meta>span{
-  font-family:'JetBrains Mono',monospace;font-size:9px;
-  color:#5a6a7a;letter-spacing:.06em;
-}
-.card-meta>span strong{color:#8a94a3}
-.card-action{
+.ds-sub{
   font-family:'JetBrains Mono',monospace;font-size:10px;
-  letter-spacing:.08em;text-transform:uppercase;
-  color:var(--brass);display:flex;align-items:center;gap:6px;
-  transition:gap .25s;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:#7a8a9a;margin-top:6px;transition:color .18s;
 }
-.card:hover .card-action{gap:10px}
+.ds-card:hover .ds-sub{color:var(--brass)}
+.ds-card-red:hover .ds-sub{color:var(--red)}
 
-/* Risk badges */
-.risk-badge{
-  display:inline-flex;align-items:center;gap:5px;
-  font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;
-  padding:3px 8px;letter-spacing:.04em;line-height:1;
+/* Description */
+.ds-desc{
+  font-family:'Inter',sans-serif;font-size:13px;color:#8a94a3;
+  line-height:1.6;margin-top:16px;margin-bottom:20px;
 }
-.risk-badge.green{background:rgba(43,168,74,.1);color:var(--greend);border:1px solid rgba(43,168,74,.3)}
-.risk-badge.red{background:rgba(192,57,43,.1);color:var(--red);border:1px solid rgba(192,57,43,.3)}
-.risk-badge .rdot{width:5px;height:5px;border-radius:50%}
-.risk-badge.green .rdot{background:var(--green)}
-.risk-badge.red .rdot{background:var(--red)}
+
+/* Tags */
+.ds-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.ds-tag{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  padding:3px 8px;letter-spacing:.1em;text-transform:uppercase;
+  color:#4a5a6a;border:1px solid rgba(255,255,255,.05);
+  background:transparent;transition:all .18s;
+}
+.ds-tag.red{color:rgba(192,57,43,.7);border-color:rgba(192,57,43,.2);background:rgba(192,57,43,.06)}
+.ds-card:hover .ds-tag{color:var(--brass);border-color:rgba(212,168,67,.3);background:rgba(212,168,67,.06)}
+.ds-card-red:hover .ds-tag{color:var(--red);border-color:rgba(156,42,42,.3);background:rgba(156,42,42,.06)}
+.ds-card-red:hover .ds-tag.red{color:#ef4444;border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08)}
+
+/* Footer */
+.ds-footer{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:auto;padding-top:20px;
+  border-top:1px solid rgba(255,255,255,.04);
+}
+.ds-f-lbl{
+  font-family:'JetBrains Mono',monospace;font-size:9px;color:#3a4a5a;
+  letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px;
+}
+.ds-f-val{font-family:'JetBrains Mono',monospace;font-size:10px;color:#7a8a9a;transition:color .18s}
+.ds-card:hover .ds-f-val{color:var(--brass)}
+.ds-card-red:hover .ds-f-val{color:var(--red)}
+.ds-f-action{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  letter-spacing:.12em;color:#5a6a7a;transition:color .18s;
+}
+.ds-card:hover .ds-f-action{color:var(--brass)}
+.ds-card-red:hover .ds-f-action{color:var(--red)}
 
 /* ═══ Footer ═══ */
 .footer{
@@ -260,8 +249,7 @@ body{
   .hero .lede{font-size:14px}
   .stats{flex-wrap:wrap;max-width:400px}
   .stats>div{flex:1 1 45%;border-bottom:1px solid var(--line2)}
-  .cards{grid-template-columns:1fr}
-  .card-preview{height:110px}
+  .ds-grid{grid-template-columns:1fr}
   .section{padding:48px 0}
   .section-title{font-size:26px}
 }
@@ -270,9 +258,7 @@ body{
   .hero-logo .text .t1{font-size:22px}
   .stats>div{flex:1 1 100%}
   .stats>div{border-right:none}
-  .card-preview{height:100px}
-  .exp-grid{gap:28px}
-  .exp-title{font-size:22px}
+  .ds-grid{grid-template-columns:1fr}
 }
 
 /* Explainer section */
@@ -385,67 +371,54 @@ body{
       <div class="section-desc">Notificações enviadas ao cliente após a consulta, com resumo dos achados decisivos e link para o relatório completo.</div>
     </div>
 
-    <div class="cards">
+    <div class="ds-grid">
       <!-- EMAIL: CLEAN -->
-      <a class="card" href="/exemplos/auto-score-email.html" target="_blank" style="animation-delay:.1s">
-        <div class="card-glow"></div>
-        <span class="card-type email">E-MAIL</span>
-        <div class="card-preview">
-          <div class="mockup">
-            <div class="mock-header green"></div>
-            <div class="mock-body">
-              <div class="mock-line w60 brass"></div>
-              <div class="mock-line w80 green-l"></div>
-              <div class="mock-line w40"></div>
-              <div class="mock-block" style="height:30px"></div>
-              <div class="mock-line w70" style="margin-top:6px"></div>
-            </div>
-          </div>
+      <a class="ds-card ds-card-ativo" href="/exemplos/auto-score-email.html" target="_blank">
+        <div class="ds-top">
+          <span class="ds-num">01</span>
+          <div class="ds-status-box"><div class="ds-status-dot green"></div><span class="ds-status-text">Aprovado</span></div>
         </div>
-        <div class="card-body">
-          <div class="card-vehicle">Modelo genérico · sem restrições</div>
-          <div class="card-title">E-mail Sem Restrições</div>
-          <div class="card-desc">Template de e-mail para resultado positivo. Hero card verde com "Aprovado", achados decisivos com NADA CONSTA e CTA para relatório completo.</div>
+        <h2 class="ds-title">E-mail Sem Restrições</h2>
+        <div class="ds-sub">Notificação · Resultado Positivo</div>
+        <p class="ds-desc">Template de e-mail para resultado positivo. Hero card verde com "Aprovado", achados decisivos com NADA CONSTA, score 95/A e CTA para relatório completo.</p>
+        <div class="ds-tags">
+          <span class="ds-tag">Score 95/A</span>
+          <span class="ds-tag">NADA CONSTA</span>
+          <span class="ds-tag">BIN</span>
+          <span class="ds-tag">Leilão</span>
+          <span class="ds-tag">Débitos</span>
+          <span class="ds-tag">FIPE</span>
         </div>
-        <div class="card-footer">
-          <div class="card-meta">
-            <span><strong>32</strong>KB</span>
-            <span class="risk-badge green"><span class="rdot"></span>APROVADO</span>
-          </div>
-          <div class="card-action">Abrir →</div>
+        <div class="ds-footer">
+          <div><div class="ds-f-lbl">Veículo</div><div class="ds-f-val">VW/FOX 1.0 GII</div></div>
+          <div><div class="ds-f-lbl">Formato</div><div class="ds-f-val">E-MAIL HTML</div></div>
+          <div class="ds-f-action">Abrir →</div>
         </div>
       </a>
 
       <!-- EMAIL: RESTRICTED -->
-      <a class="card" href="/exemplos/auto-score-email-restricao.html" target="_blank" style="animation-delay:.2s">
-        <div class="card-glow"></div>
-        <span class="card-type email">E-MAIL</span>
-        <div class="card-preview">
-          <div class="mockup">
-            <div class="mock-header red"></div>
-            <div class="mock-body">
-              <div class="mock-line w60 brass"></div>
-              <div class="mock-line w80 red-l"></div>
-              <div class="mock-line w40"></div>
-              <div class="mock-block" style="height:30px;border-color:rgba(192,57,43,.2)"></div>
-              <div class="mock-line w70" style="margin-top:6px"></div>
-            </div>
-          </div>
+      <a class="ds-card ds-card-ativo ds-card-red" href="/exemplos/auto-score-email-restricao.html" target="_blank">
+        <div class="ds-top">
+          <span class="ds-num">02</span>
+          <div class="ds-status-box red"><div class="ds-status-dot red"></div><span class="ds-status-text">Reprovado</span></div>
         </div>
-        <div class="card-body">
-          <div class="card-vehicle">Modelo genérico · com restrições</div>
-          <div class="card-title">E-mail Com Restrições</div>
-          <div class="card-desc">Template de e-mail para resultado negativo. Hero card vermelho com "Reprovado", alertas de roubo/furto, sinistro e débitos pendentes.</div>
+        <h2 class="ds-title">E-mail Com Restrições</h2>
+        <div class="ds-sub">Notificação · Resultado Negativo</div>
+        <p class="ds-desc">Template para resultado negativo. Hero card vermelho com "Reprovado", alertas de roubo/furto com recuperação, sinistro de seguradora, gravame ativo e débitos pendentes.</p>
+        <div class="ds-tags">
+          <span class="ds-tag red">Score 42/D</span>
+          <span class="ds-tag red">Roubo/Furto</span>
+          <span class="ds-tag red">Sinistro</span>
+          <span class="ds-tag">Gravame</span>
+          <span class="ds-tag">Débitos</span>
+          <span class="ds-tag">Leilão</span>
         </div>
-        <div class="card-footer">
-          <div class="card-meta">
-            <span><strong>33</strong>KB</span>
-            <span class="risk-badge red"><span class="rdot"></span>REPROVADO</span>
-          </div>
-          <div class="card-action">Abrir →</div>
+        <div class="ds-footer">
+          <div><div class="ds-f-lbl">Veículo</div><div class="ds-f-val">GM/TRACKER PREMIER</div></div>
+          <div><div class="ds-f-lbl">Formato</div><div class="ds-f-val">E-MAIL HTML</div></div>
+          <div class="ds-f-action">Abrir →</div>
         </div>
       </a>
-
     </div>
   </div>
 </section>
@@ -461,74 +434,57 @@ body{
       <div class="section-desc">Versão completa com todos os painéis expandidos, tabelas detalhadas, score de leilão e histórico completo.</div>
     </div>
 
-    <div class="cards">
+    <div class="ds-grid">
       <!-- REPORT: SNC2026 (CLEAN) -->
-      <a class="card" href="/exemplos/auto-score-relatorio-snc2026.html" target="_blank" style="animation-delay:.1s">
-        <div class="card-glow"></div>
-        <span class="card-type report">RELATÓRIO</span>
-        <div class="card-preview">
-          <div class="mockup">
-            <div class="mock-header green"></div>
-            <div class="mock-body">
-              <div class="mock-line w80 brass"></div>
-              <div class="mock-line w60"></div>
-              <div class="mock-block"></div>
-              <div class="mock-grid">
-                <div></div><div></div><div></div>
-              </div>
-              <div class="mock-line w70 green-l" style="margin-top:6px"></div>
-              <div class="mock-line w40 green-l"></div>
-            </div>
-          </div>
+      <a class="ds-card ds-card-ativo" href="/exemplos/auto-score-relatorio-snc2026.html" target="_blank">
+        <div class="ds-top">
+          <span class="ds-num">03</span>
+          <div class="ds-status-box"><div class="ds-status-dot green"></div><span class="ds-status-text">Aprovado</span></div>
         </div>
-        <div class="card-body">
-          <div class="card-vehicle">VW / FOX 1.0 GII · 2014/2015</div>
-          <div class="card-title">Relatório Completo<br/>Veículo Sem Restrições</div>
-          <div class="card-desc">Score 95/A (Baixo risco). Todos os datasets limpos — sem restrições, sem débitos, sem sinistro. KM consistente. Ideal para demonstrar o resultado positivo.</div>
+        <h2 class="ds-title">Relatório Completo<br/>Veículo Sem Restrições</h2>
+        <div class="ds-sub">Relatório · Score 95/A · Baixo Risco</div>
+        <p class="ds-desc">Score 95/A (Baixo risco). Todos os 10 datasets limpos — sem restrições, sem débitos, sem sinistro. KM consistente. 14 painéis expandidos. Ideal para demonstrar resultado positivo.</p>
+        <div class="ds-tags">
+          <span class="ds-tag">BIN</span>
+          <span class="ds-tag">FIPE</span>
+          <span class="ds-tag">Leilão</span>
+          <span class="ds-tag">Débitos</span>
+          <span class="ds-tag">KM</span>
+          <span class="ds-tag">Gravame</span>
+          <span class="ds-tag">RENAJUD</span>
+          <span class="ds-tag">CRLV-e</span>
+          <span class="ds-tag">Recall</span>
         </div>
-        <div class="card-footer">
-          <div class="card-meta">
-            <span><strong>14</strong> painéis</span>
-            <span><strong>48</strong>KB</span>
-            <span class="risk-badge green"><span class="rdot"></span>APROVADO</span>
-          </div>
-          <div class="card-action">Abrir →</div>
+        <div class="ds-footer">
+          <div><div class="ds-f-lbl">Veículo</div><div class="ds-f-val">VW/FOX 1.0 GII</div></div>
+          <div><div class="ds-f-lbl">Painéis</div><div class="ds-f-val">14</div></div>
+          <div class="ds-f-action">Abrir →</div>
         </div>
       </a>
 
       <!-- REPORT: SNC1990 (RESTRICTED) -->
-      <a class="card" href="/exemplos/auto-score-relatorio-snc1990.html" target="_blank" style="animation-delay:.2s">
-        <div class="card-glow"></div>
-        <span class="card-type report">RELATÓRIO</span>
-        <div class="card-preview">
-          <div class="mockup">
-            <div class="mock-header red"></div>
-            <div class="mock-body">
-              <div class="mock-line w80 brass"></div>
-              <div class="mock-line w60"></div>
-              <div class="mock-block"></div>
-              <div class="mock-grid">
-                <div style="border-color:rgba(192,57,43,.3)"></div>
-                <div style="border-color:rgba(192,57,43,.3)"></div>
-                <div></div>
-              </div>
-              <div class="mock-line w70 red-l" style="margin-top:6px"></div>
-              <div class="mock-line w40 red-l"></div>
-            </div>
-          </div>
+      <a class="ds-card ds-card-ativo ds-card-red" href="/exemplos/auto-score-relatorio-snc1990.html" target="_blank">
+        <div class="ds-top">
+          <span class="ds-num">04</span>
+          <div class="ds-status-box red"><div class="ds-status-dot red"></div><span class="ds-status-text">Reprovado</span></div>
         </div>
-        <div class="card-body">
-          <div class="card-vehicle">GM / CHEVROLET TRACKER PREMIER · 2020/2021</div>
-          <div class="card-title">Relatório Completo<br/>Veículo Com Restrições</div>
-          <div class="card-desc">Score 42/D (Alto risco). Roubo/furto, sinistro, gravame ativo, RENAJUD, divergência de KM, recall pendente, débitos R$ 3.933,84. Demonstra alertas críticos.</div>
+        <h2 class="ds-title">Relatório Completo<br/>Veículo Com Restrições</h2>
+        <div class="ds-sub">Relatório · Score 42/D · Alto Risco</div>
+        <p class="ds-desc">Score 42/D (Alto risco). Roubo/furto com recuperação, sinistro de seguradora, gravame Bradesco, RENAJUD, divergência de KM, recall pendente, débitos R$ 3.933,84. 15 painéis com alertas críticos.</p>
+        <div class="ds-tags">
+          <span class="ds-tag red">Roubo/Furto</span>
+          <span class="ds-tag red">Sinistro</span>
+          <span class="ds-tag red">Leilão</span>
+          <span class="ds-tag red">RENAJUD</span>
+          <span class="ds-tag red">Divergência KM</span>
+          <span class="ds-tag">Gravame</span>
+          <span class="ds-tag">Débitos</span>
+          <span class="ds-tag">Recall</span>
         </div>
-        <div class="card-footer">
-          <div class="card-meta">
-            <span><strong>15</strong> painéis</span>
-            <span><strong>60</strong>KB</span>
-            <span class="risk-badge red"><span class="rdot"></span>REPROVADO</span>
-          </div>
-          <div class="card-action">Abrir →</div>
+        <div class="ds-footer">
+          <div><div class="ds-f-lbl">Veículo</div><div class="ds-f-val">GM/TRACKER PREMIER</div></div>
+          <div><div class="ds-f-lbl">Painéis</div><div class="ds-f-val">15</div></div>
+          <div class="ds-f-action">Abrir →</div>
         </div>
       </a>
     </div>
@@ -553,7 +509,7 @@ const obs = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1 });
 
-document.querySelectorAll('.card, .section-header').forEach(el => {
+document.querySelectorAll('.ds-card, .section-header').forEach(el => {
   el.style.animationPlayState = 'paused';
   obs.observe(el);
 });
