@@ -91,6 +91,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
 /* Data blocks */
 .ds-block{margin-bottom:2px}
 .ds-hd{background:var(--navy);color:#fff;font-size:9px;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.hd-full{display:inline}
 .ds-row{padding:11px 16px;display:flex;justify-content:space-between;align-items:center;background:#ffffff;border:1px solid #d4cfc1;border-top:none;gap:16px}
 .ds-row-inner{flex:1;min-width:0}
 .dk{font-family:'JetBrains Mono',monospace;font-size:9px;color:#000;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;white-space:nowrap}
@@ -196,6 +197,12 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   .score-legend{display:grid;grid-template-columns:auto repeat(3,auto);gap:6px 12px;justify-content:start}
   .score-legend>span:first-child{grid-column:1;grid-row:1/3;align-self:center}
   .ds-hd{white-space:normal;flex-wrap:wrap;gap:6px}
+  .hd-full{display:none}
+  .snc-tbl,.snc-tbl thead,.snc-tbl tbody,.snc-tbl tr,.snc-tbl th,.snc-tbl td{display:block}
+  .snc-tbl thead{display:none}
+  .snc-tbl tr{border-bottom:1px solid #d4cfc1;padding:10px 14px;display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}
+  .snc-tbl td{padding:4px 0;text-align:left!important;border:none}
+  .snc-tbl td::before{content:attr(data-label);display:block;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:#8a94a3;margin-bottom:1px}
 }
 @media(max-width:520px){
   .r-page{margin:0}
@@ -330,7 +337,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <!-- ──── IDENTIFICAÇÃO CADASTRAL ──── -->
   <div class="src-badge" style="margin-top:8px">IDENTIFICAÇÃO CADASTRAL</div>
   <div class="ds-block" style="margin-top:8px">
-    <div class="ds-hd"><span>IDENTIFICAÇÃO CADASTRAL DO VEÍCULO (BIN)</span></div>
+    <div class="ds-hd"><span>IDENTIFICAÇÃO <span class="hd-full">CADASTRAL </span>DO VEÍCULO (BIN)</span></div>
     <div class="ds-row"><div style="display:flex;flex:1;gap:16px">
       <div class="ds-row-inner" style="flex:1"><div class="dk">Marca/Modelo</div><div class="dv">VW/FOX 1.0 GII</div></div>
       <div class="ds-row-inner" style="flex:1"><div class="dk">CRLV Digital</div><div class="dv" style="font-family:'JetBrains Mono',monospace;font-size:12px">00123456789</div></div>
@@ -395,7 +402,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
       <table class="snc-tbl">
         <thead><tr><th>#</th><th style="text-align:left">Nome / Razão Social</th><th>Documento</th><th>Município / UF</th><th>Data Atualiz.</th></tr></thead>
         <tbody>
-          <tr><td class="mono">1</td><td class="bold" style="text-align:left">CARLOS A******* S****</td><td class="mono">045.***.***-89</td><td>CONTAGEM / MG</td><td class="mono">10/03/2018</td></tr>
+          <tr><td class="mono" data-label="#">1</td><td class="bold" style="text-align:left" data-label="Nome">CARLOS A******* S****</td><td class="mono" data-label="Documento">045.***.***-89</td><td data-label="Município">CONTAGEM / MG</td><td class="mono" data-label="Data">10/03/2018</td></tr>
         </tbody>
       </table>
     </div>
@@ -404,7 +411,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <!-- ──── RESTRIÇÕES BIN ──── -->
   <div class="src-badge" style="margin-top:8px">RESTRIÇÕES E IMPEDIMENTOS</div>
   <div class="ds-block" style="margin-top:8px;border:1px solid #c8bfa8">
-    <div class="ds-hd"><span>RESTRIÇÕES CADASTRAIS GERAIS (BIN / CNJ)</span><span class="ds-hd-badge">NADA CONSTA</span></div>
+    <div class="ds-hd"><span>RESTRIÇÕES <span class="hd-full">CADASTRAIS GERAIS </span>(BIN / CNJ)</span><span class="ds-hd-badge">NADA CONSTA</span></div>
     <div class="badge-grid">
       <div class="badge-card"><span class="bk dk" style="margin:0">Restrição Geral BIN</span><span class="chip chip-green" style="margin-left:12px">NADA CONSTA</span></div>
       <div class="badge-card"><span class="bk dk" style="margin:0">Alerta de Sinistro</span><span class="chip chip-green" style="margin-left:12px">NADA CONSTA</span></div>
@@ -428,7 +435,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <!-- ──── DÉBITOS ──── -->
   <div class="src-badge" style="margin-top:8px">DÉBITOS ESTADUAIS</div>
   <div class="ds-block" style="margin-top:8px;border:1px solid #c8bfa8">
-    <div class="ds-hd"><span>DÉBITOS ATIVOS DO DETRAN ESTADUAL</span><span class="ds-hd-badge">NADA CONSTA</span></div>
+    <div class="ds-hd"><span>DÉBITOS <span class="hd-full">ATIVOS DO </span>DETRAN<span class="hd-full"> ESTADUAL</span></span><span class="ds-hd-badge">NADA CONSTA</span></div>
     <div class="debitos-strip">
       <div><div class="dval green">R$ 0,00</div><div class="dlbl">Multas Locais</div></div>
       <div><div class="dval green">R$ 0,00</div><div class="dlbl">IPVA</div></div>
@@ -447,15 +454,15 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <!-- ──── HISTÓRICO KM ──── -->
   <div class="src-badge" style="margin-top:8px">HISTÓRICO DE QUILOMETRAGEM</div>
   <div class="ds-block" style="margin-top:8px;border:1px solid #c8bfa8">
-    <div class="ds-hd"><span>HISTÓRICO CRONOLÓGICO DE QUILOMETRAGEM (HODÔMETRO)</span><span class="ds-hd-badge">4 REGISTROS</span></div>
+    <div class="ds-hd"><span>HISTÓRICO <span class="hd-full">CRONOLÓGICO </span>DE QUILOMETRAGEM<span class="hd-full"> (HODÔMETRO)</span></span><span class="ds-hd-badge">4 REGISTROS</span></div>
     <div class="tbl-wrap">
       <table class="snc-tbl">
         <thead><tr><th>Data Registro</th><th>Quilometragem Indicada</th><th>Fonte Informadora</th><th>Estado (UF)</th><th>Consistência</th></tr></thead>
         <tbody>
-          <tr><td class="mono">15/03/2025</td><td class="mono bold">58.000 KM</td><td class="bold">DETRAN (CRLV-e)</td><td class="mono">MG</td><td style="text-align:center"><span class="chip chip-green">OK</span></td></tr>
-          <tr><td class="mono">10/01/2024</td><td class="mono bold">45.000 KM</td><td class="bold">VISTORIA CAUTELAR</td><td class="mono">MG</td><td style="text-align:center"><span class="chip chip-green">OK</span></td></tr>
-          <tr><td class="mono">08/11/2022</td><td class="mono bold">32.000 KM</td><td class="bold">SEGURADORA</td><td class="mono">MG</td><td style="text-align:center"><span class="chip chip-green">OK</span></td></tr>
-          <tr><td class="mono">22/10/2022</td><td class="mono bold">28.000 KM</td><td class="bold">OFICINA</td><td class="mono">MG</td><td style="text-align:center"><span class="chip chip-green">OK</span></td></tr>
+          <tr><td class="mono" data-label="Data">15/03/2025</td><td class="mono bold" data-label="Quilometragem">58.000 KM</td><td class="bold" data-label="Fonte">DETRAN (CRLV-e)</td><td class="mono" data-label="UF">MG</td><td style="text-align:center" data-label="Status"><span class="chip chip-green">OK</span></td></tr>
+          <tr><td class="mono" data-label="Data">10/01/2024</td><td class="mono bold" data-label="Quilometragem">45.000 KM</td><td class="bold" data-label="Fonte">VISTORIA CAUTELAR</td><td class="mono" data-label="UF">MG</td><td style="text-align:center" data-label="Status"><span class="chip chip-green">OK</span></td></tr>
+          <tr><td class="mono" data-label="Data">08/11/2022</td><td class="mono bold" data-label="Quilometragem">32.000 KM</td><td class="bold" data-label="Fonte">SEGURADORA</td><td class="mono" data-label="UF">MG</td><td style="text-align:center" data-label="Status"><span class="chip chip-green">OK</span></td></tr>
+          <tr><td class="mono" data-label="Data">22/10/2022</td><td class="mono bold" data-label="Quilometragem">28.000 KM</td><td class="bold" data-label="Fonte">OFICINA</td><td class="mono" data-label="UF">MG</td><td style="text-align:center" data-label="Status"><span class="chip chip-green">OK</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -469,12 +476,12 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <!-- ──── PRECIFICADOR FIPE ──── -->
   <div class="src-badge" style="margin-top:8px">PRECIFICADOR FIPE</div>
   <div class="ds-block" style="margin-top:8px;border:1px solid #c8bfa8">
-    <div class="ds-hd"><span>TABELA DE PRECIFICAÇÃO MERCADOLÓGICA (FIPE)</span><span class="ds-hd-badge">12 MESES DE HISTÓRICO</span></div>
+    <div class="ds-hd"><span>TABELA DE PRECIFICAÇÃO<span class="hd-full"> MERCADOLÓGICA</span> (FIPE)</span><span class="ds-hd-badge">12 MESES DE HISTÓRICO</span></div>
     <div class="tbl-wrap">
       <table class="snc-tbl">
         <thead><tr><th>Código FIPE</th><th>Fabricante/Modelo</th><th>Ano Modelo</th><th>Informante</th><th>Preço Médio</th></tr></thead>
         <tbody>
-          <tr><td class="mono">004123-0</td><td class="bold" style="white-space:normal;word-break:break-word">Fox 1.0 GII</td><td class="mono">2015</td><td class="mono">FIPE</td><td class="mono bold">R$ 38.900,00</td></tr>
+          <tr><td class="mono" data-label="Código FIPE">004123-0</td><td class="bold" style="white-space:normal;word-break:break-word" data-label="Modelo">Fox 1.0 GII</td><td class="mono" data-label="Ano">2015</td><td class="mono" data-label="Informante">FIPE</td><td class="mono bold" data-label="Preço FIPE">R$ 38.900,00</td></tr>
         </tbody>
       </table>
     </div>
@@ -502,7 +509,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <!-- ──── RENAINF ──── -->
   <div class="src-badge" style="margin-top:8px">INFRAÇÕES NACIONAIS (RENAINF)</div>
   <div class="ds-block" style="margin-top:8px;border:1px solid #c8bfa8">
-    <div class="ds-hd"><span>INFRAÇÕES DE TRÂNSITO NACIONAIS (RENAINF)</span><span class="ds-hd-badge">NADA CONSTA</span></div>
+    <div class="ds-hd"><span>INFRAÇÕES DE TRÂNSITO<span class="hd-full"> NACIONAIS</span> (RENAINF)</span><span class="ds-hd-badge">NADA CONSTA</span></div>
     <div style="padding:20px 14px;display:flex;align-items:center;justify-content:center;gap:10px;background:#faf8f3">
       <span style="font-size:16px">✅</span>
       <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--greend);text-transform:uppercase;letter-spacing:.08em">Nenhuma infração registrada</span>
@@ -599,7 +606,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <!-- ──── CRLV-e ──── -->
   <div class="src-badge" style="margin-top:8px">CRLV-e DIGITAL</div>
   <div class="ds-block" style="margin-top:8px;border:1px solid #c8bfa8">
-    <div class="ds-hd"><span>DOCUMENTO CRLV-e — EXERCÍCIO 2026</span><span class="ds-hd-badge">CONSULTA CONCLUÍDA</span></div>
+    <div class="ds-hd"><span>CRLV-e<span class="hd-full"> — EXERCÍCIO 2026</span></span><span class="ds-hd-badge">CONSULTA CONCLUÍDA</span></div>
     <div class="ds-row"><div style="display:flex;flex:1;gap:16px">
       <div class="ds-row-inner" style="flex:1"><div class="dk">Exercício</div><div class="dv bold">2026</div></div>
       <div class="ds-row-inner" style="flex:1"><div class="dk">Existe Ocorrência</div><div class="dv"><span class="chip chip-green">NÃO</span></div></div>
