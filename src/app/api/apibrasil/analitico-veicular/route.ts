@@ -69,7 +69,7 @@ export async function GET(req: NextRequest) {
         uf: reg.uf || reg.estado || "—"
       })),
       anomalia: kmRaw.anomalia ?? false,
-      motivoAnomalia: kmRaw.motivoAnomalia || kmRaw.motivo_anomalia || "Anomalia detectada no hodômetro"
+      motivoAnomalia: kmRaw.motivoAnomalia || kmRaw.motivo_anomalia || "Divergência detectada no hodômetro"
     };
 
     const renajudRaw = (raw.data?.renajud || {}) as Record<string, any>;

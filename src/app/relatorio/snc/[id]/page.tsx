@@ -364,7 +364,7 @@ function SumarioCard({ payload }: { payload: RelatorioPayload }) {
           <div style={{ gridColumn: '1 / -1' }}>
             <div className="l">Situação Hodômetro</div>
             <div className="v" style={{ color: anomalia ? '#ef4444' : '#2ba84a', fontWeight: 700 }}>
-              {anomalia ? 'ANOMALIA DETECTADA' : 'HISTÓRICO CONSISTENTE'}
+              {anomalia ? 'DIVERGÊNCIA DETECTADA' : 'HISTÓRICO CONSISTENTE'}
             </div>
           </div>
         </div>
@@ -2670,9 +2670,9 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
         <>
           <div className="src-badge" style={{ marginTop: 8 }}>DÉBITOS ESTADUAIS</div>
           <div className="ds-block" style={{ marginTop: 8, border: '1px solid #c8bfa8' }}>
-            {/* REGRA DE ANOMALIA: débitos só aparecem quando temDebitos === true
+            {/* REGRA DE DIVERGÊNCIA: débitos só aparecem quando temDebitos === true
                (multas.length > 0 || ipva.length > 0). Portanto o ds-hd
-               é SEMPRE vermelho aqui — a existência já é a anomalia. */}
+               é SEMPRE vermelho aqui — a existência já é a divergência. */}
             <div className="ds-hd" style={{ background: '#c0392b' }}>
               <span>DÉBITOS ATIVOS DO DETRAN ESTADUAL</span>
               <span className="ds-hd-badge" style={{ color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)' }}>
@@ -2889,9 +2889,9 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
         <>
           <div className="src-badge" style={{ marginTop: 8 }}>HISTÓRICO DE QUILOMETRAGEM</div>
           <div className="ds-block" style={{ marginTop: 8, border: '1px solid #c8bfa8' }}>
-            {/* REGRA DE ANOMALIA: hodômetro fica vermelho apenas quando
+            {/* REGRA DE DIVERGÊNCIA: hodômetro fica vermelho apenas quando
                km.anomalia === true (regressão de KM detectada = possível adulteração).
-               Sem anomalia o ds-hd permanece azul-escuro padrão. */}
+               Sem divergência o ds-hd permanece azul-escuro padrão. */}
             <div className="ds-hd" style={{ background: km.anomalia ? '#c0392b' : 'var(--navy)' }}>
               <span>HISTÓRICO CRONOLÓGICO DE QUILOMETRAGEM (HODÔMETRO)</span>
               <span className="ds-hd-badge" style={km.anomalia ? { color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)' } : {}}>
@@ -2932,7 +2932,7 @@ function DadosSncAutoScore({ r }: { r: Record<string, unknown> }) {
           </div>
           <div style={{ padding: '8px 14px', display: 'flex', gap: 16, alignItems: 'center', borderTop: '1px solid #d4cfc1', background: '#ffffff' }}>
             <span className="dk">Alerta de Inconsistência de Hodômetro:</span>
-            <span className={`chip chip-${km.anomalia ? 'red' : 'green'}`}>{km.anomalia ? 'CONSTA ANOMALIA' : 'NADA CONSTA'}</span>
+            <span className={`chip chip-${km.anomalia ? 'red' : 'green'}`}>{km.anomalia ? 'CONSTA DIVERGÊNCIA' : 'NADA CONSTA'}</span>
             {km.motivoAnomalia && (
               <span className="dk" style={{ marginLeft: 8 }}>Motivo: <strong>{km.motivoAnomalia}</strong></span>
             )}
@@ -4743,12 +4743,12 @@ function DadosAnaliticoVeicular({ r }: { r: Record<string, unknown> }) {
             {historicoKm.anomalia && (
               <div className="ds-row">
                 <div className="ds-row-inner">
-                  <div className="dk">Alerta de Anomalia</div>
+                  <div className="dk">Alerta de Divergência</div>
                   <div className="dv" style={{ color: '#ef4444', fontWeight: 700 }}>
                     {historicoKm.motivoAnomalia || "QUILOMETRAGEM REVERTIDA — POSSÍVEL ADULTERAÇÃO DE HODÔMETRO"}
                   </div>
                 </div>
-                <span className="chip chip-red">ANOMALIA</span>
+                <span className="chip chip-red">DIVERGÊNCIA</span>
               </div>
             )}
           </>
@@ -5071,7 +5071,7 @@ function DadosHistoricoKm({ r }: { r: Record<string, unknown> }) {
         <div className="ds-hd" style={{ background: anomalia ? '#c0392b' : 'var(--navy)' }}>
           <span>HISTÓRICO DE QUILOMETRAGEM</span>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-            {anomalia && <span className="chip chip-red">ANOMALIA</span>}
+            {anomalia && <span className="chip chip-red">DIVERGÊNCIA</span>}
             <span className="ds-hd-badge" style={{ color: anomalia ? 'rgba(255,255,255,0.9)' : undefined, borderColor: anomalia ? 'rgba(255,255,255,0.3)' : undefined, background: anomalia ? 'rgba(255,255,255,0.1)' : undefined }}>
               {reg(total)}
             </span>
@@ -5110,7 +5110,7 @@ function DadosHistoricoKm({ r }: { r: Record<string, unknown> }) {
                     <td className="mono">{String(reg.estado ?? '—')}</td>
                     <td>
                       {isAnomaly ? (
-                        <span className="chip chip-red" style={{ fontSize: 9, fontWeight: 700, padding: '2px 6px' }}>ANOMALIA</span>
+                        <span className="chip chip-red" style={{ fontSize: 9, fontWeight: 700, padding: '2px 6px' }}>DIVERGÊNCIA</span>
                       ) : (
                         <span className="chip chip-green" style={{ fontSize: 9, fontWeight: 700, padding: '2px 6px' }}>NORMAL</span>
                       )}
@@ -5125,7 +5125,7 @@ function DadosHistoricoKm({ r }: { r: Record<string, unknown> }) {
                 <td colSpan={2} />
                 <td>
                   {anomalia
-                    ? <span className="chip chip-red" style={{ fontSize: 9, fontWeight: 700, padding: '2px 6px' }}>ANOMALIA DETECTADA</span>
+                    ? <span className="chip chip-red" style={{ fontSize: 9, fontWeight: 700, padding: '2px 6px' }}>DIVERGÊNCIA DETECTADA</span>
                     : <span className="chip chip-green" style={{ fontSize: 9, fontWeight: 700, padding: '2px 6px' }}>CONSISTENTE</span>
                   }
                 </td>
@@ -5785,7 +5785,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
                           <div className="r-vt">
                             {anomalia ? (
                               <h3 style={{ color: '#d32f2f', lineHeight: 1.25 }}>
-                                ANOMALIA NO HODÔMETRO<br />
+                                DIVERGÊNCIA NO HODÔMETRO<br />
                                 <span style={{ fontSize: '0.85em' }}>({total} registro(s) analisado(s))</span>
                               </h3>
                             ) : (

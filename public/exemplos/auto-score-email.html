@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SNC · Auto Score · Notificação por E-mail — Exemplo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0a1628;
+  --navy-2:#13243f;
+  --paper:#f4f1ea;
+  --ink:#0a0e16;
+  --ink-2:#3a4252;
+  --rule:#1a2742;
+  --green:#2ba84a;
+  --green-d:#1d7a36;
+  --brass:#c8a25a;
+  --red:#9c2a2a;
+  --red-d:#6e1e1e;
+  --amber:#a37b1f;
+  --cream:#faf8f1;
+  --line:#d4cfc1;
+  --line-2:#ece7d8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+/* simulated mail client chrome */
+.client{max-width:780px;margin:24px auto 60px;background:#fff;border:1px solid #c8c2b1;border-radius:6px;overflow:hidden;box-shadow:0 18px 60px rgba(10,22,40,.14)}
+.client-hd{padding:12px 18px;background:#f1ede2;border-bottom:1px solid #d4cfc1;display:flex;align-items:center;gap:12px}
+.client-hd .dots{display:flex;gap:6px}
+.client-hd .dots i{width:11px;height:11px;border-radius:50%;display:block}
+.client-hd .dots i:nth-child(1){background:#e25a5a}
+.client-hd .dots i:nth-child(2){background:#d8a93b}
+.client-hd .dots i:nth-child(3){background:#3aaf57}
+.client-hd .tabs{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:#8a8170;text-transform:uppercase;margin-left:auto}
+
+.mail-meta{padding:18px 32px 16px;border-bottom:1px solid var(--line-2);background:#fff}
+.mail-meta .from{display:flex;align-items:center;gap:14px}
+.mail-meta .avatar{width:42px;height:42px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1.5px solid var(--brass);overflow:hidden}
+.mail-meta .avatar img{width:28px;height:28px;object-fit:contain}
+.mail-meta .who{flex:1;min-width:0}
+.mail-meta .who .n{font-size:14px;color:var(--ink);font-weight:500}
+.mail-meta .who .n .b{color:#8a8170;font-weight:400}
+.mail-meta .who .to{font-size:12px;color:#6e6655;margin-top:2px;font-family:'JetBrains Mono',monospace;letter-spacing:.02em}
+.mail-meta .when{font-family:'JetBrains Mono',monospace;font-size:11px;color:#8a8170;letter-spacing:.06em;text-transform:uppercase}
+.mail-meta .subj{font-family:'Libre Caslon Text',serif;font-size:22px;font-weight:400;line-height:1.2;letter-spacing:-.01em;margin-top:14px;color:var(--ink)}
+.mail-meta .subj .it{font-style:italic;color:#8a8170}
+
+/* email body */
+.email{background:var(--paper);position:relative;padding:0}
+.email::before{content:"";position:absolute;inset:0;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.05  0 0 0 0 0.05  0 0 0 0 0.07  0 0 0 0.025 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");pointer-events:none;opacity:.55;mix-blend-mode:multiply}
+.email > *{position:relative}
+
+/* navy band header */
+.head{background:var(--navy);color:#fff;padding:26px 32px;border-bottom:5px solid var(--green);display:flex;justify-content:space-between;align-items:center;gap:20px}
+.head .brand{display:flex;align-items:center;gap:14px}
+.head .mark{height:44px;width:44px;border:1.5px solid var(--brass);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.head .mark img{width:30px;height:30px;object-fit:contain}
+.head .brand .t{border-left:1px solid #2a3a55;padding-left:14px}
+.head .brand .t1{font-family:'Libre Caslon Text',serif;font-size:14px;line-height:1;letter-spacing:-.005em}
+.head .brand .t2{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#8a94a3;margin-top:5px}
+.head .ref{text-align:right;font-family:'JetBrains Mono',monospace}
+.head .ref .lbl{font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);margin-bottom:4px}
+.head .ref .num{font-size:16px;color:#fff;font-weight:500;letter-spacing:.04em}
+.head .ref .sub{font-size:9px;color:#8a94a3;margin-top:4px;letter-spacing:.06em}
+
+/* body content */
+.body-pad{padding:38px 48px 30px}
+.kicker{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--brass);text-transform:uppercase;margin-bottom:14px}
+h1.hello{font-family:'Libre Caslon Text',serif;font-size:30px;font-weight:400;line-height:1.1;letter-spacing:-.015em;color:var(--ink);margin-bottom:16px}
+h1.hello .it{font-style:italic;color:#8a8170}
+.lede{font-size:14px;color:var(--ink-2);line-height:1.7;margin-bottom:18px}
+.lede strong{color:var(--ink);font-weight:600}
+.lede .bad{color:var(--red-d);font-weight:600}
+.signature{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-2)}
+.signature .nm{font-family:'Libre Caslon Text',serif;font-size:15px;color:var(--ink);margin-bottom:2px}
+.signature .role{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;color:#8a8170;text-transform:uppercase}
+
+/* Auto Score HERO CARD */
+.hero-card{margin:8px 0 28px;background:#fff;border:1px solid var(--line);position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--green)}
+.hero-card-top{display:flex;justify-content:space-between;align-items:center;padding:14px 20px 14px 24px;border-bottom:1px solid var(--line-2)}
+.hero-card-top .tag{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2)}
+.hero-card-top .stamp{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green-d);letter-spacing:.08em;display:flex;align-items:center;gap:6px}
+.hero-card-top .stamp::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(43,168,74,.18)}
+.hero-card-body{display:grid;grid-template-columns:200px 1fr auto;gap:28px;padding:24px 24px 22px;align-items:center}
+.hero-score{text-align:center;padding-right:24px;border-right:1px solid var(--line-2)}
+.hero-score .l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);margin-bottom:6px}
+.hero-score .v{font-family:'Libre Caslon Text',serif;font-size:78px;line-height:.9;color:var(--green-d);letter-spacing:-.03em}
+.hero-score .x{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-2);letter-spacing:.06em;margin-top:6px}
+.hero-result{flex:1;min-width:0}
+.hero-result .lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--ink-2);text-transform:uppercase;margin-bottom:8px}
+.hero-result .h{font-family:'Libre Caslon Text',serif;font-size:26px;font-weight:400;line-height:1.05;color:var(--green-d);letter-spacing:-.005em;margin-bottom:6px}
+.hero-result .p{font-size:12.5px;color:var(--ink-2);line-height:1.55}
+.hero-seal{width:74px;height:74px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;box-shadow:0 0 0 4px #fff, 0 0 0 5px var(--green)}
+.hero-seal svg{width:36px;height:36px}
+
+.hero-bar{padding:0 24px 18px}
+.hero-bar .row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--ink-2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.hero-bar .track{height:12px;background:#ece7d8;border:1px solid var(--line);position:relative;overflow:hidden}
+.hero-bar .fill{position:absolute;inset:0;width:85%;background:linear-gradient(90deg,#1d7a36 0%,#2ba84a 100%)}
+.hero-bar .marker{position:absolute;top:-4px;bottom:-4px;left:85%;width:2px;background:var(--ink);transform:translateX(-1px)}
+.hero-bar .marker::after{content:"";position:absolute;top:-5px;left:-5px;width:12px;height:12px;background:var(--ink);transform:rotate(45deg)}
+.hero-bar .scale{display:grid;grid-template-columns:repeat(5,1fr);font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-2);letter-spacing:.06em;margin-top:8px;text-transform:uppercase}
+.hero-bar .scale span{text-align:center;border-right:1px solid var(--line);padding:2px 0}
+.hero-bar .scale span:last-child{border-right:none}
+.hero-bar .scale .now{color:var(--green);font-weight:600}
+
+.hero-strip{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line-2);background:var(--cream)}
+.hero-strip > div{padding:12px 20px;border-right:1px solid var(--line-2)}
+.hero-strip > div:last-child{border-right:none}
+.hero-strip .l{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.14em;color:var(--ink-2);text-transform:uppercase;margin-bottom:4px}
+.hero-strip .v{font-family:'Libre Caslon Text',serif;font-size:20px;line-height:1;color:var(--green-d)}
+.hero-strip .v.warn{color:var(--amber)}
+.hero-strip .v.ok{color:var(--green-d)}
+.hero-strip .x{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--ink-2);margin-top:4px;letter-spacing:.04em}
+
+/* CTA */
+.cta-wrap{padding:6px 0 8px}
+.cta-row{display:flex;gap:12px;align-items:center}
+.cta{display:inline-flex;align-items:center;gap:10px;background:var(--navy);color:#fff;padding:15px 24px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;border:1px solid var(--navy);transition:all .15s;flex:1;justify-content:center}
+.cta:hover{background:var(--green-d);border-color:var(--green-d)}
+.cta svg{width:14px;height:14px}
+.cta-secondary{display:inline-flex;align-items:center;gap:8px;padding:15px 18px;border:1px solid var(--line);color:var(--ink-2);font-family:'Inter',sans-serif;font-size:11.5px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;background:#fff;transition:all .15s}
+.cta-secondary:hover{background:var(--cream);color:var(--ink)}
+.cta-secondary svg{width:13px;height:13px}
+.cta-link{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-2);letter-spacing:.06em;margin-top:10px;text-align:center}
+.cta-link a{color:var(--green-d);text-decoration:none}
+
+/* Datasets grid */
+.divider{display:flex;align-items:center;gap:14px;margin:34px 0 18px}
+.divider .num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass)}
+.divider .ti{font-family:'Libre Caslon Text',serif;font-size:18px;font-weight:400;letter-spacing:-.005em;color:var(--ink)}
+.divider .rule{flex:1;height:1px;background:var(--line)}
+
+.b-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);background:var(--cream)}
+.b-card{padding:18px 18px 16px;border-right:1px solid var(--line-2);position:relative;display:flex;flex-direction:column}
+.b-card:last-child{border-right:none}
+.b-card .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px}
+.b-card .tag{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.b-card .st{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border:1px solid;border-radius:1px;white-space:nowrap;flex-shrink:0}
+.b-card .st.warn{color:var(--amber);border-color:rgba(163,123,31,.4);background:rgba(163,123,31,.08)}
+.b-card .st.bad{color:var(--red);border-color:rgba(156,42,42,.4);background:rgba(156,42,42,.08)}
+.b-card .st.ok{color:var(--green-d);border-color:rgba(43,168,74,.4);background:rgba(43,168,74,.08)}
+.b-card .nm{font-family:'Libre Caslon Text',serif;font-size:16px;font-weight:400;letter-spacing:-.005em;margin-bottom:2px}
+.b-card .sub{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+.b-card .score{display:flex;align-items:baseline;gap:6px;margin-bottom:10px}
+.b-card .score .v{font-family:'Libre Caslon Text',serif;font-size:36px;line-height:1;letter-spacing:-.02em;color:var(--ink)}
+.b-card .score .v.warn{color:var(--amber)}
+.b-card .score .v.bad{color:var(--red-d)}
+.b-card .score .v.ok{color:var(--green-d)}
+.b-card .score .of{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-2);letter-spacing:.06em}
+.b-card .desc{font-size:11px;color:var(--ink-2);line-height:1.5;margin-bottom:0;flex:1}
+.b-card .desc strong{color:var(--red);font-weight:500}
+.b-card .desc strong.ok{color:var(--green-d)}
+.b-card .desc strong.warn{color:var(--amber)}
+.b-bar{display:flex;gap:1.5px;height:5px;margin-top:auto;padding-top:12px}
+.b-bar i{flex:1;height:100%;background:var(--line)}
+.b-bar i.bad{background:var(--red)}
+.b-bar i.warn{background:var(--amber)}
+.b-bar i.att{background:#c84a1f}
+.b-bar i.ok{background:var(--green)}
+
+/* Highlights bullets */
+.hl{margin:6px 0 18px;background:var(--cream);border:1px solid var(--line);padding:16px 20px}
+.hl-h{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);margin-bottom:10px}
+.hl ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.hl li{display:grid;grid-template-columns:18px 1fr auto;gap:10px;align-items:baseline;font-size:13px;color:var(--ink-2);line-height:1.5}
+.hl li .ix{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--brass);text-transform:uppercase}
+.hl li .v{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.08em;color:var(--ink);white-space:nowrap;padding:3px 10px;border:1px solid var(--line);border-radius:1px;background:#fff}
+.hl li .v.bad{color:var(--red-d);border-color:rgba(156,42,42,.4);background:rgba(156,42,42,.08)}
+.hl li .v.warn{color:var(--amber);border-color:rgba(163,123,31,.4);background:rgba(163,123,31,.08)}
+.hl li .v.ok{color:var(--green-d);border-color:rgba(43,168,74,.4);background:rgba(43,168,74,.08)}
+.hl li b{color:var(--ink);font-weight:600}
+
+/* Mini meta */
+.meta-tab{display:grid;grid-template-columns:auto auto auto auto;background:var(--cream);border:1px solid var(--line);margin-top:6px}
+.meta-tab > div{padding:11px 14px;border-right:1px solid var(--line-2)}
+.meta-tab > div:last-child{border-right:none}
+.meta-tab .l{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.14em;color:var(--ink-2);text-transform:uppercase;margin-bottom:3px}
+.meta-tab .v{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink);letter-spacing:.02em;white-space:nowrap}
+
+/* fine print + footer */
+.legal{padding:22px 48px;background:var(--cream);border-top:1px solid var(--line);font-size:11px;color:var(--ink-2);line-height:1.6}
+.legal p+p{margin-top:8px}
+.legal b{color:var(--ink-2);font-weight:600}
+
+.foot{background:var(--navy);color:#8a94a3;padding:24px 48px;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase}
+.foot a{color:var(--brass);text-decoration:none}
+.foot .links{display:flex;gap:18px;color:var(--brass)}
+
+/* ─── RESPONSIVE ─── */
+
+/* Tablet / small desktop */
+@media (max-width: 720px){
+  .client{margin:12px;border-radius:4px}
+  .client-hd .tabs{display:none}
+  .mail-meta{padding:14px 20px}
+  .mail-meta .when{display:none}
+  .mail-meta .subj{font-size:18px}
+  .body-pad{padding:28px 24px 24px}
+  h1.hello{font-size:24px}
+  .head{padding:20px 22px;flex-wrap:wrap;gap:14px}
+  .head .ref{text-align:left}
+  .head .brand .t2{display:none}
+  .hero-card-top{flex-wrap:wrap;gap:8px;padding:12px 18px 12px 22px}
+  .hero-card-top .tag{font-size:8px;letter-spacing:.14em}
+  .hero-card-body{grid-template-columns:140px 1fr auto;gap:18px;padding:20px 18px 18px}
+  .hero-score .v{font-size:60px}
+  .hero-result .h{font-size:22px}
+  .hero-result .p{font-size:11.5px}
+  .hero-seal{width:60px;height:60px}
+  .hero-seal svg{width:28px;height:28px}
+  .hero-strip{grid-template-columns:repeat(3,1fr)}
+  .hero-strip > div{padding:10px 14px}
+  .hero-strip .v{font-size:17px}
+  .b-grid{grid-template-columns:1fr}
+  .b-card{border-right:none;border-bottom:1px solid var(--line-2)}
+  .b-card:last-child{border-bottom:none}
+  .b-card .score .v{font-size:30px}
+  .hl{padding:14px 16px}
+  .hl li{font-size:12px;gap:8px}
+  .meta-tab{grid-template-columns:1fr 1fr}
+  .meta-tab > div{border-bottom:1px solid var(--line-2)}
+  .meta-tab .v{white-space:normal}
+  .cta-row{flex-direction:column}
+  .cta{padding:14px 20px;font-size:12px}
+  .cta-secondary{width:100%;justify-content:center}
+  .cta-link{font-size:9px}
+  .cta-link a{word-break:break-all}
+  .legal{padding:18px 24px;font-size:10px}
+  .foot{padding:18px 22px;grid-template-columns:1fr;text-align:center;gap:12px;font-size:8.5px}
+  .foot .links{justify-content:center;flex-wrap:wrap;gap:12px}
+}
+
+/* Mobile */
+@media (max-width: 520px){
+  .client{margin:0;border-radius:0;border:none;box-shadow:none}
+  .client-hd{display:none}
+  .mail-meta{padding:12px 16px}
+  .mail-meta .avatar{width:36px;height:36px}
+  .mail-meta .avatar img{width:24px;height:24px}
+  .mail-meta .who .n{font-size:13px}
+  .mail-meta .who .n .b{display:none}
+  .mail-meta .who .to{font-size:10px}
+  .mail-meta .subj{font-size:16px;margin-top:10px}
+  .body-pad{padding:22px 16px 20px}
+  .kicker{font-size:9px;letter-spacing:.14em;margin-bottom:10px}
+  h1.hello{font-size:21px;margin-bottom:12px}
+  .lede{font-size:13px;line-height:1.6}
+  .head{padding:16px;gap:10px}
+  .head .mark{width:36px;height:36px}
+  .head .mark img{width:24px;height:24px}
+  .head .brand .t1{font-size:12px}
+  .head .ref .num{font-size:14px}
+  .head .ref .sub{font-size:8px}
+  .hero-card-body{grid-template-columns:1fr;gap:16px;padding:18px 16px 16px}
+  .hero-score{text-align:left;padding-right:0;border-right:none;padding-bottom:14px;border-bottom:1px solid var(--line-2);display:flex;align-items:baseline;gap:12px}
+  .hero-score .l{margin-bottom:0}
+  .hero-score .v{font-size:52px}
+  .hero-score .x{margin-top:0}
+  .hero-seal{display:none}
+  .hero-result .h{font-size:20px}
+  .hero-bar{padding:0 16px 14px}
+  .hero-bar .row{font-size:8px}
+  .hero-strip{grid-template-columns:1fr}
+  .hero-strip > div{border-right:none;border-bottom:1px solid var(--line-2);padding:10px 16px}
+  .hero-strip > div:last-child{border-bottom:none}
+  .divider{margin:26px 0 14px}
+  .divider .ti{font-size:16px}
+  .b-card{padding:16px 14px 14px}
+  .hl{padding:12px 14px}
+  .hl li{grid-template-columns:14px 1fr;gap:6px}
+  .hl li .v{grid-column:1/-1;justify-self:start;margin-top:2px}
+  .meta-tab{grid-template-columns:1fr 1fr}
+  .meta-tab > div{padding:9px 12px}
+  .legal{padding:16px;font-size:10px}
+  .foot{padding:16px;font-size:8px;letter-spacing:.08em}
+  .foot .links{gap:10px}
+  .signature .nm{font-size:14px}
+  .signature .role{font-size:9px}
+}
+
+/* Very small screens */
+@media (max-width: 380px){
+  h1.hello{font-size:18px}
+  .hero-score .v{font-size:44px}
+  .hero-result .h{font-size:18px}
+  .hero-result .p{font-size:11px}
+  .hero-strip .v{font-size:16px}
+  .b-card .nm{font-size:14px}
+  .b-card .score .v{font-size:28px}
+  .b-card .desc{font-size:10px}
+  .meta-tab{grid-template-columns:1fr}
+  .meta-tab > div{border-right:none}
+  .lede{font-size:12px}
+  .cta{padding:12px 16px;font-size:11px}
+  .head .brand .t1{font-size:11px}
+  .head .ref .num{font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<div class="client">
+
+  <!-- Mail client chrome -->
+  <div class="client-hd">
+    <div class="dots"><i></i><i></i><i></i></div>
+    <div class="tabs">Inbox · Revendas Premium · BR</div>
+  </div>
+
+  <!-- Mail meta -->
+  <div class="mail-meta">
+    <div class="from">
+      <div class="avatar"><img src="/snc-shield.png" alt="SNC"/></div>
+      <div class="who">
+        <div class="n">SNC · Auto Score <span class="b">&lt;relatorios@snc.consolle.one&gt;</span></div>
+        <div class="to">para vendas@revendaspremium.com.br · 03 jun 2026, 09:15 BRT</div>
+      </div>
+      <div class="when">09:15 · agora</div>
+    </div>
+    <div class="subj">Seu relatório <span class="it">Auto Score</span> está pronto · Nº 2026.0603-0915</div>
+  </div>
+
+  <!-- Email body -->
+  <div class="email">
+
+    <!-- Top mast -->
+    <div class="head">
+      <div class="brand">
+        <div class="mark"><img src="/snc-shield.png" alt="SNC"/></div>
+        <div class="t">
+          <div class="t1">Sistema Nacional de Conformidade</div>
+          <div class="t2">Auto Score · Relatório veicular completo</div>
+        </div>
+      </div>
+      <div class="ref">
+        <div class="lbl">Protocolo SNC</div>
+        <div class="num">2026.0603-0915</div>
+        <div class="sub">EMITIDO EM 03 JUN 2026 · 09:15:42 BRT</div>
+      </div>
+    </div>
+
+    <!-- Greeting + lede -->
+    <div class="body-pad">
+      <div class="kicker">§ Notificação automatizada</div>
+      <h1 class="hello">A consulta Auto Score do veículo<br/><span class="it">ABC1D23</span> foi concluída.</h1>
+      <p class="lede">
+        O relatório completo do veículo <strong>VW/FOX 1.0 GII</strong>, ano <strong>2012/2013</strong>, registrado em <strong>PR</strong>, foi processado com sucesso sobre <strong>10 datasets</strong> integrados (BIN Nacional, FIPE, Leilão, Débitos, Histórico KM, Gravame, RENAJUD, Proprietário, CRLV-e e Recall). O veículo está <strong>sem restrições impeditivas</strong> nos registros nacionais.
+      </p>
+
+      <!-- ───── HERO CARD ───── -->
+      <div class="hero-card">
+        <div class="hero-card-top">
+          <span class="tag">SNC Auto Score · Risco veicular · 10 datasets</span>
+          <span class="stamp">✓ APROVADO · ASSINADO</span>
+        </div>
+        <div class="hero-card-body">
+          <div class="hero-score">
+            <div class="l">Score de risco</div>
+            <div class="v">85</div>
+            <div class="x">/ 100 · FAIXA B</div>
+          </div>
+          <div class="hero-result">
+            <div class="lbl">Parecer Auto Score</div>
+            <div class="h">Aprovado · Baixo risco</div>
+            <p class="p">Veículo sem restrições impeditivas nos registros nacionais (BIN, RENAJUD, CSV). Score de risco <strong>85/100</strong> — classificação aceitável para transferência e financiamento. Nenhum indício de sinistro ou leilão registrado.</p>
+          </div>
+          <div class="hero-seal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+        </div>
+
+        <div class="hero-bar">
+          <div class="row"><span>0 — Risco crítico</span><span>100 — Excelente</span></div>
+          <div class="track">
+            <div class="fill"></div>
+            <div class="marker"></div>
+          </div>
+          <div class="scale">
+            <span>E</span><span>D</span><span>C</span><span class="now">B</span><span>A</span>
+          </div>
+        </div>
+
+        <div class="hero-strip">
+          <div>
+            <div class="l">Valor FIPE</div>
+            <div class="v ok">R$ 24.500,00</div>
+            <div class="x">Tabela FIPE vigente</div>
+          </div>
+          <div>
+            <div class="l">Débitos totais</div>
+            <div class="v ok">R$ 0,00</div>
+            <div class="x">0 multas registradas</div>
+          </div>
+          <div>
+            <div class="l">Gravame</div>
+            <div class="v ok">Livre</div>
+            <div class="x">sem alienação</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ───── PRIMARY CTA ───── -->
+      <div class="cta-wrap">
+        <div class="cta-row">
+          <a href="#" class="cta">
+            Abrir relatório completo
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <a href="#" class="cta-secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+            Baixar CRLV-e
+          </a>
+        </div>
+        <div class="cta-link">
+          Ou copie este link · <a href="#">snc.consolle.one/relatorio/2026.0603-0915</a>
+        </div>
+      </div>
+
+      <!-- ───── DATASETS ───── -->
+      <div class="divider">
+        <span class="num">§ 02</span>
+        <span class="ti">Resumo por dataset</span>
+        <span class="rule"></span>
+      </div>
+
+      <div class="b-grid">
+        <!-- Restrições BIN -->
+        <div class="b-card">
+          <div class="top">
+            <span class="tag">D.01 · BIN Nacional</span>
+            <span class="st ok">Limpo</span>
+          </div>
+          <div class="nm">Restrições BIN</div>
+          <div class="sub">Base Índice Nacional · SENATRAN</div>
+          <div class="score">
+            <span class="v ok">0</span>
+            <span class="of">LIMPO</span>
+          </div>
+          <p class="desc">Roubo/Furto: <strong class="ok">Não</strong> · RENAJUD: <strong class="ok">Não</strong> · Baixado: <strong class="ok">Não</strong> · Sinistro: <strong class="ok">Não</strong>. Veículo sem impedimentos nos registros do SENATRAN.</p>
+          <div class="b-bar"><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i></div>
+        </div>
+
+        <!-- Débitos DETRAN -->
+        <div class="b-card">
+          <div class="top">
+            <span class="tag">D.02 · DETRAN</span>
+            <span class="st ok">Quitado</span>
+          </div>
+          <div class="nm">Débitos DETRAN</div>
+          <div class="sub">Multas · IPVA · Licenciamento</div>
+          <div class="score">
+            <span class="v ok">0</span>
+            <span class="of">QUITADO</span>
+          </div>
+          <p class="desc">Total: <strong class="ok">R$ 0,00</strong> · Multas: 0 · IPVA: R$ 0,00. Veículo sem pendências financeiras nos registros do DETRAN.</p>
+          <div class="b-bar"><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i></div>
+        </div>
+
+        <!-- Leilão & Sinistro -->
+        <div class="b-card">
+          <div class="top">
+            <span class="tag">D.03 · Leilão</span>
+            <span class="st ok">Score 85</span>
+          </div>
+          <div class="nm">Leilão & Sinistro</div>
+          <div class="sub">Histórico de leilão · Indício</div>
+          <div class="score">
+            <span class="v ok">85</span>
+            <span class="of">/100</span>
+          </div>
+          <p class="desc">0 leilão(ões) encontrado(s). Indício de sinistro: <strong class="ok">Não</strong>. Classificação: <strong class="ok">BAIXO RISCO</strong>. Veículo apto para transferência.</p>
+          <div class="b-bar"><i></i><i></i><i></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i></div>
+        </div>
+      </div>
+
+      <!-- ───── HIGHLIGHTS ───── -->
+      <div class="divider">
+        <span class="num">§ 03</span>
+        <span class="ti">Achados decisivos</span>
+        <span class="rule"></span>
+      </div>
+
+      <div class="hl">
+        <div class="hl-h">4 sinais que pesaram no parecer</div>
+        <ul>
+          <li>
+            <span class="ix">01</span>
+            <span><b>Roubo / Furto</b> — Nenhum registro de roubo ou furto encontrado nos sistemas BIN Nacional e Secretarias de Segurança Pública.</span>
+            <span class="v ok">LIMPO</span>
+          </li>
+          <li>
+            <span class="ix">02</span>
+            <span><b>Divergência de hodômetro</b> — Nenhuma divergência detectada. Histórico de quilometragem consistente com a idade e utilização do veículo.</span>
+            <span class="v ok">REGULAR</span>
+          </li>
+          <li>
+            <span class="ix">03</span>
+            <span><b>Gravame financeiro</b> — Sem gravame registrado. Veículo livre de alienação fiduciária, arrendamento mercantil ou reserva de domínio.</span>
+            <span class="v ok">LIVRE</span>
+          </li>
+          <li>
+            <span class="ix">04</span>
+            <span><b>Emissão CRLV-e</b> — Certificado de Registro e Licenciamento de Veículo Eletrônico gerado com sucesso e anexado a este e-mail.</span>
+            <span class="v ok">EMITIDO</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ───── META ───── -->
+      <div class="divider">
+        <span class="num">§ 04</span>
+        <span class="ti">Dados do veículo</span>
+        <span class="rule"></span>
+      </div>
+
+      <div class="meta-tab">
+        <div><div class="l">Placa</div><div class="v">ABC1D23</div></div>
+        <div><div class="l">Marca / Modelo</div><div class="v">VW/FOX 1.0 GII</div></div>
+        <div><div class="l">Ano</div><div class="v">2012/2013</div></div>
+        <div><div class="l">UF</div><div class="v">PR</div></div>
+      </div>
+
+      <!-- ───── CLOSING ───── -->
+      <p class="lede" style="margin-top:24px">
+        O relatório completo contém o detalhamento dos <strong>10 datasets integrados</strong>, incluindo a relação integral de <strong>débitos e multas</strong>, o <strong>histórico completo de hodômetro</strong>, análise de <strong>leilão e sinistro</strong>, e o documento <strong>CRLV-e oficial</strong> anexado a este e-mail. Você pode abrir o documento na web ou compartilhar o link com sua equipe.
+      </p>
+
+      <p class="lede">
+        Em caso de dúvida sobre os critérios de cálculo do Auto Score ou para contestar qualquer informação, entre em contato com nosso encarregado SNC (DPO) pelo e-mail <a href="mailto:dpo@snc.consolle.one" style="color:var(--green-d);text-decoration:none;font-weight:500">dpo@snc.consolle.one</a>.
+      </p>
+
+      <div class="signature">
+        <div class="nm">SNC · Sistema Nacional de Conformidade</div>
+        <div class="role">Auto Score · Relatório Veicular Completo · Emissão Automatizada</div>
+      </div>
+    </div>
+
+    <!-- Legal -->
+    <div class="legal">
+      <p><b>§ Validade jurídica & autenticação.</b> Este documento é gerado de forma automatizada pelo Sistema Nacional de Conformidade — SNC, mediante consulta autorizada e finalidade declarada conforme LGPD (Lei 13.709/2018, art. 7º, X). O Auto Score é calculado com base na análise de 10 datasets integrados (BIN Nacional, FIPE, Leilão Score, Débitos DETRAN, Histórico KM, Gravame SNG, RENAJUD, Proprietário, CRLV-e e Recall), cruzando registros do SENATRAN, DETRAN, CNJ e B3. Toda informação consolidada é rastreável à fonte primária.</p>
+      <p><b>Confidencialidade.</b> Este e-mail e seu conteúdo são destinados exclusivamente ao(s) destinatário(s) acima. Caso tenha recebido por engano, notifique o remetente e exclua a mensagem. Reprodução, encaminhamento ou divulgação não autorizada é vedada nos termos da LGPD.</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="foot">
+      <span>SNC · MMXXVI · Documento Nº 2026.0603-0915</span>
+      <div class="links">
+        <a href="#">Validar relatório</a>
+        <a href="#">Política de privacidade</a>
+        <a href="#">Descadastrar</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

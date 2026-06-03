@@ -177,6 +177,11 @@ interface AutoScoreResult {
     leilao: "success" | "failed";
     debitos: "success" | "failed";
     km: "success" | "failed";
+    gravame?: "success" | "failed";
+    renajud?: "success" | "failed";
+    fipe?: "success" | "failed";
+    agregadosPropria?: "success" | "failed";
+    crlve?: "success" | "failed";
   };
   identificacao: Identificacao | null;
   dadosTecnicos: DadosTecnicos | null;
@@ -190,6 +195,17 @@ interface AutoScoreResult {
   historicoKm: HistoricoKmResult | null;
   recall: { total: string; ocorrencias: any[] };
   pdf: string | null;
+  crlve?: {
+    exercicio?: string | null;
+    codigoSegurancaCla?: string | null;
+    existeOcorrencia?: boolean;
+    observacoes?: string | null;
+    pdfBase64?: string | null;
+    pdf?: string | null;
+    statusDescricao?: string | null;
+    veiculo?: any;
+  } | null;
+  [key: string]: any;
 }
 
 // Sub-consultas sob demanda (Tab 2)
@@ -450,10 +466,7 @@ export function BuscaSncAutoScorePanel() {
   const [loadingEstadual, setLoadingEstadual] = useState(false);
   const [estadualData, setEstadualData]       = useState<EstadualOnDemand | null>(null);
 
-  // CRLV-e Emissão Sob Demanda
-  const [loadingCrlve, setLoadingCrlve]       = useState(false);
-  const [crlveResult, setCrlveResult]         = useState<any | null>(null);
-  const [crlveErro, setCrlveErro]             = useState<string | null>(null);
+  // CRLV-e — agora vem automático do backend (não precisa mais de estado manual)
 
   const handleBuscar = useCallback(async (placaAlvo?: string) => {
     const placaClean = (placaAlvo || placa).replace(/[^A-Z0-9]/g, "");
@@ -469,8 +482,7 @@ export function BuscaSncAutoScorePanel() {
     setGravameData(null);
     setRenajudData(null);
     setEstadualData(null);
-    setCrlveResult(null);
-    setCrlveErro(null);
+
 
     try {
       const res = await fetch(`/api/apibrasil/snc-autoscore?placa=${placaClean}`);
@@ -478,9 +490,6 @@ export function BuscaSncAutoScorePanel() {
       if (!res.ok) throw new Error(data.error ?? "Erro ao realizar consulta.");
       setResultado(data as AutoScoreResult);
       salvar(placaClean, data as Record<string, unknown>);
-      // ── Auto-popula estados on-demand com dados já retornados pelo backend ──
-      // Gravame e RENAJUD já são chamados automaticamente na rota principal,
-      // populamos diretamente aqui sem depender de useEffect.
       if (data.gravame)         setGravameData(data.gravame);
       if (data.renajudDetalhes) setRenajudData(data.renajudDetalhes);
       if (data.estadual)        setEstadualData(data.estadual);
@@ -507,7 +516,6 @@ export function BuscaSncAutoScorePanel() {
         const data = await res.json();
         setResultado(data as AutoScoreResult);
         salvar(clean, data as Record<string, unknown>);
-        // Auto-popula estados on-demand com dados já retornados pelo backend
         if (data.gravame)         setGravameData(data.gravame);
         if (data.renajudDetalhes) setRenajudData(data.renajudDetalhes);
         if (data.estadual)        setEstadualData(data.estadual);
@@ -601,37 +609,7 @@ export function BuscaSncAutoScorePanel() {
     }
   };
 
-  // Emissão de CRLV-e (Tab 7)
-  const emitirCrlve = async () => {
-    if (!resultado?.identificacao?.placa || !resultado?.identificacao?.uf) {
-      setCrlveErro("Dados de placa ou UF ausentes.");
-      return;
-    }
-    setLoadingCrlve(true);
-    setCrlveErro(null);
-    setCrlveResult(null);
-
-    const isHomolog = process.env.APIBRASIL_HOMOLOG === "true";
-
-    try {
-      const res = await fetch("/api/apibrasil/crlve", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          placa: resultado.identificacao.placa,
-          uf: resultado.identificacao.uf,
-          homolog: isHomolog
-        })
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Erro ao emitir CRLV-e.");
-      setCrlveResult(data.data || data);
-    } catch (e: any) {
-      setCrlveErro(e.message);
-    } finally {
-      setLoadingCrlve(false);
-    }
-  };
+  // CRLV-e já vem do backend automaticamente — acessar via r.crlve
 
   const r = resultado;
 
@@ -1259,7 +1237,7 @@ export function BuscaSncAutoScorePanel() {
                     ) : r.historicoKm ? (
                       <>
                         <div style={{ display: "flex", gap: 16, marginBottom: 12 }}>
-                          <IndicadorBool label="Anomalia de Hodômetro" valor={r.historicoKm.anomalia} />
+                          <IndicadorBool label="Divergência de Hodômetro" valor={r.historicoKm.anomalia} />
                           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                             <span style={{ fontSize: 8, fontFamily: "'JetBrains Mono', monospace", color: "#5a6a7a", textTransform: "uppercase" }}>Registros:</span>
                             <span style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", color: "#fff", fontWeight: 700 }}>{r.historicoKm.totalRegistros}</span>
@@ -1496,8 +1474,8 @@ export function BuscaSncAutoScorePanel() {
               <>
                 {/* ── CARD 1: CRLV-e Digital Oficial ── */}
                 <div style={{
-                  border: `1px solid ${crlveResult ? 'rgba(43,168,74,0.35)' : 'rgba(212,168,67,0.25)'}`,
-                  background: crlveResult ? 'rgba(43,168,74,0.04)' : 'rgba(212,168,67,0.03)',
+                  border: `1px solid ${r.crlve ? 'rgba(43,168,74,0.35)' : 'rgba(212,168,67,0.25)'}`,
+                  background: r.crlve ? 'rgba(43,168,74,0.04)' : 'rgba(212,168,67,0.03)',
                   marginBottom: 12,
                   overflow: 'hidden',
                 }}>
@@ -1511,7 +1489,7 @@ export function BuscaSncAutoScorePanel() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                       <div style={{
                         width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        background: crlveResult ? 'rgba(43,168,74,0.15)' : 'rgba(212,168,67,0.12)',
+                        background: r.crlve ? 'rgba(43,168,74,0.15)' : 'rgba(212,168,67,0.12)',
                         fontSize: 18,
                       }}>📄</div>
                       <div>
@@ -1519,18 +1497,18 @@ export function BuscaSncAutoScorePanel() {
                           CRLV-e — Certificado de Registro e Licenciamento
                         </div>
                         <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#5a6a7a', marginTop: 2, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                          SENATRAN / DETRAN Estadual · Emissão sob demanda · 8 créditos
+                          SENATRAN / DETRAN Estadual · Emissão automática
                         </div>
                       </div>
                     </div>
                     <span style={{
                       padding: '3px 10px', fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
                       fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase',
-                      background: crlveResult ? 'rgba(43,168,74,0.2)' : 'rgba(212,168,67,0.15)',
-                      color: crlveResult ? '#2BA84A' : '#D4A843',
-                      border: `1px solid ${crlveResult ? 'rgba(43,168,74,0.4)' : 'rgba(212,168,67,0.3)'}`,
+                      background: r.crlve ? 'rgba(43,168,74,0.2)' : 'rgba(239,68,68,0.15)',
+                      color: r.crlve ? '#2BA84A' : '#ef4444',
+                      border: `1px solid ${r.crlve ? 'rgba(43,168,74,0.4)' : 'rgba(239,68,68,0.3)'}`,
                     }}>
-                      {crlveResult ? '✓ Emitido' : '⚡ Disponível'}
+                      {r.crlve ? '✓ Emitido' : '✕ Indisponível'}
                     </span>
                   </div>
 
@@ -1554,47 +1532,26 @@ export function BuscaSncAutoScorePanel() {
                       </div>
                     </div>
 
-                    {/* Ação */}
+                    {/* Resultado */}
                     <div style={{ flex: 1, minWidth: 180, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                      {!crlveResult ? (
+                      {r.crlve ? (
                         <>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                            <span style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", color: '#5a6a7a', textTransform: 'uppercase' }}>UF detectada:</span>
-                            <strong style={{ fontSize: 12, fontFamily: "'JetBrains Mono', monospace", color: COR_ACCENT }}>{r.identificacao?.uf || '—'}</strong>
-                          </div>
-                          <button
-                            onClick={emitirCrlve}
-                            disabled={loadingCrlve}
-                            style={{
-                              background: COR_ACCENT, color: '#0A1628', border: 'none',
-                              padding: '11px 16px', fontFamily: "'JetBrains Mono', monospace", fontSize: 10,
-                              fontWeight: 700, cursor: loadingCrlve ? 'not-allowed' : 'pointer',
-                              textTransform: 'uppercase', letterSpacing: '0.08em',
-                              opacity: loadingCrlve ? 0.6 : 1, width: '100%',
-                            }}
-                          >
-                            {loadingCrlve ? '⏳ Emitindo CRLV-e...' : '⚡ Emitir CRLV-e Oficial'}
-                          </button>
-                          {crlveErro && (
-                            <div style={{ padding: '8px 10px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', color: '#ef4444', fontFamily: "'JetBrains Mono', monospace", fontSize: 9 }}>
-                              ⚠ {crlveErro}
-                            </div>
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          <DataRow label="Exercício" value={crlveResult.veiculo?.anoExercicioLicenciamento || crlveResult.veiculo?.exercicio} />
-                          <DataRow label="Cód. Segurança" value={crlveResult.veiculo?.codigoSegurancaCla || '—'} isMono />
+                          <DataRow label="Exercício" value={r.crlve.exercicio || r.crlve.veiculo?.anoExercicioLicenciamento || '—'} />
+                          <DataRow label="Cód. Segurança" value={r.crlve.codigoSegurancaCla || '—'} isMono />
                           <div style={{ marginTop: 4 }}>
-                            {crlveResult.pdfBase64 ? (
-                              <CrlveDownloadButton pdfBase64={crlveResult.pdfBase64} placa={r.identificacao?.placa || 'VEICULO'} mimeType="application/pdf" />
-                            ) : crlveResult.pdf ? (
-                              <a href={crlveResult.pdf} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', background: COR_ACCENT, color: '#0a1628', padding: '10px 16px', textTransform: 'uppercase', fontSize: 10, fontFamily: "'JetBrains Mono', monospace", fontWeight: 700, textDecoration: 'none' }}>
+                            {r.crlve.pdfBase64 ? (
+                              <CrlveDownloadButton pdfBase64={r.crlve.pdfBase64} placa={r.identificacao?.placa || 'VEICULO'} mimeType="application/pdf" />
+                            ) : r.crlve.pdf ? (
+                              <a href={r.crlve.pdf} target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', background: COR_ACCENT, color: '#0a1628', padding: '10px 16px', textTransform: 'uppercase', fontSize: 10, fontFamily: "'JetBrains Mono', monospace", fontWeight: 700, textDecoration: 'none' }}>
                                 ↓ Download CRLV-e PDF
                               </a>
                             ) : <p style={{ fontSize: 9, color: '#8a94a3' }}>Sem arquivo anexado.</p>}
                           </div>
                         </>
+                      ) : (
+                        <div style={{ padding: '12px 16px', background: 'rgba(239,68,68,0.04)', border: '1px solid rgba(239,68,68,0.15)', fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#8a94a3', lineHeight: 1.6 }}>
+                          CRLV-e não pôde ser emitido automaticamente. Verifique se a UF do veículo está disponível.
+                        </div>
                       )}
                     </div>
                   </div>
@@ -1650,21 +1607,19 @@ export function BuscaSncAutoScorePanel() {
                           <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, padding: '2px 6px', border: '1px solid rgba(255,255,255,0.2)', color: '#cfd6df', letterSpacing: '0.06em' }}>OFICIAL</span>
                         </td>
                         <td style={{ padding: '10px 12px' }}>
-                          {crlveResult
+                          {r.crlve
                             ? <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, padding: '2px 6px', border: '1px solid rgba(43,168,74,0.4)', color: '#2BA84A', letterSpacing: '0.06em', display: 'inline-block' }}>EMITIDO</span>
-                            : <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, padding: '2px 6px', border: '1px solid rgba(43,168,74,0.4)', color: '#2BA84A', letterSpacing: '0.06em', display: 'inline-block' }}>DISPONIVEL</span>}
+                            : <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, padding: '2px 6px', border: '1px solid rgba(239,68,68,0.4)', color: '#ef4444', letterSpacing: '0.06em', display: 'inline-block' }}>FALHOU</span>}
                         </td>
                         <td style={{ padding: '10px 12px' }}>
-                          {crlveResult ? (
-                            crlveResult.pdfBase64
-                              ? <CrlveDownloadButton pdfBase64={crlveResult.pdfBase64} placa={r.identificacao?.placa || 'VEICULO'} mimeType="application/pdf" />
-                              : crlveResult.pdf
-                                ? <a href={crlveResult.pdf} target="_blank" rel="noreferrer" style={{ color: COR_ACCENT, fontWeight: 700, textDecoration: 'none', fontSize: 10 }}>↓ Baixar PDF</a>
+                          {r.crlve ? (
+                            r.crlve.pdfBase64
+                              ? <CrlveDownloadButton pdfBase64={r.crlve.pdfBase64} placa={r.identificacao?.placa || 'VEICULO'} mimeType="application/pdf" />
+                              : r.crlve.pdf
+                                ? <a href={r.crlve.pdf} target="_blank" rel="noreferrer" style={{ color: COR_ACCENT, fontWeight: 700, textDecoration: 'none', fontSize: 10 }}>↓ Baixar PDF</a>
                                 : <span style={{ color: '#5a6a7a', fontSize: 10 }}>Sem arquivo</span>
                           ) : (
-                            <button onClick={emitirCrlve} disabled={loadingCrlve} style={{ background: 'transparent', color: COR_ACCENT, border: `1px solid ${COR_ACCENT}`, padding: '4px 10px', fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, cursor: loadingCrlve ? 'not-allowed' : 'pointer', textTransform: 'uppercase', opacity: loadingCrlve ? 0.6 : 1 }}>
-                              {loadingCrlve ? 'Baixando...' : '↓ Baixar PDF'}
-                            </button>
+                            <span style={{ color: '#5a6a7a', fontSize: 10 }}>—</span>
                           )}
                         </td>
                       </tr>

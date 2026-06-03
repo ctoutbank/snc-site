@@ -46,7 +46,7 @@ function mapearHistoricoKm(raw: Record<string, unknown>): {
     estado: String(r.estado ?? r.uf     ?? "—"),
   }));
 
-  // Detecta anomalia: km decrescente entre registros (possível adulteração)
+  // Detecta divergência: km decrescente entre registros (possível adulteração)
   const anomalia = registros.length >= 2 && registros.some((r, i) => {
     if (i === 0) return false;
     return Number(r.km) > Number(registros[i - 1].km);

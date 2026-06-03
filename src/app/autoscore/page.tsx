@@ -171,7 +171,7 @@ const DATASETS = [
     titulo: "Histórico de Quilometragem",
     subtitulo: "Veículos · Placa",
     descricao: "Rastreie a quilometragem registrada ao longo da vida útil do veículo e identifique inconsistências ou possível adulteração de hodômetro.",
-    campos: ["Registros de Km", "Fontes", "Datas", "UF", "Anomalia de Hodômetro"],
+    campos: ["Registros de Km", "Fontes", "Datas", "UF", "Divergência de Hodômetro"],
     status: "ativo" as const,
     href: "/autoscore/historico-km",
     cor: "#D4A843",

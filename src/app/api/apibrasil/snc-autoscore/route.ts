@@ -8,8 +8,11 @@ import {
   consultarRenajud,
   consultarPlacaFIPE,
   consultarAgregadosPropria,
+  consultarCrlve,
   APIBrasilError 
 } from "@/lib/apibrasil";
+import { CRLV_MOCK_CLEAN, CRLV_MOCK_RESTRICTED } from "@/lib/mocks";
+import { enviarEmailAutoScore } from "@/lib/email-autoscore";
 
 // Best-effort in-memory cache for serverless environments
 // Evita requisições repetidas acidentais na mesma placa na mesma instância
@@ -293,6 +296,25 @@ function mapearHistoricoFipe(raw: Record<string, any>) {
     valorFormatado: item.Valor ?? item.valor ?? "—",
     codigoFipe: item.CodigoFipe ?? item.codigo_fipe ?? item.Codigo ?? null,
   }));
+}
+
+function mapearCrlve(raw: Record<string, any>) {
+  const data = raw?.data;
+  if (!data) return null;
+
+  const doc = data?.documentos?.crlv;
+  const veiculo = data?.veiculo;
+
+  return {
+    exercicio: doc?.exercicio ?? veiculo?.anoExercicioLicenciamento ?? null,
+    codigoSegurancaCla: veiculo?.codigoSegurancaCla ?? doc?.chave_retorno ?? null,
+    existeOcorrencia: doc?.existe_ocorrencia === "1" || doc?.existe_ocorrencia === "SIM",
+    observacoes: doc?.observacoes ?? null,
+    pdfBase64: doc?.pdf_file?.file_base64 ?? null,
+    pdf: doc?.pdf ?? null,
+    statusDescricao: doc?.status_retorno?.descricao ?? null,
+    veiculo: veiculo ?? null,
+  };
 }
 
 // ─── GET Handler ──────────────────────────────────────────────────────────────
@@ -607,6 +629,7 @@ export async function GET(req: NextRequest) {
         tribunal: "TJMG",
         restricoes: ["APREENSÃO", "TRANSFERÊNCIA"],
       },
+      crlve: mapearCrlve(isClean ? CRLV_MOCK_CLEAN : CRLV_MOCK_RESTRICTED),
       historicoProprietarios: isClean
         ? [
             { nome: "CARLOS ALBERTO SOUZA", documento: "045.***.***-89", municipio: "CONTAGEM", uf: "MG", dataAtualizacao: "10/03/2018" },
@@ -702,6 +725,20 @@ export async function GET(req: NextRequest) {
       console.warn(`[snc-autoscore] agregados-propria falhou para ${cleanPlaca}:`, propriaRes.reason);
     }
 
+    // ── CRLV-e Automático (precisa da UF do CSV) ──
+    let crlveData = null;
+    const ufDetectada = csvData.identificacao?.uf;
+    if (ufDetectada) {
+      try {
+        const crlveRaw = await consultarCrlve(cleanPlaca, ufDetectada);
+        crlveData = mapearCrlve(crlveRaw as any);
+      } catch (err) {
+        console.warn(`[snc-autoscore] crlve falhou para ${cleanPlaca}:`, err);
+      }
+    } else {
+      console.warn(`[snc-autoscore] UF ausente, CRLV-e não emitido para ${cleanPlaca}`);
+    }
+
     const responseData = {
       status: {
         csv: "success",
@@ -712,6 +749,7 @@ export async function GET(req: NextRequest) {
         renajud: renajudRes.status === "fulfilled" ? "success" : "failed",
         fipe: fipeRes.status === "fulfilled" ? "success" : "failed",
         agregadosPropria: propriaRes.status === "fulfilled" ? "success" : "failed",
+        crlve: crlveData ? "success" : "failed",
       },
       identificacao: csvData.identificacao,
       dadosTecnicos: csvData.dadosTecnicos,
@@ -728,11 +766,17 @@ export async function GET(req: NextRequest) {
       pdf: csvData.pdf,
       gravame: gravameData,
       renajudDetalhes: renajudData,
+      crlve: crlveData,
       historicoProprietarios: historicoProprietariosData,
     };
 
     // Salva no cache
     cache.set(cleanPlaca, { data: responseData, expiry: Date.now() + CACHE_TTL_MS });
+
+    // ── E-mail automático (fire-and-forget — não bloqueia a resposta) ──
+    enviarEmailAutoScore(responseData as any, cleanPlaca).catch(err =>
+      console.error("[snc-autoscore] Falha ao enviar e-mail AutoScore:", err)
+    );
 
     return NextResponse.json(responseData);
 
