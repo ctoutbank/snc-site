@@ -36,10 +36,10 @@ export const metadata: Metadata = {
   ],
   icons: {
     icon: [
-      { url: '/icon.png', type: 'image/png', sizes: '512x512' },
+      { url: '/snc-shield.png', type: 'image/png', sizes: '512x512' },
     ],
-    shortcut: '/icon.png',
-    apple: '/icon.png',
+    shortcut: '/snc-shield.png',
+    apple: '/snc-shield.png',
   },
   openGraph: {
     type: 'website',
@@ -47,6 +47,7 @@ export const metadata: Metadata = {
     siteName: 'SNC — Sistema Nacional de Conformidade',
     title: 'SNC — Sistema Nacional de Conformidade',
     description: '253 datasets. 9 bureaus. Uma única camada de decisão.',
+    images: [{ url: '/snc-shield.png', width: 512, height: 512, alt: 'SNC' }],
   },
   robots: { index: true, follow: true },
 };
