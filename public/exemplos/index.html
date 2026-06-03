@@ -101,7 +101,7 @@ body{
 .stats .lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:#5a6a7a;letter-spacing:.14em;text-transform:uppercase;margin-top:6px}
 
 /* ═══ Section ═══ */
-.section{padding:80px 0}
+.section{padding:56px 0}
 .section-header{margin-bottom:40px;animation:fadeUp .6s ease both}
 .section-kicker{
   font-family:'JetBrains Mono',monospace;font-size:10px;
@@ -113,7 +113,7 @@ body{
 .section-desc{font-size:14px;color:#6b7a8e;margin-top:10px;max-width:500px;line-height:1.6}
 
 /* ═══ Cards Grid ═══ */
-.cards{display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));gap:20px}
+.cards{display:grid;grid-template-columns:repeat(2, 1fr);gap:16px}
 
 .card{
   position:relative;
@@ -142,7 +142,7 @@ body{
 
 /* Card preview bar */
 .card-preview{
-  height:180px;
+  height:130px;
   background:var(--navy);
   border-bottom:1px solid var(--line2);
   display:flex;align-items:center;justify-content:center;
@@ -186,7 +186,7 @@ body{
 .card-type.report{background:rgba(200,162,90,.12);color:var(--brass);border:1px solid rgba(200,162,90,.3)}
 
 /* Card body */
-.card-body{padding:22px 24px;flex:1;display:flex;flex-direction:column}
+.card-body{padding:16px 20px;flex:1;display:flex;flex-direction:column}
 .card-vehicle{
   font-family:'JetBrains Mono',monospace;font-size:9px;
   letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);
@@ -200,7 +200,7 @@ body{
 
 /* Card footer */
 .card-footer{
-  padding:14px 24px;
+  padding:10px 20px;
   border-top:1px solid var(--line2);
   display:flex;justify-content:space-between;align-items:center;
 }
@@ -255,6 +255,7 @@ body{
   .stats{flex-wrap:wrap;max-width:400px}
   .stats>div{flex:1 1 45%;border-bottom:1px solid var(--line2)}
   .cards{grid-template-columns:1fr}
+  .card-preview{height:110px}
   .section{padding:48px 0}
   .section-title{font-size:26px}
 }
@@ -263,7 +264,7 @@ body{
   .hero-logo .text .t1{font-size:22px}
   .stats>div{flex:1 1 100%}
   .stats>div{border-right:none}
-  .card-preview{height:140px}
+  .card-preview{height:100px}
 }
 </style>
 </head>
@@ -290,7 +291,7 @@ body{
     <p class="lede">Conheça os modelos de entrega do SNC AutoScore — relatórios completos e notificações por e-mail com dados integrados de 10 datasets nacionais.</p>
 
     <div class="stats">
-      <div><div class="num">5</div><div class="lbl">Modelos</div></div>
+      <div><div class="num">4</div><div class="lbl">Modelos</div></div>
       <div><div class="num">10</div><div class="lbl">Datasets</div></div>
       <div><div class="num">15</div><div class="lbl">Painéis</div></div>
       <div><div class="num">3</div><div class="lbl">Breakpoints</div></div>
@@ -311,7 +312,7 @@ body{
 
     <div class="cards">
       <!-- REPORT: SNC2026 (CLEAN) -->
-      <a class="card" href="auto-score-relatorio-snc2026.html" target="_blank" style="animation-delay:.1s">
+      <a class="card" href="/exemplos/auto-score-relatorio-snc2026.html" target="_blank" style="animation-delay:.1s">
         <div class="card-glow"></div>
         <div class="card-preview">
           <span class="card-type report">RELATÓRIO</span>
@@ -345,7 +346,7 @@ body{
       </a>
 
       <!-- REPORT: SNC1990 (RESTRICTED) -->
-      <a class="card" href="auto-score-relatorio-snc1990.html" target="_blank" style="animation-delay:.2s">
+      <a class="card" href="/exemplos/auto-score-relatorio-snc1990.html" target="_blank" style="animation-delay:.2s">
         <div class="card-glow"></div>
         <div class="card-preview">
           <span class="card-type report">RELATÓRIO</span>
@@ -396,7 +397,7 @@ body{
 
     <div class="cards">
       <!-- EMAIL: CLEAN -->
-      <a class="card" href="auto-score-email.html" target="_blank" style="animation-delay:.1s">
+      <a class="card" href="/exemplos/auto-score-email.html" target="_blank" style="animation-delay:.1s">
         <div class="card-glow"></div>
         <div class="card-preview">
           <span class="card-type email">E-MAIL</span>
@@ -426,7 +427,7 @@ body{
       </a>
 
       <!-- EMAIL: RESTRICTED -->
-      <a class="card" href="auto-score-email-restricao.html" target="_blank" style="animation-delay:.2s">
+      <a class="card" href="/exemplos/auto-score-email-restricao.html" target="_blank" style="animation-delay:.2s">
         <div class="card-glow"></div>
         <div class="card-preview">
           <span class="card-type email">E-MAIL</span>
@@ -455,38 +456,6 @@ body{
         </div>
       </a>
 
-      <!-- EMAIL: TRACKER (real data) -->
-      <a class="card" href="auto-score-tracker-snc1990.html" target="_blank" style="animation-delay:.3s">
-        <div class="card-glow"></div>
-        <div class="card-preview">
-          <span class="card-type email">E-MAIL</span>
-          <div class="mockup">
-            <div class="mock-header red"></div>
-            <div class="mock-body">
-              <div class="mock-line w60 brass"></div>
-              <div class="mock-line w80 red-l"></div>
-              <div class="mock-line w40 red-l"></div>
-              <div class="mock-block" style="height:30px;border-color:rgba(192,57,43,.2)"></div>
-              <div class="mock-grid" style="grid-template-columns:1fr 1fr;margin-top:4px">
-                <div style="border-color:rgba(192,57,43,.2)"></div>
-                <div style="border-color:rgba(192,57,43,.2)"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="card-vehicle">GM / CHEVROLET TRACKER PREMIER · SNC1990</div>
-          <div class="card-title">E-mail com Dados Reais</div>
-          <div class="card-desc">Template populado com dados reais do Tracker Premier (SNC1990). Inclui valores FIPE, débitos específicos, alertas de sinistro e leilão. Demonstra a experiência final do cliente.</div>
-        </div>
-        <div class="card-footer">
-          <div class="card-meta">
-            <span><strong>34</strong>KB</span>
-            <span class="risk-badge red"><span class="rdot"></span>REPROVADO</span>
-          </div>
-          <div class="card-action">Abrir →</div>
-        </div>
-      </a>
     </div>
   </div>
 </section>
