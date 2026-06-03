@@ -204,7 +204,9 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   .snc-tbl thead{display:none}
   .snc-tbl tr{border-bottom:1px solid #d4cfc1;padding:10px 14px;display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}
   .snc-tbl td{padding:4px 0;text-align:left!important;border:none}
+  .snc-tbl td:last-child:nth-child(odd){grid-column:1/-1;text-align:center!important}
   .snc-tbl td::before{content:attr(data-label);display:block;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:#8a94a3;margin-bottom:1px}
+  .ds-row-inline{flex-direction:row!important;flex-wrap:wrap!important;gap:16px!important}
 }
 @media(max-width:520px){
   .r-page{margin:0}
@@ -568,7 +570,7 @@ html,body{background:#dad6cb;font-family:'Inter',sans-serif;color:var(--ink);fon
   <!-- ──── PRECIFICADOR FIPE ──── -->
   <div class="src-badge" style="margin-top:8px">PRECIFICADOR FIPE</div>
   <div class="ds-block" style="margin-top:8px;border:1px solid #c8bfa8">
-    <div class="ds-hd"><span>TABELA DE PRECIFICAÇÃO<span class="hd-full"> MERCADOLÓGICA</span> (FIPE)</span><span class="ds-hd-badge">12 MESES DE HISTÓRICO</span></div>
+    <div class="ds-hd"><span>TABELA<span class="hd-full"> DE PRECIFICAÇÃO MERCADOLÓGICA</span> (FIPE)</span><span class="ds-hd-badge">12 MESES DE HISTÓRICO</span></div>
     <div class="tbl-wrap">
       <table class="snc-tbl">
         <thead><tr><th>Código FIPE</th><th>Fabricante/Modelo</th><th>Ano Modelo</th><th>Informante</th><th>Preço Médio</th></tr></thead>
