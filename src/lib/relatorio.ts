@@ -40,6 +40,8 @@ export interface RelatorioPayload {
   emitidoEm: string;
   /** Dados do resultado (tipagem livre por dataset) */
   resultado: Record<string, unknown>;
+  /** SHA-256 hex string de integridade (64 chars) */
+  hash?: string;
 }
 
 // ─── Geração de ID curto ──────────────────────────────────────────────────────
@@ -65,6 +67,22 @@ export function gerarProtocolo(id: string, data?: Date): string {
   const dd = String(d.getDate()).padStart(2, "0");
   const ano = d.getFullYear();
   return `${ano}.${mm}${dd}-${id}`;
+}
+
+// ─── Geração de SHA-256 ──────────────────────────────────────────────────────
+
+/**
+ * Gera hash SHA-256 real do payload para integridade documental.
+ * Input: JSON.stringify(resultado) + emitidoEm
+ * Compatível com Web Crypto API (browser/Edge Runtime) e Node.js crypto.
+ */
+export async function gerarSha256(resultado: Record<string, unknown>, emitidoEm: string): Promise<string> {
+  const input = JSON.stringify(resultado) + emitidoEm;
+  const encoder = new TextEncoder();
+  const data = encoder.encode(input);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
 // ─── Serialização / deserialização ────────────────────────────────────────────
@@ -123,15 +141,18 @@ export function deserializarDados(base64: string): RelatorioPayload | null {
  * Gera a URL completa do relatório.
  * Uso: window.open(gerarUrlRelatorio(...), "_blank")
  */
-export function gerarUrlRelatorio(
+export async function gerarUrlRelatorio(
   dataset: DatasetTipo,
   documento: string,
   documentoLabel: string,
   resultado: Record<string, unknown>
-): { url: string; id: string; protocolo: string } {
+): Promise<{ url: string; id: string; protocolo: string }> {
   const id = gerarRelatorioId();
   const emitidoEm = new Date().toISOString();
   const protocolo = gerarProtocolo(id);
+
+  // Gera SHA-256 real de integridade
+  const hash = await gerarSha256(resultado, emitidoEm);
 
   const payload: RelatorioPayload = {
     dataset,
@@ -139,6 +160,7 @@ export function gerarUrlRelatorio(
     documentoLabel,
     emitidoEm,
     resultado,
+    hash,
   };
 
   const d = serializarDados(payload);

@@ -127,7 +127,7 @@ export function BuscaVeicularAgrupadosPanel() {
     }
   }, [placa, salvar]);
 
-  const handleExemplo = useCallback(() => {
+  const handleExemplo = useCallback(async () => {
     const placaSim = "SDD-4545";
     const mockData: VeicularAgrupadosResult = {
       veiculo: {
@@ -157,7 +157,7 @@ export function BuscaVeicularAgrupadosPanel() {
     setErro(null);
     setIsFromHistory(false);
 
-    const { url } = gerarUrlRelatorio("veicular-agrupados", placaSim, "PLACA", mockData as unknown as Record<string, unknown>);
+    const { url } = await gerarUrlRelatorio("veicular-agrupados", placaSim, "PLACA", mockData as unknown as Record<string, unknown>);
     window.open(url, "_blank");
   }, []);
 
@@ -296,9 +296,9 @@ export function BuscaVeicularAgrupadosPanel() {
             </div>
             <button
               id="agrupados-gerar-relatorio-btn"
-              onClick={() => {
+              onClick={async () => {
                 const clean = placa.replace(/[^A-Z0-9]/g, "");
-                const { url } = gerarUrlRelatorio(
+                const { url } = await gerarUrlRelatorio(
                   "veicular-agrupados", clean, "PLACA",
                   resultado as unknown as Record<string, unknown>
                 );
@@ -400,7 +400,7 @@ export function BuscaVeicularAgrupadosPanel() {
       {/* Botão Histórico Mobile */}
       <div className="mobile-history-toggle" style={{ display: "none", marginTop: 24 }}>
         <button
-          onClick={() => setShowHistoryMobile(!showHistoryMobile)}
+          onClick={async () => setShowHistoryMobile(!showHistoryMobile)}
           style={{
             width: "100%", padding: "14px",
             background: "rgba(255,255,255,0.04)",

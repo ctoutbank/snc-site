@@ -161,7 +161,7 @@ export default function BuscaRenainfPanel() {
     }
   }, [placa, salvar]);
 
-  const handleExemplo = useCallback((cenario: "clean" | "restricted") => {
+  const handleExemplo = useCallback(async (cenario: "clean" | "restricted") => {
     const mockData  = cenario === "clean" ? RENAINF_MOCK_CLEAN : RENAINF_MOCK_RESTRICTED;
     const placaMock = cenario === "clean" ? "XXX-0000" : "XXX-1111";
     // Popula o card do painel com os dados do mock (mesmo dado que aparece no relatório)
@@ -170,14 +170,14 @@ export default function BuscaRenainfPanel() {
     setResult(mapped);
     setError(null);
     // Abre o relatório em nova aba
-    const { url }   = gerarUrlRelatorio("renainf", placaMock, "PLACA", mockData.data);
+    const { url }   = await gerarUrlRelatorio("renainf", placaMock, "PLACA", mockData.data);
     window.open(url, "_blank");
   }, []);
 
-  const handleGerarRelatorio = useCallback(() => {
+  const handleGerarRelatorio = useCallback(async () => {
     if (!result) return;
     const doc     = result.veiculo?.placa || result.renainf?.placa || placa;
-    const { url } = gerarUrlRelatorio("renainf", doc, "PLACA", result);
+    const { url } = await gerarUrlRelatorio("renainf", doc, "PLACA", result);
     window.open(url, "_blank");
   }, [result, placa]);
 
@@ -256,7 +256,7 @@ export default function BuscaRenainfPanel() {
           <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#5a6a7a", display: "flex", alignItems: "center", textTransform: "uppercase", paddingTop: 6 }}>Exemplos:</span>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
           <button
-            onClick={() => handleExemplo("clean")}
+            onClick={async () => handleExemplo("clean")}
             style={{
               padding: "6px 14px", background: "rgba(43,168,74,0.08)", color: "#2BA84A",
               border: "1px solid rgba(43,168,74,0.25)", borderRadius: 2,
@@ -269,7 +269,7 @@ export default function BuscaRenainfPanel() {
             Exemplo de Relatório (Nada Consta)
           </button>
           <button
-            onClick={() => handleExemplo("restricted")}
+            onClick={async () => handleExemplo("restricted")}
             style={{
               padding: "6px 14px", background: "rgba(192,57,43,0.08)", color: "#c0392b",
               border: "1px solid rgba(192,57,43,0.25)", borderRadius: 2,
@@ -407,7 +407,7 @@ export default function BuscaRenainfPanel() {
       {/* ── Histórico mobile toggle ── */}
       <div className="mobile-history-toggle" style={{ display: "none", marginTop: 24 }}>
         <button
-          onClick={() => setShowMobileHistory(!showMobileHistory)}
+          onClick={async () => setShowMobileHistory(!showMobileHistory)}
           style={{
             width: "100%",
             padding: "14px",

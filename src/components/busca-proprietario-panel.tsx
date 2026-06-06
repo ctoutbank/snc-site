@@ -176,7 +176,7 @@ export function BuscaProprietarioPanel() {
     if (e.key === "Enter") handleBuscar();
   };
 
-  const handleExemplo = useCallback((cenario: "clean" | "restricted") => {
+  const handleExemplo = useCallback(async (cenario: "clean" | "restricted") => {
     const isClean = cenario === "clean";
     const placaSimulada = isClean ? "XXX-0000" : "XXX-1111";
     const mockData = isClean ? PROPRIETARIO_MOCK_CLEAN : PROPRIETARIO_MOCK_RESTRICTED;
@@ -185,7 +185,7 @@ export function BuscaProprietarioPanel() {
     setResultado(mockData as unknown as ConsultaResult);
     setErro(null);
     // Abre o relatório em nova aba
-    const { url } = gerarUrlRelatorio("proprietario", placaSimulada, "PLACA", mockData);
+    const { url } = await gerarUrlRelatorio("proprietario", placaSimulada, "PLACA", mockData);
     window.open(url, "_blank");
   }, []);
 
@@ -276,7 +276,7 @@ export function BuscaProprietarioPanel() {
           <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#5a6a7a", display: "flex", alignItems: "center", textTransform: "uppercase", paddingTop: 6 }}>Exemplos:</span>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
           <button
-            onClick={() => handleExemplo("clean")}
+            onClick={async () => handleExemplo("clean")}
             style={{
               padding: "6px 14px", background: "rgba(43,168,74,0.08)", color: "#2BA84A",
               border: "1px solid rgba(43,168,74,0.25)", borderRadius: 2,
@@ -295,7 +295,7 @@ export function BuscaProprietarioPanel() {
             Exemplo de Relatório (Nada Consta)
           </button>
           <button
-            onClick={() => handleExemplo("restricted")}
+            onClick={async () => handleExemplo("restricted")}
             style={{
               padding: "6px 14px", background: "rgba(192,57,43,0.08)", color: "#c0392b",
               border: "1px solid rgba(192,57,43,0.25)", borderRadius: 2,
@@ -359,8 +359,8 @@ export function BuscaProprietarioPanel() {
                 </a>
               )}
               <button
-                onClick={() => {
-                  const { url } = gerarUrlRelatorio(
+                onClick={async () => {
+                  const { url } = await gerarUrlRelatorio(
                     "proprietario", placa, "PLACA",
                     resultado as unknown as Record<string, unknown>
                   );
@@ -478,7 +478,7 @@ export function BuscaProprietarioPanel() {
       {/* Botão para abrir Histórico no Mobile */}
       <div className="mobile-history-toggle" style={{ display: "none", marginTop: 24 }}>
         <button
-          onClick={() => setShowHistoryMobile(!showHistoryMobile)}
+          onClick={async () => setShowHistoryMobile(!showHistoryMobile)}
           style={{
             width: "100%",
             padding: "14px",

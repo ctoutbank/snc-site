@@ -190,7 +190,7 @@ export default function BuscaCsvCompletaPanel() {
     }
   }, [placa, salvar]);
 
-  const handleExemplo = useCallback((cenario: "clean" | "restricted") => {
+  const handleExemplo = useCallback(async (cenario: "clean" | "restricted") => {
     const mockData  = cenario === "clean" ? CSV_COMPLETA_MOCK_CLEAN : CSV_COMPLETA_MOCK_RESTRICTED;
     const placaMock = cenario === "clean" ? "XXX-0000" : "XXX-1111";
     // Popula o card do panel com os dados do mock (mesmo dado que aparece no relatório)
@@ -198,14 +198,14 @@ export default function BuscaCsvCompletaPanel() {
     setResult(mockData.data as CsvCompletaResult);
     setError(null);
     // Abre o relatório em nova aba
-    const { url } = gerarUrlRelatorio("csv-completa", placaMock, "PLACA", mockData.data);
+    const { url } = await gerarUrlRelatorio("csv-completa", placaMock, "PLACA", mockData.data);
     window.open(url, "_blank");
   }, []);
 
-  const handleGerarRelatorio = useCallback(() => {
+  const handleGerarRelatorio = useCallback(async () => {
     if (!result) return;
     const doc     = result.veicular?.proprietario_atual_veiculo?.placa || placa;
-    const { url } = gerarUrlRelatorio("csv-completa", doc, "PLACA", result);
+    const { url } = await gerarUrlRelatorio("csv-completa", doc, "PLACA", result);
     window.open(url, "_blank");
   }, [result, placa]);
 
@@ -308,7 +308,7 @@ export default function BuscaCsvCompletaPanel() {
           </span>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <button
-              onClick={() => handleExemplo("clean")}
+              onClick={async () => handleExemplo("clean")}
               style={{ padding: "6px 14px", border: "1px solid rgba(43,168,74,0.25)", background: "rgba(43,168,74,0.08)", color: "#2BA84A", fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, cursor: "pointer", transition: "all 0.15s", borderRadius: 2 }}
               onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(43,168,74,0.15)"; e.currentTarget.style.borderColor = "#2BA84A"; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(43,168,74,0.08)"; e.currentTarget.style.borderColor = "rgba(43,168,74,0.25)"; }}
@@ -316,7 +316,7 @@ export default function BuscaCsvCompletaPanel() {
               Exemplo de Relatório (Nada Consta)
             </button>
             <button
-              onClick={() => handleExemplo("restricted")}
+              onClick={async () => handleExemplo("restricted")}
               style={{ padding: "6px 14px", border: "1px solid rgba(192,57,43,0.25)", background: "rgba(192,57,43,0.08)", color: "#c0392b", fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, cursor: "pointer", transition: "all 0.15s", borderRadius: 2 }}
               onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(192,57,43,0.15)"; e.currentTarget.style.borderColor = "#c0392b"; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(192,57,43,0.08)"; e.currentTarget.style.borderColor = "rgba(192,57,43,0.25)"; }}

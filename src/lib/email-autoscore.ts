@@ -366,7 +366,7 @@ export async function enviarEmailAutoScore(
   data: AutoScoreEmailData,
   placa: string
 ) {
-  const { url, protocolo } = gerarUrlRelatorio(
+  const { url, protocolo } = await gerarUrlRelatorio(
     'snc-autoscore',
     placa,
     'PLACA',

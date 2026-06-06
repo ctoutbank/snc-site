@@ -196,7 +196,7 @@ export default function BuscaCrlvePanel() {
     }
   }, [placa, uf, salvar]);
 
-  const handleExemplo = useCallback((cenario: "clean" | "restricted") => {
+  const handleExemplo = useCallback(async (cenario: "clean" | "restricted") => {
     const mockData  = cenario === "clean" ? CRLV_MOCK_CLEAN : CRLV_MOCK_RESTRICTED;
     const placaMock = cenario === "clean" ? "XXX-0000" : "XXX-1111";
     // Popula o card do painel com os dados do mock (mesmo dado que aparece no relatório)
@@ -205,18 +205,18 @@ export default function BuscaCrlvePanel() {
     setResult(mapped);
     setError(null);
     // Abre o relatório em nova aba
-    const { url }   = gerarUrlRelatorio("crlve", placaMock, "PLACA", mockData.data);
+    const { url }   = await gerarUrlRelatorio("crlve", placaMock, "PLACA", mockData.data);
     window.open(url, "_blank");
   }, []);
 
-  const handleGerarRelatorio = useCallback(() => {
+  const handleGerarRelatorio = useCallback(async () => {
     if (!result) return;
     const doc     = result.veiculo?.placa || placa;
-    const { url } = gerarUrlRelatorio("crlve", doc, "PLACA", result);
+    const { url } = await gerarUrlRelatorio("crlve", doc, "PLACA", result);
     window.open(url, "_blank");
   }, [result, placa]);
 
-  const handleDownloadPDF = useCallback(() => {
+  const handleDownloadPDF = useCallback(async () => {
     if (!result?.documentos?.crlv?.pdf_file?.file_base64) return;
     try {
       const base64 = result.documentos.crlv.pdf_file.file_base64;
@@ -358,7 +358,7 @@ export default function BuscaCrlvePanel() {
           </span>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <button
-              onClick={() => handleExemplo("clean")}
+              onClick={async () => handleExemplo("clean")}
               style={{
                 padding: "6px 14px", border: "1px solid rgba(43,168,74,0.25)",
                 background: "rgba(43,168,74,0.08)", color: "#2BA84A",
@@ -371,7 +371,7 @@ export default function BuscaCrlvePanel() {
               Exemplo de Relatório (Nada Consta)
             </button>
             <button
-              onClick={() => handleExemplo("restricted")}
+              onClick={async () => handleExemplo("restricted")}
               style={{
                 padding: "6px 14px", border: "1px solid rgba(192,57,43,0.25)",
                 background: "rgba(192,57,43,0.08)", color: "#c0392b",

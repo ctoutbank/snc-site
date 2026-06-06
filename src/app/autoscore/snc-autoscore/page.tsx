@@ -1,106 +1,158 @@
-import type { Metadata } from "next";
-import { SiteNav } from "@/components/site-nav";
-import { SiteFooter } from "@/components/site-footer";
-import { BuscaSncAutoScorePanel } from "@/components/busca-snc-autoscore-panel";
-import { BackButton } from "@/components/back-button";
+"use client";
 
-export const metadata: Metadata = {
-  title: "SNC AutoScore — Super-Relatório Veicular Integrado",
-  description:
-    "O mais completo relatório veicular unificado do mercado. Combina BIN cadastral, restrições detalhadas, débitos do DETRAN, histórico cronológico de quilometragem, leilão com score de risco e recalls.",
-};
+/* page.tsx — SNC AutoScore · Novo Design
+   Fluxo: BUSCA (SearchScreen) → fetch API real → RESULTADO (Dashboard com toggle Relatório/Painel).
+   Usa o design do protótipo com dados reais da API /api/apibrasil/snc-autoscore. */
 
-export default function BuscaSncAutoScorePage() {
+import { useCallback, useRef, useState, useEffect } from "react";
+import { SearchScreen, SiteNav } from "./_components/search";
+import { Dashboard } from "./_components/dashboard";
+import type { Mode } from "./_components/report";
+import type { VehicleReport } from "./_data/types";
+import { transformApiToReport } from "./_data/transform";
+
+type View = "busca" | "dashboard";
+
+export default function AutoScorePage() {
+  const [view, setView] = useState<View>("busca");
+  const [data, setData] = useState<VehicleReport | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [loadingPlaca, setLoadingPlaca] = useState<string | null>(null);
+  const [erro, setErro] = useState<string | null>(null);
+  const [mode, setMode] = useState<Mode>("relatorio");
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Auth: fetch user info from API
+  const [userName, setUserName] = useState<string | undefined>();
+  const [userEmail, setUserEmail] = useState<string | undefined>();
+
+  useEffect(() => {
+    // Attempt to read user info from cookie-based session
+    // The snc-site proxies auth from outbank-one via /auth/*
+    fetch("/api/apibrasil/me", { credentials: "include" })
+      .then((r) => r.ok ? r.json() : null)
+      .then((u) => {
+        if (u?.name) setUserName(u.name);
+        if (u?.email) setUserEmail(u.email);
+      })
+      .catch(() => { /* silent — guest mode */ });
+  }, []);
+
+  const consultar = useCallback(async (placa: string) => {
+    const clean = placa.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    setLoading(true);
+    setLoadingPlaca(null);
+    setErro(null);
+
+    try {
+      const res = await fetch(`/api/apibrasil/snc-autoscore?placa=${clean}`);
+      const json = await res.json();
+
+      if (!res.ok) {
+        throw new Error(json.error || `Erro ${res.status}`);
+      }
+
+      const report = transformApiToReport(json, clean);
+      setData(report);
+      setMode("relatorio");
+      setView("dashboard");
+      if (scrollRef.current) scrollRef.current.scrollTop = 0;
+    } catch (e) {
+      setErro(e instanceof Error ? e.message : "Erro ao consultar. Tente novamente.");
+    } finally {
+      setLoading(false);
+      setLoadingPlaca(null);
+    }
+  }, []);
+
+  const consultarExemplo = useCallback(async (placa: string) => {
+    const clean = placa.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    setLoading(true);
+    setLoadingPlaca(placa);
+    setErro(null);
+
+    try {
+      const res = await fetch(`/api/apibrasil/snc-autoscore?placa=${clean}`);
+      const json = await res.json();
+
+      if (!res.ok) {
+        throw new Error(json.error || `Erro ${res.status}`);
+      }
+
+      const report = transformApiToReport(json, clean);
+      setData(report);
+      setMode("relatorio");
+      setView("dashboard");
+      if (scrollRef.current) scrollRef.current.scrollTop = 0;
+    } catch (e) {
+      setErro(e instanceof Error ? e.message : "Erro ao consultar exemplo.");
+    } finally {
+      setLoading(false);
+      setLoadingPlaca(null);
+    }
+  }, []);
+
+  const novaConsulta = useCallback(() => {
+    setView("busca");
+    setErro(null);
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+  }, []);
+
+  const handleLogout = useCallback(() => {
+    // Redirect to auth sign-in (proxied from outbank-one)
+    window.location.href = "https://snc.consolle.one/auth/sign-in";
+  }, []);
+
   return (
-    <div className="snc-root">
-      <SiteNav />
-
-      {/* ── Action Bar de Navegação Secundária ── */}
-      <div style={{
-        background: "#0A1628",
-        borderBottom: "1px solid rgba(255,255,255,0.1)"
-      }}>
-        <div style={{
-          background: "rgba(255,255,255,0.03)",
-          padding: "12px 28px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center"
-        }}>
-          <BackButton fallback="/autoscore" />
-          <div style={{ display: "flex", gap: 8 }}>
-            {/* Espaço para ações adicionais futuras */}
+    <div className="as-scroll" ref={scrollRef}>
+      {view === "busca" ? (
+        <SearchScreen
+          onConsultar={consultar}
+          onExemplo={consultarExemplo}
+          loading={loading}
+          loadingPlaca={loadingPlaca}
+          userName={userName}
+          userEmail={userEmail}
+          onLogout={handleLogout}
+        />
+      ) : data ? (
+        <>
+          <SiteNav
+            active="autoscore"
+            onNova={novaConsulta}
+            userName={userName}
+            userEmail={userEmail}
+            onLogout={handleLogout}
+          />
+          <div className="as-cockpit-pad">
+            <Dashboard data={data} mode={mode} setMode={setMode} />
           </div>
+        </>
+      ) : null}
+
+      {/* Erro global (aparece na tela de busca como fallback) */}
+      {erro && view === "busca" && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: 24,
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "rgba(229,72,77,0.95)",
+            color: "#fff",
+            padding: "12px 24px",
+            fontFamily: "var(--mono)",
+            fontSize: 11,
+            letterSpacing: "0.04em",
+            zIndex: 100,
+            maxWidth: 500,
+            backdropFilter: "blur(8px)",
+            border: "1px solid rgba(229,72,77,0.5)",
+          }}
+        >
+          {erro}
         </div>
-      </div>
-
-      <main>
-        <section className="busca-main-section">
-          <div className="busca-panel-inner">
-
-            <div className="busca-header-compact">
-              <div className="snc-mono sub-meta">
-                DATASET 00 · SNC AUTOSCORE · SUPER-RELATÓRIO UNIFICADO · PLACA · LGPD ART. 7º III
-              </div>
-              <h1 className="busca-title-compact">
-                SNC <span className="gold">AutoScore</span>
-              </h1>
-              <p className="busca-desc-compact">
-                O mais avançado relatório unificado da plataforma. Combina Ficha Cadastral Completa (BIN), 
-                Proprietário Atual (Nome/Doc), restrições detalhadas, débitos em tempo real do DETRAN, 
-                precificação FIPE, histórico cronológico de quilometragem e análise de risco de leilão com score.
-              </p>
-            </div>
-
-            <BuscaSncAutoScorePanel />
-
-          </div>
-        </section>
-      </main>
-      <SiteFooter />
-
-      <style>{`
-        .busca-main-section {
-          background: var(--snc-navy);
-          border-top: 1px solid #17243b;
-          padding: 60px 28px 80px;
-        }
-        .busca-panel-inner {
-          max-width: 1100px;
-          margin: 0 auto;
-        }
-        .busca-header-compact {
-          margin-bottom: 36px;
-        }
-        .busca-header-compact .sub-meta {
-          font-size: 9px;
-          color: #a0aec0;
-          letter-spacing: 0.2em;
-          text-transform: uppercase;
-        }
-        .busca-title-compact {
-          font-family: 'Libre Caslon Text', serif;
-          font-weight: 400;
-          font-size: 32px;
-          color: #fff;
-          margin: 8px 0 12px;
-        }
-        .busca-title-compact .gold {
-          color: #D4A843;
-        }
-        .busca-desc-compact {
-          font-size: 13px;
-          color: #8a94a3;
-          line-height: 1.6;
-          max-width: 720px;
-          margin: 0;
-        }
-        @media (max-width: 768px) {
-          .busca-main-section { padding: 40px 16px 48px; }
-          .busca-title-compact { font-size: 28px; }
-          .busca-desc-compact { font-size: 12px; }
-        }
-      `}</style>
+      )}
     </div>
   );
 }

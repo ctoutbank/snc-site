@@ -97,7 +97,7 @@ export async function GET(request: Request) {
 
   try {
     // Gerar URL e protocolo
-    const { url, protocolo } = gerarUrlRelatorio(
+    const { url, protocolo } = await gerarUrlRelatorio(
       "snc-autoscore",
       placa,
       "PLACA",

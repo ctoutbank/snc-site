@@ -386,8 +386,8 @@ export function BuscaVeiculoPanel() {
           <div style={{ marginTop: 2, padding: "20px 0", display: "flex", justifyContent: "flex-end" }}>
             <button
               id="veiculo-gerar-relatorio-btn"
-              onClick={() => {
-                const { url } = gerarUrlRelatorio(
+              onClick={async () => {
+                const { url } = await gerarUrlRelatorio(
                   "veiculo",
                   placa,
                   "PLACA",

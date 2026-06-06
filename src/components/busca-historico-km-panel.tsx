@@ -131,7 +131,7 @@ export function BuscaHistoricoKmPanel() {
     if (e.key === "Enter") handleBuscar();
   };
 
-  const handleExemplo = useCallback((cenario: "clean" | "restricted") => {
+  const handleExemplo = useCallback(async (cenario: "clean" | "restricted") => {
     const mockData = cenario === "clean" ? HISTORICO_KM_MOCK_CLEAN : HISTORICO_KM_MOCK_RESTRICTED;
     const placaSimulada = cenario === "clean" ? "XXX-0000" : "XXX-1111";
     // Popula o card do painel com os dados do mock (mesmo dado que aparece no relatório)
@@ -139,7 +139,7 @@ export function BuscaHistoricoKmPanel() {
     setResultado(mockData as unknown as ConsultaResult);
     setErro(null);
     // Abre o relatório em nova aba
-    const { url } = gerarUrlRelatorio("historico-km", placaSimulada, "PLACA", mockData as unknown as Record<string, unknown>);
+    const { url } = await gerarUrlRelatorio("historico-km", placaSimulada, "PLACA", mockData as unknown as Record<string, unknown>);
     window.open(url, "_blank");
   }, []);
 
@@ -225,7 +225,7 @@ export function BuscaHistoricoKmPanel() {
           <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#5a6a7a", display: "flex", alignItems: "center", textTransform: "uppercase", paddingTop: 6 }}>Exemplos:</span>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <button
-              onClick={() => handleExemplo("clean")}
+              onClick={async () => handleExemplo("clean")}
               style={{ padding: "6px 14px", background: "rgba(43,168,74,0.08)", color: "#2BA84A", border: "1px solid rgba(43,168,74,0.25)", borderRadius: 2, fontFamily: "'JetBrains Mono', monospace", fontSize: 10, cursor: "pointer", transition: "all 0.15s", textTransform: "uppercase" }}
               onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(43,168,74,0.15)"; e.currentTarget.style.borderColor = "#2BA84A"; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(43,168,74,0.08)"; e.currentTarget.style.borderColor = "rgba(43,168,74,0.25)"; }}
@@ -233,7 +233,7 @@ export function BuscaHistoricoKmPanel() {
               Exemplo de Relatório (Consistente)
             </button>
             <button
-              onClick={() => handleExemplo("restricted")}
+              onClick={async () => handleExemplo("restricted")}
               style={{ padding: "6px 14px", background: "rgba(192,57,43,0.08)", color: "#c0392b", border: "1px solid rgba(192,57,43,0.25)", borderRadius: 2, fontFamily: "'JetBrains Mono', monospace", fontSize: 10, cursor: "pointer", transition: "all 0.15s", textTransform: "uppercase" }}
               onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(192,57,43,0.15)"; e.currentTarget.style.borderColor = "#c0392b"; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(192,57,43,0.08)"; e.currentTarget.style.borderColor = "rgba(192,57,43,0.25)"; }}
@@ -276,8 +276,8 @@ export function BuscaHistoricoKmPanel() {
               </span>
             </div>
             <button
-              onClick={() => {
-                const { url } = gerarUrlRelatorio("historico-km", placa, "PLACA", resultado as unknown as Record<string, unknown>);
+              onClick={async () => {
+                const { url } = await gerarUrlRelatorio("historico-km", placa, "PLACA", resultado as unknown as Record<string, unknown>);
                 window.open(url, "_blank");
               }}
               style={{
@@ -350,7 +350,7 @@ export function BuscaHistoricoKmPanel() {
       {/* Mobile: botão histórico */}
       <div className="mobile-history-toggle" style={{ display: "none", marginTop: 24 }}>
         <button
-          onClick={() => setShowHistoryMobile(!showHistoryMobile)}
+          onClick={async () => setShowHistoryMobile(!showHistoryMobile)}
           style={{
             width: "100%", padding: "14px",
             background: "rgba(255,255,255,0.04)",

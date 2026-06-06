@@ -657,7 +657,7 @@ export function BuscaSncAutoScorePanel() {
           </div>
           <button
             id="autoscore-consultar-btn"
-            onClick={() => handleBuscar()}
+            onClick={async () => handleBuscar()}
             disabled={loading}
             style={{
               padding: "18px 36px", background: loading ? "rgba(212,168,67,0.4)" : COR_ACCENT,
@@ -694,7 +694,7 @@ export function BuscaSncAutoScorePanel() {
           <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#5a6a7a", display: "flex", alignItems: "center", textTransform: "uppercase", paddingTop: 6 }}>Exemplos:</span>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <button
-              onClick={() => handleExemplo("clean")}
+              onClick={async () => handleExemplo("clean")}
               style={{
                 padding: "6px 14px", background: "rgba(43,168,74,0.08)", color: "#2BA84A",
                 border: "1px solid rgba(43,168,74,0.25)", borderRadius: 2,
@@ -713,7 +713,7 @@ export function BuscaSncAutoScorePanel() {
               Exemplo de Relatório (Nada Consta)
             </button>
             <button
-              onClick={() => handleExemplo("restricted")}
+              onClick={async () => handleExemplo("restricted")}
               style={{
                 padding: "6px 14px", background: "rgba(192,57,43,0.08)", color: "#c0392b",
                 border: "1px solid rgba(192,57,43,0.25)", borderRadius: 2,
@@ -757,8 +757,8 @@ export function BuscaSncAutoScorePanel() {
               </span>
             </div>
             <button
-              onClick={() => {
-                const { url } = gerarUrlRelatorio("snc-autoscore", r.identificacao?.placa ?? "", "PLACA", r as unknown as Record<string, unknown>);
+              onClick={async () => {
+                const { url } = await gerarUrlRelatorio("snc-autoscore", r.identificacao?.placa ?? "", "PLACA", r as unknown as Record<string, unknown>);
                 window.open(url, "_blank");
               }}
               style={{
@@ -796,7 +796,7 @@ export function BuscaSncAutoScorePanel() {
             ].map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={async () => setActiveTab(tab.id as any)}
                 style={{
                   flex: 1, minWidth: 120, padding: "12px 8px",
                   background: activeTab === tab.id ? COR_ACCENT_DIM : "transparent",
@@ -1005,7 +1005,7 @@ export function BuscaSncAutoScorePanel() {
                         <DataRow label="Data Inclusão"    value={gravameData.data_inclusao} />
                         <DataRow label="Situação Gravame"  value={gravameData.situacao} />
                         <button 
-                          onClick={() => setGravameData(null)}
+                          onClick={async () => setGravameData(null)}
                           style={{ background: "transparent", color: "#5a6a7a", border: "none", cursor: "pointer", fontFamily: "'JetBrains Mono', monospace", fontSize: 9, marginTop: 12 }}
                         >
                           ✕ Limpar Busca
@@ -1053,7 +1053,7 @@ export function BuscaSncAutoScorePanel() {
                           </div>
                         )}
                         <button 
-                          onClick={() => setEstadualData(null)}
+                          onClick={async () => setEstadualData(null)}
                           style={{ background: "transparent", color: "#5a6a7a", border: "none", cursor: "pointer", fontFamily: "'JetBrains Mono', monospace", fontSize: 9, marginTop: 12 }}
                         >
                           ✕ Limpar Busca
@@ -1101,7 +1101,7 @@ export function BuscaSncAutoScorePanel() {
                           </div>
                         )}
                         <button 
-                          onClick={() => setRenajudData(null)}
+                          onClick={async () => setRenajudData(null)}
                           style={{ background: "transparent", color: "#5a6a7a", border: "none", cursor: "pointer", fontFamily: "'JetBrains Mono', monospace", fontSize: 9, marginTop: 12 }}
                         >
                           ✕ Limpar Busca
@@ -1659,7 +1659,7 @@ export function BuscaSncAutoScorePanel() {
       {/* Botão de Histórico Mobile */}
       <div className="mobile-history-toggle" style={{ display: "none", marginTop: 24 }}>
         <button
-          onClick={() => setShowHistoryMobile(!showHistoryMobile)}
+          onClick={async () => setShowHistoryMobile(!showHistoryMobile)}
           style={{
             width: "100%",
             padding: "14px",

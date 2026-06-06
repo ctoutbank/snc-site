@@ -198,7 +198,7 @@ export function BuscaPanel() {
           {(["CPF", "CNPJ"] as TipoDoc[]).map((t) => (
             <button
               key={t}
-              onClick={() => handleTipo(t)}
+              onClick={async () => handleTipo(t)}
               id={`busca-tipo-${t.toLowerCase()}`}
               style={{
                 padding: "12px 24px",
@@ -404,8 +404,8 @@ export function BuscaPanel() {
           <div style={{ marginTop: 2, padding: "20px 0", display: "flex", justifyContent: "flex-end" }}>
             <button
               id="credito-gerar-relatorio-btn"
-              onClick={() => {
-                const { url } = gerarUrlRelatorio(
+              onClick={async () => {
+                const { url } = await gerarUrlRelatorio(
                   "credito",
                   valor,
                   tipo,

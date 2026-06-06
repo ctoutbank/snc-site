@@ -148,14 +148,14 @@ export function BuscaAnaliticoVeicularPanel() {
     }
   }, [placa, salvar]);
 
-  const handleExemplo = useCallback((cenario: "clean" | "restricted") => {
+  const handleExemplo = useCallback(async (cenario: "clean" | "restricted") => {
     const isClean = cenario === "clean";
     const placaSimulada = isClean ? "XXX-0000" : "XXX-1111";
     const mockData = isClean ? ANALITICO_VEICULAR_MOCK_CLEAN : ANALITICO_VEICULAR_MOCK_RESTRICTED;
     setPlaca(placaSimulada);
     setResultado(mockData as unknown as AnaliticoVeicularResult);
     setErro(null);
-    const { url } = gerarUrlRelatorio("analitico-veicular", placaSimulada, "PLACA", mockData as unknown as Record<string, unknown>);
+    const { url } = await gerarUrlRelatorio("analitico-veicular", placaSimulada, "PLACA", mockData as unknown as Record<string, unknown>);
     window.open(url, "_blank");
   }, []);
 
@@ -235,7 +235,7 @@ export function BuscaAnaliticoVeicularPanel() {
           <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#5a6a7a", display: "flex", alignItems: "center", textTransform: "uppercase", paddingTop: 6 }}>Exemplos:</span>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <button
-              onClick={() => handleExemplo("clean")}
+              onClick={async () => handleExemplo("clean")}
               style={{
                 padding: "6px 14px", background: "rgba(43,168,74,0.08)", color: "#2BA84A",
                 border: "1px solid rgba(43,168,74,0.25)", borderRadius: 2,
@@ -254,7 +254,7 @@ export function BuscaAnaliticoVeicularPanel() {
               Exemplo de Relatório (Nada Consta)
             </button>
             <button
-              onClick={() => handleExemplo("restricted")}
+              onClick={async () => handleExemplo("restricted")}
               style={{
                 padding: "6px 14px", background: "rgba(192,57,43,0.08)", color: "#c0392b",
                 border: "1px solid rgba(192,57,43,0.25)", borderRadius: 2,
@@ -322,9 +322,9 @@ export function BuscaAnaliticoVeicularPanel() {
               })()}
             </div>
             <button
-              onClick={() => {
+              onClick={async () => {
                 const clean = placa.replace(/[^A-Z0-9]/g, "");
-                const { url } = gerarUrlRelatorio("analitico-veicular", clean, "PLACA", r as unknown as Record<string, unknown>);
+                const { url } = await gerarUrlRelatorio("analitico-veicular", clean, "PLACA", r as unknown as Record<string, unknown>);
                 window.open(url, "_blank");
               }}
               style={{
@@ -361,7 +361,7 @@ export function BuscaAnaliticoVeicularPanel() {
             ].map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={async () => setActiveTab(tab.id as any)}
                 style={{
                   flex: 1, minWidth: 150, padding: "14px 16px",
                   background: activeTab === tab.id ? COR_ACCENT_DIM : "transparent",
@@ -625,7 +625,7 @@ export function BuscaAnaliticoVeicularPanel() {
       {/* Botão para abrir Histórico no Mobile */}
       <div className="mobile-history-toggle" style={{ display: "none", marginTop: 24 }}>
         <button
-          onClick={() => setShowHistoryMobile(!showHistoryMobile)}
+          onClick={async () => setShowHistoryMobile(!showHistoryMobile)}
           style={{
             width: "100%",
             padding: "14px",

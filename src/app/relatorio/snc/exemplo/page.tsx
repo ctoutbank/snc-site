@@ -444,11 +444,11 @@ export default function RelatorioExemploPage() {
 
           {/* Hash */}
           <div className="hash-block">
-            <div className="lbl">§ Assinatura Digital · SHA-256</div>
+            <div className="lbl">§ SHA-256 Hash Block</div>
             <div className="val">
-              e3b0c44298fc1c149afbf4c8996fb924<span style={{ opacity: 0.4 }}>…</span>7852b855
+              a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2
               <br />
-              <span style={{ opacity: 0.45, fontSize: 10 }}>sha256( JSON.stringify(rawData) + dtinsert.toISOString() ) — documento demonstrativo</span>
+              <span style={{ opacity: 0.45, fontSize: 10 }}>sha256( JSON.stringify(resultado) + emitidoEm ) — documento demonstrativo</span>
             </div>
           </div>
         </section>

@@ -300,7 +300,7 @@ export function HistoricoConsultas({ historico, onCarregar, onLimpar, corAccent 
               {/* 5. Ação (Botão Carregar) - Centralizado */}
               <span style={{ display: "flex", justifyContent: "center" }}>
                 <button
-                  onClick={() => handleCarregar(h.dados, h.placa)}
+                  onClick={async () => handleCarregar(h.dados, h.placa)}
                   className="hist-btn"
                   style={{
                     fontFamily: "'JetBrains Mono', monospace", fontSize: 9,
@@ -329,8 +329,8 @@ export function HistoricoConsultas({ historico, onCarregar, onLimpar, corAccent 
               {/* 6. Relatório (Botão Ver Relatório) - Centralizado */}
               <span style={{ display: "flex", justifyContent: "center" }}>
                 <button
-                  onClick={() => {
-                    const { url } = gerarUrlRelatorio(h.dataset as any, h.placa, h.dataset === "credito" ? "DOCUMENTO" : "PLACA", h.dados);
+                  onClick={async () => {
+                    const { url } = await gerarUrlRelatorio(h.dataset as any, h.placa, h.dataset === "credito" ? "DOCUMENTO" : "PLACA", h.dados);
                     window.open(url, "_blank");
                   }}
                   className="hist-btn"
@@ -388,7 +388,7 @@ export function HistoricoConsultas({ historico, onCarregar, onLimpar, corAccent 
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             {safeCurrentPage > 1 && (
               <button
-                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                onClick={async () => setCurrentPage(p => Math.max(1, p - 1))}
                 style={{
                   background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
                   color: "#cfd6df", padding: "6px 14px",
@@ -405,7 +405,7 @@ export function HistoricoConsultas({ historico, onCarregar, onLimpar, corAccent 
             </span>
             
             <button
-              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              onClick={async () => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={safeCurrentPage === totalPages}
               style={{
                 background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",

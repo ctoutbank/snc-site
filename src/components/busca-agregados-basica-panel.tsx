@@ -132,7 +132,7 @@ export function BuscaAgregadosBasicaPanel() {
     }
   }, [placa, salvar]);
 
-  const handleExemplo = useCallback(() => {
+  const handleExemplo = useCallback(async () => {
     const placaSimulada = "SDD-4545";
     const mockData = {
       veiculo: {
@@ -155,7 +155,7 @@ export function BuscaAgregadosBasicaPanel() {
     setIsFromHistory(false);
     
     // Abre o relatório em nova aba
-    const { url } = gerarUrlRelatorio("agregados-basica", placaSimulada, "PLACA", mockData);
+    const { url } = await gerarUrlRelatorio("agregados-basica", placaSimulada, "PLACA", mockData);
     window.open(url, "_blank");
   }, []);
 
@@ -300,9 +300,9 @@ export function BuscaAgregadosBasicaPanel() {
             </div>
             <button
               id="agregados-gerar-relatorio-btn"
-              onClick={() => {
+              onClick={async () => {
                 const clean = placa.replace(/[^A-Z0-9]/g, "");
-                const { url } = gerarUrlRelatorio(
+                const { url } = await gerarUrlRelatorio(
                   "agregados-basica",
                   clean,
                   "PLACA",
@@ -385,7 +385,7 @@ export function BuscaAgregadosBasicaPanel() {
       {/* Botão para abrir Histórico no Mobile */}
       <div className="mobile-history-toggle" style={{ display: "none", marginTop: 24 }}>
         <button
-          onClick={() => setShowHistoryMobile(!showHistoryMobile)}
+          onClick={async () => setShowHistoryMobile(!showHistoryMobile)}
           style={{
             width: "100%",
             padding: "14px",

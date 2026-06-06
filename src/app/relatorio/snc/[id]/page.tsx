@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import Script from "next/script";
 import type { Metadata } from 'next';
-import { gerarProtocolo, DATASET_META, type RelatorioPayload, type DatasetTipo } from '@/lib/relatorio';
+import { gerarProtocolo, gerarSha256, DATASET_META, type RelatorioPayload, type DatasetTipo } from '@/lib/relatorio';
 import { CrlveDownloadButton } from '@/components/crlve-download-button';
 
 
@@ -5414,6 +5414,12 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
 
   const payload = d ? deserializar(d) : null;
   const protocolo = gerarProtocolo(id, payload ? new Date(payload.emitidoEm) : undefined);
+
+  // Se o payload não trouxer hash pré-computado, gera server-side
+  let sha256Hash = payload?.hash ?? null;
+  if (payload && !sha256Hash) {
+    sha256Hash = await gerarSha256(payload.resultado, payload.emitidoEm);
+  }
   const meta = payload ? DATASET_META[payload.dataset] : null;
 
   const docLimpo = (payload?.documento ?? '').replace(/[^A-Z0-9]/g, '');
@@ -5480,7 +5486,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
 
       <div className="print-running-sig" aria-hidden="true">
         <span className="lbl">§ SHA-256</span>
-        <span>snc-{id}-autenticado</span>
+        <span>{sha256Hash ? `${sha256Hash.slice(0,16)}…${sha256Hash.slice(-8)}` : `snc-${id}`}</span>
         <span className="lbl">PROTOCOLO {protocolo}</span>
       </div>
 
@@ -5991,9 +5997,9 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
               <div className="hash-block">
                 <div className="lbl">§ SHA-256 Hash Block</div>
                 <div className="val">
-                  #{new Date(payload.emitidoEm).getTime().toString(16).toUpperCase()}-{id.toUpperCase()}-SNC
+                  {sha256Hash ?? '—'}
                   <br />
-                  <span style={{ opacity: 0.45, fontSize: 10 }}>sha256( JSON.stringify(rawData) + emitidoEm ) — protocolo {protocolo}</span>
+                  <span style={{ opacity: 0.45, fontSize: 10 }}>sha256( JSON.stringify(resultado) + emitidoEm ) — protocolo {protocolo}</span>
                 </div>
               </div>
             </section>
