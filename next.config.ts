@@ -34,19 +34,19 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/login",
-        destination: `${PORTAL_URL}/auth/sign-in?tenant=snc`,
+        destination: `${PORTAL_URL}/portal/login?tenant=snc`,
       },
       {
         source: "/portal/:path*",
-        destination: `${PORTAL_URL}/portal/:path*?tenant=snc`,
+        destination: `${PORTAL_URL}/portal/:path*`,
       },
       {
         source: "/forgot-password",
-        destination: `${PORTAL_URL}/forgot-password?tenant=snc`,
+        destination: `${PORTAL_URL}/portal/redefinir_senha?tenant=snc`,
       },
       {
-        source: "/reset-password/:path*",
-        destination: `${PORTAL_URL}/reset-password/:path*?tenant=snc`,
+        source: "/reset-password/:token*",
+        destination: `${PORTAL_URL}/portal/redefinir_senha/:token*`,
       },
       // Mantém a rota local de contato intocada
       {
