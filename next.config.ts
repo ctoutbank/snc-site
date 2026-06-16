@@ -1,72 +1,20 @@
 import type { NextConfig } from "next";
 
 // 🔴 IMPORTANTE — IDENTIDADE DO PRODUTO
-// O PRODUTO chama-se `consolle.one` (ISOs: snc.consolle.one, bancoprisma.consolle.one, etc).
-// `outbank.cloud` é APENAS o hostname técnico/legado onde está hospedado o backend e
-// também é usado como domínio de marketing institucional.
-// NÃO use "outbank.cloud" para se referir ao SISTEMA — em UI, docs, conversas com o
-// usuário, ou comentários descrevendo o produto, use SEMPRE `consolle.one`.
-// Aqui aparece apenas como configuração técnica de proxy. Veja CLAUDE.md.
-const PORTAL_URL = process.env.PORTAL_PROXY_URL || "https://outbank.cloud";
+// O PRODUTO chama-se `consolle.one`.
+// - snc.consolle.one  → site institucional (este projeto)
+// - app.consolle.one  → sistema/portal (snc-autoscore-next)
+// NÃO misture os dois. O site não faz proxy para o sistema.
+// Veja CLAUDE.md.
 
 const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/blog", destination: "/artigos", permanent: true },
       { source: "/blog/:slug", destination: "/artigos/:slug", permanent: true },
-      // ⚠️ CRÍTICO — NÃO REINTRODUZIR redirect global de /_next/static/* aqui ⚠️
-      //
-      // Histórico:
-      // - Antes existia um `redirect: /_next/static/:path* → outbank.cloud/_next/static/:path*`
-      //   para fazer o /auth/sign-in funcionar (chunks vinham do HTML proxiado).
-      // - PROBLEMA: esse redirect global pegava TAMBÉM os chunks LOCAIS do snc-site
-      //   (home, artigos, lgpd, /relatorio/snc/exemplo) — todas paginas locais ficavam
-      //   sem hidratar React, botões/menus travavam.
-      //
-      // SOLUÇÃO ATUAL: src/middleware.ts faz a decisão de forma SELETIVA via Referer:
-      //   - Chunk veio de página proxiada (auth/portal/relatorio/snc/[id])  →  redireciona
-      //   - Chunk veio de página local                                       →  serve local
-      //
-      // Veja src/middleware.ts e CLAUDE.md.
-    ];
-  },
-  async rewrites() {
-    return [
-      {
-        source: "/login",
-        destination: `${PORTAL_URL}/portal/login?tenant=snc`,
-      },
-      {
-        source: "/portal/:path*",
-        destination: `${PORTAL_URL}/portal/:path*`,
-      },
-      {
-        source: "/forgot-password",
-        destination: `${PORTAL_URL}/portal/redefinir_senha?tenant=snc`,
-      },
-      {
-        source: "/reset-password/:token*",
-        destination: `${PORTAL_URL}/portal/redefinir_senha/:token*`,
-      },
-      // Mantém a rota local de contato intocada
-      {
-        source: "/api/contact",
-        destination: "/api/contact",
-      },
-      // Mantém as rotas locais de API do APIBrasil intactas (não faz proxy para o backend)
-      {
-        source: "/api/apibrasil/:path*",
-        destination: "/api/apibrasil/:path*",
-      },
-      // Faz proxy de TODAS as outras rotas da API para o novo portal
-      {
-        source: "/api/:path*",
-        destination: `${PORTAL_URL}/portal/api/:path*`,
-      },
-      {
-        source: "/icon",
-        destination: `${PORTAL_URL}/portal/icon`,
-      },
+      // Redireciona rotas antigas de login para o sistema
+      { source: "/login", destination: "https://app.consolle.one/portal/login", permanent: false },
+      { source: "/auth/:path*", destination: "https://app.consolle.one/portal/login", permanent: false },
     ];
   },
 };

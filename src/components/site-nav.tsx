@@ -167,7 +167,7 @@ export function SiteNav() {
               Validar Relatório
             </button>
             <a
-              href="https://snc.consolle.one/auth/sign-in"
+              href="https://app.consolle.one/portal/login"
               className="snc-btn snc-btn-ghost"
               style={{
                 height: 40, padding: '0 18px',
@@ -264,7 +264,7 @@ export function SiteNav() {
               Validar Relatório
             </button>
             <a
-              href="https://snc.consolle.one/auth/sign-in"
+              href="https://app.consolle.one/portal/login"
               className="snc-btn snc-btn-ghost"
               style={{
                 justifyContent: 'center',
