@@ -32,6 +32,10 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     return [
+      {
+        source: "/login",
+        destination: `${PORTAL_URL}/auth/sign-in?tenant=snc`,
+      },
       // Vercel apaga o host original em rewrites cross-deployment (snc.consolle.one
       // → outbank.cloud vira host=outbank.cloud no destino). Passamos o tenant via
       // query param porque é a única forma confiável de transmitir essa info.
