@@ -34,29 +34,19 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/login",
-        destination: `${PORTAL_URL}/auth/sign-in?tenant=snc`,
-      },
-      // Vercel apaga o host original em rewrites cross-deployment (snc.consolle.one
-      // → outbank.cloud vira host=outbank.cloud no destino). Passamos o tenant via
-      // query param porque é a única forma confiável de transmitir essa info.
-      // O outbank-one (auth/sign-in/page.tsx + forgot-password/page.tsx) lê ?tenant.
-      {
-        source: "/auth/:path*",
-        destination: `${PORTAL_URL}/auth/:path*?tenant=snc`,
+        destination: `${PORTAL_URL}/portal/login?tenant=snc`,
       },
       {
         source: "/portal/:path*",
         destination: `${PORTAL_URL}/portal/:path*?tenant=snc`,
       },
-      // Páginas de autenticação secundárias (não cobertas por /auth/*):
-      // O snc-site adiciona ?tenant=snc para preservar o contexto do ISO no backend.
       {
         source: "/forgot-password",
-        destination: `${PORTAL_URL}/forgot-password?tenant=snc`,
+        destination: `${PORTAL_URL}/portal/redefinir_senha?tenant=snc`,
       },
       {
         source: "/reset-password/:path*",
-        destination: `${PORTAL_URL}/reset-password/:path*?tenant=snc`,
+        destination: `${PORTAL_URL}/portal/redefinir_senha/:path*?tenant=snc`,
       },
       // Mantém a rota local de contato intocada
       {
@@ -68,16 +58,15 @@ const nextConfig: NextConfig = {
         source: "/api/apibrasil/:path*",
         destination: "/api/apibrasil/:path*",
       },
-      // Faz proxy de TODAS as outras rotas da API para o outbank-one
+      // Faz proxy de TODAS as outras rotas da API para o novo portal
       {
         source: "/api/:path*",
-        destination: `${PORTAL_URL}/api/:path*`,
+        destination: `${PORTAL_URL}/portal/api/:path*`,
       },
       {
         source: "/icon",
-        destination: `${PORTAL_URL}/icon`,
+        destination: `${PORTAL_URL}/portal/icon`,
       },
-      // /relatorio/* é servido localmente pelo snc-site (não há proxy)
     ];
   },
 };
