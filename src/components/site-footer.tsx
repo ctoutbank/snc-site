@@ -7,7 +7,7 @@ export function SiteFooter() {
       <div className="snc-foot-in">
         <div className="snc-foot-top">
           <div className="brand">
-            <img src="/snc-logo.png" alt="SNC" />
+            <img src="/snc-shield.png" alt="SNC" />
             <p>Sistema Nacional de Conformidade. Infraestrutura brasileira de inteligência de dados para decisão em tempo real. Conformidade LGPD e BCB 4.893.</p>
 
             {/* E-mail institucional — estilo monospace brass + email branco */}

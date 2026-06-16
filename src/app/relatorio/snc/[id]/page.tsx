@@ -5497,7 +5497,7 @@ export default async function RelatorioPage({ params, searchParams }: Props) {
         <header className="r-head" style={constarRoubo ? { background: '#3b0808', borderBottomColor: '#ff2c36' } : {}}>
           <div className="r-head-top">
             <div className="r-brand-meta">
-              <img src="/snc-logo.png" alt="SNC" style={{ height: 48, width: 'auto' }} />
+              <img src="/snc-shield.png" alt="SNC" style={{ height: 48, width: 'auto' }} />
               <div className="sep" />
               <div>
                 <div className="t1">Sistema Nacional de Conformidade</div>

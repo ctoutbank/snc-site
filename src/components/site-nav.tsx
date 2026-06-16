@@ -108,7 +108,7 @@ export function SiteNav() {
         </div>
         <nav className="snc-nav">
           <Link href="/" className="snc-brand">
-            <img src="/snc-logo.png" alt="SNC" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+            <img src="/snc-shield.png" alt="SNC" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
             <div className="bd">
               <div className="t1">Sistema Nacional de Conformidade</div>
               <div className="t2">Consolle Data Intelligence</div>
@@ -194,7 +194,7 @@ export function SiteNav() {
       {menuOpen && (
         <div className="snc-mobile-menu">
           <div className="mm-top">
-            <img src="/snc-logo.png" alt="SNC" height={36} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+            <img src="/snc-shield.png" alt="SNC" height={36} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
             <button className="mm-close" onClick={() => setMenuOpen(false)} aria-label="Fechar">×</button>
           </div>
 
